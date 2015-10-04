@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObjectInitializerTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(572);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/ObjectInitializerTests.cs" target="_top">Style\ObjectInitializerTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="7bc2ba2306375122" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="a085737020f425f7">ObjectInitializerWithLocalDeclarationTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#a0ceca079a83781d" class="t">ObjectInitializerAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#4853556594d2f649" class="t">ObjectInitializerCodeFixProvider</a>&gt;
+    {
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="fc859ff1f033121d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAssigningButNotCreatingAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                var p = 1;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6546f898c3415541" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenDeclaringTwoVariablesAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                Person q = new Person(), r = new Person();
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5e8c1eaa448dad2f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsDeclaredAndObjectIsCreatedButNoAssignmentsHappenLaterAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                var p = new Person();
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c9c1049cb4b2a9b5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsDeclaredAndObjectIsCreatedButOnlyUnrelatedDeclarationsHappenLaterAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                var p = new Person();
+                string a;
+                int i;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="42eb13949123a1a4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsDeclaredAndObjectIsCreatedButOnlyUnrelatedAssignmentsHappenLaterAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private A a;
+            public int Foo()
+            {
+                var p = new Person();
+                a.Name = 1;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c87aeeeb51692d30" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenDeclaringAndCreatingObjectAndAssigningPropertiesThenAnalyzerCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                var p = new Person();
+                p.Name = &quot;&quot;Giovanni&quot;&quot;;
+                p.Age = 25;
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r6 rd" class="r6 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1d151cc11efc298e">ObjectInitializer_LocalDeclaration</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can use initializers in here.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 8, 17) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r5 r">source</span>, <span class="r6 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="959c2b8d24e86b5d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingANewVariableDeclaredAndAssigningToPropertiesOfJustCreatedObjectChangeToObjectInitializersFix</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                string a;
+                //some comment before
+                var p = new Person();
+                p.Name = &quot;&quot;Giovanni&quot;&quot;;
+                p.Age = 25;
+                //some comment after
+                string b;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r8 rd" class="r8 r">fixtest</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                string a;
+                //some comment before
+                var p = new Person
+                {
+                    Name = &quot;&quot;Giovanni&quot;&quot;,
+                    Age = 25
+                };
+                //some comment after
+                string b;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="780f61ef93255f6b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ObjectCreationWithoutConstructorDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            class Point
+            {
+                public int X { get; set; }
+                public int Y { get; set; }
+            }
+            Point GetPoint() { return null; }
+            void Foo()
+            {
+                var myPoint = GetPoint();
+                myPoint.X = 5;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e6bf5eaefd604335" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenInitializerWouldReferenceAnotherVariableCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class Point
+        {
+            public Point(int x) { X = x; }
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        class Bar
+        {
+            void Foo()
+            {
+                var myPoint = new Point(5);
+                var myPoint2 = new Point(5);
+                myPoint2.Y = myPoint.X;
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r11 rd" class="r11 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1d151cc11efc298e">ObjectInitializer_LocalDeclaration</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can use initializers in here.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 15, 17) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r10 r">source</span>, <span class="r11 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9dd89923a1792656" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenInitializerWouldReferenceItselfDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class Point
+        {
+            public Point(int x) { X = x; }
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        class Bar
+        {
+            void Foo()
+            {
+                var myPoint = new Point(5);
+                myPoint.Y = myPoint.X;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4b9f5b42c65833d9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenInitializerWouldReferenceItselfWithParamDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class Point
+        {
+            public Point(int x) { X = x; }
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        class Bar
+        {
+            void Foo(int i)
+            {
+                var myPoint = new Point(5);
+                myPoint.Y = myPoint.X + i;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1462fb1e816c509e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenInitializerWouldReferenceItselfInAnExpressionDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class Point
+        {
+            public Point(int x) { X = x; }
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        class Bar
+        {
+            void Foo()
+            {
+                var myPoint = new Point(5);
+                myPoint.Y = 5 + myPoint.X;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r14 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4ef05aabea4e6437" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenInitializerHasAConditionalExpressionDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+    class Person
+    {
+        public string Name { get; set; }
+        public void Bar()
+        {
+            var p = System.DateTime.Now.Second &gt; 2 ? null : new Person();
+            p.Name = &quot;&quot;Giovanni&quot;&quot;;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3111283b5d5bbb19" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenInitializerHasANullCoalesceDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+    class Person
+    {
+        public string Name { get; set; }
+        public void Bar()
+        {
+            var p = null ?? new Person();
+            p.Name = &quot;&quot;Giovanni&quot;&quot;;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r16 r">source</span>);
+        }
+    }
+ 
+    <b>public class</b> <a id="db7f5c55546e9665" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="da1236981a8e1bf5">ObjectInitializerWithAssignmentTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#a0ceca079a83781d" class="t">ObjectInitializerAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#4853556594d2f649" class="t">ObjectInitializerCodeFixProvider</a>&gt;
+    {
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4c1c7452d2040987" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenObjectIsCreatedButNoAssignmentsHappenLaterAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r17 rd" class="r17 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                Person p;
+                p = new Person();
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r17 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c8c5a8b114edc213" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenCreatingObjectAndAssigningPropertiesThenAnalyzerCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                Person p;
+                p = new Person();
+                p.Name = &quot;&quot;Giovanni&quot;&quot;;
+                p.Age = 25;
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r19 rd" class="r19 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#023b17948e4e79aa">ObjectInitializer_Assignment</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can use initializers in here.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 9, 17) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e016a59cd86490cf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenObjectIsCreatedButOnlyUnrelatedDeclarationsHappenLaterAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                Person p;
+                p = new Person();
+                string a;
+                int i;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r20 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="521deb14b43b775e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenObjectIsCreatedButOnlyUnrelatedAssignmentsHappenLaterAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private A a;
+            public int Foo()
+            {
+                Person p;
+                p = new Person();
+                a.Name = 1;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r21 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="dc4f6a76da2fe4d8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingAPreviouslyDeclaredVariableAndAssigningToPropertiesOfJustCreatedObjectChangeToObjectInitializersFix</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                string a;
+                //some comment before
+                Person p;
+                p = new Person();
+                p.Name = &quot;&quot;Giovanni&quot;&quot;;
+                p.Age = 25;
+                //some comment after
+                string b;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r23 rd" class="r23 r">fixtest</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo()
+            {
+                string a;
+                //some comment before
+                Person p;
+                p = new Person
+                {
+                    Name = &quot;&quot;Giovanni&quot;&quot;,
+                    Age = 25
+                };
+                //some comment after
+                string b;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="98b87f823e1fa782" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ObjectCreationWithoutConstructorDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            class Point
+            {
+                public int X { get; set; }
+                public int Y { get; set; }
+            }
+            Point GetPoint() { return null; }
+ 
+            Point myPoint;
+            void Foo()
+            {
+                myPoint = GetPoint();
+                myPoint.X = 5;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r24 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="df842781e197fef3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenObjectAlreadyHaveInitializerMergeExistentInitializersWithNewOnes</a>()
+        {
+            <b>const string</b> <span id="r25 rd" class="r25 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private A a;
+            public int Foo()
+            {
+                var p = new Person
+                {
+                    Name = &quot;&quot;Giovanni&quot;&quot;,
+                };
+                p.Age = 25;
+                p.LastName = &quot;&quot;Bassi&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r26 rd" class="r26 r">fixtest</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private A a;
+            public int Foo()
+            {
+                var p = new Person
+                {
+                    Name = &quot;&quot;Giovanni&quot;&quot;,
+                    Age = 25,
+                    LastName = &quot;&quot;Bassi&quot;&quot;
+                };
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r25 r">source</span>, <span class="r26 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b78682efbe5ed084" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenObjectAlreadyHaveInitializerAndThereIsRepeatingAssignmentMergeExistentInitializersWithNewOnesOverringOldAssignment</a>()
+        {
+            <b>const string</b> <span id="r27 rd" class="r27 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private A a;
+            public int Foo()
+            {
+                var p = new Person
+                {
+                    Name = &quot;&quot;Giovanni&quot;&quot;,
+                    Age = 24
+                };
+                p.Age = 25;
+                p.LastName = &quot;&quot;Bassi&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r28 rd" class="r28 r">fixtest</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private A a;
+            public int Foo()
+            {
+                var p = new Person
+                {
+                    Name = &quot;&quot;Giovanni&quot;&quot;,
+                    Age = 25,
+                    LastName = &quot;&quot;Bassi&quot;&quot;
+                };
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r27 r">source</span>, <span class="r28 r">fixtest</span>, 0);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

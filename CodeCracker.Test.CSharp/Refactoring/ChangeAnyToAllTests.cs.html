@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html><head><title>ChangeAnyToAllTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(183);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/ChangeAnyToAllTests.cs" target="_top">Refactoring\ChangeAnyToAllTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="4f5ed37f471e623b" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="99242a4d5c9926a6">ChangeAnyToAllTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#26c52b3e93397e11" class="t">ChangeAnyToAllAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#76a6e44eb5868922" class="t">ChangeAnyToAllCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2}.AsQueryable();
+            var query = ints.Any(i =&gt; i &gt; 0);&quot;</span>, 30, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2}.AsQueryable();
+            var query = !ints.Any(i =&gt; i &gt; 0);&quot;</span>, 31, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i &gt; 0);&quot;</span>, 30, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.Any(i =&gt; i &gt; 0);&quot;</span>, 31, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2}.AsQueryable();
+            var query = !ints.All(i =&gt; i &gt; 0);&quot;</span>, 31, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#8a82651fe7956cec">ChangeAllToAny</a>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i &gt; 0);&quot;</span>, 31, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#8a82651fe7956cec">ChangeAllToAny</a>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6bd6e3c573c01515" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AnyAndAllWithLinqCreatesDiagnostic</a>(<b>string</b> <span id="r0 rd" class="r0 r">code</span>, <b>int</b> <span id="r1 rd" class="r1 r">column</span>, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a> <span id="r2 rd" class="r2 r">diagnosticId</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">source</span> = <span class="r0 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>);
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <span class="r2 r">diagnosticId</span>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="r2 r">diagnosticId</span> == <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a> ? <a href="/CodeCracker.CSharp/A.html#26c52b3e93397e11" class="t">ChangeAnyToAllAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#2c04b2ce31242a91">MessageAny</a> : <a href="/CodeCracker.CSharp/A.html#26c52b3e93397e11" class="t">ChangeAnyToAllAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#4853a3dff7098ede">MessageAll</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 13, <span class="r1 r">column</span>) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r3 r">source</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4331d8561bda3774" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ComplexLambdaDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var notAll = !ints.All(i =&gt; { return i &gt; 0; } );&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="96c2c666dc5e998a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">InvokingMethodThatIsNotAnyDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">source</span> = <span class="s">&quot;Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="613312f93a162248" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertsConditionalExpression</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">original</span> = <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; true ? true : false);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">fix</span> = <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; (true ? true : false) == false);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">original</span>, <span class="r9 r">fix</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            ints.Any(i =&gt; true);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            ints.All(i =&gt; true);&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e5af78d7ae7489b6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ExpressionStatementsDoNotCreateDiagnostic</a>(<b>string</b> <span id="r10 rd" class="r10 r">code</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">original</span> = <span class="r10 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">original</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i &gt; 1);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i &lt;= 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i &gt;= 1);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i &lt; 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i &lt; 1);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i &gt;= 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i &lt;= 1);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i &gt; 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i == 1);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i != 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; i != 1);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i == 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; !true);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; true);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; !(i == 1));&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i == 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; true);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; false);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; false);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; true);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.Any(i =&gt; false);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.All(i =&gt; true);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; (i == 1) == true);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; (i == 1) == false);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; true == (i == 1));&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; false == (i == 1));&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; (i == 1) == false);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i == 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; false == (i == 1));&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i == 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; (i == 1) != true);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i == 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; true != (i == 1));&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; i == 1);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; (i == 1) != false);&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; (i == 1) == false);&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = ints.Any(i =&gt; false != (i == 1));&quot;</span>, <span class="s">@&quot;
+            var ints = new [] {1, 2};
+            var query = !ints.All(i =&gt; false == (i == 1));&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e2d3caf09ac9f715" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertsSpecialCases</a>(<b>string</b> <span id="r12 rd" class="r12 r">original</span>, <b>string</b> <span id="r13 rd" class="r13 r">fix</span>) =&gt;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r12 r">original</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>),
+                <span class="r13 r">fix</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r4 r">usings</span>: <span class="s">&quot;\nusing System.Linq;&quot;</span>));
+    }
+}</pre></td></tr></table></div></body></html>

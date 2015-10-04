@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeMethodNonAsyncTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(38);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/MakeMethodNonAsyncTests.cs" target="_top">Refactoring\MakeMethodNonAsyncTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="340733015292b90f" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="d49a68d93b9fc41f">MakeMethodNonAsyncTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="fcbb50b29e7c5685" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldRemoveAsyncKeywordAndReplaceReturnedValuesWithTaskFromResultAsync</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">codeFileTemplate</span> = <span class="s">@&quot;using System.Threading.Tasks;
+class Test
+{{
+{0}
+}}&quot;</span>;
+ 
+            <b>const string</b> <span id="r1 rd" class="r1 r">testMethod</span> = <span class="s">@&quot;
+public static async Task&lt;int&gt; FooAsync()
+{
+    return 42;
+}&quot;</span>;
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">testCode</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="r0 r">codeFileTemplate</span>, <span class="r1 r">testMethod</span>);
+            <b>const string</b> <span id="r3 rd" class="r3 r">fixedMethod</span> = <span class="s">@&quot;
+public static Task&lt;int&gt; FooAsync()
+{
+    return Task.FromResult(42);
+}&quot;</span>;
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">fixedCode</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="r0 r">codeFileTemplate</span>, <span class="r3 r">fixedMethod</span>);
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r2 r">testCode</span>, <span class="r4 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a> <a id="fb744beb29c3c539" href="../R/fb744beb29c3c539.html" target="n" data-glyph="75,1">GetCodeFixProvider</a>() =&gt; <b>new</b> <a href="/CodeCracker.CSharp/A.html#d204358abd142d9d" class="t">MakeMethodNonAsyncCodeFixProvider</a>();
+    }
+}
+</pre></td></tr></table></div></body></html>

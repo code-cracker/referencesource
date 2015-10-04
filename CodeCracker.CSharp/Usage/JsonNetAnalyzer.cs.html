@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html><head><title>JsonNetAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(79);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/JsonNetAnalyzer.cs" target="_top">Usage\JsonNetAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Reflection;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="d4add1caf5fadc77" href="../R/d4add1caf5fadc77.html" target="n" data-glyph="0,0" class="t"><span id="9e9cab31849da11a">JsonNetAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="9241675899a3e9bf" href="../R/9241675899a3e9bf.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Your Json syntax is wrong&quot;</span>;
+        <b>internal const string</b> <a id="9c7306d593a1fb73" href="../R/9c7306d593a1fb73.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="239bdc08489c40a2" href="../R/239bdc08489c40a2.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="a38ab1da763f05e9" href="../R/a38ab1da763f05e9.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;This diagnostic checks the json string and triggers if the parsing fail &quot;</span>
+            + <span class="s">&quot;by throwing an exception.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="2d23dc97a61125d5" href="../R/2d23dc97a61125d5.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d8ccca123527e756">JsonNet</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#9241675899a3e9bf">Title</a>,
+            <a href="#9c7306d593a1fb73">MessageFormat</a>,
+            <a href="#239bdc08489c40a2">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#a38ab1da763f05e9">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d8ccca123527e756">JsonNet</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="7a514aa6b4c864bf" href="../R/7a514aa6b4c864bf.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#2d23dc97a61125d5">Rule</a>);
+ 
+        <b>public override void</b> <a id="bbe71f036ea5c6a7" href="../R/bbe71f036ea5c6a7.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<span id="r4 rd" class="r4 r">c</span> =&gt; <a href="#8963e3c7726ae896">Analyzer</a>(<span class="r4 r">c</span>, <span class="s">&quot;DeserializeObject&quot;</span>, <span class="s">&quot;Newtonsoft.Json.JsonConvert.DeserializeObject&lt;T&gt;(string)&quot;</span>), <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<span id="r5 rd" class="r5 r">c</span> =&gt; <a href="#8963e3c7726ae896">Analyzer</a>(<span class="r5 r">c</span>, <span class="s">&quot;Parse&quot;</span>, <span class="s">&quot;Newtonsoft.Json.Linq.JObject.Parse(string)&quot;</span>), <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<span id="r6 rd" class="r6 r">c</span> =&gt; <a href="#8963e3c7726ae896">Analyzer</a>(<span class="r6 r">c</span>, <span class="s">&quot;Parse&quot;</span>, <span class="s">&quot;Newtonsoft.Json.Linq.JArray.Parse(string)&quot;</span>), <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+        }
+ 
+        <b>private static void</b> <a id="8963e3c7726ae896" href="../R/8963e3c7726ae896.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r7 rd" class="r7 r">context</span>, <b>string</b> <span id="r8 rd" class="r8 r">methodName</span>, <b>string</b> <span id="r9 rd" class="r9 r">methodFullDefinition</span>)
+        {
+            <b>if</b> (<span class="r7 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r10 rd" class="r10 r">invocationExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<span class="r7 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r11 rd" class="r11 r">memberExpression</span> = <span class="r10 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+            <b>if</b> (<span class="r11 r">memberExpression</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8dd001af6537653d">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> != <span class="r8 r">methodName</span>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r12 rd" class="r12 r">memberSymbol</span> = <span class="r7 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r11 r">memberExpression</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <b>if</b> (<span class="r12 r">memberSymbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#455cd97d6b66cb9f">OriginalDefinition</a>?.ToString() != <span class="r9 r">methodFullDefinition</span>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="k">var</a> <span id="r13 rd" class="r13 r">argumentList</span> = <span class="r10 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a>;
+            <b>if</b> ((<span class="r13 r">argumentList</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> ?? 0) != 1) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r14 rd" class="r14 r">literalParameter</span> = <span class="r13 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>[0].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+            <b>if</b> (<span class="r14 r">literalParameter</span> == <b>null</b>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#86bbd87a0ffc79bf" class="k">var</a> <span id="r15 rd" class="r15 r">jsonOpt</span> = <span class="r7 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r14 r">literalParameter</span>);
+            <b>var</b> <span id="r16 rd" class="r16 r">json</span> = <span class="r15 r">jsonOpt</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a> <b>as string</b>;
+ 
+            <a href="#76ca5286a61a5ca1">CheckJsonValue</a>(<span class="r7 r">context</span>, <span class="r14 r">literalParameter</span>, <span class="r16 r">json</span>);
+        }
+ 
+        <b>private static void</b> <a id="76ca5286a61a5ca1" href="../R/76ca5286a61a5ca1.html" target="n" data-glyph="76,1">CheckJsonValue</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r17 rd" class="r17 r">context</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r18 rd" class="r18 r">literalParameter</span>,
+            <b>string</b> <span id="r19 rd" class="r19 r">json</span>)
+        {
+            <b>try</b>
+            {
+                <a href="#3f0676caed4e5166">parseMethodInfo</a>.Value.Invoke(<b>null</b>, <b>new</b>[] { <span class="r19 r">json</span> });
+            }
+            <b>catch</b> (<span class="t">Exception</span> <span id="r20 rd" class="r20 r">ex</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r21 rd" class="r21 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#2d23dc97a61125d5">Rule</a>, <span class="r18 r">literalParameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r20 r">ex</span>.InnerException.Message);
+                <span class="r17 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r21 r">diag</span>);
+            }
+        }
+ 
+        <b>private static readonly</b> <span class="t">Lazy</span>&lt;<span class="t">Type</span>&gt; <a id="96a91b887fb74a4f" href="../R/96a91b887fb74a4f.html" target="n" data-glyph="46,1">jObjectType</a> = <b>new</b> <span class="t">Lazy</span>&lt;<span class="t">Type</span>&gt;(() =&gt; <span class="t">Type</span>.GetType(<span class="s">&quot;Newtonsoft.Json.Linq.JObject, Newtonsoft.Json&quot;</span>));
+        <b>private static readonly</b> <span class="t">Lazy</span>&lt;<span class="t">MethodInfo</span>&gt; <a id="3f0676caed4e5166" href="../R/3f0676caed4e5166.html" target="n" data-glyph="46,1">parseMethodInfo</a> = <b>new</b> <span class="t">Lazy</span>&lt;<span class="t">MethodInfo</span>&gt;(() =&gt; <a href="#96a91b887fb74a4f">jObjectType</a>.Value.GetRuntimeMethod(<span class="s">&quot;Parse&quot;</span>, <b>new</b>[] { <b>typeof</b>(<b>string</b>) }));
+    }
+}</pre></td></tr></table></div></body></html>

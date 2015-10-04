@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html><head><title>MethodInformation.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(21);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/MethodAnalyzers/MethodInformation.cs" target="_top">Usage\MethodAnalyzers\MethodInformation.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage.MethodAnalyzers
+{
+    <b>public class</b> <a id="c91c3d4f81a546e3" href="../../R/c91c3d4f81a546e3.html" target="n" data-glyph="0,0" class="t">MethodInformation</a>
+    {
+        <b>public string</b> <a id="193d8bdde3b215a3" href="../../R/193d8bdde3b215a3.html" target="n" data-glyph="102,1">MethodName</a> { <b>get</b>; <b>set</b>; }
+        <b>public string</b> <a id="2dfb39d41c221e09" href="../../R/2dfb39d41c221e09.html" target="n" data-glyph="102,1">MethodFullDefinition</a> { <b>get</b>; <b>set</b>; }
+        <b>public int</b> <a id="45ef93d057d240ca" href="../../R/45ef93d057d240ca.html" target="n" data-glyph="102,1">ArgumentIndex</a> { <b>get</b>; <b>set</b>; }
+        <b>public</b> <span class="t">Action</span>&lt;<span class="t">List</span>&lt;<b>object</b>&gt;&gt; <a id="814f6b0919b1367e" href="../../R/814f6b0919b1367e.html" target="n" data-glyph="102,1">MethodAction</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public</b> <a id="d2eab224b3737453" href="../../R/d2eab224b3737453.html" target="n" data-glyph="72,1">MethodInformation</a>(<b>string</b> <span id="r0 rd" class="r0 r">methodName</span>, <b>string</b> <span id="r1 rd" class="r1 r">methodFullDefinition</span>, <span class="t">Action</span>&lt;<span class="t">List</span>&lt;<b>object</b>&gt;&gt; <span id="r2 rd" class="r2 r">methodAction</span>, <b>int</b> <span id="r3 rd" class="r3 r">argumentIndex</span> = 0)
+        {
+            <a href="#193d8bdde3b215a3">MethodName</a> = <span class="r0 r">methodName</span>;
+            <a href="#2dfb39d41c221e09">MethodFullDefinition</a> = <span class="r1 r">methodFullDefinition</span>;
+            <a href="#45ef93d057d240ca">ArgumentIndex</a> = <span class="r3 r">argumentIndex</span>;
+            <a href="#814f6b0919b1367e">MethodAction</a> = <span class="r2 r">methodAction</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

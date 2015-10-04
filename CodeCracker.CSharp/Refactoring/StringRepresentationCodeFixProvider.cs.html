@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringRepresentationCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(82);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/StringRepresentationCodeFixProvider.cs" target="_top">Refactoring\StringRepresentationCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using static</b> Microsoft.CodeAnalysis.CSharp.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> System.Text;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> System.Composition;
+<b>using</b> System.Threading;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <b>nameof</b>(<a href="#cf33cf40914d09e4" class="t">StringRepresentationCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="cf33cf40914d09e4" href="../R/cf33cf40914d09e4.html" target="n" data-glyph="0,0" class="t"><span id="a508fde0c961b86f">StringRepresentationCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public const string</b> <a id="106a75c9d59a6897" href="../R/106a75c9d59a6897.html" target="n" data-glyph="6,1">Id</a> = <b>nameof</b>(<a href="#cf33cf40914d09e4" class="t">StringRepresentationCodeFixProvider</a>);
+        <b>public const string</b> <a id="1ef2412f6ca866b6" href="../R/1ef2412f6ca866b6.html" target="n" data-glyph="6,1">ToRegularId</a> = <a href="#106a75c9d59a6897">Id</a> + <span class="s">&quot;ToRegularString&quot;</span>;
+        <b>public const string</b> <a id="d3f1a8e0ea5efefd" href="../R/d3f1a8e0ea5efefd.html" target="n" data-glyph="6,1">ToVerbatimId</a> = <a href="#106a75c9d59a6897">Id</a> + <span class="s">&quot;ToVerbatimString&quot;</span>;
+ 
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="6a18a10658af8f4f" href="../R/6a18a10658af8f4f.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6fd534749e013e1b">StringRepresentation_RegularString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(), <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#42d4606f3a8dae4e">StringRepresentation_VerbatimString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="729ab7ab674bc69e" href="../R/729ab7ab674bc69e.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="32523c7db2d0a16c" href="../R/32523c7db2d0a16c.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <b>var</b> <span id="r2 rd" class="r2 r">truncated</span> = <span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ba4b6448b981d28">Properties</a>[<span class="s">&quot;truncatedString&quot;</span>];
+            <b>var</b> <span id="r3 rd" class="r3 r">isVerbatimString</span> = <span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ba4b6448b981d28">Properties</a>[<span class="s">&quot;isVerbatim&quot;</span>] == <span class="s">&quot;1&quot;</span>;
+            <b>var</b> <span id="r4 rd" class="r4 r">message</span> = <span class="r3 r">isVerbatimString</span> ? <span class="s">$&quot;</span><span class="s">Convert \&quot;</span>{<span class="r2 r">truncated</span>}<span class="s">\&quot; to regular string</span><span class="s">&quot;</span> : <span class="s">$&quot;</span><span class="s">Convert \&quot;</span>{<span class="r2 r">truncated</span>}<span class="s">\&quot; to verbatim string</span><span class="s">&quot;</span>;
+            <b>var</b> <span id="r5 rd" class="r5 r">equivalenceKey</span> = <span class="r3 r">isVerbatimString</span> ? <a href="#1ef2412f6ca866b6">ToRegularId</a> : <a href="#d3f1a8e0ea5efefd">ToVerbatimId</a>;
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(
+                <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="r4 r">message</span>, <span id="r6 rd" class="r6 r">ct</span> =&gt; <a href="#178fef06cbd6a7bb">CreateChangedDocumentAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r3 r">isVerbatimString</span>, <span class="r6 r">ct</span>), <span class="r5 r">equivalenceKey</span>), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="178fef06cbd6a7bb" href="../R/178fef06cbd6a7bb.html" target="n" data-glyph="76,1">CreateChangedDocumentAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r7 rd" class="r7 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r8 rd" class="r8 r">diagnostic</span>, <b>bool</b> <span id="r9 rd" class="r9 r">isVerbatim</span>, <span class="t">CancellationToken</span> <span id="r10 rd" class="r10 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r11 rd" class="r11 r">root</span> = <b>await</b> <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r10 r">cancellationToken</span>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r12 rd" class="r12 r">literalExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>)<span class="r11 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r8 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>, <span class="r13 r">getInnermostNodeForTie</span>: <b>true</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="k">var</a> <span id="r14 rd" class="r14 r">replacement</span> = <span class="r9 r">isVerbatim</span> ? <a href="#499a6cf909b4901e">ToStringLiteral</a>(<span class="r12 r">literalExpression</span>) : <a href="#93356022ba1aefa2">ToVerbatimStringLiteral</a>(<span class="r12 r">literalExpression</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r15 rd" class="r15 r">finalReplacement</span> = <span class="r14 r">replacement</span>.<a href="/CodeCracker.Common/A.html#8a6360d3de9480c8">WithSameTriviaAs</a>(<span class="r12 r">literalExpression</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r16 rd" class="r16 r">newRoot</span> = <span class="r11 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r12 r">literalExpression</span>, <span class="r15 r">finalReplacement</span>);
+            <b>return</b> <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r16 r">newRoot</span>);
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <a id="499a6cf909b4901e" href="../R/499a6cf909b4901e.html" target="n" data-glyph="76,1">ToStringLiteral</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r17 rd" class="r17 r">expression</span>)
+        {
+            <b>var</b> <span id="r18 rd" class="r18 r">str</span> = (<b>string</b>)<span class="r17 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>;
+            <b>return</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2e2176fd697e7b68">LiteralExpression</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1fe7c08d8ff2a9e9">StringLiteralExpression</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ba74e281d3050dbf">Literal</a>(<span class="r18 r">str</span>));
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <a id="93356022ba1aefa2" href="../R/93356022ba1aefa2.html" target="n" data-glyph="76,1">ToVerbatimStringLiteral</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r19 rd" class="r19 r">expression</span>)
+        {
+            <b>var</b> <span id="r20 rd" class="r20 r">str</span> = (<b>string</b>)<span class="r19 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>;
+            <b>return</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2e2176fd697e7b68">LiteralExpression</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1fe7c08d8ff2a9e9">StringLiteralExpression</a>,
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#69ce3de3d5bdab26">Literal</a>(
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f92dd6056332da9">TriviaList</a>(),
+                    <a href="#37ec268b2d560d8b">StringToVerbatimText</a>(<span class="r20 r">str</span>),
+                    <span class="r20 r">str</span>,
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f92dd6056332da9">TriviaList</a>()));
+        }
+ 
+        <b>private static string</b> <a id="37ec268b2d560d8b" href="../R/37ec268b2d560d8b.html" target="n" data-glyph="76,1">StringToVerbatimText</a>(<b>string</b> <span id="r21 rd" class="r21 r">s</span>)
+        {
+            <b>var</b> <span id="r22 rd" class="r22 r">builder</span> = <b>new</b> <span class="t">StringBuilder</span>(<span class="r21 r">s</span>.Length + 3);
+            <span class="r22 r">builder</span>.Append(<span class="s">&quot;@\&quot;&quot;</span>);
+            <b>foreach</b> (<b>var</b> <span id="r23 rd" class="r23 r">c</span> <b>in</b> <span class="r21 r">s</span>)
+            {
+                <b>if</b> (<span class="r23 r">c</span> == <span class="s">&#39;&quot;&#39;</span>)
+                    <span class="r22 r">builder</span>.Append(<span class="s">&quot;\&quot;\&quot;&quot;</span>);
+                <b>else</b>
+                    <span class="r22 r">builder</span>.Append(<span class="r23 r">c</span>);
+            }
+            <span class="r22 r">builder</span>.Append(<span class="s">&quot;\&quot;&quot;</span>);
+            <b>return</b> <span class="r22 r">builder</span>.ToString();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

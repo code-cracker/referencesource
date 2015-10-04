@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseEmptyStringCodeFixProviderAll.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(85);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/UseEmptyStringCodeFixProviderAll.cs" target="_top">Style\UseEmptyStringCodeFixProviderAll.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    <b>public sealed class</b> <a id="a04db8b8c5cd91e1" href="../R/a04db8b8c5cd91e1.html" target="n" data-glyph="0,0" class="t">UseEmptyStringCodeFixAllProvider</a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+    {
+        <b>private static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5df4388ff3239a2c" class="t">SyntaxAnnotation</a> <a id="e0c0440f9639adee" href="../R/e0c0440f9639adee.html" target="n" data-glyph="46,1">useEmptyStringAnnotation</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#a029520aa34217c5" class="t">SyntaxAnnotation</a>(<b>nameof</b>(<a href="#a04db8b8c5cd91e1" class="t">UseEmptyStringCodeFixAllProvider</a>));
+        <b>private</b> <a id="93c0def412d49f5a" href="../R/93c0def412d49f5a.html" target="n" data-glyph="76,1">UseEmptyStringCodeFixAllProvider</a>() { }
+        <b>public static</b> <a href="#a04db8b8c5cd91e1" class="t">UseEmptyStringCodeFixAllProvider</a> <a id="a43bd3880c6ce265" href="../R/a43bd3880c6ce265.html" target="n" data-glyph="42,1">Instance</a> = <b>new</b> <a href="#93c0def412d49f5a" class="t">UseEmptyStringCodeFixAllProvider</a>();
+ 
+        <b>public override</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>&gt; <a id="39eec858990a47e6" href="../R/39eec858990a47e6.html" target="n" data-glyph="72,1">GetFixAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r0 rd" class="r0 r">fixAllContext</span>)
+        {
+            <b>switch</b> (<span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b9bff38165d5d1e8">Scope</a>)
+            {
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#97fa69e6457fca10">Document</a>:
+                    {
+                        <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<a href="UseEmptyStringCodeFixProvider.cs.html#a1ff7b4881452cae" class="t">UseEmptyStringCodeFixProvider</a>.<a href="UseEmptyStringCodeFixProvider.cs.html#4baaaa9b551033d0">MessageFormat</a>,
+                            <b>async</b> <span id="r1 rd" class="r1 r">ct</span> =&gt;
+                            {
+                                <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="k">var</a> <span id="r2 rd" class="r2 r">newFixAllContext</span> = <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#3161b6d4cb63c311">WithCancellationToken</a>(<span class="r1 r">ct</span>);
+                                <b>var</b> <span id="r3 rd" class="r3 r">diagnostics</span> = <b>await</b> <span class="r2 r">newFixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#095faaf998f0da13">GetDocumentDiagnosticsAsync</a>(<span class="r2 r">newFixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>).ConfigureAwait(<b>false</b>);
+                                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r4 rd" class="r4 r">root</span> = <b>await</b> <a href="#d9bc94b9bc3871cf">GetFixedDocumentAsync</a>(<span class="r2 r">newFixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>, <span class="r3 r">diagnostics</span>, <span class="r1 r">ct</span>).ConfigureAwait(<b>false</b>);
+                                <b>return</b> <span class="r2 r">newFixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r4 r">root</span>);
+                            }));
+ 
+                    }
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6ea2f449b2d95b0d">Project</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<a href="UseEmptyStringCodeFixProvider.cs.html#a1ff7b4881452cae" class="t">UseEmptyStringCodeFixProvider</a>.<a href="UseEmptyStringCodeFixProvider.cs.html#4baaaa9b551033d0">MessageFormat</a>,
+                        <span id="r5 rd" class="r5 r">ct</span> =&gt;
+                        {
+                            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="k">var</a> <span id="r6 rd" class="r6 r">newFixAllContext</span> = <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#3161b6d4cb63c311">WithCancellationToken</a>(<span class="r5 r">ct</span>);
+                            <b>return</b> <a href="#558e7c4284b9c90a">GetFixedProjectAsync</a>(<span class="r6 r">newFixAllContext</span>, <span class="r6 r">newFixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#3161b6d4cb63c311">WithCancellationToken</a>(<span class="r5 r">ct</span>).<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#2ac5d9c985a8d9bf">Project</a>);
+                        }));
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9c02b956ab631d88">Solution</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<a href="UseEmptyStringCodeFixProvider.cs.html#a1ff7b4881452cae" class="t">UseEmptyStringCodeFixProvider</a>.<a href="UseEmptyStringCodeFixProvider.cs.html#4baaaa9b551033d0">MessageFormat</a>,
+                        <span id="r7 rd" class="r7 r">ct</span> =&gt; <a href="#340ccc3a4f6e0dd8">GetFixedSolutionAsync</a>(<span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#3161b6d4cb63c311">WithCancellationToken</a>(<span class="r7 r">ct</span>))));
+            }
+            <b>return null</b>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="340ccc3a4f6e0dd8" href="../R/340ccc3a4f6e0dd8.html" target="n" data-glyph="76,1">GetFixedSolutionAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r8 rd" class="r8 r">fixAllContext</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r9 rd" class="r9 r">newSolution</span> = <span class="r8 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#814dea7e1160077e">Solution</a>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d57a45799bc4a52e" class="k">var</a> <span id="r10 rd" class="r10 r">projectId</span> <b>in</b> <span class="r9 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#2800abcd032f3c15">ProjectIds</a>)
+                <span class="r9 r">newSolution</span> = <b>await</b> <a href="#558e7c4284b9c90a">GetFixedProjectAsync</a>(<span class="r8 r">fixAllContext</span>, <span class="r9 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c554b9964ab32f06">GetProject</a>(<span class="r10 r">projectId</span>)).ConfigureAwait(<b>false</b>);
+            <b>return</b> <span class="r9 r">newSolution</span>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="558e7c4284b9c90a" href="../R/558e7c4284b9c90a.html" target="n" data-glyph="76,1">GetFixedProjectAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r11 rd" class="r11 r">fixAllContext</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a> <span id="r12 rd" class="r12 r">project</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r13 rd" class="r13 r">solution</span> = <span class="r12 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4c4d2a069da85c41">Solution</a>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r14 rd" class="r14 r">document</span> <b>in</b> <span class="r12 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9e72271524e0d9b3">Documents</a>)
+            {
+                <b>var</b> <span id="r15 rd" class="r15 r">diagnostics</span> = <b>await</b> <span class="r11 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#095faaf998f0da13">GetDocumentDiagnosticsAsync</a>(<span class="r14 r">document</span>).ConfigureAwait(<b>false</b>);
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r16 rd" class="r16 r">newRoot</span> = <b>await</b> <a href="#d9bc94b9bc3871cf">GetFixedDocumentAsync</a>(<span class="r14 r">document</span>, <span class="r15 r">diagnostics</span>, <span class="r11 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#46f6905548a61514">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+                <span class="r13 r">solution</span> = <span class="r13 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d63e3a736f35fb26">WithDocumentSyntaxRoot</a>(<span class="r14 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>, <span class="r16 r">newRoot</span>);
+            }
+            <b>return</b> <span class="r13 r">solution</span>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>&gt; <a id="d9bc94b9bc3871cf" href="../R/d9bc94b9bc3871cf.html" target="n" data-glyph="76,1">GetFixedDocumentAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r17 rd" class="r17 r">document</span>, <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt; <span id="r18 rd" class="r18 r">diagnostics</span>, <span class="t">CancellationToken</span> <span id="r19 rd" class="r19 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r20 rd" class="r20 r">root</span> = <b>await</b> <span class="r17 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r19 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <b>var</b> <span id="r21 rd" class="r21 r">nodes</span> = <span class="r18 r">diagnostics</span>.Select(<span id="r22 rd" class="r22 r">d</span> =&gt; <span class="r20 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r22 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>)).Where(<span id="r23 rd" class="r23 r">n</span> =&gt; !<span class="r23 r">n</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#295e4dfa32129e54">IsMissing</a>).Select(<span id="r24 rd" class="r24 r">n</span> =&gt; <span class="r24 r">n</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0486ce360964263b">DescendantNodesAndSelf</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>&gt;().First());
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r25 rd" class="r25 r">newRoot</span> = <span class="r20 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(<span class="r21 r">nodes</span>, (<span id="r26 rd" class="r26 r">original</span>, <span id="r27 rd" class="r27 r">rewritten</span>) =&gt; <span class="r26 r">original</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="#e0c0440f9639adee">useEmptyStringAnnotation</a>));
+            <b>while</b> (<b>true</b>)
+            {
+                <b>var</b> <span id="r28 rd" class="r28 r">annotatedNodes</span> = <span class="r25 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5dbd5590ba4a012b">GetAnnotatedNodes</a>(<a href="#e0c0440f9639adee">useEmptyStringAnnotation</a>);
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r29 rd" class="r29 r">node</span> = <span class="r28 r">annotatedNodes</span>.FirstOrDefault();
+                <b>if</b> (<span class="r29 r">node</span> == <b>null</b>) <b>break</b>;
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r30 rd" class="r30 r">literal</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>)<span class="r29 r">node</span>;
+                <span class="r25 r">newRoot</span> = <span class="r25 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r30 r">literal</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#191a9af6d2a8df1a">ParseExpression</a>(<span class="s">&quot;\&quot;\&quot;&quot;</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r30 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>()).<a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r30 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2578281909aee103">GetTrailingTrivia</a>()));
+            }
+            <b>return</b> <span class="r25 r">newRoot</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

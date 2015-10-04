@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html><head><title>MergeNestedIfCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(54);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/MergeNestedIfCodeFixProvider.cs" target="_top">Refactoring\MergeNestedIfCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Formatting;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+ 
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#1b329c5c18469e41" class="t">MergeNestedIfCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="1b329c5c18469e41" href="../R/1b329c5c18469e41.html" target="n" data-glyph="0,0" class="t"><span id="36edfac2bbb5086d">MergeNestedIfCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="fc65f8ec43b0e7e4" href="../R/fc65f8ec43b0e7e4.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#15b110fb1bab810b">MergeNestedIf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="9588f4d8e36ca8d2" href="../R/9588f4d8e36ca8d2.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="6b08ac8051fad9c1" href="../R/6b08ac8051fad9c1.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Merge nested if statements&quot;</span>, <span id="r2 rd" class="r2 r">c</span> =&gt; <a href="#61ee26df5ae0af9c">MergeIfsAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>, <span class="r2 r">c</span>), <b>nameof</b>(<a href="#1b329c5c18469e41" class="t">MergeNestedIfCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="61ee26df5ae0af9c" href="../R/61ee26df5ae0af9c.html" target="n" data-glyph="76,1">MergeIfsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a> <span id="r4 rd" class="r4 r">diagnosticLocation</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r7 rd" class="r7 r">ifStatement</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>)<span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">diagnosticLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r8 rd" class="r8 r">newRoot</span> = <a href="#e2ef30c017a5ec82">MergeIfs</a>(<span class="r7 r">ifStatement</span>, <span class="r6 r">root</span>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r9 rd" class="r9 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r8 r">newRoot</span>);
+            <b>return</b> <span class="r9 r">newDocument</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="e2ef30c017a5ec82" href="../R/e2ef30c017a5ec82.html" target="n" data-glyph="76,1">MergeIfs</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a> <span id="r10 rd" class="r10 r">ifStatement</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r11 rd" class="r11 r">root</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r12 rd" class="r12 r">nestedIf</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>)<span class="r10 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#337996ab6ff635b7">Statement</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#3f972615421628b4">GetSingleStatementFromPossibleBlock</a>();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r13 rd" class="r13 r">newIf</span> = <span class="r10 r">ifStatement</span>
+                .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bc12f2f8b6da85e6">WithCondition</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df6c0ef4b58e95fd">BinaryExpression</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a411193aebdbc1dc">LogicalAndExpression</a>, <span class="r10 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5bdf6aeba24c785a">Condition</a>, <span class="r12 r">nestedIf</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5bdf6aeba24c785a">Condition</a>))
+                .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#eb4b35a6b87cc1a4">WithStatement</a>(<span class="r12 r">nestedIf</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#337996ab6ff635b7">Statement</a>)
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r10 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#a01f00140480e9da">AddRange</a>(<span class="r12 r">nestedIf</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>()))
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <b>if</b> (<span class="r10 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6a8d20dae428298">HasTrailingTrivia</a> &amp;&amp; <span class="r12 r">nestedIf</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6a8d20dae428298">HasTrailingTrivia</a> &amp;&amp; !<span class="r10 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2578281909aee103">GetTrailingTrivia</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#13248cee6a72bb95">Equals</a>(<span class="r12 r">nestedIf</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2578281909aee103">GetTrailingTrivia</a>()))
+                <span class="r13 r">newIf</span> = <span class="r13 r">newIf</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r10 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2578281909aee103">GetTrailingTrivia</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#a01f00140480e9da">AddRange</a>(<span class="r12 r">nestedIf</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2578281909aee103">GetTrailingTrivia</a>()));
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r14 rd" class="r14 r">newRoot</span> = <span class="r11 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r10 r">ifStatement</span>, <span class="r13 r">newIf</span>);
+            <b>return</b> <span class="r14 r">newRoot</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

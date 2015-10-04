@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html><head><title>CatchEmptyCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(48);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Design/CatchEmptyCodeFixProvider.vb" target="_top">Design\CatchEmptyCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.Formatting
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+ 
+<b>Namespace</b> Design
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#18d17f522538223a" class="t">CatchEmptyCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="18d17f522538223a" href="../R/18d17f522538223a.html" target="n" data-glyph="0,0" class="t"><span id="c0b659a3e85f5c0c">CatchEmptyCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public NotOverridable Overrides ReadOnly Property</b> <a id="acc58b13fed290d0" href="../R/acc58b13fed290d0.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="CatchEmptyAnalyzer.vb.html#6075819765fbead0" class="t">CatchEmptyAnalyzer</a>.<a href="CatchEmptyAnalyzer.vb.html#570f6f27fd917f26">Id</a>)
+ 
+        <b>Public Overrides Function</b> <a id="47368aee66a1b72c" href="../R/47368aee66a1b72c.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public Overrides Async Function</b> <a id="760e502007ae3c54" href="../R/760e502007ae3c54.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r2 rd" class="r2 r">diag</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First()
+            <b>Dim</b> <span id="r3 rd" class="r3 r">diagSpan</span> = <span class="r2 r">diag</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">declaration</span> = <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">diagSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fce85eedb588219e" class="t">CatchBlockSyntax</a>).First()
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Add an Exception class&quot;</span>, <b>Function</b>(<span id="r5 rd" class="r5 r">c</span>) <a href="#5e9cb55dbf25e35f">MakeCatchEmptyAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">declaration</span>, <span class="r5 r">c</span>), <b>NameOf</b>(<a href="#18d17f522538223a" class="t">CatchEmptyCodeFixProvider</a>)), <span class="r2 r">diag</span>)
+        <b>End Function
+ 
+        Private Async Function</b> <a id="5e9cb55dbf25e35f" href="../R/5e9cb55dbf25e35f.html" target="n" data-glyph="76,1">MakeCatchEmptyAsync</a>(<span id="r6 rd" class="r6 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r7 rd" class="r7 r">catchStatement</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fce85eedb588219e" class="t">CatchBlockSyntax</a>, <span id="r8 rd" class="r8 r">cancellationtoken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>)
+            <b>Dim</b> <span id="r9 rd" class="r9 r">semanticModel</span> = <b>Await</b> <span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>(<span class="r8 r">cancellationtoken</span>)
+ 
+            <b>Dim</b> <span id="r10 rd" class="r10 r">newCatch</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#233aff2cf24085c8">CatchBlock</a>(
+            <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8f9c2f1d502c67ce">CatchStatement</a>(
+                <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7928be8a6f01a288">IdentifierName</a>(<span class="s">&quot;ex&quot;</span>),
+                <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1256f41f1dd049c2">SimpleAsClause</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7928be8a6f01a288">IdentifierName</a>(<b>NameOf</b>(<span class="t">Exception</span>))),
+                <b>Nothing</b>)).
+                <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#667a3a5e171dbf8d">WithStatements</a>(<span class="r7 r">catchStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#a21e6218b31450cf">Statements</a>).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r7 r">catchStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#96deb704a8ae75d8">GetLeadingTrivia</a>).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r7 r">catchStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bde4d0f06326d796">GetTrailingTrivia</a>).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>)
+ 
+            <b>Dim</b> <span id="r11 rd" class="r11 r">root</span> = <b>Await</b> <span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>()
+            <b>Dim</b> <span id="r12 rd" class="r12 r">newRoot</span> = <span class="r11 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r7 r">catchStatement</span>, <span class="r10 r">newCatch</span>)
+            <b>Dim</b> <span id="r13 rd" class="r13 r">newDoc</span> = <span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r12 r">newRoot</span>)
+            <b>Return</b> <span class="r13 r">newDoc</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html><head><title>RegexAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(66);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/RegexAnalyzer.cs" target="_top">Usage\RegexAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="d7ab380b44349648" href="../R/d7ab380b44349648.html" target="n" data-glyph="0,0" class="t"><span id="f33ac73e007cf8de">RegexAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="2c4a99e84174c5d8" href="../R/2c4a99e84174c5d8.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Your Regex expression is wrong&quot;</span>;
+        <b>internal const string</b> <a id="bd27ac5176847642" href="../R/bd27ac5176847642.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="66bf3df0995bf015" href="../R/66bf3df0995bf015.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#2f6994e63821aee7">Naming</a>;
+        <b>const string</b> <a id="f57036c0a22f35de" href="../R/f57036c0a22f35de.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;This diagnostic compile the Regex expression and trigger if the compilation fail &quot;</span>
+            + <span class="s">&quot;by throwing an exception.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="9e99836e3c1fe73a" href="../R/9e99836e3c1fe73a.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#7d2b20bc384cb1e8">Regex</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#2c4a99e84174c5d8">Title</a>,
+            <a href="#bd27ac5176847642">MessageFormat</a>,
+            <a href="#66bf3df0995bf015">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#f57036c0a22f35de">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#7d2b20bc384cb1e8">Regex</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="3a7d95e02a3bec28" href="../R/3a7d95e02a3bec28.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#9e99836e3c1fe73a">Rule</a>);
+ 
+        <b>public override void</b> <a id="5938ab4849639e98" href="../R/5938ab4849639e98.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#2bf97910a81988df">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+ 
+        <b>private static void</b> <a id="2bf97910a81988df" href="../R/2bf97910a81988df.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r5 rd" class="r5 r">invocationExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r6 rd" class="r6 r">memberExpresion</span> = <span class="r5 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+            <b>if</b> (<span class="r6 r">memberExpresion</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>() != <span class="s">&quot;Match&quot;</span>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r7 rd" class="r7 r">memberSymbol</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r6 r">memberExpresion</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <b>if</b> (<span class="r7 r">memberSymbol</span>?.ToString() != <span class="s">&quot;System.Text.RegularExpressions.Regex.Match(string, string)&quot;</span>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="k">var</a> <span id="r8 rd" class="r8 r">argumentList</span> = <span class="r5 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a>;
+            <b>if</b> ((<span class="r8 r">argumentList</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> ?? 0) != 2) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r9 rd" class="r9 r">regexLiteral</span> = <span class="r8 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>[1].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+            <b>if</b> (<span class="r9 r">regexLiteral</span> == <b>null</b>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#86bbd87a0ffc79bf" class="k">var</a> <span id="r10 rd" class="r10 r">regexOpt</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r9 r">regexLiteral</span>);
+ 
+            <b>var</b> <span id="r11 rd" class="r11 r">regex</span> = <span class="r10 r">regexOpt</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a> <b>as string</b>;
+ 
+            <b>try</b>
+            {
+                System.Text.RegularExpressions.<span class="t">Regex</span>.Match(<span class="s">&quot;&quot;</span>, <span class="r11 r">regex</span>);
+            }
+            <b>catch</b> (<span class="t">ArgumentException</span> <span id="r12 rd" class="r12 r">e</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r13 rd" class="r13 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#9e99836e3c1fe73a">Rule</a>, <span class="r9 r">regexLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r12 r">e</span>.Message);
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r13 r">diag</span>);
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

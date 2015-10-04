@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html><head><title>SealedAttributeTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(149);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Performance/SealedAttributeTests.cs" target="_top">Performance\SealedAttributeTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Performance;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Performance
+{
+    <b>public class</b> <a id="739541806fc3008c" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="7e8f2fc5e8fa4da7">SealedAttributeTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#b322d191e8ef8285" class="t">SealedAttributeAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#4bd26d7a9870cb92" class="t">SealedAttributeCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="69d3241e5878467c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ApplySealedWhenClassInheritsFromSystemAttributeClass</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+                public class MyAttribute : System.Attribute
+                {
+ 
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d6e29a9282628302">SealedAttribute</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Mark &#39;MyAttribute&#39; as sealed.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 2, 30) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bf319123c7b0ef31" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ApplySealedWhenClassInheritsIndirectlyFromSystemAttributeClass</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+                public abstract class MyAttribute : System.Attribute
+                {
+ 
+                }
+ 
+                public class OtherAttribute : MyAttribute
+                {
+ 
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d6e29a9282628302">SealedAttribute</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Mark &#39;OtherAttribute&#39; as sealed.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 7, 30) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="75d5bf4d01e27f13" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplySealedWhenClassThatInheritsFromSystemAttributeClassIsAbstract</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+                public abstract class MyAttribute : System.Attribute
+                {
+ 
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="02b7c91dda9f7a4a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplySealedWhenClassThatInheritsFromSystemAttributeClassIsSealed</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+                public sealed class MyAttribute : System.Attribute
+                {
+ 
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="26c959a51cb0d577" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplySealedWhenIsStruct</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+                public struct MyStruct
+                {
+ 
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4491b50e7163f68d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplySealedWhenIsInterface</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;
+                public interface ITest
+                {
+ 
+                    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c92a835c5c734516" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenSealedModifierIsAppliedOnClass</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+                public class MyAttribute : System.Attribute
+                {
+                }&quot;</span>;
+ 
+            <b>const string</b> <span id="r9 rd" class="r9 r">fixtest</span> = <span class="s">@&quot;
+                public sealed class MyAttribute : System.Attribute
+                {
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">source</span>, <span class="r9 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="91afe42a01722129" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenSealedModifierIsAppliedOnClassFixAll</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source1</span> = <span class="s">@&quot;
+                public class MyAttribute1 : System.Attribute
+                {
+                }
+                public class MyAttribute3 : System.Attribute
+                {
+                }&quot;</span>;
+            <b>const string</b> <span id="r11 rd" class="r11 r">fixtest1</span> = <span class="s">@&quot;
+                public sealed class MyAttribute1 : System.Attribute
+                {
+                }
+                public sealed class MyAttribute3 : System.Attribute
+                {
+                }&quot;</span>;
+ 
+            <b>const string</b> <span id="r12 rd" class="r12 r">source2</span> = <span class="s">@&quot;
+                public class MyAttribute2 : System.Attribute
+                {
+                }&quot;</span>;
+            <b>const string</b> <span id="r13 rd" class="r13 r">fixtest2</span> = <span class="s">@&quot;
+                public sealed class MyAttribute2 : System.Attribute
+                {
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b> <b>string</b>[] { <span class="r10 r">source1</span>, <span class="r12 r">source2</span> }, <b>new</b> <b>string</b>[] { <span class="r11 r">fixtest1</span>, <span class="r13 r">fixtest2</span> });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

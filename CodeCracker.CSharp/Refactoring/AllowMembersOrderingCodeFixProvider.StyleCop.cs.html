@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProvider.StyleCop.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(167);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/AllowMembersOrderingCodeFixProvider.StyleCop.cs" target="_top">Refactoring\AllowMembersOrderingCodeFixProvider.StyleCop.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Text;
+<b>using</b> System.Threading;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#640060f2ed0a8d7d" class="t">StyleCopAllowMembersOrderingCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="640060f2ed0a8d7d" href="../R/640060f2ed0a8d7d.html" target="n" data-glyph="0,0" class="t">StyleCopAllowMembersOrderingCodeFixProvider</a> : <a href="AllowMembersOrderingCodeFixProvider.Base.cs.html#b26b9ea4b8ff21dc" class="t">BaseAllowMembersOrderingCodeFixProvider</a>
+    {
+        <b>public</b> <a id="95ec6730f65317a3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingCodeFixProvider</a>() :
+            <a href="AllowMembersOrderingCodeFixProvider.Base.cs.html#aa89b01ffe3cd11a" class="k">base</a>(<span class="s">&quot;Order {0}&#39;s members following StyleCop patterns&quot;</span>)
+        { }
+ 
+        <b>protected override</b> <span class="t">IComparer</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt; <a id="cebf1d7544dd0f5f" href="../R/cebf1d7544dd0f5f.html" target="n" data-glyph="75,1">GetMemberDeclarationComparer</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r0 rd" class="r0 r">d</span>, <span class="t">CancellationToken</span> <span id="r1 rd" class="r1 r">c</span>) =&gt;
+            <b>new</b> <a href="#a4b9c444a430d62e" class="t">StyleCopMembersComparer</a>();
+ 
+        <b>public class</b> <a id="a4b9c444a430d62e" href="../R/a4b9c444a430d62e.html" target="n" data-glyph="0,1" class="t"><span id="592aebe95207f3c7">StyleCopMembersComparer</span></a> : <span class="t">IComparer</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt;
+        {
+            <b>readonly</b> <span class="t">Dictionary</span>&lt;<span class="t">Type</span>, <b>int</b>&gt; <a id="c9b94c6ea372c800" href="../R/c9b94c6ea372c800.html" target="n" data-glyph="46,2">typeRank</a> = <b>new</b> <span class="t">Dictionary</span>&lt;<span class="t">Type</span>, <b>int</b>&gt;
+            {
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>),       1 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>), 2 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#74831f65e834140c" class="t">DestructorDeclarationSyntax</a>),  3 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>),    4 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#235f9d42f8b7ed3c" class="t">EventFieldDeclarationSyntax</a>),  5 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#18e71d51f69a42d9" class="t">EventDeclarationSyntax</a>),       6 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#79f10d58f910c0dc" class="t">EnumDeclarationSyntax</a>),        7 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#260ed6457d1bea56" class="t">InterfaceDeclarationSyntax</a>),   8 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="t">PropertyDeclarationSyntax</a>),    9 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="t">IndexerDeclarationSyntax</a>),     10 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#987174a8e091e829" class="t">OperatorDeclarationSyntax</a>),    11 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>),      12 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8cfe7b539562640d" class="t">StructDeclarationSyntax</a>),      13 },
+                { <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>),       14 },
+            };
+ 
+            <b>private readonly</b> <span class="t">Dictionary</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>, <b>int</b>&gt; <a id="f8910fa547611747" href="../R/f8910fa547611747.html" target="n" data-glyph="46,2">specialModifierRank</a> = <b>new</b> <span class="t">Dictionary</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>, <b>int</b>&gt;
+            {
+                { <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3342344fece4043d">ConstKeyword</a>,   1 },
+                { <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9a5af18d43921abb">StaticKeyword</a>,  2 },
+            };
+ 
+            <b>private readonly</b> <span class="t">Dictionary</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>, <b>int</b>&gt; <a id="4f99e1a3be9e8860" href="../R/4f99e1a3be9e8860.html" target="n" data-glyph="46,2">accessLevelRank</a> = <b>new</b> <span class="t">Dictionary</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>, <b>int</b>&gt;
+            {
+                { <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b4701da0ca687ba5">PublicKeyword</a>,     -4 },
+                { <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df597579a4251569">InternalKeyword</a>,   -2 },
+                { <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c00358d30ac54cb3">ProtectedKeyword</a>,   1 },
+                { <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f5360853bd205f17">PrivateKeyword</a>,     2 },
+            };
+ 
+            <b>public int</b> <a id="255e43ae204b2997" href="../R/255e43ae204b2997.html" target="n" data-glyph="72,2">Compare</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r2 rd" class="r2 r">x</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r3 rd" class="r3 r">y</span>)
+            {
+                <b>if</b> (<span class="r2 r">x</span> == <b>null</b> &amp;&amp; <span class="r3 r">y</span> == <b>null</b>) <b>return</b> 0;
+                <b>if</b> (<span class="r2 r">x</span> == <b>null</b>) <b>return</b> 1;
+                <b>if</b> (<span class="r3 r">y</span> == <b>null</b>) <b>return</b> -1;
+ 
+                <b>var</b> <span id="r4 rd" class="r4 r">comparedPoints</span> = <a href="#521a3d188ea35953">GetRankPoints</a>(<span class="r2 r">x</span>).CompareTo(<a href="#521a3d188ea35953">GetRankPoints</a>(<span class="r3 r">y</span>));
+                <b>if</b> (<span class="r4 r">comparedPoints</span> != 0)
+                    <b>return</b> <span class="r4 r">comparedPoints</span>;
+ 
+                <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="k">var</a> <span id="r5 rd" class="r5 r">xModifiers</span> = <a href="#cab8aaa9ff7bc2d2">GetModifiers</a>(<span class="r2 r">x</span>);
+                <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="k">var</a> <span id="r6 rd" class="r6 r">yModifiers</span> = <a href="#cab8aaa9ff7bc2d2">GetModifiers</a>(<span class="r3 r">y</span>);
+ 
+                <span class="r4 r">comparedPoints</span> = <a href="#3bfe3abfa6639ce3">GetAccessLevelPoints</a>(<span class="r5 r">xModifiers</span>).CompareTo(<a href="#3bfe3abfa6639ce3">GetAccessLevelPoints</a>(<span class="r6 r">yModifiers</span>));
+                <b>if</b> (<span class="r4 r">comparedPoints</span> != 0)
+                    <b>return</b> <span class="r4 r">comparedPoints</span>;
+ 
+                <span class="r4 r">comparedPoints</span> = <a href="#1bdf81ea3784d7ff">GetSpecialModifierPoints</a>(<span class="r5 r">xModifiers</span>).CompareTo(<a href="#1bdf81ea3784d7ff">GetSpecialModifierPoints</a>(<span class="r6 r">yModifiers</span>));
+                <b>if</b> (<span class="r4 r">comparedPoints</span> != 0)
+                    <b>return</b> <span class="r4 r">comparedPoints</span>;
+ 
+                <b>return</b> <span class="r4 r">comparedPoints</span> != 0 ? <span class="r4 r">comparedPoints</span> : <a href="#607b500a012bc4b8">GetName</a>(<span class="r2 r">x</span>).CompareTo(<a href="#607b500a012bc4b8">GetName</a>(<span class="r3 r">y</span>));
+            }
+ 
+            <b>private int</b> <a id="521a3d188ea35953" href="../R/521a3d188ea35953.html" target="n" data-glyph="76,2">GetRankPoints</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r7 rd" class="r7 r">node</span>)
+            {
+                <b>int</b> <span id="r8 rd" class="r8 r">points</span>;
+                <b>if</b> (!<a href="#c9b94c6ea372c800">typeRank</a>.TryGetValue(<span class="r7 r">node</span>.GetType(), <b>out</b> <span class="r8 r">points</span>))
+                    <b>return</b> 0;
+                <b>return</b> <span class="r8 r">points</span>;
+            }
+ 
+            <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <a id="cab8aaa9ff7bc2d2" href="../R/cab8aaa9ff7bc2d2.html" target="n" data-glyph="76,2">GetModifiers</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r9 rd" class="r9 r">node</span>)
+            {
+                <b>var</b> <span id="r10 rd" class="r10 r">nodeType</span> = <span class="r9 r">node</span>.GetType();
+ 
+                <b>if</b> (<span class="r9 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="t">BaseMethodDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r9 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="t">BaseMethodDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#192a807e661e1151">Modifiers</a>;
+ 
+                <b>if</b> (<span class="r9 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6ff8c577cfc78a" class="t">BaseFieldDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r9 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6ff8c577cfc78a" class="t">BaseFieldDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0d9a55c4dfa5a2b3">Modifiers</a>;
+ 
+                <b>if</b> (<span class="r9 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r9 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#63a75031fae691c0">Modifiers</a>;
+ 
+                <b>if</b> (<span class="r9 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e719a8192750de72" class="t">BasePropertyDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r9 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e719a8192750de72" class="t">BasePropertyDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7672642b2d0cd172">Modifiers</a>;
+ 
+                <b>return default</b>(<a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a>);
+            }
+ 
+            <b>private int</b> <a id="1bdf81ea3784d7ff" href="../R/1bdf81ea3784d7ff.html" target="n" data-glyph="76,2">GetSpecialModifierPoints</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r11 rd" class="r11 r">tokenList</span>) =&gt; <a href="#720bc69c1984c2d0">SumRankPoints</a>(<span class="r11 r">tokenList</span>, <a href="#f8910fa547611747">specialModifierRank</a>, 100);
+ 
+            <b>private int</b> <a id="3bfe3abfa6639ce3" href="../R/3bfe3abfa6639ce3.html" target="n" data-glyph="76,2">GetAccessLevelPoints</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r12 rd" class="r12 r">tokenList</span>) =&gt; <a href="#720bc69c1984c2d0">SumRankPoints</a>(<span class="r12 r">tokenList</span>, <a href="#4f99e1a3be9e8860">accessLevelRank</a>, <a href="#4f99e1a3be9e8860">accessLevelRank</a>[<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f5360853bd205f17">PrivateKeyword</a>]);
+ 
+            <b>private static int</b> <a id="720bc69c1984c2d0" href="../R/720bc69c1984c2d0.html" target="n" data-glyph="76,2">SumRankPoints</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r13 rd" class="r13 r">tokenList</span>, <span class="t">Dictionary</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>, <b>int</b>&gt; <span id="r14 rd" class="r14 r">rank</span>, <b>int</b> <span id="r15 rd" class="r15 r">defaultSumValue</span>)
+            {
+                <b>var</b> <span id="r16 rd" class="r16 r">points</span> = <span class="r13 r">tokenList</span>
+                        .Select(<span id="r17 rd" class="r17 r">s</span> =&gt; <span class="r17 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f99f46fc603f74ac">Kind</a>())
+                        .Sum(<span id="r18 rd" class="r18 r">tokenKind</span> =&gt; <span class="r14 r">rank</span>.ContainsKey(<span class="r18 r">tokenKind</span>) ? <span class="r14 r">rank</span>[<span class="r18 r">tokenKind</span>] : 0);
+                <b>return</b> <span class="r16 r">points</span> == 0 ? <span class="r15 r">defaultSumValue</span> : <span class="r16 r">points</span>;
+            }
+ 
+            <b>private static string</b> <a id="607b500a012bc4b8" href="../R/607b500a012bc4b8.html" target="n" data-glyph="76,2">GetName</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r19 rd" class="r19 r">node</span>)
+            {
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>)
+                    <b>return</b> <a href="#181b25270227eb54">GetName</a>((<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c49a28b1ba615695">Declaration</a>);
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#235f9d42f8b7ed3c" class="t">EventFieldDeclarationSyntax</a>)
+                    <b>return</b> <a href="#181b25270227eb54">GetName</a>((<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#235f9d42f8b7ed3c" class="t">EventFieldDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b05d63b2ea9cdf89">Declaration</a>);
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#987174a8e091e829" class="t">OperatorDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#987174a8e091e829" class="t">OperatorDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#210f4542285192a1">OperatorToken</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="t">IndexerDeclarationSyntax</a>)
+                    <b>return</b> <span class="s">&quot;this&quot;</span>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="t">PropertyDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="t">PropertyDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7939517b98b4e8b4">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#334a238081d758bd">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#74831f65e834140c" class="t">DestructorDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#74831f65e834140c" class="t">DestructorDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59cc9e7eeb5e39d">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#118e6f1f6a820e0c">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#18e71d51f69a42d9" class="t">EventDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#18e71d51f69a42d9" class="t">EventDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#23253a19df302b9b">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d6cba869e993d020" class="t">BaseTypeDeclarationSyntax</a>)
+                    <b>return</b> (<span class="r19 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d6cba869e993d020" class="t">BaseTypeDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f24e720d95831112">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+ 
+                <b>return</b> <span class="s">&quot;&quot;</span>;
+            }
+ 
+            <b>private static string</b> <a id="181b25270227eb54" href="../R/181b25270227eb54.html" target="n" data-glyph="76,2">GetName</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#19e857e7634f6af2" class="t">VariableDeclarationSyntax</a> <span id="r20 rd" class="r20 r">declaration</span>)
+            {
+                <b>var</b> <span id="r21 rd" class="r21 r">str</span> = <b>new</b> <span class="t">StringBuilder</span>();
+                <span class="r20 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.Aggregate(<span class="r21 r">str</span>, (<span id="r22 rd" class="r22 r">accumulate</span>, <span id="r23 rd" class="r23 r">seed</span>) =&gt; <span class="r22 r">accumulate</span>.Append(<span class="r23 r">seed</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>));
+                <b>return</b> <span class="r21 r">str</span>.ToString();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

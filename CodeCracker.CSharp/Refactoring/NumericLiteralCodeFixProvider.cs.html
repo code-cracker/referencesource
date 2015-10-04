@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html><head><title>NumericLiteralCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(74);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/NumericLiteralCodeFixProvider.cs" target="_top">Refactoring\NumericLiteralCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+ 
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#04d726cd09343463" class="t">NumericLiteralCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="04d726cd09343463" href="../R/04d726cd09343463.html" target="n" data-glyph="0,0" class="t"><span id="ef18f913e04b6d2d">NumericLiteralCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="c52b0a6ce43292c6" href="../R/c52b0a6ce43292c6.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#311245ed96e98551">NumericLiteral</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="895df2166240b009" href="../R/895df2166240b009.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="cfa5a187edb0f8a3" href="../R/cfa5a187edb0f8a3.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Swap decimal and hexadecimal literals&quot;</span>, <span id="r2 rd" class="r2 r">c</span> =&gt; <a href="#207b61471d5b1444">ChangeLiteralAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>, <span class="r2 r">c</span>), <b>nameof</b>(<a href="#04d726cd09343463" class="t">NumericLiteralCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="207b61471d5b1444" href="../R/207b61471d5b1444.html" target="n" data-glyph="76,1">ChangeLiteralAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a> <span id="r4 rd" class="r4 r">diagnosticLocation</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r7 rd" class="r7 r">literal</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">diagnosticLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>) <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+            <b>if</b> (<span class="r7 r">literal</span> == <b>null</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6835ecc13681e392" class="k">var</a> <span id="r8 rd" class="r8 r">argument</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6835ecc13681e392" class="t">ArgumentSyntax</a>)<span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">diagnosticLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+                <span class="r7 r">literal</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>)<span class="r8 r">argument</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>;
+            }
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r9 rd" class="r9 r">newRoot</span> = <a href="#afd5455676ee0df5">CreateNewLiteral</a>(<span class="r7 r">literal</span>, <span class="r6 r">root</span>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r10 rd" class="r10 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r9 r">newRoot</span>);
+            <b>return</b> <span class="r10 r">newDocument</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="afd5455676ee0df5" href="../R/afd5455676ee0df5.html" target="n" data-glyph="76,1">CreateNewLiteral</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r11 rd" class="r11 r">literal</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r12 rd" class="r12 r">root</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r13 rd" class="r13 r">newRoot</span>;
+            <b>if</b> (<span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> != <span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>)
+            {
+                <b>var</b> <span id="r14 rd" class="r14 r">newTokenText</span> = <span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>;
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r15 rd" class="r15 r">newLiteral</span> = <span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ef8b58a2b9f3c60b">WithToken</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#dcaa4aaf3f7a7628">ParseToken</a>(<span class="r14 r">newTokenText</span>));
+                <span class="r13 r">newRoot</span> = <span class="r12 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r11 r">literal</span>, <span class="r15 r">newLiteral</span>);
+            }
+            <b>else</b>
+            {
+                <b>var</b> <span id="r16 rd" class="r16 r">value</span> = (<b>dynamic</b>)<span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>;
+                <b>if</b> (<span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a> != <b>null</b> &amp;&amp; <span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#36cf7e441ab545b2">UnaryMinusExpression</a>))
+                {
+                    <b>var</b> <span id="r17 rd" class="r17 r">newTokenText</span> = (<b>string</b>)(<span class="s">&quot;0x&quot;</span> + (<span class="r16 r">value</span> * -1).ToString(<span class="s">&quot;X&quot;</span>));
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r18 rd" class="r18 r">newLiteral</span> = <span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ef8b58a2b9f3c60b">WithToken</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#dcaa4aaf3f7a7628">ParseToken</a>(<span class="r17 r">newTokenText</span>))
+                        .<a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#d81e1df82fa9772d">GetLeadingTrivia</a>())
+                        .<a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2c8b23967d743711">GetTrailingTrivia</a>());
+                    <span class="r13 r">newRoot</span> = <span class="r12 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>, <span class="r18 r">newLiteral</span>);
+                }
+                <b>else</b>
+                {
+                    <b>var</b> <span id="r19 rd" class="r19 r">newTokenText</span> = (<b>string</b>)(<span class="s">&quot;0x&quot;</span> + <span class="r16 r">value</span>.ToString(<span class="s">&quot;X&quot;</span>));
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r20 rd" class="r20 r">newLiteral</span> = <span class="r11 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ef8b58a2b9f3c60b">WithToken</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#dcaa4aaf3f7a7628">ParseToken</a>(<span class="r19 r">newTokenText</span>));
+                    <span class="r13 r">newRoot</span> = <span class="r12 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r11 r">literal</span>, <span class="r20 r">newLiteral</span>);
+                }
+            }
+            <b>return</b> <span class="r13 r">newRoot</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

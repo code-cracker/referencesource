@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemovePrivateMethodNeverUsedAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(70);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/RemovePrivateMethodNeverUsedAnalyzer.vb" target="_top">Usage\RemovePrivateMethodNeverUsedAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="62f0818c68fefdd6" href="../R/62f0818c68fefdd6.html" target="n" data-glyph="0,0" class="t"><span id="84bb41e11b3b8a39">RemovePrivateMethodNeverUsedAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="756ad53209c8135b" href="../R/756ad53209c8135b.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Unused Method&quot;</span>
+        <b>Friend Const</b> <a id="801f2a8b70372381" href="../R/801f2a8b70372381.html" target="n" data-glyph="8,1">Message</a> = <span class="s">&quot;Method is not used.&quot;</span>
+        <b>Private Const</b> <a id="47219d82aae7fb3a" href="../R/47219d82aae7fb3a.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;When a private method is declared but not used, remove it to avoid confusion.&quot;</span>
+ 
+        <b>Friend Shared</b> <a id="64ce718fe157233a" href="../R/64ce718fe157233a.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6001b257c1992b0e">RemovePrivateMethodNeverUsed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#756ad53209c8135b">Title</a>,
+            <a href="#801f2a8b70372381">Message</a>,
+            <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#47219d82aae7fb3a">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6001b257c1992b0e">RemovePrivateMethodNeverUsed</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="00c3df254c8dff4b" href="../R/00c3df254c8dff4b.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#64ce718fe157233a">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="5829bc729c639186" href="../R/5829bc729c639186.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#31207396f60f6095">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#60844220762ff50e">SubStatement</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0144caff7cd4a13c">FunctionStatement</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="31207396f60f6095" href="../R/31207396f60f6095.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">methodStatement</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6428171a2349e2b8" class="t">MethodStatementSyntax</a>)
+            <b>If</b> <span class="r5 r">methodStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1490cebb4660b359">HandlesClause</a> <b>IsNot Nothing Then Exit Sub
+            If Not</b> <span class="r5 r">methodStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d8879a2444966a44">Modifiers</a>.Any(<b>Function</b>(<span id="r6 rd" class="r6 r">a</span>) <span class="r6 r">a</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#981434cd44f87f3e">Token</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f1354d31b311e16a">PrivateKeyword</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>) <b>Then Exit Sub
+            If</b> <a href="#c2987e7114373101">IsMethodUsed</a>(<span class="r5 r">methodStatement</span>, <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>) <b>Then Exit Sub
+            Dim</b> <span id="r7 rd" class="r7 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#64ce718fe157233a">Rule</a>, <span class="r5 r">methodStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>())
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diag</span>)
+        <b>End Sub
+ 
+        Private Function</b> <a id="c2987e7114373101" href="../R/c2987e7114373101.html" target="n" data-glyph="76,1">IsMethodUsed</a>(<span id="r8 rd" class="r8 r">methodTarget</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6428171a2349e2b8" class="t">MethodStatementSyntax</a>, <span id="r9 rd" class="r9 r">semanticModel</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As Boolean
+            Dim</b> <span id="r10 rd" class="r10 r">typeDeclaration</span> = <b>TryCast</b>(<span class="r8 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>)
+            <b>If</b> <span class="r10 r">typeDeclaration</span> <b>Is Nothing Then Return True
+ 
+            Dim</b> <span id="r11 rd" class="r11 r">classStatement</span> = <span class="r10 r">typeDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cbbbebcffeffb4a6">ClassStatement</a>
+            <b>If</b> <span class="r11 r">classStatement</span> <b>Is Nothing Then Return True
+ 
+            If Not</b> <span class="r11 r">classStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19cb7abb40b83a0d">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#773056510c6d78ed">Any</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#857ee683befdca09">PartialKeyword</a>) <b>Then
+                Return</b> <a href="#740d1ee1f158b361">IsMethodUsed</a>(<span class="r8 r">methodTarget</span>, <span class="r10 r">typeDeclaration</span>)
+            <b>End If
+ 
+            Dim</b> <span id="r12 rd" class="r12 r">symbol</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e8928ce4e7dbaf13">GetDeclaredSymbol</a>(<span class="r10 r">typeDeclaration</span>)
+ 
+            <b>Return</b> <span class="r12 r">symbol</span> <b>Is Nothing OrElse</b> <span class="r12 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>.Any(<b>Function</b>(<span id="r13 rd" class="r13 r">r</span>) <a href="#740d1ee1f158b361">IsMethodUsed</a>(<span class="r8 r">methodTarget</span>, <span class="r13 r">r</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4bca9697879fc0f6">GetSyntax</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>))
+        <b>End Function
+ 
+        Private Function</b> <a id="740d1ee1f158b361" href="../R/740d1ee1f158b361.html" target="n" data-glyph="76,1">IsMethodUsed</a>(<span id="r14 rd" class="r14 r">methodTarget</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6428171a2349e2b8" class="t">MethodStatementSyntax</a>, <span id="r15 rd" class="r15 r">typeDeclaration</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>) <b>As Boolean
+            Dim</b> <span id="r16 rd" class="r16 r">hasIdentifier</span> = <span class="r15 r">typeDeclaration</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>()?.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a5444c7de676498" class="t">IdentifierNameSyntax</a>)()
+            <b>If</b> (<span class="r16 r">hasIdentifier</span> <b>Is Nothing OrElse Not</b> <span class="r16 r">hasIdentifier</span>.Any()) <b>Then Return False
+            Return</b> <span class="r16 r">hasIdentifier</span>.Any(<b>Function</b>(<span id="r17 rd" class="r17 r">a</span>) <span class="r17 r">a</span> <b>IsNot Nothing AndAlso</b> <span class="r17 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d6e94d60351f98c8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>.Equals(<span class="r14 r">methodTarget</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#22e1ddd7ffa48688">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>))
+        <b>End Function
+ 
+    End Class
+End Namespace</b>
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html><head><title>GlobalSuppressions.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(10);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/GlobalSuppressions.cs" target="_top">GlobalSuppressions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// This file is used by Code Analysis to maintain SuppressMessage</span>
+<span class="c">// attributes that are applied to this project.</span>
+<span class="c">// Project-level suppressions either have no target or are given</span>
+<span class="c">// a specific target and scoped to a namespace, type, member, etc.</span>
+ 
+<span class="c">//this works, but is specific to a method, so it would be too much work to use:</span>
+<span class="c">//1: [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Style&quot;, &quot;CC0061:TaskNameAsyncAnalyzer&quot;, Justification = &quot;No need for tests to have async sufix.&quot;, Scope = &quot;member&quot;, Target = &quot;~M:CodeCracker.Test.Design.CopyEventToVariableBeforeFireTests.IgnoreMemberAccess&quot;)]</span>
+<span class="c">//this should work but does not we are keeping it here only because it should work in the future</span>
+<span class="c">//right now we are using a .ruleset to exclude CC0061 from the test project</span>
+<span class="c">//2: [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Style&quot;, &quot;CC0061&quot;, Scope = &quot;namespace&quot;, Target = &quot;CodeCracker.Test.Design&quot;, Justification = &quot;No need for tests to have async sufix.&quot;)]</span></pre></td></tr></table></div></body></html>

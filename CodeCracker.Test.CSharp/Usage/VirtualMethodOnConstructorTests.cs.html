@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html><head><title>VirtualMethodOnConstructorTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(149);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/VirtualMethodOnConstructorTests.cs" target="_top">Usage\VirtualMethodOnConstructorTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage {
+    <b>public class</b> <a id="93abfe05417642e0" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="d3be881e7080a541">VirtualMethodOnConstructorTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#edc7bdb3c3230679" class="t">DiagnosticVerifier</a> {
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c80eb7f5a478b9be" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfVirtualMethodFoundInConstructorCreatesDiagnostic</a>() {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+public class Person
+{{
+	public Person(string foo)
+	{{
+		DoFoo(foo);
+	}}
+ 
+	public virtual void DoFoo(string foo)
+	{{
+	}}
+}}&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b7a9a1e118c413ee">VirtualMethodOnConstructor</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#169cd686bd2f8ac9" class="t">VirtualMethodOnConstructorAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#3a5fc10866c448b2">Message</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 3) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="268411a4ced3070f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfVirtualMethodWithThisFoundInConstructorCreatesDiagnostic</a>() {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+public class Person
+{{
+	public Person(string foo)
+	{{
+		this.DoFoo(foo);
+	}}
+ 
+	public virtual void DoFoo(string foo)
+	{{
+	}}
+}}&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b7a9a1e118c413ee">VirtualMethodOnConstructor</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#169cd686bd2f8ac9" class="t">VirtualMethodOnConstructorAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#3a5fc10866c448b2">Message</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 3) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="27f928a804f69a41" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfVirtualMethodFoundFromOtherClassInConstructorDoNotCreateDiagnostic</a>() {
+            <b>const string</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+public class Book
+{{
+	public virtual void DoFoo(string foo)
+	{{
+	}}
+}}
+public class Person
+{{
+	public Person(string foo)
+	{{
+		var b = new Book();
+        b.DoFoo(foo);
+	}}
+}}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c120a1162b1ba98d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfVirtualMethodNotFoundInConstructorDoNotCreateDiagnostic</a>() {
+            <b>const string</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+public class Person
+{{
+	public Person(string foo)
+	{{
+		DoFoo(foo);
+	}}
+ 
+	public void DoFoo(string foo)
+	{{
+	}}
+}}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f4ccfe11dd51c927" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfManyVirtualMethodFoundInConstructorCreatesDiagnostics</a>() {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+public class Person
+{{
+	public Person(string foo)
+	{{
+		DoFoo(foo);
+		DoFoo2(foo);
+	}}
+ 
+	public virtual void DoFoo(string foo)
+	{{
+	}}
+    public virtual void DoFoo2(string foo)
+	{{
+	}}
+}}&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r7 rd" class="r7 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b7a9a1e118c413ee">VirtualMethodOnConstructor</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#169cd686bd2f8ac9" class="t">VirtualMethodOnConstructorAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#3a5fc10866c448b2">Message</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 3) }
+            };
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r8 rd" class="r8 r">expected2</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b7a9a1e118c413ee">VirtualMethodOnConstructor</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#169cd686bd2f8ac9" class="t">VirtualMethodOnConstructorAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#3a5fc10866c448b2">Message</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 7, 3) }
+            };
+ 
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">test</span>, <span class="r7 r">expected</span>, <span class="r8 r">expected2</span>);
+        }
+ 
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a> <a id="020360bf3843af7a" href="../R/020360bf3843af7a.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>() {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.CSharp/A.html#169cd686bd2f8ac9" class="t">VirtualMethodOnConstructorAnalyzer</a>();
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="18d9754bb34cef4d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfNameOfFoundInConstructorDoesNotCreateDiagnostic</a>() {
+            <b>const string</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">@&quot;
+public class Person
+{{
+	public Person(string name)
+	{{
+        throw new System.ArgumentOutOfRangeException(nameof(name), &quot;&quot;&quot;&quot;);
+	}}
+}}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">test</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

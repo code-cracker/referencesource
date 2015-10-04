@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html><head><title>ParameterRefactoryAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(47);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/ParameterRefactoryAnalyzer.cs" target="_top">Refactoring\ParameterRefactoryAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="988df4d8d97895bf" href="../R/988df4d8d97895bf.html" target="n" data-glyph="0,0" class="t"><span id="810ec999ede9aa50">ParameterRefactoryAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="1826453c49336dae" href="../R/1826453c49336dae.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;You should use a class&quot;</span>;
+        <b>internal const string</b> <a id="aaa1d6c2c4b86385" href="../R/aaa1d6c2c4b86385.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;When the method has more than three parameters, use new class.&quot;</span>;
+        <b>internal const string</b> <a id="05de410a3faebf00" href="../R/05de410a3faebf00.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="fee8461529e18ca1" href="../R/fee8461529e18ca1.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#61cec36eae775f87">ParameterRefactory</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#1826453c49336dae">Title</a>,
+            <a href="#aaa1d6c2c4b86385">MessageFormat</a>,
+            <a href="#05de410a3faebf00">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#61cec36eae775f87">ParameterRefactory</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="1822cf7c1143f4fc" href="../R/1822cf7c1143f4fc.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#fee8461529e18ca1">Rule</a>);
+        <b>public override void</b> <a id="c9eaf599aa5306f3" href="../R/c9eaf599aa5306f3.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt;
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#5bae3b77560d4b9f">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f888c625ee964f4b">MethodDeclaration</a>);
+ 
+        <b>private static void</b> <a id="5bae3b77560d4b9f" href="../R/5bae3b77560d4b9f.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r4 rd" class="r4 r">method</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21f487672c2ad64b">Any</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#547e20dfc16c45fd">ExternKeyword</a>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b1c0088f7b71bd8" class="k">var</a> <span id="r5 rd" class="r5 r">contentParameter</span> = <span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#885475f5cb2513b6">ParameterList</a>;
+            <b>if</b> (!<span class="r5 r">contentParameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a>() || <span class="r5 r">contentParameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> &lt;= 3) <b>return</b>;
+            <b>if</b> (<span class="r5 r">contentParameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.SelectMany(<span id="r6 rd" class="r6 r">parameter</span> =&gt; <span class="r6 r">parameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#33b33843834d6a63">Modifiers</a>)
+                    .Any(<span id="r7 rd" class="r7 r">modifier</span> =&gt; <span class="r7 r">modifier</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4c40726bf6d2c81f">RefKeyword</a>) ||
+                                     <span class="r7 r">modifier</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bea17a3927f00bc">OutKeyword</a>) ||
+                                     <span class="r7 r">modifier</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fdd2a8da625e34fd">ThisKeyword</a>) ||
+                                     <span class="r7 r">modifier</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c7b2cf21f07e287c">ParamsKeyword</a>))) <b>return</b>;
+            <b>if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>().Count() &gt; 0) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r8 rd" class="r8 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#fee8461529e18ca1">Rule</a>, <span class="r5 r">contentParameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>());
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r8 r">diagnostic</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProvider.Base.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(74);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/AllowMembersOrderingCodeFixProvider.Base.cs" target="_top">Refactoring\AllowMembersOrderingCodeFixProvider.Base.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Formatting;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    <b>public abstract class</b> <a id="b26b9ea4b8ff21dc" href="../R/b26b9ea4b8ff21dc.html" target="n" data-glyph="0,0" class="t">BaseAllowMembersOrderingCodeFixProvider</a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="996695531132fa88" href="../R/996695531132fa88.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b4e1a1d2add10d97">AllowMembersOrdering</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="d118ddeca8844c10" href="../R/d118ddeca8844c10.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>protected readonly string</b> <a id="2e1a2fd28fbee1ea" href="../R/2e1a2fd28fbee1ea.html" target="n" data-glyph="45,1">codeActionDescription</a>;
+ 
+        <b>protected</b> <a id="aa89b01ffe3cd11a" href="../R/aa89b01ffe3cd11a.html" target="n" data-glyph="75,1">BaseAllowMembersOrderingCodeFixProvider</a>(<b>string</b> <span id="r0 rd" class="r0 r">codeActionDescription</span>) : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#569b185451aeed96" class="k">base</a>()
+        {
+            <a href="#b26b9ea4b8ff21dc" class="k">this</a>.<a href="#2e1a2fd28fbee1ea">codeActionDescription</a> = <span class="r0 r">codeActionDescription</span>;
+        }
+ 
+        <b>public override async</b> <span class="t">Task</span> <a id="68e4beeb00fc3210" href="../R/68e4beeb00fc3210.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r1 rd" class="r1 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r2 rd" class="r2 r">root</span> = <b>await</b> <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r3 rd" class="r3 r">diagnostic</span> = <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="k">var</a> <span id="r4 rd" class="r4 r">typeDeclarationSyntax</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a>)<span class="r2 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r3 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r5 rd" class="r5 r">newDocument</span> = <b>await</b> <a href="#98f6b80c63e5bd3e">AllowMembersOrderingAsync</a>(<span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">typeDeclarationSyntax</span>, <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+            <b>if</b> (<span class="r5 r">newDocument</span> != <b>null</b>)
+                <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<b>string</b>.Format(<a href="#2e1a2fd28fbee1ea">codeActionDescription</a>, <span class="r4 r">typeDeclarationSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f24e720d95831112">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>), <span id="r6 rd" class="r6 r">ct</span> =&gt; <span class="t">Task</span>.FromResult(<span class="r5 r">newDocument</span>)), <span class="r3 r">diagnostic</span>);
+        }
+ 
+        <b>private async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="98f6b80c63e5bd3e" href="../R/98f6b80c63e5bd3e.html" target="n" data-glyph="76,1">AllowMembersOrderingAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r7 rd" class="r7 r">document</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r8 rd" class="r8 r">typeDeclarationSyntax</span>, <span class="t">CancellationToken</span> <span id="r9 rd" class="r9 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r10 rd" class="r10 r">newTypeDeclarationSyntax</span>;
+            <b>var</b> <span id="r11 rd" class="r11 r">orderChanged</span> = <a href="#2373f03fc8465817">TryReplaceTypeMembers</a>(
+                <span class="r8 r">typeDeclarationSyntax</span>,
+                <span class="r8 r">typeDeclarationSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#eed581e2c3deee1e">Members</a>,
+                <span class="r8 r">typeDeclarationSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#eed581e2c3deee1e">Members</a>.OrderBy(<span id="r12 rd" class="r12 r">member</span> =&gt; <span class="r12 r">member</span>, <a href="#bcc526ecaf6a990d">GetMemberDeclarationComparer</a>(<span class="r7 r">document</span>, <span class="r9 r">cancellationToken</span>)),
+                <b>out</b> <span class="r10 r">newTypeDeclarationSyntax</span>);
+ 
+            <b>if</b> (!<span class="r11 r">orderChanged</span>) <b>return null</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r13 rd" class="r13 r">root</span> = <b>await</b> <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r9 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r14 rd" class="r14 r">newRoot</span> = <span class="r13 r">root</span>
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r8 r">typeDeclarationSyntax</span>, <span class="r10 r">newTypeDeclarationSyntax</span>)
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r15 rd" class="r15 r">newDocument</span> = <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r14 r">newRoot</span>);
+            <b>return</b> <span class="r15 r">newDocument</span>;
+        }
+ 
+        <b>protected abstract</b> <span class="t">IComparer</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt; <a id="bcc526ecaf6a990d" href="../R/bcc526ecaf6a990d.html" target="n" data-glyph="75,1">GetMemberDeclarationComparer</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r16 rd" class="r16 r">document</span>, <span class="t">CancellationToken</span> <span id="r17 rd" class="r17 r">cancellationToken</span>);
+ 
+        <b>private static bool</b> <a id="2373f03fc8465817" href="../R/2373f03fc8465817.html" target="n" data-glyph="76,1">TryReplaceTypeMembers</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r18 rd" class="r18 r">typeDeclarationSyntax</span>, <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt; <span id="r19 rd" class="r19 r">membersDeclaration</span>, <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt; <span id="r20 rd" class="r20 r">sortedMembers</span>, <b>out</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r21 rd" class="r21 r">orderedType</span>)
+        {
+            <b>var</b> <span id="r22 rd" class="r22 r">sortedMembersQueue</span> = <b>new</b> <span class="t">Queue</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt;(<span class="r20 r">sortedMembers</span>);
+            <b>var</b> <span id="r23 rd" class="r23 r">orderChanged</span> = <b>false</b>;
+            <span class="r21 r">orderedType</span> = <span class="r18 r">typeDeclarationSyntax</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(
+                <span class="r19 r">membersDeclaration</span>,
+                (<span id="r24 rd" class="r24 r">original</span>, <span id="r25 rd" class="r25 r">rewritten</span>) =&gt;
+                {
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="k">var</a> <span id="r26 rd" class="r26 r">newMember</span> = <span class="r22 r">sortedMembersQueue</span>.Dequeue();
+                    <b>if</b> (!<span class="r23 r">orderChanged</span> &amp;&amp; !<span class="r24 r">original</span>.Equals(<span class="r26 r">newMember</span>)) <span class="r23 r">orderChanged</span> = <b>true</b>;
+                    <b>return</b> <span class="r26 r">newMember</span>;
+                });
+            <b>return</b> <span class="r23 r">orderChanged</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

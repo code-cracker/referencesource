@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.ReportingServices.targets</title><link rel="stylesheet" href="../../../../../../../../styles.css"><script src="../../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(32);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/ReportingServices/Microsoft.ReportingServices.targets" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\ReportingServices\Microsoft.ReportingServices.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/RdlCompile.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.ReportViewer.WebForms/A.html#3413629704e0573c" class="msbuildlink">Microsoft.Reporting.RdlCompile</a></span>&quot; <span class="xan">AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+	&lt;</span><span class="xn"><a href="/MSBuildProperties/R/PrepareResourcesDependsOn.html" target="n" class="msbuildlink">PrepareResourcesDependsOn</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/PrepareResourcesDependsOn.html" target="n" class="msbuildlink">PrepareResourcesDependsOn</a>);<a href="/MSBuildTargets/R/CompileRdlFiles.html" target="n" class="msbuildlink">CompileRdlFiles</a><span class="xd">&lt;/</span><span class="xn">PrepareResourcesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+	&lt;</span><span class="xn"><a href="/MSBuildProperties/R/CompileRdlFilesDependsOn.html" target="n" class="msbuildlink">CompileRdlFilesDependsOn</a></span><span class="xd">&gt;</span><a href="/MSBuildTargets/R/PrepareRdlFiles.html" target="n" class="msbuildlink">PrepareRdlFiles</a>;<a href="/MSBuildTargets/R/RunRdlCompiler.html" target="n" class="msbuildlink">RunRdlCompiler</a><span class="xd">&lt;/</span><span class="xn">CompileRdlFilesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/CompileRdlFiles.html" target="n" class="msbuildlink">CompileRdlFiles</a></span>&quot; <span class="xan">DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CompileRdlFilesDependsOn.html" target="n" class="msbuildlink">CompileRdlFilesDependsOn</a>)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/PrepareRdlFiles.html" target="n" class="msbuildlink">PrepareRdlFiles</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+	&lt;</span><span class="xn"><a href="/MSBuildTasks/R/CreateItem.html" target="n" class="msbuildlink">CreateItem</a></span><span class="xan">
+		Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a>);@(<a href="/MSBuildItems/R/Content.html" target="n" class="msbuildlink">Content</a>)</span>&quot;<span class="xan">
+		Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(Extension)&#39;==&#39;.rdlc&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+	  &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">Include</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/RdlFile.html" target="n" class="msbuildlink">RdlFile</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+	&lt;/</span><span class="xn">CreateItem</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target</span><span class="xan">
+	  Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/RunRdlCompiler.html" target="n" class="msbuildlink">RunRdlCompiler</a></span>&quot;<span class="xan">
+	  Inputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/RdlFile.html" target="n" class="msbuildlink">RdlFile</a>)</span>&quot;  <span class="xan">
+	  Outputs</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)RdlCompile.compiled</span>&quot;<span class="xan">
+	  Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/RdlFile.html" target="n" class="msbuildlink">RdlFile</a>)&#39;!=&#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+	&lt;</span><span class="xn"><a href="/MSBuildTasks/R/RdlCompile.html" target="n" class="msbuildlink">RdlCompile</a></span><span class="xan">
+		Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/RdlFile.html" target="n" class="msbuildlink">RdlFile</a>)</span>&quot;<span class="xan">
+		StateFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)RdlCompile.cache</span>&quot;<span class="xan">
+		TimeStampFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)RdlCompile.compiled</span>&quot;<span class="xd">&gt;</span><span class="xd">
+	  &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">StateFile</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/FileWrites.html" target="n" class="msbuildlink">FileWrites</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+	  &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">TimeStampFile</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/FileWrites.html" target="n" class="msbuildlink">FileWrites</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+	&lt;/</span><span class="xn">RdlCompile</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

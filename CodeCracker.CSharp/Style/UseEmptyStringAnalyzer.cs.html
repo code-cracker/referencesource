@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseEmptyStringAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(46);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/UseEmptyStringAnalyzer.cs" target="_top">Style\UseEmptyStringAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="a1a0a3dd6fbda9a9" href="../R/a1a0a3dd6fbda9a9.html" target="n" data-glyph="0,0" class="t"><span id="7e88951c1fdeca6b">UseEmptyStringAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>private const string</b> <a id="cadaacad81b1af51" href="../R/cadaacad81b1af51.html" target="n" data-glyph="10,1">EmptyString</a> = <span class="s">&quot;\&quot;\&quot;&quot;</span>;
+        <b>private const string</b> <a id="bc96fea2a773f43a" href="../R/bc96fea2a773f43a.html" target="n" data-glyph="10,1">InsteadStringEmpty</a> = <span class="s">&quot; instead of &#39;string.Empty&#39;&quot;</span>;
+        <b>internal const string</b> <a id="74bff32a090f9d16" href="../R/74bff32a090f9d16.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Consider use &quot;</span> + <a href="#cadaacad81b1af51">EmptyString</a>;
+ 
+        <b>internal const string</b> <a id="72a313508ec97499" href="../R/72a313508ec97499.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Use &quot;</span> + <a href="#cadaacad81b1af51">EmptyString</a> + <a href="#bc96fea2a773f43a">InsteadStringEmpty</a>;
+        <b>internal const string</b> <a id="e4de08a0de09796b" href="../R/e4de08a0de09796b.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="0b7bf879de3d2c78" href="../R/0b7bf879de3d2c78.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Consider using &quot;</span> + <a href="#cadaacad81b1af51">EmptyString</a> + <a href="#bc96fea2a773f43a">InsteadStringEmpty</a>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="f13eace428dd9cda" href="../R/f13eace428dd9cda.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#a48498898d0f0ef2">UseEmptyString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#74bff32a090f9d16">Title</a>,
+            <a href="#72a313508ec97499">MessageFormat</a>,
+            <a href="#e4de08a0de09796b">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#0b7bf879de3d2c78">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#a48498898d0f0ef2">UseEmptyString</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="f7109dd267a206e0" href="../R/f7109dd267a206e0.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#f13eace428dd9cda">Rule</a>);
+ 
+        <b>public override void</b> <a id="c51ff2a4ac34a928" href="../R/c51ff2a4ac34a928.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#a951189adafac9da">AnalyzeNodeVariableDeclaration</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff818812b7a56bce">SimpleMemberAccessExpression</a>);
+ 
+        <b>private static void</b> <a id="a951189adafac9da" href="../R/a951189adafac9da.html" target="n" data-glyph="76,1">AnalyzeNodeVariableDeclaration</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r5 rd" class="r5 r">expression</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+            <b>if</b> (<span class="r5 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>().ToLower() != <span class="s">&quot;string.empty&quot;</span> || <span class="r5 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#70d1b9c06b5b04c7">Ancestors</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0230280a170f659a" class="t">AttributeArgumentSyntax</a>&gt;().Any())
+                <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r6 rd" class="r6 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f13eace428dd9cda">Rule</a>, <span class="r5 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>());
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r6 r">diagnostic</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

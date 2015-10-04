@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html><head><title>StaticConstructorExceptionAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(48);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Design/StaticConstructorExceptionAnalyzer.vb" target="_top">Design\StaticConstructorExceptionAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+ 
+<b>Namespace</b> Design
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="672c43180345dc8d" href="../R/672c43180345dc8d.html" target="n" data-glyph="0,0" class="t"><span id="285d6fcbe81970fb">StaticConstructorExceptionAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="8b9d30850e289580" href="../R/8b9d30850e289580.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#56d19a28a236b319">StaticConstructorException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="de2a7654dfabdf6a" href="../R/de2a7654dfabdf6a.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;Don&#39;t throw exception inside static constructors.&quot;</span>
+        <b>Public Const</b> <a id="ef1c47c3b7b9db0c" href="../R/ef1c47c3b7b9db0c.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;Don&#39;t throw exceptions inside static constructors.&quot;</span>
+        <b>Public Const</b> <a id="390b5a4007ff2686" href="../R/390b5a4007ff2686.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>
+        <b>Public Const</b> <a id="4f7e87c97be3e42e" href="../R/4f7e87c97be3e42e.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;Static constructor are called before the first time a class is used but the caller doesn&#39;t control when exactly.
+Exception thrown in this context forces callers to use &#39;try&#39; block around any useage of the class and should be avoided.&quot;</span>
+        <b>Protected Shared</b> <a id="58152113b63d6531" href="../R/58152113b63d6531.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+                <a href="#8b9d30850e289580">Id</a>,
+                <a href="#de2a7654dfabdf6a">Title</a>,
+                <a href="#ef1c47c3b7b9db0c">MessageFormat</a>,
+                <a href="#390b5a4007ff2686">Category</a>,
+                <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+                <span class="r1 r">description</span>:=<a href="#4f7e87c97be3e42e">Description</a>,
+                <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#56d19a28a236b319">StaticConstructorException</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="7ad60537e26f2ad3" href="../R/7ad60537e26f2ad3.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#58152113b63d6531">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="6d4970d2011e9208" href="../R/6d4970d2011e9208.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#5b7d4413771940d8">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f4c8d95a9de9019d">SubNewStatement</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="5b7d4413771940d8" href="../R/5b7d4413771940d8.html" target="n" data-glyph="76,1">Analyzer</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">ctor</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, Syntax.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a>)
+            <b>If Not</b> <span class="r5 r">ctor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#76f03a4146e01759">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#773056510c6d78ed">Any</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#676068cc4ad0356d">SharedKeyword</a>) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r6 rd" class="r6 r">constructorBlock</span> = <b>DirectCast</b>(<span class="r5 r">ctor</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>, Syntax.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>)
+            <b>If Not</b> <span class="r6 r">constructorBlock</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d7d816eacd656bcc">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7409ba70634b172">Any</a>() <b>Then Exit Sub
+ 
+            Dim</b> <span id="r7 rd" class="r7 r">throwBlock</span> = <span class="r6 r">constructorBlock</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>.OfType(<b>Of</b> Syntax.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#78e0fbc5cf37f591" class="t">ThrowStatementSyntax</a>).FirstOrDefault()
+            <b>If</b> <span class="r7 r">throwBlock</span> <b>Is Nothing Then Exit Sub</b>
+ 
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#58152113b63d6531">Rule</a>, <span class="r7 r">throwBlock</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>, <a href="#de2a7654dfabdf6a">Title</a>))
+        <b>End Sub
+    End Class
+End Namespace</b>
+</pre></td></tr></table></div></body></html>

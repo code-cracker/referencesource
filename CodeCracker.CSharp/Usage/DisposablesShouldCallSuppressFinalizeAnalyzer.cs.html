@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposablesShouldCallSuppressFinalizeAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(92);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/DisposablesShouldCallSuppressFinalizeAnalyzer.cs" target="_top">Usage\DisposablesShouldCallSuppressFinalizeAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="f3ded5ab73dfeecb" href="../R/f3ded5ab73dfeecb.html" target="n" data-glyph="0,0" class="t"><span id="a6e17228fe22f5cf">DisposablesShouldCallSuppressFinalizeAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="44075e39ee7bc574" href="../R/44075e39ee7bc574.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Disposables Should Call Suppress Finalize&quot;</span>;
+        <b>internal const string</b> <a id="54d4b444cb44c239" href="../R/54d4b444cb44c239.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;&#39;{0}&#39; should call GC.SuppressFinalize inside the Dispose method.&quot;</span>;
+        <b>internal const string</b> <a id="c3f789b5649780fe" href="../R/c3f789b5649780fe.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#2f6994e63821aee7">Naming</a>;
+        <b>const string</b> <a id="fb9491abae0e65cc" href="../R/fb9491abae0e65cc.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Classes implementing IDisposable should call the GC.SuppressFinalize method in their &quot;</span>
+            + <span class="s">&quot;finalize method to avoid any finalizer from being called.\r\n&quot;</span>
+            + <span class="s">&quot;This rule should be followed even if the class doesn&#39;t have a finalizer as a derived class could have one.&quot;</span>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="a5c15d610a9022a8" href="../R/a5c15d610a9022a8.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#44075e39ee7bc574">Title</a>,
+            <a href="#54d4b444cb44c239">MessageFormat</a>,
+            <a href="#c3f789b5649780fe">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#fb9491abae0e65cc">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="3b6028bddd5bc046" href="../R/3b6028bddd5bc046.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#a5c15d610a9022a8">Rule</a>);
+ 
+        <b>public override void</b> <a id="9754c7574e654258" href="../R/9754c7574e654258.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#814f11e23a09e6f3">RegisterSymbolAction</a>(<a href="#9b7eaf347fec1678">Analyze</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#948cc1dd75de6895">NamedType</a>);
+ 
+        <b>private static void</b> <a id="9b7eaf347fec1678" href="../R/9b7eaf347fec1678.html" target="n" data-glyph="76,1">Analyze</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#2fdf5467e5e35082">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r5 rd" class="r5 r">symbol</span> = (<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a>;
+            <b>if</b> (<span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e11035df95f7fe47">Class</a>) <b>return</b>;
+            <b>if</b> (!<span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ab9dbc4496a6195">Interfaces</a>.Any(<span id="r6 rd" class="r6 r">i</span> =&gt; <span class="r6 r">i</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e44c02d09717b17d">System_IDisposable</a>)) <b>return</b>;
+            <b>if</b> (<span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92631bc5d794919">IsSealed</a> &amp;&amp; !<a href="#4138d608786c4ab9">ContainsUserDefinedFinalizer</a>(<span class="r5 r">symbol</span>)) <b>return</b>;
+            <b>if</b> (!<a href="#0912aaf653964b45">ContainsNonPrivateConstructors</a>(<span class="r5 r">symbol</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r7 rd" class="r7 r">disposeMethod</span> = <a href="#1419604393ee75a3">FindDisposeMethod</a>(<span class="r5 r">symbol</span>);
+            <b>if</b> (<span class="r7 r">disposeMethod</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r8 rd" class="r8 r">syntaxTree</span> = <span class="r7 r">disposeMethod</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>[0]?.<a href="@1@Microsoft.CodeAnalysis/A.html#4bca9697879fc0f6">GetSyntax</a>();
+ 
+            <b>var</b> <span id="r9 rd" class="r9 r">statements</span> = ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)<span class="r8 r">syntaxTree</span>)?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bc3b9b57b05e7d0">Statements</a>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#cc5ca0d98e6c43b4" class="t">ExpressionStatementSyntax</a>&gt;();
+            <b>if</b> (<span class="r9 r">statements</span> != <b>null</b>)
+            {
+                <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#cc5ca0d98e6c43b4" class="k">var</a> <span id="r10 rd" class="r10 r">statement</span> <b>in</b> <span class="r9 r">statements</span>)
+                {
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r11 rd" class="r11 r">invocation</span> = <span class="r10 r">statement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1b8e9fd67912d209">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r12 rd" class="r12 r">method</span> = <span class="r11 r">invocation</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r13 rd" class="r13 r">identifierSyntax</span> = <span class="r12 r">method</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#89a6a33327342122">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+                    <b>if</b> (<span class="r13 r">identifierSyntax</span> != <b>null</b> &amp;&amp; <span class="r13 r">identifierSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>() == <span class="s">&quot;GC&quot;</span> &amp;&amp; <span class="r12 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>() == <span class="s">&quot;SuppressFinalize&quot;</span>)
+                        <b>return</b>;
+                }
+            }
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b04c1b4614c7fc95">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#a5c15d610a9022a8">Rule</a>, <span class="r7 r">disposeMethod</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6fdf20baf08270e2">Locations</a>[0], <span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>));
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a> <a id="1419604393ee75a3" href="../R/1419604393ee75a3.html" target="n" data-glyph="76,1">FindDisposeMethod</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r14 rd" class="r14 r">symbol</span>)
+        {
+            <b>return</b> <span class="r14 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>().Where(<span id="r15 rd" class="r15 r">x</span> =&gt; <span class="r15 r">x</span>.ToString().Contains(<span class="s">$&quot;</span>{<span class="r15 r">x</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>}<span class="s">.Dispose(</span><span class="s">&quot;</span>)).Cast&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>&gt;()
+                .FirstOrDefault(<span id="r16 rd" class="r16 r">m</span> =&gt; <span class="r16 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#bc885140ba8cf592">Parameters</a> == <b>null</b> || <span class="r16 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#bc885140ba8cf592">Parameters</a>.Length == 0);
+        }
+ 
+        <b>public static bool</b> <a id="4138d608786c4ab9" href="../R/4138d608786c4ab9.html" target="n" data-glyph="72,1">ContainsUserDefinedFinalizer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r17 rd" class="r17 r">symbol</span>)
+        {
+            <b>return</b> <span class="r17 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>()
+                .Any(<span id="r18 rd" class="r18 r">x</span> =&gt; <span class="r18 r">x</span>.ToString().Contains(<span class="s">$&quot;</span><span class="s">.~</span>{<span class="r18 r">x</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>}<span class="s">(</span><span class="s">&quot;</span>));
+        }
+ 
+        <b>public static bool</b> <a id="0912aaf653964b45" href="../R/0912aaf653964b45.html" target="n" data-glyph="72,1">ContainsNonPrivateConstructors</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r19 rd" class="r19 r">symbol</span>)
+        {
+            <b>if</b> (<a href="#dab0002b22681e9a">IsNestedPrivateType</a>(<span class="r19 r">symbol</span>))
+                <b>return false</b>;
+ 
+            <b>return</b> <span class="r19 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>()
+                .Any(<span id="r20 rd" class="r20 r">m</span> =&gt; <span class="r20 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#337168667cb2dd7d">MetadataName</a> == <span class="s">&quot;.ctor&quot;</span> &amp;&amp; <span class="r20 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0684dd47edcdbeff">DeclaredAccessibility</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#96ec9a52e8b1305b" class="t">Accessibility</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#42080aaf5bad0b91">Private</a>);
+        }
+ 
+        <b>private static bool</b> <a id="dab0002b22681e9a" href="../R/dab0002b22681e9a.html" target="n" data-glyph="76,1">IsNestedPrivateType</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r21 rd" class="r21 r">symbol</span>)
+        {
+            <b>if</b> (<span class="r21 r">symbol</span> == <b>null</b>)
+                <b>return false</b>;
+ 
+            <b>if</b> (<span class="r21 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0684dd47edcdbeff">DeclaredAccessibility</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#96ec9a52e8b1305b" class="t">Accessibility</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#42080aaf5bad0b91">Private</a> &amp;&amp; <span class="r21 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a> != <b>null</b>)
+                <b>return true</b>;
+ 
+            <b>return</b> <a href="#dab0002b22681e9a">IsNestedPrivateType</a>(<span class="r21 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

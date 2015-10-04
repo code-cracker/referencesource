@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html><head><title>InterfaceNameAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(44);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/InterfaceNameAnalyzer.cs" target="_top">Style\InterfaceNameAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="ecd01f58fbb57bf2" href="../R/ecd01f58fbb57bf2.html" target="n" data-glyph="0,0" class="t"><span id="1d188319a35a2d7a">InterfaceNameAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="0d357c2821959438" href="../R/0d357c2821959438.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;You should add letter &#39;I&#39; before interface name.&quot;</span>;
+        <b>internal const string</b> <a id="b18de7946c1c03c0" href="../R/b18de7946c1c03c0.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Consider naming interfaces starting with &#39;I&#39;.&quot;</span>;
+        <b>internal const string</b> <a id="a03df644c44dc834" href="../R/a03df644c44dc834.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="754e006ee92e5a3b" href="../R/754e006ee92e5a3b.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Consider naming interfaces starting with &#39;I&#39;.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="68d30521ec84fd71" href="../R/68d30521ec84fd71.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#93053666e3bb8ba0">InterfaceName</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#0d357c2821959438">Title</a>,
+            <a href="#b18de7946c1c03c0">MessageFormat</a>,
+            <a href="#a03df644c44dc834">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#754e006ee92e5a3b">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#93053666e3bb8ba0">InterfaceName</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="eb19e8f4609c86ae" href="../R/eb19e8f4609c86ae.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#68d30521ec84fd71">Rule</a>);
+ 
+        <b>public override void</b> <a id="4f59d42e5ccd1ef4" href="../R/4f59d42e5ccd1ef4.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#e15c278aba4cb166">AnalyzeClass</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f547ed176ba97180">InterfaceDeclaration</a>);
+ 
+        <b>private static void</b> <a id="e15c278aba4cb166" href="../R/e15c278aba4cb166.html" target="n" data-glyph="76,1">AnalyzeClass</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#260ed6457d1bea56" class="k">var</a> <span id="r5 rd" class="r5 r">invocationExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#260ed6457d1bea56" class="t">InterfaceDeclarationSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r6 rd" class="r6 r">semanticModel</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>;
+ 
+            <b>var</b> <span id="r7 rd" class="r7 r">name</span> = <span class="r5 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9000fe398ffad4e3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>().ToUpper();
+            <b>if</b> (<span class="r7 r">name</span>.StartsWith(<span class="s">&quot;I&quot;</span>)) <b>return</b>;
+            <b>var</b> <span id="r8 rd" class="r8 r">error</span> = <b>string</b>.Format(<a href="#b18de7946c1c03c0">MessageFormat</a>, <a href="#b18de7946c1c03c0">MessageFormat</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r9 rd" class="r9 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#68d30521ec84fd71">Rule</a>, <span class="r5 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r8 r">error</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r9 r">diag</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

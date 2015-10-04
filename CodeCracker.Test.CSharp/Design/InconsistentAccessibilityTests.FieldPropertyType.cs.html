@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityTests.FieldPropertyType.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(143);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Design/InconsistentAccessibilityTests.FieldPropertyType.cs" target="_top">Design\InconsistentAccessibilityTests.FieldPropertyType.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Design
+{
+    <b>public</b> <a href="../P/f6a245822fee58bf.html" target="s" class="k">partial</a> <b>class</b> <a id="f6a245822fee58bf" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="37e3b860aaedfbcc">InconsistentAccessibilityTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+		[<span class="t">Fact</span>]
+		<b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="01107abdf353142f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldFixInconsistentAccessibilityErrorInClassFieldTypeAsync</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">testCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public DependedUpon field;
+}
+ 
+class DependedUpon
+{
+}&quot;</span>;
+            <b>const string</b> <span id="r1 rd" class="r1 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public DependedUpon field;
+}
+ 
+public class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r0 r">testCode</span>, <span class="r1 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+		[<span class="t">Fact</span>]
+		<b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7a1b238c517e5f2e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldFixInconsistentAccessibilityErrorInClassFieldTypeWhenQualifiedNameAsync</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">testCode</span> = <span class="s">@&quot;public class Dependent
+{
+    internal Dependent.DependedUpon field;
+ 
+	class DependedUpon
+	{
+	}
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r3 rd" class="r3 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    internal Dependent.DependedUpon field;
+ 
+	internal class DependedUpon
+	{
+	}
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r2 r">testCode</span>, <span class="r3 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ed49b402b96414c3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldFixInconsistentAccessibilityErrorInStructFieldTypeAsync</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">testCode</span> = <span class="s">@&quot;public struct Dependent
+{
+    public DependedUpon field, field1;
+}
+ 
+class DependedUpon
+{
+}&quot;</span>;
+            <b>const string</b> <span id="r5 rd" class="r5 r">fixedCode</span> = <span class="s">@&quot;public struct Dependent
+{
+    public DependedUpon field, field1;
+}
+ 
+public class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">testCode</span>, <span class="r5 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="18f3b263a8afac95" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldFixInconsistentAccessibilityErrorInPropertyTypeAsync</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">testCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public DependedUpon Property
+    {
+        get { return null; }
+        set { }
+    }
+}
+ 
+class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r7 rd" class="r7 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public DependedUpon Property
+    {
+        get { return null; }
+        set { }
+    }
+}
+ 
+public class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r6 r">testCode</span>, <span class="r7 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="be82abba941cc86b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldFixInconsistentAccessibilityErrorInPropertyTypeWhenUsingAutoPropertyAsync</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">testCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public DependedUpon Property
+    {
+        get;
+        set;
+    }
+}
+ 
+class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r9 rd" class="r9 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public DependedUpon Property
+    {
+        get;
+        set;
+    }
+}
+ 
+public class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">testCode</span>, <span class="r9 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

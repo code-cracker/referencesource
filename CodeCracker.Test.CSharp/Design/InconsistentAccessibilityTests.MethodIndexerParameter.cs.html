@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityTests.MethodIndexerParameter.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(401);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Design/InconsistentAccessibilityTests.MethodIndexerParameter.cs" target="_top">Design\InconsistentAccessibilityTests.MethodIndexerParameter.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Design.InconsistentAccessibility;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Design
+{
+    <b>public</b> <a href="../P/f6a245822fee58bf.html" target="s" class="k">partial</a> <b>class</b> <a id="f6a245822fee58bf" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="37e3b860aaedfbcc">InconsistentAccessibilityTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>,<span class="s">&quot;internal&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>,<span class="s">&quot;&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>, <span class="s">&quot;internal&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>, <span class="s">&quot;&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="716dff4d1d351c7d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenErrorInConstructor</a>(<b>string</b> <span id="r0 rd" class="r0 r">type</span>, <b>string</b> <span id="r1 rd" class="r1 r">dependedUponModfifier</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">sourceCode</span> = <span class="s">@&quot;
+public &quot;</span> + <span class="r0 r">type</span> + <span class="s">@&quot; Dependent
+{
+    public Dependent(int a, DependendedUpon d, string b)
+    {
+    }
+}
+&quot;</span> + <span class="r1 r">dependedUponModfifier</span> + <span class="s">@&quot; class DependendedUpon
+{
+}&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">fixedCode</span> = <span class="s">@&quot;
+public &quot;</span> + <span class="r0 r">type</span> + <span class="s">@&quot; Dependent
+{
+    public Dependent(int a, DependendedUpon d, string b)
+    {
+    }
+}
+public class DependendedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r2 r">sourceCode</span>, <span class="r3 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public&quot;</span>, <span class="s">&quot;sealed&quot;</span>, <span class="s">&quot;public sealed&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public static&quot;</span>, <span class="s">&quot;sealed internal&quot;</span>, <span class="s">&quot;sealed public&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public&quot;</span>, <span class="s">&quot;private&quot;</span>, <span class="s">&quot;public&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public&quot;</span>, <span class="s">&quot;protected&quot;</span>, <span class="s">&quot;public&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public&quot;</span>, <span class="s">&quot;/* a */ protected /* b */ internal /* c */&quot;</span>, <span class="s">&quot;/* a */ public /* b */  /* c */&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;protected virtual&quot;</span>, <span class="s">&quot;&quot;</span>, <span class="s">&quot;protected&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;protected&quot;</span>, <span class="s">&quot;internal /* comment */&quot;</span>, <span class="s">&quot;protected /* comment */&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;protected&quot;</span>, <span class="s">&quot;private&quot;</span>, <span class="s">&quot;protected&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;protected internal&quot;</span>, <span class="s">&quot;&quot;</span>, <span class="s">&quot;protected internal&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;protected internal&quot;</span>, <span class="s">&quot;  protected  &quot;</span>, <span class="s">&quot;  protected internal  &quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;protected internal&quot;</span>, <span class="s">&quot;internal&quot;</span>, <span class="s">&quot;protected internal&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;internal protected&quot;</span>, <span class="s">&quot;private&quot;</span>, <span class="s">&quot;protected internal&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;internal&quot;</span>, <span class="s">&quot;protected&quot;</span>, <span class="s">&quot;internal&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;internal&quot;</span>, <span class="s">&quot;private&quot;</span>, <span class="s">&quot;internal&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f31feaa659a66914" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenErrrorInMethod</a>(<b>string</b> <span id="r4 rd" class="r4 r">methodModifier</span>, <b>string</b> <span id="r5 rd" class="r5 r">dependedUponModifier</span>, <b>string</b> <span id="r6 rd" class="r6 r">fixedDependedUponModifier</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    &quot;</span> + <span class="r4 r">methodModifier</span> + <span class="s">@&quot; void SomeMethod(DependendedUpon d)
+    {
+    }
+ 
+    &quot;</span> + <span class="r5 r">dependedUponModifier</span> + <span class="s">@&quot; class DependendedUpon
+    {
+    }
+}&quot;</span>;
+ 
+             <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    &quot;</span> + <span class="r4 r">methodModifier</span> + <span class="s">@&quot; void SomeMethod(DependendedUpon d)
+    {
+    }
+ 
+    &quot;</span> + <span class="r6 r">fixedDependedUponModifier</span> + <span class="s">@&quot; class DependendedUpon
+    {
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">sourceCode</span>, <span class="r8 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public&quot;</span>, <span class="s">&quot;internal&quot;</span>, <span class="s">&quot;public&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;public&quot;</span>, <span class="s">&quot;&quot;</span>, <span class="s">&quot;public&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0d4baa0248179de3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenErrorInInterface</a>(<b>string</b> <span id="r9 rd" class="r9 r">interfaceAccessibilityModifier</span>, <b>string</b> <span id="r10 rd" class="r10 r">dependedUponModifier</span>, <b>string</b> <span id="r11 rd" class="r11 r">fixedDependedUponModifier</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">sourceCode</span> = <span class="s">@&quot;
+&quot;</span> + <span class="r9 r">interfaceAccessibilityModifier</span> + <span class="s">@&quot; interface Dependent
+{
+    void SomeMethod(DependendedUpon d);
+}
+&quot;</span> + <span class="r10 r">dependedUponModifier</span> + <span class="s">@&quot; class DependendedUpon
+{
+}&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">fixedCode</span> = <span class="s">@&quot;
+&quot;</span> + <span class="r9 r">interfaceAccessibilityModifier</span> + <span class="s">@&quot; interface Dependent
+{
+    void SomeMethod(DependendedUpon d);
+}
+&quot;</span> + <span class="r11 r">fixedDependedUponModifier</span> + <span class="s">@&quot; class DependendedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r12 r">sourceCode</span>, <span class="r13 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="09b951ad29536889" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenQualifiedNameIsUsedForParameterType</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(Dependent.DependendedUpon d)
+    {
+    }
+ 
+    internal class DependendedUpon
+    {
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r15 rd" class="r15 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(Dependent.DependendedUpon d)
+    {
+    }
+ 
+    public class DependendedUpon
+    {
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r14 r">sourceCode</span>, <span class="r15 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="592fb06416de5e34" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenAliasQualifiedNameIsUsedForParameterType</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(global::DependendedUpon d)
+    {
+    }
+}
+internal class DependendedUpon
+{
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r17 rd" class="r17 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(global::DependendedUpon d)
+    {
+    }
+}
+public class DependendedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r16 r">sourceCode</span>, <span class="r17 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3ded665dc23d240d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenUsingDelegateAsParameter</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+delegate void DependedUpon(int a);&quot;</span>;
+ 
+            <b>const string</b> <span id="r19 rd" class="r19 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+public delegate void DependedUpon(int a);&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r18 r">sourceCode</span>, <span class="r19 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b7725977c14884a5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenUsingEnumAsParameter</a>()
+        {
+            <b>const string</b> <span id="r20 rd" class="r20 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+enum DependedUpon {}&quot;</span>;
+ 
+            <b>const string</b> <span id="r21 rd" class="r21 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+public enum DependedUpon {}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">sourceCode</span>, <span class="r21 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6e716d6058f38fa7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenUsingInterfaceAsParameter</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+interface DependedUpon {}&quot;</span>;
+ 
+            <b>const string</b> <span id="r23 rd" class="r23 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+public interface DependedUpon {}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">sourceCode</span>, <span class="r23 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bb8c5b0330f055f2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenUsingGenericClassAsParameter</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon&lt;int&gt; d)
+    {
+    }
+}
+class DependedUpon&lt;T&gt; {}&quot;</span>;
+ 
+            <b>const string</b> <span id="r25 rd" class="r25 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon&lt;int&gt; d)
+    {
+    }
+}
+public class DependedUpon&lt;T&gt; {}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r24 r">sourceCode</span>, <span class="r25 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="152627c786dc4d23" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityToAllPartialDeclarationsAsync</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">sourceCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+partial class DependedUpon {}
+class SomeClass {}
+partial class DependedUpon {}&quot;</span>;
+ 
+            <b>const string</b> <span id="r27 rd" class="r27 r">fixedCode</span> = <span class="s">@&quot;
+public class Dependent
+{
+    public Dependent(DependedUpon d)
+    {
+    }
+}
+public partial class DependedUpon {}
+class SomeClass {}
+public partial class DependedUpon {}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r26 r">sourceCode</span>, <span class="r27 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7c86b32996da7aba" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenErrorInIndexerParameterAsync</a>()
+        {
+            <b>const string</b> <span id="r28 rd" class="r28 r">sourceCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public int this[int idx, DependedUpon dependedUpon]
+    {
+        get { return 0; }
+        set { }
+    }
+}
+ 
+class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r29 rd" class="r29 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public int this[int idx, DependedUpon dependedUpon]
+    {
+        get { return 0; }
+        set { }
+    }
+}
+ 
+public class DependedUpon
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r28 r">sourceCode</span>, <span class="r29 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4454491f619bf59d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenErrorInIndexerParameterUsingQualifiedNameAsync</a>()
+        {
+            <b>const string</b> <span id="r30 rd" class="r30 r">sourceCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public int this[int idx, Dependent.DependedUpon dependedUpon]
+    {
+        get { return 0; }
+        set { }
+    }
+ 
+    class DependedUpon
+    {
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r31 rd" class="r31 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public int this[int idx, Dependent.DependedUpon dependedUpon]
+    {
+        get { return 0; }
+        set { }
+    }
+ 
+    public class DependedUpon
+    {
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r30 r">sourceCode</span>, <span class="r31 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="18adcafdba03faab" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldChangeAccessibilityWhenErrorInMoreThanOneIndexerParameterAsync</a>()
+        {
+            <b>const string</b> <span id="r32 rd" class="r32 r">sourceCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public int this[int idx, Dependent.DependedUpon dependedUpon, DependedUpon2 dependedUpon2]
+    {
+        get { return 0; }
+        set { }
+    }
+ 
+    class DependedUpon
+    {
+    }
+}
+ 
+class DependedUpon2
+{
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r33 rd" class="r33 r">fixedCode</span> = <span class="s">@&quot;public class Dependent
+{
+    public int this[int idx, Dependent.DependedUpon dependedUpon, DependedUpon2 dependedUpon2]
+    {
+        get { return 0; }
+        set { }
+    }
+ 
+    public class DependedUpon
+    {
+    }
+}
+ 
+public class DependedUpon2
+{
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r32 r">sourceCode</span>, <span class="r33 r">fixedCode</span>).<a href="@0@mscorlib/A.html#9ca6b2f012ce7587">ConfigureAwait</a>(<b>false</b>);
+        }
+ 
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a> <a id="467cbc7335852577" href="../R/467cbc7335852577.html" target="n" data-glyph="75,1">GetCodeFixProvider</a>() =&gt; <b>new</b> <a href="/CodeCracker.CSharp/A.html#58836c9c3464b79a" class="t">InconsistentAccessibilityCodeFixProvider</a>();
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html><head><title>NameOfCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(42);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Design/NameOfCodeFixProvider.vb" target="_top">Design\NameOfCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.Formatting
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Design
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#b938295f168e9d60" class="t">NameOfCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="b938295f168e9d60" href="../R/b938295f168e9d60.html" target="n" data-glyph="0,0" class="t"><span id="797d51693f989de7">NameOfCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public NotOverridable Overrides ReadOnly Property</b> <a id="1da02e21f9092834" href="../R/1da02e21f9092834.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="NameOfAnalyzer.vb.html#81860c00b340151d" class="t">NameOfAnalyzer</a>.<a href="NameOfAnalyzer.vb.html#85d16a579ae9b369">Id</a>)
+ 
+        <b>Public Overrides Function</b> <a id="3de7d71b4b294737" href="../R/3de7d71b4b294737.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public Overrides Async Function</b> <a id="24f79e823451f12f" href="../R/24f79e823451f12f.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r2 rd" class="r2 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First
+            <b>Dim</b> <span id="r3 rd" class="r3 r">diagnosticspan</span> = <span class="r2 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">stringLiteral</span> = <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">diagnosticspan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>).FirstOrDefault
+            <b>If</b> <span class="r4 r">stringLiteral</span> <b>IsNot Nothing Then</b>
+                <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;use NameOf()&quot;</span>, <b>Function</b>(<span id="r5 rd" class="r5 r">c</span>) <a href="#ebf9d56d86981da4">MakeNameOf</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">stringLiteral</span>, <span class="r1 r">root</span>, <span class="r2 r">diagnostic</span>, <span class="r5 r">c</span>), <b>NameOf</b>(<a href="#b938295f168e9d60" class="t">NameOfCodeFixProvider</a>)), <span class="r2 r">diagnostic</span>)
+            <b>End If
+        End Function
+ 
+        Private Function</b> <a id="ebf9d56d86981da4" href="../R/ebf9d56d86981da4.html" target="n" data-glyph="76,1">MakeNameOf</a>(<span id="r6 rd" class="r6 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r7 rd" class="r7 r">stringLiteral</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>, <span id="r8 rd" class="r8 r">root</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>, <span id="r9 rd" class="r9 r">diagnostic</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>, <span id="r10 rd" class="r10 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>)
+            <b>Dim</b> <span id="r11 rd" class="r11 r">newNameof</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#db974b9e86ca7855">ParseExpression</a>(<span class="s">$&quot;</span><span class="s">NameOf(</span>{<span class="r7 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8353e6b0f3d3a218">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>().Replace(<span class="s">&quot;&quot;&quot;&quot;</span>, <span class="s">&quot;&quot;</span>)}<span class="s">)</span><span class="s">&quot;</span>).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r7 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#96deb704a8ae75d8">GetLeadingTrivia</a>).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r7 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bde4d0f06326d796">GetTrailingTrivia</a>).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>)
+ 
+            <b>Dim</b> <span id="r12 rd" class="r12 r">newRoot</span> = <span class="r8 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r7 r">stringLiteral</span>, <span class="r11 r">newNameof</span>)
+            <b>Return</b> <span class="t">Task</span>.FromResult(<span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r12 r">newRoot</span>))
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

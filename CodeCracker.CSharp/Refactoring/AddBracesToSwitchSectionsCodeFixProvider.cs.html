@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html><head><title>AddBracesToSwitchSectionsCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(59);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/AddBracesToSwitchSectionsCodeFixProvider.cs" target="_top">Refactoring\AddBracesToSwitchSectionsCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Formatting;
+<b>using</b> System.Threading;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#bcd2c3406ed501dc" class="t">AddBracesToSwitchSectionsCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="bcd2c3406ed501dc" href="../R/bcd2c3406ed501dc.html" target="n" data-glyph="0,0" class="t"><span id="b1c4bcb42d2b20ec">AddBracesToSwitchSectionsCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="b38ec063f0b54be2" href="../R/b38ec063f0b54be2.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#65790a4c540f79d1">AddBracesToSwitchSections</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="6e8dde88837c4b48" href="../R/6e8dde88837c4b48.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public override</b> <span class="t">Task</span> <a id="8e1986b6fbf9d0a9" href="../R/8e1986b6fbf9d0a9.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Add braces to each switch section&quot;</span>, <span id="r2 rd" class="r2 r">ct</span> =&gt; <a href="#2b6d01e7e0dfed5c">AddBracesAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r2 r">ct</span>), <b>nameof</b>(<a href="#bcd2c3406ed501dc" class="t">AddBracesToSwitchSectionsCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="2b6d01e7e0dfed5c" href="../R/2b6d01e7e0dfed5c.html" target="n" data-glyph="76,1">AddBracesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r4 rd" class="r4 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2bd20d0fd2a53894" class="k">var</a> <span id="r7 rd" class="r7 r">@switch</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2bd20d0fd2a53894" class="t">SwitchStatementSyntax</a>)<span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+            <b>var</b> <span id="r8 rd" class="r8 r">sections</span> = <b>new</b> <span class="t">List</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d8f489fc25a6f833" class="t">SwitchSectionSyntax</a>&gt;();
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d8f489fc25a6f833" class="k">var</a> <span id="r9 rd" class="r9 r">section</span> <b>in</b> <span class="r7 r">@switch</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52015ea163990842">Sections</a>)
+            {
+                <b>if</b> (!<a href="AddBracesToSwitchSectionsAnalyzer.cs.html#f2e3a1397be38067" class="t">AddBracesToSwitchSectionsAnalyzer</a>.<a href="AddBracesToSwitchSectionsAnalyzer.cs.html#a0d9843c6a74a788">HasBraces</a>(<span class="r9 r">section</span>))
+                {
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d8f489fc25a6f833" class="k">var</a> <span id="r10 rd" class="r10 r">newSection</span> = <a href="#08ce782decea95c5">AddBraces</a>(<span class="r9 r">section</span>);
+                    <span class="r8 r">sections</span>.Add(<span class="r10 r">newSection</span>);
+                }
+                <b>else</b>
+                {
+                    <span class="r8 r">sections</span>.Add(<span class="r9 r">section</span>);
+                }
+            }
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2bd20d0fd2a53894" class="k">var</a> <span id="r11 rd" class="r11 r">newSwitch</span> = <span class="r7 r">@switch</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ccef562435876816">WithSections</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e15ac987442c16c9">List</a>(<span class="r8 r">sections</span>)).<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r12 rd" class="r12 r">newRoot</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r7 r">@switch</span>, <span class="r11 r">newSwitch</span>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r13 rd" class="r13 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r12 r">newRoot</span>);
+            <b>return</b> <span class="r13 r">newDocument</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d8f489fc25a6f833" class="t">SwitchSectionSyntax</a> <a id="08ce782decea95c5" href="../R/08ce782decea95c5.html" target="n" data-glyph="76,1">AddBraces</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d8f489fc25a6f833" class="t">SwitchSectionSyntax</a> <span id="r14 rd" class="r14 r">section</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#994532e1525a7cd0" class="t">StatementSyntax</a> <span id="r15 rd" class="r15 r">blockStatement</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a8d52daaeb6d29e0">Block</a>(<span class="r14 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21a6f4ec9064c1f7">Statements</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#58715d7ff8771702">WithoutTrailingTrivia</a>();
+            <b>return</b> <span class="r14 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#75f5af55eed704fc">Update</a>(<span class="r14 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e2995001b2f323bb">Labels</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21267e62aa72eb43">SingletonList</a>(<span class="r15 r">blockStatement</span>));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

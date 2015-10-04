@@ -1,0 +1,579 @@
+﻿<!DOCTYPE html>
+<html><head><title>IntroduceFieldFromConstructorTest.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(570);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/IntroduceFieldFromConstructorTest.cs" target="_top">Refactoring\IntroduceFieldFromConstructorTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="f9e6bd81857bced9" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="30dcb4fb38699c39">IntroduceFieldFromConstructorTest</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#f8917b6e6bb5f16c" class="t">IntroduceFieldFromConstructorAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#fc4e2ae418fc30d8" class="t">IntroduceFieldFromConstructorCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f3526eddcc3cc9a7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenConstructorParameterHasPrivateField</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private int par;
+ 
+            public TypeName(int par)
+            {
+               this.par = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="54211c55b7093a99" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenConstructorParameterHasPrivateReadOnlyField</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par;
+ 
+            public TypeName(int par)
+            {
+               this.par = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="389352a7faa1caf8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenConstructorParameterHasAnyFieldAssign</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private int myField;
+ 
+            public TypeName(int par)
+            {
+               this.myField = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="86eb539236f4a4b7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateField</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r4 rd" class="r4 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par;
+ 
+            public TypeName(int par)
+            {
+               this.par = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r3 r">test</span>, <span class="r4 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3d1cfc67081f9872" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldAlreadyExistsAndMatchesType</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par;
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r6 rd" class="r6 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par;
+ 
+            public TypeName(int par)
+            {
+               this.par = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3560dd19982d5a65" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExists</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private string par;
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r8 rd" class="r8 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+            private string par;
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">test</span>, <span class="r8 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0628d898846ff07c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsOnEvent</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private event Action par;
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r10 rd" class="r10 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+ 
+            private event Action par;
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5c69d88ed1b5ed23" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsOnInterface</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            interface par { }
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r12 rd" class="r12 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+ 
+            interface par { }
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">test</span>, <span class="r12 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="35a6bab1026c152b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsOnDelegate</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            delegate void par();
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r14 rd" class="r14 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+ 
+            delegate void par();
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">test</span>, <span class="r14 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="293e78269be858df" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsOnInnerEnum</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            enum par { }
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r16 rd" class="r16 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+ 
+            enum par { }
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r15 r">test</span>, <span class="r16 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cc42276ce4d75521" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsOnInnerStruct</a>()
+        {
+            <b>const string</b> <span id="r17 rd" class="r17 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            struct par { }
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r18 rd" class="r18 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+ 
+            struct par { }
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r17 r">test</span>, <span class="r18 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a829b6ba09905a2b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsOnInnerClass</a>()
+        {
+            <b>const string</b> <span id="r19 rd" class="r19 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            class par { }
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r20 rd" class="r20 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+ 
+            class par { }
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r19 r">test</span>, <span class="r20 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="fe760a4a8dc262b4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsInSecondPosition</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private string bar, par;
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r22 rd" class="r22 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par1;
+            private string bar, par;
+ 
+            public TypeName(int par)
+            {
+               this.par1 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r21 r">test</span>, <span class="r22 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6e179a622d9bcb26" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorParameterWithPrivateFieldWhenFieldParameterNameAlreadyExistsTwice</a>()
+        {
+            <b>const string</b> <span id="r23 rd" class="r23 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private string par;
+            private string par1;
+ 
+            public TypeName(int par)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r24 rd" class="r24 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private readonly int par2;
+            private string par;
+            private string par1;
+ 
+            public TypeName(int par)
+            {
+               this.par2 = par;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r23 r">test</span>, <span class="r24 r">expected</span>);
+        }
+ 
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="05e37fa3e3e0b87c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IntroduceFieldConstructorFixAllInProject</a>()
+        {
+            <b>const string</b> <span id="r25 rd" class="r25 r">source1</span> = <span class="s">@&quot;
+                using System;
+                class foo1
+                {
+                    public foo1(int a)
+                    {
+                    }
+                }
+                class foo2
+                {
+                    public foo2(int a, int b)
+                    {
+                    }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r26 rd" class="r26 r">source2</span> = <span class="s">@&quot;
+                using system;
+                class foo3
+                {
+                    private string bar;
+ 
+                    public foo3(int bar)
+                    {
+                    }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r27 rd" class="r27 r">source3</span> = <span class="s">@&quot;
+               using system;
+               class foo4
+               {
+                   public foo4(int a, string b)
+                   {
+                   }
+               }
+            &quot;</span>;
+            <b>const string</b> <span id="r28 rd" class="r28 r">fixtest1</span> = <span class="s">@&quot;
+                using System;
+                class foo1
+                {
+                    private readonly int a;
+ 
+                    public foo1(int a) 
+                    {
+                        this.a = a;
+                    }
+                }
+                class foo2
+                {
+                    private readonly int b;
+                    private readonly int a;
+ 
+                    public foo2(int a, int b) 
+                    {
+                        this.a = a;
+                        this.b = b;
+                    }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r29 rd" class="r29 r">fixtest2</span> = <span class="s">@&quot;
+                using system;
+                class foo3
+                {
+                    private readonly int bar1;
+                    private string bar;
+ 
+                    public foo3(int bar)
+                    {
+                        this.bar1 = bar;
+                    }
+                }
+&quot;</span>;
+ 
+            <b>const string</b> <span id="r30 rd" class="r30 r">fixtest3</span> = <span class="s">@&quot;
+                using system;
+                class foo4
+                {
+                    private readonly string b;
+                    private readonly int a;
+ 
+                    public foo4(int a, string b)
+                    {
+                        this.a = a;
+                        this.b = b;
+                    }
+                }
+    &quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b>[] { <span class="r25 r">source1</span>, <span class="r26 r">source2</span>, <span class="r27 r">source3</span> }, <b>new</b>[] { <span class="r28 r">fixtest1</span>, <span class="r29 r">fixtest2</span>, <span class="r30 r">fixtest3</span> });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

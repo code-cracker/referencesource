@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseConfigureAwaitFalseCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(46);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Reliability/UseConfigureAwaitFalseCodeFixProvider.vb" target="_top">Reliability\UseConfigureAwaitFalseCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.Formatting
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Reliability
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#d2cc861248483d76" class="t">UseConfigureAwaitFalseCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="d2cc861248483d76" href="../R/d2cc861248483d76.html" target="n" data-glyph="0,0" class="t"><span id="37f2946591bdcfec">UseConfigureAwaitFalseCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public NotOverridable Overrides ReadOnly Property</b> <a id="a76c4a6b7a327920" href="../R/a76c4a6b7a327920.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#352a24b30260dc0b">UseConfigureAwaitFalse</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>())
+ 
+        <b>Public NotOverridable Overrides Function</b> <a id="e4e76c1cb9c61a38" href="../R/e4e76c1cb9c61a38.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public NotOverridable Overrides Async Function</b> <a id="a17cb5779c6454df" href="../R/a17cb5779c6454df.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First()
+            <b>Dim</b> <span id="r2 rd" class="r2 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r3 rd" class="r3 r">awaitExpression</span> = <span class="r2 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5f4a7819c46edf71" class="t">AwaitExpressionSyntax</a>).FirstOrDefault()
+            <b>If</b> <span class="r3 r">awaitExpression</span> <b>Is Nothing Then Exit Function
+ 
+            Dim</b> <span id="r4 rd" class="r4 r">newExpression</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3e1240e05eaa31c0">InvocationExpression</a>(
+                <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8bedda1f0f918d55">MemberAccessExpression</a>(
+                    <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9097237816b3f2dc">SimpleMemberAccessExpression</a>,
+                    <span class="r3 r">awaitExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#42eebabe87a78715">Expression</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#58715d7ff8771702">WithoutTrailingTrivia</a>(),
+                    <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#981434cd44f87f3e">Token</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1b86f922c98167f1">DotToken</a>),
+                    <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7928be8a6f01a288">IdentifierName</a>(<span class="s">&quot;ConfigureAwait&quot;</span>)),
+                <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f9699f591c0a1afa">ArgumentList</a>().
+                    <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#273529a21963c602">AddArguments</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1e1c365c7cb78bd1">SimpleArgument</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#792a08de8b56064f">FalseLiteralExpression</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#981434cd44f87f3e">Token</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e6b38e4820509f3">FalseKeyword</a>))
+                ))).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r3 r">awaitExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#42eebabe87a78715">Expression</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bde4d0f06326d796">GetTrailingTrivia</a>()).
+                <a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>)
+            <b>Dim</b> <span id="r5 rd" class="r5 r">newRoot</span> = <span class="r2 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r3 r">awaitExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#42eebabe87a78715">Expression</a>, <span class="r4 r">newExpression</span>)
+            <b>Dim</b> <span id="r6 rd" class="r6 r">newDocument</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r5 r">newRoot</span>)
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Use ConfigureAwait(False)&quot;</span>,
+                                                      <b>Function</b>(<span id="r7 rd" class="r7 r">ct</span>)
+                                                          <b>Return</b> <span class="t">Task</span>.FromResult(<span class="r6 r">newDocument</span>)
+                                                      <b>End Function</b>,
+                                                      <b>NameOf</b>(<a href="#d2cc861248483d76" class="t">UseConfigureAwaitFalseCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

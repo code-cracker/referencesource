@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingAnalyzerTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(64);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/AllowMembersOrderingAnalyzerTests.cs" target="_top">Refactoring\AllowMembersOrderingAnalyzerTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> Xunit;
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="69d79605e84eff71" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="8b2b70e3400a92c9">AllowMembersOrderingAnalyzerTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a> <a id="ac8934c238898103" href="../R/ac8934c238898103.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>()
+        {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.CSharp/A.html#88f25c5e31db93f8" class="t">AllowMembersOrderingAnalyzer</a>();
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>)]
+        <b>public async void</b> <a id="0e57888af2633fcb" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AllowMembersOrderingForEmptyTypeShouldNotTiggerDiagnostic</a>(<b>string</b> <span id="r0 rd" class="r0 r">typeDeclaration</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+            &quot;</span> + <span class="r0 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+            {
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>)]
+        <b>public async void</b> <a id="3ba66dea98d66ca8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AllowMembersOrderingForOneMemberShouldNotTiggerDiagnostic</a>(<b>string</b> <span id="r2 rd" class="r2 r">typeDeclaration</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">test</span> = <span class="s">@&quot;
+            &quot;</span> + <span class="r2 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+            {
+                int bar() { return 0; }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>)]
+        <b>public async void</b> <a id="6204591c0405da7c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AllowMembersOrderingForMoreThanOneMemberShouldTiggerDiagnostic</a>(<b>string</b> <span id="r4 rd" class="r4 r">typeDeclaration</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+            &quot;</span> + <span class="r4 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+            {
+                int bar() { return 0; }
+                void car() { }
+            }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r6 rd" class="r6 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b4e1a1d2add10d97">AllowMembersOrdering</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#88f25c5e31db93f8" class="t">AllowMembersOrderingAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#7f2c32991263d66c">MessageFormat</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 2, 14 + <span class="r4 r">typeDeclaration</span>.<a href="@0@mscorlib/A.html#e13f5829ef28aa07">Length</a>) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">expected</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseStaticRegexIsMatchTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(124);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Performance/UseStaticRegexIsMatchTests.cs" target="_top">Performance\UseStaticRegexIsMatchTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Performance;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Performance
+{
+    <b>public class</b> <a id="88aa1480619a8241" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="7f4e27f48bfad1be">UseStaticRegexIsMatchTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#7adbf24bfef79874" class="t">UseStaticRegexIsMatchAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#2591829f04527808" class="t">UseStaticRegexIsMatchCodeFixProvider</a>&gt;
+    {
+        <b>private const string</b> <a id="39590e6a270379db" href="../R/39590e6a270379db.html" target="n" data-glyph="10,1">test</a> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class Program
+        {
+            public async Task Foo()
+            {
+                Regex usedRegex = new Regex(@&quot;&quot;\p{ Sc}+\s *\d + &quot;&quot;);
+                usedRegex.IsMatch(&quot;&quot;$ 5.60&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e1a25fe20ed0011d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreatesDiagnosticsWhenDeclaringALocalRegexAndUsingIsMatch</a>()
+        {
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r0 rd" class="r0 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#8103bd3d6b19bfe1">UseStaticRegexIsMatch</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#7adbf24bfef79874" class="t">UseStaticRegexIsMatchAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#b31cd4c41e86bedf">MessageFormat</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 12, 17) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<a href="#39590e6a270379db">test</a>, <span class="r0 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="54d95032307ea09b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresIsMatchCallFromStaticRegexClass</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">testStatic</span> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class Program
+        {
+            public async Task Foo()
+            {
+                Regex.IsMatch(&quot;&quot;$ 5.60&quot;&quot;, (@&quot;&quot;\p{ Sc}+\s *\d + &quot;&quot;));
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">testStatic</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3a5345c6108d30e1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMakeMethodCallStatic</a>()
+        {
+ 
+            <b>const string</b> <span id="r2 rd" class="r2 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class Program
+        {
+            public async Task Foo()
+            {
+                Regex.IsMatch(&quot;&quot;$ 5.60&quot;&quot;, @&quot;&quot;\p{ Sc}+\s *\d + &quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#39590e6a270379db">test</a>, <span class="r2 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8df64a86c1ad372a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMakeRegexCompiled</a>()
+        {
+ 
+            <b>const string</b> <span id="r3 rd" class="r3 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class Program
+        {
+            public async Task Foo()
+            {
+                Regex usedRegex = new Regex(@&quot;&quot;\p{ Sc}+\s *\d + &quot;&quot;, RegexOptions.Compiled);
+                usedRegex.IsMatch(&quot;&quot;$ 5.60&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#39590e6a270379db">test</a>, <span class="r3 r">fixtest</span>, 2);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7ae093bca0138de1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMakeRegexCompiledAndStatic</a>()
+        {
+ 
+            <b>const string</b> <span id="r4 rd" class="r4 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class Program
+        {
+            public async Task Foo()
+            {
+                Regex.IsMatch(&quot;&quot;$ 5.60&quot;&quot;, @&quot;&quot;\p{ Sc}+\s *\d + &quot;&quot;, RegexOptions.Compiled);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#39590e6a270379db">test</a>, <span class="r4 r">fixtest</span>, 1);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

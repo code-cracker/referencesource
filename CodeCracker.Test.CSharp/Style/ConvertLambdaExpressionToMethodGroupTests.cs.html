@@ -1,0 +1,622 @@
+﻿<!DOCTYPE html>
+<html><head><title>ConvertLambdaExpressionToMethodGroupTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(613);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/ConvertLambdaExpressionToMethodGroupTests.cs" target="_top">Style\ConvertLambdaExpressionToMethodGroupTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="4fa14b7fd29c3a10" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="54a01d272888c979">ConvertLambdaExpressionToMethodGroupTests</span></a>
+        : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#7dda2181ef1ab1a1" class="t">ConvertLambdaExpressionToMethodGroupAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#de1525952f6f229b" class="t">ConvertLambdaExpressionToMethodGroupCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e1aa200810782489" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticForSimpleLambdaExpression</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;var f = a.Where(item =&gt; filter(item));&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#95437da29e289131">ConvertLambdaExpressionToMethodGroup</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You should remove the lambda expression and pass just &#39;filter&#39; instead.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 1, 17) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0148550e07673de6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticForSimpleLambdaExpressionWithBlockInBody</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;var f = a.Where(item =&gt; { return filter(item); });&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#95437da29e289131">ConvertLambdaExpressionToMethodGroup</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You should remove the lambda expression and pass just &#39;filter&#39; instead.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 1, 17) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="39cdce950c4f2040" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticForParenthesizedLambdaExpressionWithBlockInBody</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;var f = a.Foo((param1, param2) =&gt; { return filter(param1, param2); });&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#95437da29e289131">ConvertLambdaExpressionToMethodGroup</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You should remove the lambda expression and pass just &#39;filter&#39; instead.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 1, 15) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">test</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4879ae44fabd32e4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotCreateDiagnosticForMethodGoupd</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;var f = a.Where(filter);&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="51bf2ad1a2ef47b4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotCreateDiagnosticWhenParametersDoNotMatch</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;var f = a.Foo((param1, param2) =&gt; { return filter(param2, param1); });&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d81d2bb573eff922" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotCreateDiagnosticWhenIncompleteLambdaExpression</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            Func&lt;int, bool&gt; a = x =&gt; filter();
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b59858ac6c114b60" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SimpleLambdaExpressionIsReplaceByMethodInDeclarationStatement</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            Func&lt;int, bool&gt; a = x =&gt; filter(x);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r10 rd" class="r10 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            Func&lt;int, bool&gt; a = filter;
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">oldCode</span>, <span class="r10 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bd870bc1af9df11e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ParenthesizedLambdaExpressionIsReplaceByMethodInDeclarationStatement</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int param1, int param2)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            Func&lt;int, int, bool&gt; a = (x, y) =&gt; filter(x, y);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r12 rd" class="r12 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int param1, int param2)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            Func&lt;int, int, bool&gt; a = filter;
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">oldCode</span>, <span class="r12 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b8fb59c39fc43be3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SimpleLambdaExpressionIsReplaceByMethodInArgumentList</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where(item =&gt; filter(item));
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r14 rd" class="r14 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where(filter);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">oldCode</span>, <span class="r14 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="96da5af3064555bd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ParenthesizedLambdaExpressionIsReplaceByMethodInArgumentList</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value, int index)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where((item, index) =&gt; filter(item, index));
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r16 rd" class="r16 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value, int index)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where(filter);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r15 r">oldCode</span>, <span class="r16 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="84ee029b09f1477e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SimpleLambdaExpressionWithBlockInBodyIsReplaceByMethodInArgumentList</a>()
+        {
+            <b>const string</b> <span id="r17 rd" class="r17 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where(item =&gt; { return filter(item); });
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r18 rd" class="r18 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where(filter);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r17 r">oldCode</span>, <span class="r18 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bd82b4a7ab88bd99" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ParenthesizedLambdaExpressionWihtBlockInBodyIsReplaceByMethodInArgumentList</a>()
+        {
+            <b>const string</b> <span id="r19 rd" class="r19 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value, int index)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where((item, index) =&gt; { return filter(item, index); });
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r20 rd" class="r20 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value, int index)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.Where(filter);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r19 r">oldCode</span>, <span class="r20 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="88364e2279110b50" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixEndOfPipelineLambdaExpressionAndReplaceByMethod</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(item =&gt; item).Where(item =&gt; filter(item));
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r22 rd" class="r22 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(item =&gt; item).Where(filter);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r21 r">oldCode</span>, <span class="r22 r">newCode</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="304c89d87bee95df" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMiddleOfPipelineLambdaExpressionAndReplaceByMethod</a>()
+        {
+            <b>const string</b> <span id="r23 rd" class="r23 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(item =&gt; item).Where(item =&gt; filter(item)).Select(item =&gt; item * 2);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r24 rd" class="r24 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(item =&gt; item).Where(filter).Select(item =&gt; item * 2);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r23 r">oldCode</span>, <span class="r24 r">newCode</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="38f776096e752e28" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMiddleOfPipelineLambdaExpressionAndReplaceByMethodMultipleMatches</a>()
+        {
+            <b>const string</b> <span id="r25 rd" class="r25 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        private int orderAccessor(int value)
+        {
+            return item;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(item =&gt; orderAccessor(item)).Where(item =&gt; filter(item)).Select(item =&gt; item * 2);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r26 rd" class="r26 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private bool filter(int value)
+        {
+            return true;
+        }
+ 
+        private int orderAccessor(int value)
+        {
+            return item;
+        }
+ 
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(orderAccessor).Where(filter).Select(item =&gt; item * 2);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r25 r">oldCode</span>, <span class="r26 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1a619897e2969fd9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMiddleOfPipelineLambdaExpressionAndReplaceByMethodMultipleMatchesWithThis</a>()
+        {
+            <b>const string</b> <span id="r27 rd" class="r27 r">oldCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private int orderAccessor(int value)
+        {
+            return item;
+        }
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(item =&gt; this.orderAccessor(item)).Select(item =&gt; item * 2);
+        }
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r28 rd" class="r28 r">newCode</span> = <span class="s">@&quot;
+using System.Linq;
+ 
+namespace Sample
+{
+    public class Foo
+    {
+        private int orderAccessor(int value)
+        {
+            return item;
+        }
+        public void bar()
+        {
+            var a = new int[10];
+            var f = a.OrderBy(this.orderAccessor).Select(item =&gt; item * 2);
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r27 r">oldCode</span>, <span class="r28 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d7ce0c9bd409d5ed" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotCreateDiagnosticWhenSubstitutionMayBreakInvocationResolution</a>()
+        {
+            <b>const string</b> <span id="r29 rd" class="r29 r">oldCode</span> = <span class="s">@&quot;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+ 
+namespace ConsoleApplication4
+{
+    class Test
+    {
+        protected virtual Task&lt;HttpResponseMessage&gt; SendImplAsyncWorks(CancellationToken cancellationToken)
+        {
+            return HttpClient.SendAsync().Finally(task =&gt; OnAfterAsyncWebResponse(task));
+        }
+        protected virtual Task&lt;HttpResponseMessage&gt; SendImplAsyncBreaks(CancellationToken cancellationToken)
+        {
+            return HttpClient.SendAsync().Finally(OnAfterAsyncWebResponse);
+        }
+        protected virtual void OnAfterAsyncWebResponse(Task&lt;HttpResponseMessage&gt; response) { }
+    }
+ 
+    public class HttpClient
+    {
+        public static Task&lt;HttpResponseMessage&gt; SendAsync()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class HttpResponseMessage { }
+ 
+    public static class Extension
+    {
+        public static Task&lt;TResult&gt; Finally&lt;TResult&gt;(this Task&lt;TResult&gt; task, Action&lt;Task&lt;TResult&gt;&gt; cleanupAction)
+        {
+            throw new NotImplementedException();
+        }
+        public static Task&lt;TResult&gt; Finally&lt;TResult&gt;(this Task&lt;TResult&gt; task, Func&lt;Task&lt;TResult&gt;, Task&gt; cleanupAction)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r29 r">oldCode</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

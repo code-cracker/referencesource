@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html><head><title>ChangeCultureTests.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(19);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/ChangeCultureTests.cs" target="_top">ChangeCultureTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> FluentAssertions;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp
+{
+    <b>public class</b> <a id="f7f9858291235877" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="c373d4bb7db88cc9">ChangeCultureTests</span></a>
+    {
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="25391e832c2681c5" href="R/../../0000000000.html" target="n" data-glyph="72,1">ChangesCulture</a>()
+        {
+            <b>using</b> (<b>new</b> <a href="/CodeCracker.Test.Common/A.html#31c5c0e13eb81e7e" class="t">ChangeCulture</a>(<span class="s">&quot;en-US&quot;</span>))
+                2.5.<a href="@0@mscorlib/A.html#de581d5a1a6b2a1a">ToString</a>().Should().Be(<span class="s">&quot;2.5&quot;</span>);
+            <b>using</b> (<b>new</b> <a href="/CodeCracker.Test.Common/A.html#31c5c0e13eb81e7e" class="t">ChangeCulture</a>(<span class="s">&quot;pt-BR&quot;</span>))
+                2.5.<a href="@0@mscorlib/A.html#de581d5a1a6b2a1a">ToString</a>().Should().Be(<span class="s">&quot;2,5&quot;</span>);
+            <b>using</b> (<b>new</b> <a href="/CodeCracker.Test.Common/A.html#31c5c0e13eb81e7e" class="t">ChangeCulture</a>(<span class="s">&quot;&quot;</span>))
+                2.5.<a href="@0@mscorlib/A.html#de581d5a1a6b2a1a">ToString</a>().Should().Be(<span class="s">&quot;2.5&quot;</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

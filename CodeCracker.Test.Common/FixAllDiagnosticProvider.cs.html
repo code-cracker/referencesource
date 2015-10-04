@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html><head><title>FixAllDiagnosticProvider.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(51);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.Common/FixAllDiagnosticProvider.cs" target="_top">FixAllDiagnosticProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.Common" target="_top">test\Common\CodeCracker.Test.Common\CodeCracker.Test.Common.csproj</a> (CodeCracker.Test.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.Test
+{
+    <b>public class</b> <a id="1342dd989d129c65" href="R/1342dd989d129c65.html" target="n" data-glyph="0,0" class="t">FixAllDiagnosticProvider</a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b1e1e9a54e0b10a6" class="t">DiagnosticProvider</a>
+    {
+        <b>private readonly</b> <span class="t">ImmutableHashSet</span>&lt;<b>string</b>&gt; <a id="69b0e694f7aec9b9" href="R/69b0e694f7aec9b9.html" target="n" data-glyph="46,1">diagnosticIds</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Delegate to fetch diagnostics for any given document within the given fix all scope.</span>
+        <span class="c">///</span><span class="c"> This delegate is invoked by </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="#1ba651d493501fd9">GetDocumentDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>)<span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> with the given </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="#69b0e694f7aec9b9">diagnosticIds</a><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> as arguments.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>private readonly</b> <a href="@0@mscorlib/A.html#d6a8fafda0383fc5" class="t">Func</a>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span class="t">ImmutableHashSet</span>&lt;<b>string</b>&gt;, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>, <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt;&gt; <a id="e71353ca42edc712" href="R/e71353ca42edc712.html" target="n" data-glyph="46,1">getDocumentDiagnosticsAsync</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Delegate to fetch diagnostics for any given project within the given fix all scope.</span>
+        <span class="c">///</span><span class="c"> This delegate is invoked by </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="#292410b359b9a901">GetProjectDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>)<span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> and </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="#468ccd169740efea">GetAllDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>)<span class="c">&quot;</span><span class="c">/&gt;</span>
+        <span class="c">///</span><span class="c"> with the given </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="#69b0e694f7aec9b9">diagnosticIds</a><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> as arguments.</span>
+        <span class="c">///</span><span class="c"> The boolean argument to the delegate indicates whether or not to return location-based diagnostics, i.e.</span>
+        <span class="c">///</span><span class="c"> (a) False =&gt; Return only diagnostics with </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7ceef3cef4fed19">None</a><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c">.</span>
+        <span class="c">///</span><span class="c"> (b) True =&gt; Return all project diagnostics, regardless of whether or not they have a location.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>private readonly</b> <a href="@0@mscorlib/A.html#dd88852b83582863" class="t">Func</a>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a>, <b>bool</b>, <span class="t">ImmutableHashSet</span>&lt;<b>string</b>&gt;, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>, <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt;&gt; <a id="453a115c85dd9908" href="R/453a115c85dd9908.html" target="n" data-glyph="46,1">getProjectDiagnosticsAsync</a>;
+ 
+        <b>public</b> <a id="2f721fc826cfbee7" href="R/2f721fc826cfbee7.html" target="n" data-glyph="72,1">FixAllDiagnosticProvider</a>(
+            <span class="t">ImmutableHashSet</span>&lt;<b>string</b>&gt; <span id="r0 rd" class="r0 r">diagnosticIds</span>,
+            <a href="@0@mscorlib/A.html#d6a8fafda0383fc5" class="t">Func</a>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span class="t">ImmutableHashSet</span>&lt;<b>string</b>&gt;, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>, <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt;&gt; <span id="r1 rd" class="r1 r">getDocumentDiagnosticsAsync</span>,
+            <a href="@0@mscorlib/A.html#dd88852b83582863" class="t">Func</a>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a>, <b>bool</b>, <span class="t">ImmutableHashSet</span>&lt;<b>string</b>&gt;, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>, <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt;&gt; <span id="r2 rd" class="r2 r">getProjectDiagnosticsAsync</span>)
+        {
+            <a href="#1342dd989d129c65" class="k">this</a>.<a href="#69b0e694f7aec9b9">diagnosticIds</a> = <span class="r0 r">diagnosticIds</span>;
+            <a href="#1342dd989d129c65" class="k">this</a>.<a href="#e71353ca42edc712">getDocumentDiagnosticsAsync</a> = <span class="r1 r">getDocumentDiagnosticsAsync</span>;
+            <a href="#1342dd989d129c65" class="k">this</a>.<a href="#453a115c85dd9908">getProjectDiagnosticsAsync</a> = <span class="r2 r">getProjectDiagnosticsAsync</span>;
+        }
+<b>#</b><b>pragma</b> <b>warning</b> <b>disable</b> CC0031
+        <b>public override</b> <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt; <a id="1ba651d493501fd9" href="R/1ba651d493501fd9.html" target="n" data-glyph="72,1">GetDocumentDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a> <span id="r4 rd" class="r4 r">cancellationToken</span>) =&gt;
+            <a href="#e71353ca42edc712">getDocumentDiagnosticsAsync</a>(<span class="r3 r">document</span>, <a href="#69b0e694f7aec9b9">diagnosticIds</a>, <span class="r4 r">cancellationToken</span>);
+ 
+        <b>public override</b> <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt; <a id="468ccd169740efea" href="R/468ccd169740efea.html" target="n" data-glyph="72,1">GetAllDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a> <span id="r5 rd" class="r5 r">project</span>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a> <span id="r6 rd" class="r6 r">cancellationToken</span>) =&gt;
+            <a href="#453a115c85dd9908">getProjectDiagnosticsAsync</a>(<span class="r5 r">project</span>, <b>true</b>, <a href="#69b0e694f7aec9b9">diagnosticIds</a>, <span class="r6 r">cancellationToken</span>);
+ 
+        <b>public override</b> <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt; <a id="292410b359b9a901" href="R/292410b359b9a901.html" target="n" data-glyph="72,1">GetProjectDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a> <span id="r7 rd" class="r7 r">project</span>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a> <span id="r8 rd" class="r8 r">cancellationToken</span>) =&gt;
+            <a href="#453a115c85dd9908">getProjectDiagnosticsAsync</a>(<span class="r7 r">project</span>, <b>false</b>, <a href="#69b0e694f7aec9b9">diagnosticIds</a>, <span class="r8 r">cancellationToken</span>);
+<b>#</b><b>pragma</b> <b>warning</b> <b>restore</b> CC0031
+    }
+}</pre></td></tr></table></div></body></html>

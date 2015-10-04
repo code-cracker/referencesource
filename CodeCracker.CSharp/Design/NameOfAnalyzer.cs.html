@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html><head><title>NameOfAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(116);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/NameOfAnalyzer.cs" target="_top">Design\NameOfAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.Properties;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="07eb1c00637db4fd" href="../R/07eb1c00637db4fd.html" target="n" data-glyph="0,0" class="t"><span id="8e6e935002ca0791">NameOfAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="b5c58ab5b9f78300" href="../R/b5c58ab5b9f78300.html" target="n" data-glyph="44,1">Title</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#7c65d5fd9052eb11">NameOfAnalyzer_Title</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="9eb7ac412ce59a60" href="../R/9eb7ac412ce59a60.html" target="n" data-glyph="44,1">MessageFormat</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#96fdd621f4a24d1f">NameOfAnalyzer_MessageFormat</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="686a489ceeffb5c3" href="../R/686a489ceeffb5c3.html" target="n" data-glyph="44,1">Description</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#1ec227856f7f3cc8">NameOfAnalyzer_Description</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal const string</b> <a id="77d3ee8f9db138a3" href="../R/77d3ee8f9db138a3.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="f3912bd93ccb3af0" href="../R/f3912bd93ccb3af0.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#fb352e176a89c98b" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#833011b017224aed">NameOf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#b5c58ab5b9f78300">Title</a>,
+            <a href="#9eb7ac412ce59a60">MessageFormat</a>,
+            <a href="#77d3ee8f9db138a3">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#686a489ceeffb5c3">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#833011b017224aed">NameOf</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="4216a1add8f68637" href="../R/4216a1add8f68637.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#f3912bd93ccb3af0">Rule</a>);
+ 
+        <b>public override void</b> <a id="11718b18e8ebf267" href="../R/11718b18e8ebf267.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#d322de55ea449cc3">RegisterSyntaxNodeAction</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#41ddf4073ec089aa" class="t">LanguageVersion</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4efb4f046fbb6861">CSharp6</a>, <a href="#0487cf7c9a84267a">Analyze</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1fe7c08d8ff2a9e9">StringLiteralExpression</a>);
+ 
+        <b>private static void</b> <a id="0487cf7c9a84267a" href="../R/0487cf7c9a84267a.html" target="n" data-glyph="76,1">Analyze</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r5 rd" class="r5 r">stringLiteral</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+            <b>if</b> (<b>string</b>.IsNullOrWhiteSpace(<span class="r5 r">stringLiteral</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>)) <b>return</b>;
+ 
+            <b>var</b> <span id="r6 rd" class="r6 r">programElementName</span> = <a href="#aa0ba50b23a61a3c">GetProgramElementNameThatMatchStringLiteral</a>(<span class="r5 r">stringLiteral</span>, <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>);
+ 
+            <b>if</b> (<a href="#9d632900a4d1b15e">Found</a>(<span class="r6 r">programElementName</span>) &amp;&amp; <a href="#8f860e0d9c327f5c">OutSideOfDeclarationSideWithSameName</a>(<span class="r5 r">stringLiteral</span>))
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r7 rd" class="r7 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f3912bd93ccb3af0">Rule</a>, <span class="r5 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r6 r">programElementName</span>);
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diagnostic</span>);
+            }
+        }
+ 
+        <b>private static bool</b> <a id="8f860e0d9c327f5c" href="../R/8f860e0d9c327f5c.html" target="n" data-glyph="76,1">OutSideOfDeclarationSideWithSameName</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r8 rd" class="r8 r">stringLiteral</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="k">var</a> <span id="r9 rd" class="r9 r">variableDeclaration</span> = <span class="r8 r">stringLiteral</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a>&gt;();
+            <b>if</b> (<span class="r9 r">variableDeclaration</span> != <b>null</b>)
+            {
+                <b>return</b> !<b>string</b>.Equals(<span class="r9 r">variableDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="r8 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="t">StringComparison</span>.Ordinal);
+            }
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="k">var</a> <span id="r10 rd" class="r10 r">propertyDeclaration</span> = <span class="r8 r">stringLiteral</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="t">PropertyDeclarationSyntax</a>&gt;();
+            <b>var</b> <span id="r11 rd" class="r11 r">outSideOfAccessors</span> = <b>null</b> == <span class="r8 r">stringLiteral</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6957168ede4eef02" class="t">AccessorListSyntax</a>&gt;();
+            <b>if</b> (!<span class="r11 r">outSideOfAccessors</span>) <b>return true</b>;
+            <b>return</b> !<b>string</b>.Equals(<span class="r10 r">propertyDeclaration</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7939517b98b4e8b4">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="r8 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="t">StringComparison</span>.Ordinal);
+        }
+ 
+        <b>private static string</b> <a id="aa0ba50b23a61a3c" href="../R/aa0ba50b23a61a3c.html" target="n" data-glyph="76,1">GetProgramElementNameThatMatchStringLiteral</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r12 rd" class="r12 r">stringLiteral</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r13 rd" class="r13 r">semanticModel</span>)
+        {
+            <b>var</b> <span id="r14 rd" class="r14 r">programElementName</span> = <a href="#cdf691bc9dd86d41">GetParameterNameThatMatchStringLiteral</a>(<span class="r12 r">stringLiteral</span>);
+ 
+            <b>if</b> (!<a href="#9d632900a4d1b15e">Found</a>(<span class="r14 r">programElementName</span>))
+            {
+                <b>var</b> <span id="r15 rd" class="r15 r">literalValueText</span> = <span class="r12 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r16 rd" class="r16 r">symbol</span> = <span class="r13 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#019112cdb218fa28">LookupSymbols</a>(<span class="r12 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a38722cd380fa23">SpanStart</a>, <b>null</b>, <span class="r15 r">literalValueText</span>).FirstOrDefault();
+ 
+                <b>if</b> (<span class="r16 r">symbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#d2adba436e8e1d01">Kind</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#14dd92a838936e8d">Local</a>)
+                {
+                    <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="k">var</a> <span id="r17 rd" class="r17 r">symbolSpan</span> = <span class="r16 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6fdf20baf08270e2">Locations</a>.Min(<span id="r18 rd" class="r18 r">i</span> =&gt; <span class="r18 r">i</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+                    <b>if</b> (<span class="r17 r">symbolSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4738f3d50510cb45">CompareTo</a>(<span class="r12 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#1df7da450c7a2dcc">Span</a>) &gt; 0)
+                        <b>return string</b>.Empty;
+                }
+ 
+                <span class="r14 r">programElementName</span> = <span class="r16 r">symbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#97f37bb405289f6d">ToDisplayParts</a>().LastOrDefault(<a href="/CodeCracker.Common/A.html#7dad468f6756e34c" class="t">AnalyzerExtensions</a>.<a href="/CodeCracker.Common/A.html#0b11bc16b3413b91">IsName</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#afc37f9ae8b9279e">ToString</a>();
+            }
+ 
+            <b>return</b> <span class="r14 r">programElementName</span>;
+        }
+ 
+        <b>private static string</b> <a id="cdf691bc9dd86d41" href="../R/cdf691bc9dd86d41.html" target="n" data-glyph="76,1">GetParameterNameThatMatchStringLiteral</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r19 rd" class="r19 r">stringLiteral</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r20 rd" class="r20 r">ancestorThatMightHaveParameters</span> = <span class="r19 r">stringLiteral</span>.<a href="/CodeCracker.Common/A.html#febbf40e5a890c7f">FirstAncestorOfType</a>(<b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f05473b00280320" class="t">AttributeListSyntax</a>), <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>), <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>), <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="t">IndexerDeclarationSyntax</a>));
+            <b>var</b> <span id="r21 rd" class="r21 r">parameterName</span> = <b>string</b>.Empty;
+            <b>if</b> (<span class="r20 r">ancestorThatMightHaveParameters</span> != <b>null</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="k">var</a> <span id="r22 rd" class="r22 r">parameters</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="t">SeparatedSyntaxList</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>&gt;();
+                <b>switch</b> (<span class="r20 r">ancestorThatMightHaveParameters</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>())
+                {
+                    <b>case</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f888c625ee964f4b">MethodDeclaration</a>:
+                    <b>case</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5441df22b7fa0844">ConstructorDeclaration</a>:
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="k">var</a> <span id="r23 rd" class="r23 r">method</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="t">BaseMethodDeclarationSyntax</a>)<span class="r20 r">ancestorThatMightHaveParameters</span>;
+                        <span class="r22 r">parameters</span> = <span class="r23 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#af44c85a856e51b5">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>;
+                        <b>break</b>;
+                    <b>case</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5cb3c9d3e7bdf2ba">IndexerDeclaration</a>:
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="k">var</a> <span id="r24 rd" class="r24 r">indexer</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="t">IndexerDeclarationSyntax</a>)<span class="r20 r">ancestorThatMightHaveParameters</span>;
+                        <span class="r22 r">parameters</span> = <span class="r24 r">indexer</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bcc1aa95a20fb37e">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4bb964a3b8ba7cc5">Parameters</a>;
+                        <b>break</b>;
+                    <b>case</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#db9cf60ff447bd06">AttributeList</a>:
+                        <b>break</b>;
+                }
+                <span class="r21 r">parameterName</span> = <a href="#6cf32b17e74bdf72">GetParameterWithIdentifierEqualToStringLiteral</a>(<span class="r19 r">stringLiteral</span>, <span class="r22 r">parameters</span>)?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+            }
+            <b>return</b> <span class="r21 r">parameterName</span>;
+        }
+ 
+        <b>private static bool</b> <a id="9d632900a4d1b15e" href="../R/9d632900a4d1b15e.html" target="n" data-glyph="76,1">Found</a>(<b>string</b> <span id="r25 rd" class="r25 r">programElement</span>) =&gt; !<b>string</b>.IsNullOrEmpty(<span class="r25 r">programElement</span>);
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a> <a id="6cf32b17e74bdf72" href="../R/6cf32b17e74bdf72.html" target="n" data-glyph="76,1">GetParameterWithIdentifierEqualToStringLiteral</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a> <span id="r26 rd" class="r26 r">stringLiteral</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="t">SeparatedSyntaxList</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>&gt; <span id="r27 rd" class="r27 r">parameters</span>) =&gt;
+            <span class="r27 r">parameters</span>.FirstOrDefault(<span id="r28 rd" class="r28 r">m</span> =&gt; <b>string</b>.Equals(<span class="r28 r">m</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="r26 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="t">StringComparison</span>.Ordinal));
+    }
+}</pre></td></tr></table></div></body></html>

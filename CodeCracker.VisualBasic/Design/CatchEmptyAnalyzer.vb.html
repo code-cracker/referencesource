@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html><head><title>CatchEmptyAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(42);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Design/CatchEmptyAnalyzer.vb" target="_top">Design\CatchEmptyAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> System.Collections.Immutable
+ 
+<b>Namespace</b> Design
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="6075819765fbead0" href="../R/6075819765fbead0.html" target="n" data-glyph="0,0" class="t"><span id="42ce89efbdbaffce">CatchEmptyAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="570f6f27fd917f26" href="../R/570f6f27fd917f26.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#2a34eaf549ebdeb0">CatchEmpty</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="90ba2ae9d05b8993" href="../R/90ba2ae9d05b8993.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;Your catch may includes some Exception&quot;</span>
+        <b>Public Const</b> <a id="e5574bffc65e8b29" href="../R/e5574bffc65e8b29.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;{0}&quot;</span>
+        <b>Public Const</b> <a id="b4118ca9d1d36254" href="../R/b4118ca9d1d36254.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>
+        <b>Protected Shared</b> <a id="bd3e66cb8d9db314" href="../R/bd3e66cb8d9db314.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#570f6f27fd917f26">Id</a>,
+            <a href="#90ba2ae9d05b8993">Title</a>,
+            <a href="#e5574bffc65e8b29">MessageFormat</a>,
+            <a href="#b4118ca9d1d36254">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#2a34eaf549ebdeb0">CatchEmpty</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="61d9c4b7241e1b37" href="../R/61d9c4b7241e1b37.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#bd3e66cb8d9db314">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="fb0d5012aa47b9f9" href="../R/fb0d5012aa47b9f9.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r2 rd" class="r2 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#d964e9f27a7794a6">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cf0f85e22d7019a8">CatchStatement</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="d964e9f27a7794a6" href="../R/d964e9f27a7794a6.html" target="n" data-glyph="76,1">Analyzer</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r3 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r4 rd" class="r4 r">catchStatement</span> = <b>DirectCast</b>(<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, Syntax.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#89a43c8ae6f20e16" class="t">CatchStatementSyntax</a>)
+                <b>If</b> <span class="r4 r">catchStatement</span> <b>Is Nothing Then Exit Sub
+ 
+            If</b> <span class="r4 r">catchStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57618d11a8914e33">IdentifierName</a> <b>Is Nothing Then
+                Dim</b> <span id="r5 rd" class="r5 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#bd3e66cb8d9db314">Rule</a>, <span class="r4 r">catchStatement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="s">&quot;Consider including an Exception Class in catch.&quot;</span>)
+                <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r5 r">diag</span>)
+            <b>End If
+        End Sub
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

@@ -1,0 +1,600 @@
+﻿<!DOCTYPE html>
+<html><head><title>NameOfTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(591);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Design/NameOfTests.vb" target="_top">Design\NameOfTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Design
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Design
+    <b>Public Class</b> <a id="2019520b6a817ff5" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="e9e39fe425c295c3">NameOfTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#81860c00b340151d" class="t">NameOfAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#b938295f168e9d60" class="t">NameOfCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;Nothing&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;b&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;A As String&quot;</span>, <span class="s">&quot;b&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="453adc6e741cede7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenStringLiteralInMethodShouldNotReportDiagnostic</a>(<span id="r0 rd" class="r0 r">parameters</span> <b>As String</b>, <span id="r1 rd" class="r1 r">stringLiteral</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">$&quot;</span><span class="s">
+Public Class TypeName
+  Sub Foo(</span>{<span class="r0 r">parameters</span>}<span class="s">)
+    Dim whatever = &quot;&quot;</span><span class="s">&quot;</span> &amp; <span class="r1 r">stringLiteral</span> &amp; <span class="s">&quot;&quot;&quot;
+  End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>)
+        <b>End Function</b>
+ 
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;b As String&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;b&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;[for] As String&quot;</span>, <span class="s">&quot;[for]&quot;</span>, <span class="s">&quot;[for]&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="7f34d74461d8230d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenStringLiteralInMethodShouldReportDiagnostic</a>(<span id="r3 rd" class="r3 r">parameters</span> <b>As String</b>, <span id="r4 rd" class="r4 r">stringLiteral</span> <b>As String</b>, <span id="r5 rd" class="r5 r">nameofArgument</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">$&quot;</span><span class="s">
+Public Class TypeName
+  Sub(</span>{<span class="r3 r">parameters</span>}<span class="s">)
+    Dim whatever = &quot;&quot;</span><span class="s">&quot;</span> &amp; <span class="r4 r">stringLiteral</span> &amp; <span class="s">&quot;&quot;&quot;
+  End Sub
+End Class&quot;</span>
+            <b>Dim</b> <span id="r7 rd" class="r7 r">expected</span> = <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="r5 r">nameofArgument</span>, 4, 20)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r6 r">source</span>, <span class="r7 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f76dfc31b64d8abf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreIfStringLiteralIsWhitespace</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo()
+        Dim whatever = &quot;&quot;&quot;&quot;
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r8 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="7db77503bf4bfcc3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreIfStringLiteralIsNothing</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo()
+        Dim whatever = Nothing
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r9 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="7b96a5d1e40c89f2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreIfConstructorHasNoParameters</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r10 rd" class="r10 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Public Sub New()
+        dim whatever = &quot;&quot;b&quot;&quot;
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r10 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="355f58629cb07abf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingSomeStringInAttributeShouldNotReportDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r11 rd" class="r11 r">test</span> = <span class="s">&quot;
+public class TypeName
+    &lt;Whatever(&quot;&quot;a&quot;&quot;)&gt;
+    &lt;Whatever(&quot;&quot;xyz&quot;&quot;)&gt;
+    Sub Foo(a As String)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;xyz&quot;</span>, <b>False</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;NestedClass&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SomeStruct&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SomeEnum&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;IInterface&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;N2&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SomeDelegate&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;readonlyField&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;ParticularEvent&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Prop&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;TheTypeName&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Invoke&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;N1&quot;</span>, <b>True</b>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;N3&quot;</span>, <b>True</b>)&gt;
+        <b>Public Async Function</b> <a id="2c8efd4cfb014ea5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringInMethodInvocation</a>(<span id="r12 rd" class="r12 r">stringLiteral</span> <b>As String</b>, <span id="r13 rd" class="r13 r">shouldReportDiatnostic</span> <b>As Boolean</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">$&quot;</span><span class="s">Namespace N1.N2
+    Namespace N3
+        Public Class TheTypeName
+            Private ReadOnly readonlyField As Integer
+            Public Property Prop As Integer
+            Public Event ParticularEvent As EventHandler
+            Public Delegate Sub SomeDelegate(c As Integer, d As Double)
+ 
+            Public Interface IInterface
+ 
+            End Interface
+            Public Structure SomeStruct
+ 
+            End Structure
+            Public Enum SomeEnum
+                defaultMember
+            End Enum
+            Public Class NestedClass
+ 
+            End Class
+            Public WriteOnly Property Prop1 As Integer
+                Set(value As Integer)
+                    Invoke(&quot;&quot;abc&quot;&quot;, &quot;&quot;</span><span class="s">&quot;</span> &amp; <span class="r12 r">stringLiteral</span> &amp; <span class="s">&quot;&quot;&quot;)
+                End Set
+            End Property
+            Private Sub Invoke(arg1 As String, arg2 As String)
+ 
+            End Sub
+        End Class
+    End Namespace
+End Namespace&quot;</span>
+            <b>If Not</b> <span class="r13 r">shouldReportDiatnostic</span> <b>Then
+                Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r14 r">source</span>)
+            <b>Else
+                Dim</b> <span id="r15 rd" class="r15 r">expected</span> = <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="r12 r">stringLiteral</span>, 23, 35)
+                <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r14 r">source</span>, <span class="r15 r">expected</span>)
+            <b>End If
+        End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6698d6ce7d9ec634" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementStringInVariableAssignment</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">&quot;
+Public Class TypeName
+    Private ReadOnly readonlyField As Integer
+    Public Class NestedClass
+    End Class
+ 
+    Public WriteOnly Property Prop As Integer
+        Set
+            Dim variable = &quot;&quot;NestedClass&quot;&quot;
+            Dim variable = &quot;&quot;xyz&quot;&quot;
+            variable = &quot;&quot;readonlyField&quot;&quot;
+        End Set
+    End Property
+End Class&quot;</span>
+ 
+            <b>Dim</b> <span id="r17 rd" class="r17 r">expectedForFirstAssignment</span> = <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;NestedClass&quot;</span>, 9, 28)
+            <b>Dim</b> <span id="r18 rd" class="r18 r">expectedForSecondAssignment</span> = <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 11, 24)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e69846c21794f630">VerifyBasicDiagnosticAsync</a>(<span class="r16 r">source</span>, <span class="r17 r">expectedForFirstAssignment</span>, <span class="r18 r">expectedForSecondAssignment</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="23e0384e8546207e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringInAttributeShouldReportDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r19 rd" class="r19 r">source</span> = <span class="s">&quot;
+Namespace N1.N2
+    Public Class TheTypeName
+        Private ReadOnly readonlyField As Integer
+        Public Property Prop As Integer
+        Public Event ParticularEvent As EventHandler
+        Public Delegate Function SomeDelegate(c As Integer, d As Double) As Integer
+        &lt;Whatever(&quot;&quot;N2&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;SomeDelegate&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;readonlyField&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;ParticularEvent&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;Prop&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;TheTypeName&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;Foo&quot;&quot;)&gt;
+        &lt;Whatever(&quot;&quot;N1&quot;&quot;)&gt;
+        Sub Foo(a As String)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r20 rd" class="r20 r">expected</span> = {
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N2&quot;</span>, 8, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;SomeDelegate&quot;</span>, 9, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 10, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;ParticularEvent&quot;</span>, 11, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;Prop&quot;</span>, 12, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;TheTypeName&quot;</span>, 13, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;Foo&quot;</span>, 14, 19),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N1&quot;</span>, 15, 19)
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#303390ca1ef578c1">VerifyBasicDiagnosticAsync</a>(<span class="r19 r">source</span>, <span class="r20 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="ebeb2b6c40f9f777" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralInObjectInitializer</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r21 rd" class="r21 r">source</span> = <span class="s">&quot;
+Namespace N1.N2
+    Public Class OtherTypeName
+        Public Property Prop As String
+        Private Property Prop2 As String
+        Public Property Prop3 As String
+    End Class
+    Public Class TypeName
+        Sub Foo(a As String)
+            Dim instance As New OtherTypeName
+            {
+                Prop = &quot;&quot;xyz&quot;&quot;
+                Prop2 = &quot;&quot;OtherTypeName&quot;&quot;
+                Prop3 = &quot;&quot;Prop2&quot;&quot;
+            }
+        End Sub
+    End Class
+End Namespace&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r21 r">source</span>, <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;OtherTypeName&quot;</span>, 13, 25))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="499fabe79081bcca" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameInArrayInitializer</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">&quot;
+Public Class TypeName
+    Private ReadOnly readonlyField As Integer
+    Public Interface IInterface
+    End Interface
+ 
+    Sub Foo(a As String)
+        Dim t = {&quot;&quot;readonlyField&quot;&quot;, &quot;&quot;xyz&quot;&quot;, &quot;&quot;IInterface&quot;&quot;}
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Dim</b> <span id="r23 rd" class="r23 r">expected</span> =
+                {
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 8, 18),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;IInterface&quot;</span>, 8, 42)
+                }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#303390ca1ef578c1">VerifyBasicDiagnosticAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">expected</span>)
+ 
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="af79f7634cf4e1e9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenCreatingNewObjectWithStringLiterals</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">&quot;
+Public Structure TheTypeName
+    Sub Foo(a As String)
+        Dim instance = New OtherTypeName(&quot;&quot;b&quot;&quot;, &quot;&quot;xyz&quot;&quot;)
+        instance2 = New OtherTypeName(&quot;&quot;TheTypeName&quot;&quot;, &quot;&quot;a&quot;&quot;)
+    End Sub
+End Structure&quot;</span>
+ 
+            <b>Dim</b> <span id="r25 rd" class="r25 r">expected</span> =
+            {
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;TheTypeName&quot;</span>, 5, 39),
+                <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;a&quot;</span>, 5, 54)
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#303390ca1ef578c1">VerifyBasicDiagnosticAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a963536094fce427" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralInVariousPlaces</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">&quot;
+Namespace N1.N2
+    Namespace N3
+        Public Delegate Function SomeDelegate(a As Integer, b As Integer) As Integer
+ 
+        Public Class BaseTypeName
+            Public Sub New(a As String)
+ 
+            End Sub
+        End Class
+ 
+        Public Class TheTypeName
+            Inherits BaseTypeName
+ 
+            Private ReadOnly readonlyField As Integer
+            Public Event ParticularEvent As EventHandler
+            Public className As String = &quot;&quot;TheTypeName&quot;&quot;
+            Public fieldName As String = &quot;&quot;field&quot;&quot;
+            Public someName As String = &quot;&quot;variable&quot;&quot;
+            Public namespaceName As String = &quot;&quot;N3&quot;&quot;
+            Public namespaceName2 As String = &quot;&quot;N2&quot;&quot;
+ 
+            Public Sub Foo()
+                String.Format(&quot;&quot;{0}&quot;&quot;, &quot;&quot;xyz&quot;&quot;)
+            End Sub
+            Public Sub Foo2()
+                String.Format(&quot;&quot;{0}&quot;&quot;, &quot;&quot;readonlyField&quot;&quot;)
+            End Sub
+ 
+            Public Sub New()
+                MyBase.New(&quot;&quot;SomeDelegate&quot;&quot;)
+            End Sub
+ 
+            Sub Foo3(a As String)
+                Dim dict As New Dictionary(Of String, String) With
+                    {
+                        {&quot;&quot;b&quot;&quot;, &quot;&quot;readonlyField&quot;&quot;},
+                        {&quot;&quot;xyz&quot;&quot;, &quot;&quot;ParticularEvent&quot;&quot;}
+                    }
+            End Sub
+ 
+            Public ReadOnly Property Prop As Integer
+                Get
+                    Dim variable = 5
+                    Return variable
+                End Get
+            End Property
+ 
+            Public namespaceName3 As String = &quot;&quot;N1.N2&quot;&quot;
+            Public verbatimString As String = &quot;&quot;
+verbatim
+string
+lines&quot;&quot;
+ 
+        End Class
+    End Namespace
+End Namespace
+&quot;</span>
+            <b>Dim</b> <span id="r27 rd" class="r27 r">expected</span> =
+                {
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;TheTypeName&quot;</span>, 17, 42),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N3&quot;</span>, 20, 46),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N2&quot;</span>, 21, 47),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 27, 38),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;SomeDelegate&quot;</span>, 31, 28),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 37, 31),
+                    <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;ParticularEvent&quot;</span>, 38, 33)
+                }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#303390ca1ef578c1">VerifyBasicDiagnosticAsync</a>(<span class="r26 r">source</span>, <span class="r27 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="9ab996005390c2d9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWithVerbatimIdentifiers</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r28 rd" class="r28 r">source</span> = <span class="s">&quot;
+Public Class TypeName
+    Public Sub New(obj As Object)
+        Dim name = &quot;&quot;obj&quot;&quot;
+    End Sub
+    Sub Foo(a As String, [for] As Integer, b As String, [integer] As Object)
+        Dim whatever = &quot;&quot;[for]&quot;&quot;
+        Dim whatever1 = &quot;&quot;b&quot;&quot;
+        Dim whatever2 = &quot;&quot;a&quot;&quot;
+        Dim whatever3 = &quot;&quot;[integer]&quot;&quot;
+    End Sub
+End Class&quot;</span>
+            <b>Const</b> <span id="r29 rd" class="r29 r">fixTest</span> = <span class="s">&quot;
+Public Class TypeName
+    Public Sub New(obj As Object)
+        Dim name = NameOf(obj)
+    End Sub
+    Sub Foo(a As String, [for] As Integer, b As String, [integer] As Object)
+        Dim whatever = NameOf([for])
+        Dim whatever1 = NameOf(b)
+        Dim whatever2 = NameOf(a)
+        Dim whatever3 = NameOf([integer])
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r28 r">source</span>, <span class="r29 r">fixTest</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="839b13cb912d579c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreIfMethodHasNoParameters</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r30 rd" class="r30 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo()
+        Dim whatever = &quot;&quot;&quot;&quot;
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r30 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="16f35648804bc73b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreIfMethodHasParametersUnlineOfStringLiteral</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r31 rd" class="r31 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo(a As String)
+        Dim whatever = &quot;&quot;b&quot;&quot;
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r31 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="8759ef4812974813" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameReturnAnalyzerCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r32 rd" class="r32 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo(b As String)
+        Dim whatever = &quot;&quot;b&quot;&quot;
+    End Sub
+End Class&quot;</span>
+            <b>Dim</b> <span id="r33 rd" class="r33 r">expected</span> = <a href="#b3aeddd12187657e">CreateNameofDiagnosticResult</a>(<span class="s">&quot;b&quot;</span>, 4, 24)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r32 r">test</span>, <span class="r33 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="175bf3ba4dffe7b8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInConstructorFixItToNameof</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r34 rd" class="r34 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub New(b As String)
+        Dim whatever = &quot;&quot;b&quot;&quot;
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r35 rd" class="r35 r">fixtest</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub New(b As String)
+        Dim whatever = NameOf(b)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r34 r">test</span>, <span class="r35 r">fixtest</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="102c1f2fb1560485" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInConstructorFixItToNameofMustKeepComments</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r36 rd" class="r36 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub New(b As String)
+        &#39;a
+        Dim whatever = &quot;&quot;b&quot;&quot; &#39;d
+        &#39;b
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r37 rd" class="r37 r">fixtest</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub New(b As String)
+        &#39;a
+        Dim whatever = NameOf(b) &#39;d
+        &#39;b
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r36 r">test</span>, <span class="r37 r">fixtest</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="47894d5b1a367230" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInMethodFixItToNameof</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r38 rd" class="r38 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo(b As String)
+        Dim whatever = &quot;&quot;b&quot;&quot;
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r39 rd" class="r39 r">fixtest</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo(b As String)
+        Dim whatever = NameOf(b)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r38 r">test</span>, <span class="r39 r">fixtest</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="eba00c49dca9efbd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInMethodMustKeepComments</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r40 rd" class="r40 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo(b As String)
+        &#39;a
+        Dim whatever = &quot;&quot;b&quot;&quot;&#39;d
+        &#39;b
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r41 rd" class="r41 r">fixtest</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo(b As String)
+        &#39;a
+        Dim whatever = NameOf(b) &#39;d
+        &#39;b
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r40 r">test</span>, <span class="r41 r">fixtest</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="74329733e3ec1f6e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreAttributes</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r42 rd" class="r42 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    &lt;Whatever(&quot;&quot;a&quot;&quot;)&gt;
+    Sub Foo(a as String)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r42 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e71d519af71b28fa" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAll</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r43 rd" class="r43 r">source</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Go(x As Integer, y As Integer, z As Integer)
+        Dim a = &quot;&quot;x&quot;&quot;
+        Dim b = &quot;&quot;y&quot;&quot;
+        Dim c = &quot;&quot;z&quot;&quot;
+    End Sub
+End Class&quot;</span>
+            <b>Const</b> <span id="r44 rd" class="r44 r">fixtest</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Go(x As Integer, y As Integer, z As Integer)
+        Dim a = NameOf(x)
+        Dim b = NameOf(y)
+        Dim c = NameOf(z)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a9eb17a7699f2c31">VerifyBasicFixAllAsync</a>(<span class="r43 r">source</span>, <span class="r44 r">fixtest</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;NestedClass&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SomeStruct&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SomeEnum&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;IInterface&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;N2&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SomeDelegate&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;readonlyField&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;ParticularEvent&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Prop&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;TheTypeName&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Invoke&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;N1&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;N3&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="1c028a9a40e4a3e9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringInMethodInvocationThenFixUpdatesAsExpected</a>(<span id="r45 rd" class="r45 r">stringLiteral</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r46 rd" class="r46 r">source</span> = <span class="s">&quot;
+Namespace N1.N2
+    Namespace N3
+        Public Class TheTypeName
+ 
+            Private ReadOnly readonlyField As Integer
+            Public Property Prop As Integer
+            Public Event ParticularEvent As EventHandler
+            Public Enum SomeEnum
+                SomeValue
+            End Enum
+            Public Delegate Function SomeDelegate(c As Integer, d As Double) As Integer
+            Public Interface IInterface
+ 
+            End Interface
+            Public Structure SomeStruct
+ 
+            End Structure
+            Public Class NestedClass
+ 
+            End Class
+            Public WriteOnly Property Prop2 As Integer
+                Set(value As Integer)
+                    Invoke(&quot;&quot;abc&quot;&quot;, ~REPLACE~)
+                End Set
+            End Property
+            Private Sub Invoke(arg1 As String, arg2 As String)
+ 
+            End Sub
+        End Class
+    End Namespace
+End Namespace
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a9eb17a7699f2c31">VerifyBasicFixAllAsync</a>(<span class="r46 r">source</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;~REPLACE~&quot;</span>, <span class="s">$&quot;</span><span class="s">&quot;&quot;</span>{<span class="r45 r">stringLiteral</span>}<span class="s">&quot;&quot;</span><span class="s">&quot;</span>), <span class="r46 r">source</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;~REPLACE~&quot;</span>, <span class="s">$&quot;</span><span class="s">NameOf(</span>{<span class="r45 r">stringLiteral</span>}<span class="s">)</span><span class="s">&quot;</span>))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="ab1f439eb8b54b89" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreNamesNotDeclaredYet</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r47 rd" class="r47 r">test</span> = <span class="s">&quot;
+Public Class TypeName
+    Sub Foo()
+        Dim str = &quot;&quot;x&quot;&quot;
+        Dim x = 1
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r47 r">test</span>)
+        <b>End Function
+ 
+        Private Function</b> <a id="b3aeddd12187657e" href="../R/b3aeddd12187657e.html" target="n" data-glyph="76,1">CreateNameofDiagnosticResult</a>(<span id="r48 rd" class="r48 r">nameofArgument</span> <b>As String</b>, <span id="r49 rd" class="r49 r">diagnosticLine</span> <b>As Integer</b>, <span id="r50 rd" class="r50 r">diagnosticColumn</span> <b>As Integer</b>) <b>As</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            <b>Return</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+            {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#833011b017224aed">NameOf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">$&quot;</span><span class="s">Use &#39;NameOf(</span>{<span class="r48 r">nameofArgument</span>}<span class="s">)&#39; instead of specifying the program element name.</span><span class="s">&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, <span class="r49 r">diagnosticLine</span>, <span class="r50 r">diagnosticColumn</span>)}
+            }
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

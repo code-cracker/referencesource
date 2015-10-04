@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html><head><title>GeneratedCodeAnalysisExtensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(11);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Common/Extensions/GeneratedCodeAnalysisExtensions.cs" target="_top">Extensions\GeneratedCodeAnalysisExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Common" target="_top">src\Common\CodeCracker.Common\CodeCracker.Common.csproj</a> (CodeCracker.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Text.RegularExpressions;
+ 
+<b>namespace</b> CodeCracker
+{
+    <b>public static class</b> <a id="d8db7b2424208c35" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t">GeneratedCodeAnalysisExtensions</a>
+    {
+        <b>public static bool</b> <a id="d2c79ffe8bcf600f" href="../R/d2c79ffe8bcf600f.html" target="n" data-glyph="220,1">IsOnGeneratedFile</a>(<b>this</b> <b>string</b> <span id="r0 rd" class="r0 r">filePath</span>) =&gt;
+            <span class="t">Regex</span>.IsMatch(<span class="r0 r">filePath</span>, <span class="s">@&quot;(\\service|\\TemporaryGeneratedFile_.*|\\assemblyinfo|\\assemblyattributes|\.(g\.i|g|designer|generated|assemblyattributes))\.(cs|vb)$&quot;</span>,
+                <span class="t">RegexOptions</span>.IgnoreCase);
+    }
+}</pre></td></tr></table></div></body></html>

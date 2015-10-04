@@ -1,0 +1,8 @@
+CodeCracker.Common
+CodeCracker.CSharp
+CodeCracker.CSharp
+CodeCracker.Test.Common
+CodeCracker.Test.CSharp
+CodeCracker.Test.VisualBasic
+CodeCracker.VisualBasic
+CodeCracker.VisualBasic

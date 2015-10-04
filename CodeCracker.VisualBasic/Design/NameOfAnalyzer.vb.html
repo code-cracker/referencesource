@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html><head><title>NameOfAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(97);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Design/NameOfAnalyzer.vb" target="_top">Design\NameOfAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Linq
+ 
+<b>Namespace</b> Design
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="81860c00b340151d" href="../R/81860c00b340151d.html" target="n" data-glyph="0,0" class="t"><span id="b58690bb8c9914f9">NameOfAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="85d16a579ae9b369" href="../R/85d16a579ae9b369.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#833011b017224aed">NameOf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="eb72de39cd28045c" href="../R/eb72de39cd28045c.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;You should use nameof instead of the parameter element name string&quot;</span>
+        <b>Public Const</b> <a id="eb97a69acb1d118f" href="../R/eb97a69acb1d118f.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;Use &#39;NameOf({0})&#39; instead of specifying the program element name.&quot;</span>
+        <b>Public Const</b> <a id="88c100c9c53d0404" href="../R/88c100c9c53d0404.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>
+        <b>Public Const</b> <a id="dd7a2175ea711207" href="../R/dd7a2175ea711207.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;In VB14 the NameOf() operator should be used to specify the name of a program element instead of a string literal as it produces code that is easier to refactor.&quot;</span>
+        <b>Protected Shared</b> <a id="b1081acc00bb00c4" href="../R/b1081acc00bb00c4.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#85d16a579ae9b369">Id</a>,
+            <a href="#eb72de39cd28045c">Title</a>,
+            <a href="#eb97a69acb1d118f">MessageFormat</a>,
+            <a href="#88c100c9c53d0404">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#dd7a2175ea711207">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#833011b017224aed">NameOf</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="e9ab9fe12edf5a22" href="../R/e9ab9fe12edf5a22.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#b1081acc00bb00c4">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="21efb598158d1a1f" href="../R/21efb598158d1a1f.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="../Extensions/VBAnalyzerExtensions.vb.html#72080da7fbd50e23">RegisterSyntaxNodeAction</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bc5663c61b5a0033">VisualBasic14</a>, <b>AddressOf</b> <a href="#70797cce475704e0">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#863d781b63b16b4b">StringLiteralExpression</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="70797cce475704e0" href="../R/70797cce475704e0.html" target="n" data-glyph="76,1">Analyzer</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">stringLiteral</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>)
+            <b>If String</b>.IsNullOrWhiteSpace(<span class="r5 r">stringLiteral</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8353e6b0f3d3a218">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>) <b>Then Return
+ 
+            Dim</b> <span id="r6 rd" class="r6 r">programElementName</span> = <a href="#c3607f6fd301071e">GetProgramElementNameThatMatchesStringLiteral</a>(<span class="r5 r">stringLiteral</span>, <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>)
+            <b>If</b> (<a href="#04e91e830e19cc54">Found</a>(<span class="r6 r">programElementName</span>)) <b>Then
+                Dim</b> <span id="r7 rd" class="r7 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#b1081acc00bb00c4">Rule</a>, <span class="r5 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="r6 r">programElementName</span>)
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diag</span>)
+            <b>End If
+        End Sub
+ 
+        Private Shared Function</b> <a id="c3607f6fd301071e" href="../R/c3607f6fd301071e.html" target="n" data-glyph="76,1">GetProgramElementNameThatMatchesStringLiteral</a>(<span id="r8 rd" class="r8 r">stringLiteral</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>, <span id="r9 rd" class="r9 r">model</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As String
+            Dim</b> <span id="r10 rd" class="r10 r">programElementName</span> = <a href="#88b0f0773a50e113">GetParameterNameThatMatchesStringLiteral</a>(<span class="r8 r">stringLiteral</span>)
+            <b>If Not</b> <a href="#04e91e830e19cc54">Found</a>(<span class="r10 r">programElementName</span>) <b>Then
+                Dim</b> <span id="r11 rd" class="r11 r">literalValueText</span> = <span class="r8 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8353e6b0f3d3a218">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>
+                <b>Dim</b> <span id="r12 rd" class="r12 r">symbol</span> = <span class="r9 r">model</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#019112cdb218fa28">LookupSymbols</a>(<span class="r8 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8353e6b0f3d3a218">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a38722cd380fa23">SpanStart</a>, <b>Nothing</b>, <span class="r11 r">literalValueText</span>).FirstOrDefault()
+                <b>If</b> <span class="r12 r">symbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#d2adba436e8e1d01">Kind</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#14dd92a838936e8d">Local</a> <b>Then</b>
+                    <span class="c">&#39; Only register if local variable is declared before it is used.</span>
+                    <span class="c">&#39; Don&#39;t recommend if variable is declared after string literal is used.</span>
+                    <b>Dim</b> <span id="r13 rd" class="r13 r">symbolSpan</span> = <span class="r12 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6fdf20baf08270e2">Locations</a>.Min(<b>Function</b>(<span id="r14 rd" class="r14 r">i</span>) <span class="r14 r">i</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>)
+                    <b>If</b> <span class="r13 r">symbolSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4738f3d50510cb45">CompareTo</a>(<span class="r8 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8353e6b0f3d3a218">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#1df7da450c7a2dcc">Span</a>) &gt; 0 <b>Then
+                        Return String</b>.Empty
+                    <b>End If
+                End If</b>
+                <span class="r10 r">programElementName</span> = <span class="r12 r">symbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#97f37bb405289f6d">ToDisplayParts</a>().
+                        Where(<b>AddressOf</b> <a href="#9da77263d65d8144">IncludeOnlyPartsThatAreName</a>).
+                        LastOrDefault(<b>Function</b>(<span id="r15 rd" class="r15 r">displayPart</span>) <span class="r15 r">displayPart</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#afc37f9ae8b9279e">ToString</a>() = <span class="r11 r">literalValueText</span>).
+                        <a href="@1@Microsoft.CodeAnalysis/A.html#afc37f9ae8b9279e">ToString</a>()
+                <b>End If
+                Return</b> <span class="r10 r">programElementName</span>
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="88b0f0773a50e113" href="../R/88b0f0773a50e113.html" target="n" data-glyph="76,1">GetParameterNameThatMatchesStringLiteral</a>(<span id="r16 rd" class="r16 r">stringLiteral</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>) <b>As String
+            Dim</b> <span id="r17 rd" class="r17 r">ancestorThatMightHaveParameters</span> = <span class="r16 r">stringLiteral</span>.<a href="/CodeCracker.Common/A.html#febbf40e5a890c7f">FirstAncestorOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#20980c918f870a95" class="t">AttributeListSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>))
+            <b>Dim</b> <span id="r18 rd" class="r18 r">parameterName</span> = <b>String</b>.Empty
+            <b>If</b> <span class="r17 r">ancestorThatMightHaveParameters</span> <b>IsNot Nothing Then
+                Dim</b> <span id="r19 rd" class="r19 r">parameters</span> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="t">SeparatedSyntaxList</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>)()
+                <b>Select Case</b> <span class="r17 r">ancestorThatMightHaveParameters</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9c0930f385ba9e37">Kind</a>
+                    <b>Case</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#a0cfdc448283878a">SubBlock</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2ac049fce489d4a7">FunctionBlock</a>
+                        <b>Dim</b> <span id="r20 rd" class="r20 r">method</span> = <b>DirectCast</b>(<span class="r17 r">ancestorThatMightHaveParameters</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>)
+                        <span class="r19 r">parameters</span> = <span class="r20 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#10d160a0781ecce3">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>
+                    <b>Case</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#065372af381a89a5">AttributeList</a>
+                <b>End Select</b>
+                <span class="r18 r">parameterName</span> = <a href="#d4ea4102db5b814e">GetParameterWithIdentifierEqualToStringLiteral</a>(<span class="r16 r">stringLiteral</span>, <span class="r19 r">parameters</span>)?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cc186f48b54c6387">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+ 
+            <b>End If
+            Return</b> <span class="r18 r">parameterName</span>
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="04e91e830e19cc54" href="../R/04e91e830e19cc54.html" target="n" data-glyph="76,1">Found</a>(<span id="r21 rd" class="r21 r">programElement</span> <b>As String</b>) <b>As Boolean
+            Return Not String</b>.IsNullOrEmpty(<span class="r21 r">programElement</span>)
+        <b>End Function
+ 
+        Public Shared Function</b> <a id="9da77263d65d8144" href="../R/9da77263d65d8144.html" target="n" data-glyph="72,1">IncludeOnlyPartsThatAreName</a>(<span id="r22 rd" class="r22 r">displayPart</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#e62b13fcfb856a0b" class="t">SymbolDisplayPart</a>) <b>As Boolean
+            Return</b> <span class="r22 r">displayPart</span>.<a href="/CodeCracker.Common/A.html#79ebb455137c8e6c">IsAnyKind</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#ffbf9e646589e577">ClassName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a212ae8b4fb4ebbd">DelegateName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#1cbdd64c5beef98f">EnumName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#638a68c9da8a0786">EventName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b136cfebbcafbb50">FieldName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8d4541904283cf77">InterfaceName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9290841d9b19e2bb">LocalName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5f0f346289357674">MethodName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9dec5d6c724fa53f">NamespaceName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a03e7cb6d23c90eb">ParameterName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d1a3d1a3b968ee1">PropertyName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#d328ad2ff1491bf9">StructName</a>)
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="d4ea4102db5b814e" href="../R/d4ea4102db5b814e.html" target="n" data-glyph="76,1">GetParameterWithIdentifierEqualToStringLiteral</a>(<span id="r23 rd" class="r23 r">stringLiteral</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>, <span id="r24 rd" class="r24 r">parameters</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="t">SeparatedSyntaxList</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>)) <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>
+            <b>Return</b> <span class="r24 r">parameters</span>.FirstOrDefault(<b>Function</b>(<span id="r25 rd" class="r25 r">m</span>) <b>String</b>.Equals(<span class="r25 r">m</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cc186f48b54c6387">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>, <span class="r23 r">stringLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8353e6b0f3d3a218">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="t">StringComparison</span>.Ordinal))
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html><head><title>ArgumentExceptionTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(220);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/ArgumentExceptionTests.vb" target="_top">Usage\ArgumentExceptionTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Usage
+    <b>Public Class</b> <a id="44666149005d2756" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="652f7673499343da">ArgumentExceptionTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#6c329f03d9b7280f" class="t">ArgumentExceptionAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#46a713b105e11b6d" class="t">ArgumentExceptionCodeFixProvider</a>)
+ 
+        <b>Shared Function</b> <a id="ab92210190021ede" href="../R/ab92210190021ede.html" target="n" data-glyph="72,1">Wrap</a>(<span id="r0 rd" class="r0 r">code</span> <b>As String</b>) <b>As String
+            Return</b> <span class="s">&quot;
+Using System
+ 
+Namespace ConsoleApplication1
+    Class TypeName
+        &quot;</span> &amp; <span class="r0 r">code</span> &amp; <span class="s">&quot;
+    End Class
+End Namespace&quot;</span>
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="43956b81222e7022" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentAnalyzerCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Async Function Foo(a As Integer, b As Integer) As Task
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;)
+End Function
+&quot;</span>)
+ 
+            <b>Dim</b> <span id="r2 rd" class="r2 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;c&#39; is not in the argument list.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 8, 44)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r1 r">test</span>, <span class="r2 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="8afd47c6bbe6bd48" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInConstrucorWithInvalidARgumentAnalyzerCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r3 rd" class="r3 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub New(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;)
+End Sub
+&quot;</span>)
+ 
+            <b>Dim</b> <span id="r4 rd" class="r4 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;c&#39; is not in the argument list.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 8, 44)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r3 r">test</span>, <span class="r4 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="29cef49bdc063fa4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentAndApplyingFirstFixUsesFirstParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r5 rd" class="r5 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub Foo(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;)
+End Sub
+&quot;</span>)
+ 
+            <b>Dim</b> <span id="r6 rd" class="r6 r">fix</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub Foo(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;a&quot;&quot;)
+End Sub
+&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">fix</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d64943ec1fd1cbbb" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentAndApplyingSecondFixUsesSecondParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r7 rd" class="r7 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub Foo(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;)
+End Sub
+&quot;</span>)
+ 
+            <b>Dim</b> <span id="r8 rd" class="r8 r">fix</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub Foo(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;b&quot;&quot;)
+End Sub
+&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r7 r">test</span>, <span class="r8 r">fix</span>, 1)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e1c5fe669025eab7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInConstructorAndApplyingFirstFixUsesFirstParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r9 rd" class="r9 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub New(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;)
+End Sub
+&quot;</span>)
+ 
+            <b>Dim</b> <span id="r10 rd" class="r10 r">fix</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub New(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;a&quot;&quot;)
+End Sub
+&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">fix</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d90218ed3d0cc18a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInConstructorAndApplyingFirstFixUsesSecondParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r11 rd" class="r11 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub New(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;)
+End Sub
+&quot;</span>)
+ 
+            <b>Dim</b> <span id="r12 rd" class="r12 r">fix</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+Public Sub New(a As Integer, b As Integer)
+    Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;b&quot;&quot;)
+End Sub
+&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r11 r">test</span>, <span class="r12 r">fix</span>, 1)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6499f14eaa4a4f1d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresAgrumentExceptionObjectsInFields</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r13 rd" class="r13 r">test</span> = <span class="s">&quot;Dim ex As New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r13 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="2a4a2227808ea047" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresArgumentExceptionObjectsInGetAccessors</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r14 rd" class="r14 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+        Public Property NewProperty() As String
+            Get
+                Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)
+            End Get
+            Set(ByVal value As String)
+            End Set
+        End Property
+&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r14 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f06f4aaea444a730" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInSetPropertyArgumentNameShouldBeValue</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r15 rd" class="r15 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+        Public Property NewProperty() As String
+            Get
+            End Get
+            Set(ByVal value As String)
+                Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)
+            End Set
+        End Property
+&quot;</span>)
+            <b>Dim</b> <span id="r16 rd" class="r16 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                        .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                        .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;paramName&#39; is not in the argument list.&quot;</span>,
+                        .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                        .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 11, 56)}
+                    }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r15 r">test</span>, <span class="r16 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="aa7245a704a77827" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgmentExceptionWithInvalidArgumentInSetAccessorAndApplyingFixUsesParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r17 rd" class="r17 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+        Public Property NewProperty() As String
+            Get
+                Return Nothing
+            End Get
+            Set(ByVal value As String)
+                Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)
+            End Set
+        End Property
+&quot;</span>)
+            <b>Dim</b> <span id="r18 rd" class="r18 r">fix</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+        Public Property NewProperty() As String
+            Get
+                Return Nothing
+            End Get
+            Set(ByVal value As String)
+                Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;value&quot;&quot;)
+            End Set
+        End Property
+&quot;</span>)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r17 r">test</span>, <span class="r18 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d74efe670041092a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInMultilineLambdaAndApplyingFix</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r19 rd" class="r19 r">test</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+        Dim a = Function(p) 
+                   Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)
+                End Function
+        Sub Foo(a As String)
+            Dim action = Sub(p1)
+                Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)
+            End Sub        
+        End Sub
+&quot;</span>)
+            <b>Dim</b> <span id="r20 rd" class="r20 r">fix</span> = <a href="#ab92210190021ede">Wrap</a>(<span class="s">&quot;
+        Dim a = Function(p) 
+                   Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;p&quot;&quot;)
+                End Function
+        Sub Foo(a As String)
+            Dim action = Sub(p1)
+                Throw New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;p1&quot;&quot;)
+            End Sub        
+        End Sub
+&quot;</span>)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r19 r">test</span>, <span class="r20 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="22b04f34da5529e4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresArgumentExceptionObjectsInInitializerOfAutoProperties</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r21 rd" class="r21 r">test</span> = <span class="s">&quot;
+ReadOnly Property Test = New ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;)
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r21 r">test</span>)
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

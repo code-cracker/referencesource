@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html><head><title>AppxPackageTestDir</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">2 assignments to MSBuild property AppxPackageTestDir</div><div class="rA">MSBuildFiles (2)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\AppxPackage\Microsoft.AppXPackage.Targets (2)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2084"><b>2084</b>&lt;<i>AppxPackageTestDir</i> Condition=&quot;&#39;$(ProduceAppxBundle)&#39; == &#39;false&#39;&quot;&gt;$(AppxPackageDir)$(AppxPackageName)_Test\&lt;/AppxPackageTestDir&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2085"><b>2085</b>&lt;<i>AppxPackageTestDir</i> Condition=&quot;&#39;$(ProduceAppxBundle)&#39; == &#39;true&#39;&quot;&gt;$(AppxPackageDir)$(AppxPackageNameNeutral)$(_AppxPackageConfiguration)_Test\&lt;/AppxPackageTestDir&gt;</a>
+</div>
+</div>
+<div class="rH">8 usages of MSBuild property AppxPackageTestDir</div><div class="rA">MSBuildFiles (8)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\AppxPackage\Microsoft.AppXPackage.Targets (8)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2083"><b>2083</b>&lt;PropertyGroup Condition=&quot;&#39;$(<i>AppxPackageTestDir</i>)&#39; == &#39;&#39;&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2089"><b>2089</b>&lt;AppxPackageOutput&gt;$(<i>AppxPackageTestDir</i>)$(AppxPackageName)$(AppxPackageExtension)&lt;/AppxPackageOutput&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2104"><b>2104</b>&lt;AppxSymbolPackageOutput&gt;$(<i>AppxPackageTestDir</i>)$(AppxPackageName)$(AppxSymbolPackageExtension)&lt;/AppxSymbolPackageOutput&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2364"><b>2364</b>&lt;_TestLayoutTargetFiles Condition=&quot;&#39;%(Architecture)&#39; == &#39;neutral&#39;&quot; Include=&quot;@(FrameworkSdkPackage-&gt;&#39;$(<i>AppxPackageTestDir</i>)Dependencies\%(FileName)%(Extension)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2369"><b>2369</b>&lt;_TestLayoutTargetFiles Condition=&quot;&#39;%(Architecture)&#39; != &#39;neutral&#39;&quot; Include=&quot;@(FrameworkSdkPackage-&gt;&#39;$(<i>AppxPackageTestDir</i>)Dependencies\%(Architecture)\%(FileName)%(Extension)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2383"><b>2383</b>&lt;PackagingDirectoryWrites Include=&quot;$(<i>AppxPackageTestDir</i>)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2398"><b>2398</b>&lt;_PowerShellScriptsDestination Include=&quot;@(_PowerShellScriptsSource-&gt;&#39;$(<i>AppxPackageTestDir</i>)%(RecursiveDir)%(FileName)%(Extension)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3397"><b>3397</b>&lt;AppxBundleOutput&gt;$(<i>AppxPackageTestDir</i>)$(AppxPackageNameNeutral)_$(AppxBundlePlatformsForNaming)$(_AppxPackageConfiguration)$(AppxBundleExtension)&lt;/AppxBundleOutput&gt;</a>
+</div>
+</div>
+</body></html>

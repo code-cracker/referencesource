@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<html><head><title>TernaryOperatorTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(530);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Style/TernaryOperatorTests.vb" target="_top">Style\TernaryOperatorTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Style
+<b>Imports</b> Xunit
+ 
+<b>Public Class</b> <a id="c66fdcc914abaa44" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="ef3fe3a9b5cc29d2">TernaryOperatorWithAssignmentTests</span></a>
+    <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#51cd17c16d35558c" class="t">TernaryOperatorAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#e80e84eba73beb68" class="t">TernaryOperatorWithAssignmentCodeFixProvider</a>)
+ 
+    <b>Public Async Function</b> <a id="13fae4a99d5c6eb0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithoutElseAnalyzerDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r0 rd" class="r0 r">sourceWithoutElse</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            If something Then
+                x = &quot;&quot;b&quot;&quot;
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">sourceWithoutElse</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="31e5930955129fd8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButWithBlockWith2StatementsOnIfAnalyzerDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r1 rd" class="r1 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            If something Then
+                x = String.Empty
+                x = &quot;&quot;c&quot;&quot;
+            Else
+                x = &quot;&quot;d&quot;&quot;
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r1 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="0be9fe96fe44589a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButWithBlockWith2StatementsOnElseAnalyzerDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r2 rd" class="r2 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            If something Then
+                x = &quot;&quot;B&quot;&quot;
+            Else
+                Dim a = String.Empty
+                x = &quot;&quot;C&quot;&quot;
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="3e2c3b0a7e06643a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButWithoutReturnOnElseDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r3 rd" class="r3 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            Dim y = &quot;&quot;c&quot;&quot;
+            If something Then
+                x = &quot;&quot;b&quot;&quot;
+            Else
+                Dim a = String.Empty
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="4cf208a6bea43086" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButIfBlockWithoutReturnDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r4 rd" class="r4 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            dim y = &quot;&quot;b&quot;&quot;
+            If something Then
+                x = &quot;&quot;b&quot;&quot;
+            Else
+                y = x
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="c57616fe5c2cae48" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIElseIfDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r5 rd" class="r5 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            If something Then
+                x = &quot;&quot;b&quot;&quot;
+            ElseIf Not Something then
+                x = &quot;&quot;c&quot;&quot;
+                x = &quot;&quot;d&quot;&quot;
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r5 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="f4fa1d3975c69b6a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfAndElseWithDirectReturnAnalyzerCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r6 rd" class="r6 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#65bcd6ec037fc6a7">TernaryOperator_Assignment</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can use a ternary operator.&quot;</span>,
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 8, 13)}
+            }
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<a href="#d9a759af096ece82">sourceAssign</a>, <span class="r6 r">expected</span>)
+    <b>End Function
+ 
+    Private Const</b> <a id="d9a759af096ece82" href="../R/d9a759af096ece82.html" target="n" data-glyph="10,1">sourceAssign</a> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class MyType
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            If something Then
+                x = &quot;&quot;b&quot;&quot;
+            Else
+                x = &quot;&quot;c&quot;&quot;
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="0de6ef9a763e84a5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfAndElseWithAssignmentChangeToTernaryFix</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r7 rd" class="r7 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class MyType
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            x = If(something, &quot;&quot;b&quot;&quot;, &quot;&quot;c&quot;&quot;)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<a href="#d9a759af096ece82">sourceAssign</a>, <span class="r7 r">fix</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="dff0edfeaec1a479" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfAndElseWithAssignmentChangeToTernaryFixAll</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r8 rd" class="r8 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class MyType
+        Public Sub Foo()
+            Dim something = true
+            Dim x = &quot;&quot;a&quot;&quot;
+            x = If(something, &quot;&quot;b&quot;&quot;, &quot;&quot;c&quot;&quot;)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<a href="#d9a759af096ece82">sourceAssign</a>, <a href="#d9a759af096ece82">sourceAssign</a>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)}, <b>New</b> <b>String</b>() {<span class="r8 r">fix</span>, <span class="r8 r">fix</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)})
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="ccec936d9e0407db" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenTernaryWithObjectDoesApplyFix</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">&quot;
+Class MyCustomer
+    Public Property Value As String
+End Class
+Public Class ExcelLineRecordClass
+    Public Property LineNumber As Integer
+    Public Property imported As Boolean
+End Class
+Class Tester
+    Private Sub Test()
+        Dim ExcelRecord As New ExcelLineRecordClass
+        Dim lCell As New MyCustomer
+        If lCell Is Nothing Then
+            ExcelRecord.imported = False
+        Else
+            ExcelRecord.imported = If(lCell.Value, lCell.Value.ToString = &quot;&quot;X&quot;&quot;)
+        End If
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Const</b> <span id="r10 rd" class="r10 r">fix</span> = <span class="s">&quot;
+Class MyCustomer
+    Public Property Value As String
+End Class
+Public Class ExcelLineRecordClass
+    Public Property LineNumber As Integer
+    Public Property imported As Boolean
+End Class
+Class Tester
+    Private Sub Test()
+        Dim ExcelRecord As New ExcelLineRecordClass
+        Dim lCell As New MyCustomer
+        ExcelRecord.imported = If(lCell Is Nothing, False, If(lCell.Value, lCell.Value.ToString = &quot;&quot;X&quot;&quot;))
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r9 r">source</span>, <span class="r10 r">fix</span>)
+ 
+    <b>End Function
+ 
+End Class
+ 
+Public Class</b> <a id="5b813094a76c3921" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="c6e46dbf432c776f">TernaryOperatorWithReturnTests</span></a>
+    <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#51cd17c16d35558c" class="t">TernaryOperatorAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#a2129c99f2674f1c" class="t">TernaryOperatorWithReturnCodeFixProvider</a>)
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="a777839112ff80c1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithoutElseAnalyzerDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r11 rd" class="r11 r">sourceWithoutElse</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Return 1
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">sourceWithoutElse</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="837ecc778c912052" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButWithBlockWith2StatementsOnIfAnalyzerDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r12 rd" class="r12 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Dim a = String.Empty
+                Return 1
+            Else
+                Return 2
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r12 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="5c54e3550ece34ca" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButWithBlockWith2StatementsOnElseAnalyzerDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r13 rd" class="r13 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Return 1
+            Else
+                Dim a = String.Empty
+                Return 2
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r13 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="ad4f091993898723" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButWithoutReturnOnElseDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r14 rd" class="r14 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Return 1
+            Else
+                Dim a = String.Empty
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r14 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="e9e9b0a9bc13c32a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfWithElseButIfBlockWithoutReturnDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r15 rd" class="r15 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Dim a = String.Empty
+            Else
+                Return 2
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r15 r">sourceWithMultipleStatements</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="b2cbe847910b1b3c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIElseIfDoesNotCreate</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r16 rd" class="r16 r">sourceWithMultipleStatements</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Return 1
+            ElseIf Not Something then
+                Dim a = String.Empty
+                Return 2
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r16 r">sourceWithMultipleStatements</span>)
+    <b>End Function
+ 
+    Private Const</b> <a id="d104f195da0b2a2b" href="../R/d104f195da0b2a2b.html" target="n" data-glyph="10,1">sourceReturn</a> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class MyType
+        Public Function Foo() As Integer
+            Dim something = true
+            If something Then
+                Return 1
+            Else
+                Return 2
+            End If
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="cb10dfbbd666b99a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfAndElseWithDirectReturnAnalyzerCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r17 rd" class="r17 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#2c1818e1a9a3f58d">TernaryOperator_Return</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can use a ternary operator.&quot;</span>,
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 13)}
+            }
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<a href="#d104f195da0b2a2b">sourceReturn</a>, <span class="r17 r">expected</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="54d6b095054bb261" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfAndElseWithDirectReturnCreatesFix</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r18 rd" class="r18 r">fix</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class MyType
+        Public Function Foo() As Integer
+            Dim something = true
+            Return If(something, 1, 2)
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<a href="#d104f195da0b2a2b">sourceReturn</a>, <span class="r18 r">fix</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="94e1815da5b156b7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIfAndElseWithDirectReturnCreatesFixAll</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r19 rd" class="r19 r">fix</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class MyType
+        Public Function Foo() As Integer
+            Dim something = true
+            Return If(something, 1, 2)
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<a href="#d104f195da0b2a2b">sourceReturn</a>, <a href="#d104f195da0b2a2b">sourceReturn</a>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)}, <b>New</b> <b>String</b>() {<span class="r19 r">fix</span>, <span class="r19 r">fix</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)})
+    <b>End Function
+ 
+End Class
+ 
+Public Class</b> <a id="c0a5256161b6390f" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="d2a13a7fcff24643">TernaryOperatorFromIifTests</span></a>
+    <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#51cd17c16d35558c" class="t">TernaryOperatorAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#1a0e53e3e081a8c5" class="t">TernaryOperatorFromIifCodeFixProvider</a>)
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="65ac8a84de39a019" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIifAndSimpleAssignmentCreatesFix</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+        Dim x = 1
+        x = Iif(x = 1, 2, 3)
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Const</b> <span id="r21 rd" class="r21 r">fix</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+        Dim x = 1
+        x = If(x = 1, 2, 3)
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">fix</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="794be4d56f5ae7a9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIifAndSimpleAssignmentCreatesFixAll</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">&quot;
+Class MyType
+    Public Sub Foo()
+        Dim x = 1
+        x = Iif(x = 1, 2, 3)
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Const</b> <span id="r23 rd" class="r23 r">fix</span> = <span class="s">&quot;
+Class MyType
+    Public Sub Foo()
+        Dim x = 1
+        x = If(x = 1, 2, 3)
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<span class="r22 r">source</span>, <span class="r22 r">source</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)}, <b>New</b> <b>String</b>() {<span class="r23 r">fix</span>, <span class="r23 r">fix</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)})
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="d359926a4c646df7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIifAndReturnCreatesFix</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">&quot;
+Class MyType
+    Public Function Foo() As Integer
+        Dim x = 1
+        Return Iif(x = 1, 2, 3)
+    End Function
+End Class&quot;</span>
+ 
+        <b>Const</b> <span id="r25 rd" class="r25 r">fix</span> = <span class="s">&quot;
+Class MyType
+    Public Function Foo() As Integer
+        Dim x = 1
+        Return If(x = 1, 2, 3)
+    End Function
+End Class&quot;</span>
+ 
+        <b>Dim</b> <span id="r26 rd" class="r26 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#bcc1c8a9c3404bab">TernaryOperator_Iif</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can use a ternary operator.&quot;</span>,
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 16)}
+            }
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r24 r">source</span>, <span class="r26 r">expected</span>)
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">fix</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="4e488fe77fbb8bbe" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingIifAndReturnCreatesFixAll</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r27 rd" class="r27 r">source</span> = <span class="s">&quot;
+Class MyType
+    Public Function Foo() As Integer
+        Dim x = 1
+        Return Iif(x = 1, 2, 3)
+    End Function
+End Class&quot;</span>
+ 
+        <b>Const</b> <span id="r28 rd" class="r28 r">fix</span> = <span class="s">&quot;
+Class MyType
+    Public Function Foo() As Integer
+        Dim x = 1
+        Return If(x = 1, 2, 3)
+    End Function
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<span class="r27 r">source</span>, <span class="r27 r">source</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)}, <b>New</b> <b>String</b>() {<span class="r28 r">fix</span>, <span class="r28 r">fix</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;MyType&quot;</span>, <span class="s">&quot;MyType1&quot;</span>)})
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="bfdd9afc23f948a9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenNotUsingIifDoesNotCreateAnalyzer</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r29 rd" class="r29 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+        Dim x = 1
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r29 r">source</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="483682b5b7946b2a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenIifWithTooManyParametersDoesNotCreateAnalyzer</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r30 rd" class="r30 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+        Dim x = Iif(true, 1, 2, 3)
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r30 r">source</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="c3a5dcc844c156a0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenIifWithTooFewParametersDoesNotCreateAnalyzer</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Const</b> <span id="r31 rd" class="r31 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+        Dim x = Iif(true, 1)
+    End Sub
+End Class&quot;</span>
+ 
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r31 r">source</span>)
+    <b>End Function
+ 
+ 
+ 
+End Class</b>
+ 
+</pre></td></tr></table></div></body></html>

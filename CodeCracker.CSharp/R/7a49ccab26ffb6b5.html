@@ -1,0 +1,10 @@
+﻿<!DOCTYPE html>
+<html><head><title>FixType</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">6 references to FixType</div><div class="rA">CodeCracker.CSharp (6)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Style\PropertyPrivateSetCodeFixProvider.cs (6)</div>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#27"><b>27</b>context.RegisterCodeFix(CodeAction.Create(&quot;Change property to &#39;private set&#39;&quot;, c =&gt; ChangePropertySetAsync(context.Document, diagnostic, c, <i>FixType</i>.PrivateFix), nameof(PropertyPrivateSetCodeFixProvider) + nameof(<i>FixType</i>.PrivateFix)), diagnostic);</a>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#28"><b>28</b>context.RegisterCodeFix(CodeAction.Create(&quot;Change property to &#39;protected set&#39;&quot;, c =&gt; ChangePropertySetAsync(context.Document, diagnostic, c, <i>FixType</i>.ProtectedFix), nameof(PropertyPrivateSetCodeFixProvider) + nameof(<i>FixType</i>.ProtectedFix)), diagnostic);</a>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#32"><b>32</b>private async static Task&lt;Document&gt; ChangePropertySetAsync(Document document, Diagnostic diagnostic, CancellationToken cancellationToken, <i>FixType</i> fixType)</a>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#40"><b>40</b>var privateprotectedModifier = SyntaxFactory.Token(fixType == <i>FixType</i>.PrivateFix ? SyntaxKind.PrivateKeyword : SyntaxKind.ProtectedKeyword)</a>
+</div>
+</div>
+</body></html>

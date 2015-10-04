@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html><head><title>JsonNetAnalyzerTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(111);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/JsonNetAnalyzerTests.cs" target="_top">Usage\JsonNetAnalyzerTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="9a4c3113f211ac8e" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="bd9042add45bbe7b">JsonNetTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        <b>private const string</b> <a id="db5a83f30f87ecba" href="../R/db5a83f30f87ecba.html" target="n" data-glyph="10,1">TestCode</a> = <span class="s">@&quot;
+using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+namespace ConsoleApplication1
+{{
+    class Person
+    {{
+        public Person()
+        {{
+            {0}
+        }}
+    }}
+}}&quot;</span>;
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e62e420a07014126" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfDeserializeObjectIdentifierFoundAndJsonTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;Newtonsoft.Json.JsonConvert.DeserializeObject&lt;Person&gt;(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <a href="#2bb0db5252e7921e">CreateDiagnosticResult</a>(11, 67));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="60435fd853daa79c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedDeserializeObjectIdentifierFoundAndJsonTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;JsonConvert.DeserializeObject&lt;Person&gt;(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r1 r">test</span>, <a href="#2bb0db5252e7921e">CreateDiagnosticResult</a>(11,51));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="dbd18c88c0d1f9d5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfDeserializeObjectIdentifierFoundAndJsonTextIsCorrectDoesNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;Newtonsoft.Json.JsonConvert.DeserializeObject&lt;Person&gt;(&quot;&quot;{&quot;&quot;name&quot;&quot;:&quot;&quot;foo&quot;&quot;}&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e5d00499336c1f70" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviateDeserializeObjectIdentifierFoundAndJsonTextIsCorrectDoesNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;JsonConvert.DeserializeObject&lt;Person&gt;(&quot;&quot;{&quot;&quot;name&quot;&quot;:&quot;&quot;foo&quot;&quot;}&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="84e56dbc9ebfb721" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfJObjectParseIdentifierFoundAndJsonTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;Newtonsoft.Json.Linq.JObject.Parse(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">test</span>, <a href="#2bb0db5252e7921e">CreateDiagnosticResult</a>(11, 48));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0390dc805b4f678a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedJObjectParseIdentifierFoundAndJsonTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;JObject.Parse(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r5 r">test</span>, <a href="#2bb0db5252e7921e">CreateDiagnosticResult</a>(11, 27));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ecfd81486eeee4c2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfJObjectParseIdentifierFoundAndJsonTextIsCorrectDoesNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;JObject.Parse(&quot;&quot;{&quot;&quot;name&quot;&quot;:&quot;&quot;foo&quot;&quot;}&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+        <span class="c">//</span>
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ca676d7194b9b271" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfJArrayParseIdentifierFoundAndJsonTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;Newtonsoft.Json.Linq.JArray.Parse(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r7 r">test</span>, <a href="#2bb0db5252e7921e">CreateDiagnosticResult</a>(11, 47));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c948b19b5bb40a85" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedJArrayParseIdentifierFoundAndJsonTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;JArray.Parse(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r8 r">test</span>, <a href="#2bb0db5252e7921e">CreateDiagnosticResult</a>(11, 26));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="de3ffa9247733ec3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfJArrayParseIdentifierFoundAndJsonTextIsCorrectDoesNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#db5a83f30f87ecba">TestCode</a>, <span class="s">@&quot;JArray.Parse(&quot;&quot;{&quot;&quot;name&quot;&quot;:&quot;&quot;foo&quot;&quot;}&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">test</span>);
+        }
+ 
+        <b>private static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="2bb0db5252e7921e" href="../R/2bb0db5252e7921e.html" target="n" data-glyph="76,1">CreateDiagnosticResult</a>(<b>int</b> <span id="r10 rd" class="r10 r">line</span>, <b>int</b> <span id="r11 rd" class="r11 r">column</span>) {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d8ccca123527e756">JsonNet</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Error parsing boolean value. Path &#39;&#39;, line 0, position 0.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] {<b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r10 r">line</span>, <span class="r11 r">column</span>)}
+            };
+        }
+ 
+ 
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a> <a id="9347fc347ef44ecc" href="../R/9347fc347ef44ecc.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>()
+        {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.CSharp/A.html#d4add1caf5fadc77" class="t">JsonNetAnalyzer</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeLocalVariableConstWhenPossibleAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(97);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Performance/MakeLocalVariableConstWhenPossibleAnalyzer.vb" target="_top">Performance\MakeLocalVariableConstWhenPossibleAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.Collections.Immutable
+ 
+<b>Namespace</b> Performance
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="39cbdfa04787535a" href="../R/39cbdfa04787535a.html" target="n" data-glyph="0,0" class="t"><span id="8061955c02b65bb4">MakeLocalVariableConstWhenPossibleAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="d68f63472a6952ba" href="../R/d68f63472a6952ba.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#640c4f61208ae5ab">MakeLocalVariableConstWhenItIsPossible</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="c633e843095c4842" href="../R/c633e843095c4842.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;Make Local Variable Constant.&quot;</span>
+        <b>Public Const</b> <a id="1a10bd3d76e8fa8b" href="../R/1a10bd3d76e8fa8b.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;This variable can be made const.&quot;</span>
+        <b>Public Const</b> <a id="f5483f2856d96861" href="../R/f5483f2856d96861.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>
+        <b>Public Const</b> <a id="4e6db9ef9b83c320" href="../R/4e6db9ef9b83c320.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;If this variable is assigned a constant value and never changed, it can be made &#39;const&#39;.&quot;</span>
+        <b>Protected Shared</b> <a id="41a96d13e599a828" href="../R/41a96d13e599a828.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#d68f63472a6952ba">Id</a>,
+            <a href="#c633e843095c4842">Title</a>,
+            <a href="#1a10bd3d76e8fa8b">MessageFormat</a>,
+            <a href="#f5483f2856d96861">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#4e6db9ef9b83c320">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#640c4f61208ae5ab">MakeLocalVariableConstWhenItIsPossible</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="76eea184b501151c" href="../R/76eea184b501151c.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#41a96d13e599a828">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="0852ead35dad7e09" href="../R/0852ead35dad7e09.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#172f0c0cf948bf02">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0269e2067c52238d">LocalDeclarationStatement</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="172f0c0cf948bf02" href="../R/172f0c0cf948bf02.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">localDeclaration</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6edd9e9e8fcc1f0" class="t">LocalDeclarationStatementSyntax</a>)
+            <b>Dim</b> <span id="r6 rd" class="r6 r">semanticModel</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>
+            <b>If Not</b> <span class="r5 r">localDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2dfc1fbfc3ce55c8">Modifiers</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0aaf36d62c36d844" class="t">ConstDirectiveTriviaSyntax</a>).Any() <b>AndAlso</b>
+            <a href="#38c95838c288619d">IsDeclarationConstFriendly</a>(<span class="r5 r">localDeclaration</span>, <span class="r6 r">semanticModel</span>) <b>AndAlso</b>
+            <a href="#7a95a7dbc4385756">AreVariablesOnlyWrittenInsideDeclaration</a>(<span class="r5 r">localDeclaration</span>, <span class="r6 r">semanticModel</span>) <b>Then
+ 
+                Dim</b> <span id="r7 rd" class="r7 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#41a96d13e599a828">Rule</a>, <span class="r5 r">localDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>())
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diag</span>)
+            <b>End If
+        End Sub
+ 
+        Private Shared Function</b> <a id="38c95838c288619d" href="../R/38c95838c288619d.html" target="n" data-glyph="76,1">IsDeclarationConstFriendly</a>(<span id="r8 rd" class="r8 r">declaration</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6edd9e9e8fcc1f0" class="t">LocalDeclarationStatementSyntax</a>, <span id="r9 rd" class="r9 r">semanticModel</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As Boolean
+            For Each</b> <span class="r10 r">variable</span> <b>In</b> <span class="r8 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ec13b065e029e1e8">Declarators</a>
+                <span class="c">&#39; In VB an initializer can either be</span>
+                <span class="c">&#39; infered with an ititializer or declared via</span>
+                <span class="c">&#39; As New ReferenceType</span>
+                <b>If</b> <span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#55ae2d52d86d9298">Initializer</a> <b>Is Nothing Then Return False</b>
+ 
+                <span class="c">&#39; is constant?</span>
+                <b>If</b> <span class="r8 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2dfc1fbfc3ce55c8">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#773056510c6d78ed">Any</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a992c13de18c720">ConstKeyword</a>) <b>Then Return False
+ 
+                Dim</b> <span id="r11 rd" class="r11 r">constantValue</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#55ae2d52d86d9298">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b39d6e2b239eba1b">Value</a>)
+                <b>Dim</b> <span id="r12 rd" class="r12 r">valueIsConstant</span> <b>As Boolean</b> = <span class="r11 r">constantValue</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1d6e9fac604b3517">HasValue</a>
+                <b>If Not</b> <span class="r12 r">valueIsConstant</span> <b>Then Return False
+ 
+                Dim</b> <span id="r13 rd" class="r13 r">variableConvertedType</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="t">ITypeSymbol</a>
+ 
+                <span class="c">&#39; is declared as null reference type</span>
+                <b>If</b> <span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aba70ddc7965c2af">AsClause</a> <b>IsNot Nothing Then
+                    Dim</b> <span id="r14 rd" class="r14 r">variableType</span> = <span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aba70ddc7965c2af">AsClause</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e637e28f33e08854">Type</a>
+                    <span class="r13 r">variableConvertedType</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r14 r">variableType</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#7f848b8b3703eab5">ConvertedType</a>
+                <b>Else
+                    Dim</b> <span id="r15 rd" class="r15 r">symbol</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f95417d19c703068">GetDeclaredSymbol</a>(<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e1bad758d18bf7e0">Names</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed0e49a5740d359">First</a>())
+                    <span class="r13 r">variableConvertedType</span> = <b>DirectCast</b>(<span class="r15 r">symbol</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#4272096ccd1dda5a">Type</a>
+                <b>End If
+ 
+                If</b> <span class="r13 r">variableConvertedType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#ceee05362776c494">IsReferenceType</a> <b>AndAlso</b>
+                <span class="r13 r">variableConvertedType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> &lt;&gt; <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#236fc9e187f143b5">System_String</a> <b>AndAlso</b>
+                <span class="r11 r">constantValue</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a> <b>IsNot Nothing Then Return False</b>
+ 
+                <span class="c">&#39; Nullable?</span>
+                <b>If</b> <span class="r13 r">variableConvertedType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#001dbe54ab60ea5f">OriginalDefinition</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5c2777fb1e34001a">System_Nullable_T</a> <b>Then Return False
+                If</b> <span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#55ae2d52d86d9298">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b39d6e2b239eba1b">Value</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1b39c036e63391c9">Kind</a> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#835c2563b50b849c">NothingLiteralExpression</a> <b>Then Return True</b>
+ 
+                <span class="c">&#39; Value can be converted to variable type?</span>
+                <b>Dim</b> <span id="r16 rd" class="r16 r">conversion</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#68ec0eb4736bb480">ClassifyConversion</a>(<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#55ae2d52d86d9298">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b39d6e2b239eba1b">Value</a>, <span class="r13 r">variableConvertedType</span>)
+                <b>If</b> (<b>Not</b> <span class="r16 r">conversion</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4686c88464b2adbc">Exists</a> <b>OrElse</b> <span class="r16 r">conversion</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d134f571de8cba1b">IsUserDefined</a>) <b>Then Return False
+ 
+            Next
+            Return True
+        End Function
+ 
+        Private Shared Function</b> <a id="7a95a7dbc4385756" href="../R/7a95a7dbc4385756.html" target="n" data-glyph="76,1">AreVariablesOnlyWrittenInsideDeclaration</a>(<span id="r17 rd" class="r17 r">declaration</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6edd9e9e8fcc1f0" class="t">LocalDeclarationStatementSyntax</a>, <span id="r18 rd" class="r18 r">SemanticModel</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As Boolean
+            Dim</b> <span id="r19 rd" class="r19 r">dfa</span> = <span class="r18 r">SemanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0f94d8efc27be744">AnalyzeDataFlow</a>(<span class="r17 r">declaration</span>)
+            <b>Dim</b> <span id="r20 rd" class="r20 r">symbols</span> = <b>From</b> declarator <b>In</b> <span class="r17 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ec13b065e029e1e8">Declarators</a>
+                          <b>From</b> variable <b>In</b> declarator.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e1bad758d18bf7e0">Names</a>
+                          <b>Select</b> <span class="r18 r">SemanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f95417d19c703068">GetDeclaredSymbol</a>(variable)
+ 
+            <b>Dim</b> <span id="r21 rd" class="r21 r">result</span> = <b>Not</b> <span class="r20 r">symbols</span>.Any(<b>Function</b>(<span id="r22 rd" class="r22 r">s</span>) <span class="r19 r">dfa</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#25bfcd14ba2991f2">WrittenOutside</a>.Contains(<span class="r22 r">s</span>))
+            <b>Return</b> <span class="r21 r">result</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

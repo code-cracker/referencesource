@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringRepresentationAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(62);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/StringRepresentationAnalyzer.cs" target="_top">Refactoring\StringRepresentationAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="dc9285226599b994" href="../R/dc9285226599b994.html" target="n" data-glyph="0,0" class="t"><span id="70048c52b351dfe5">StringRepresentationAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="89b2fefa2e4b8bbf" href="../R/89b2fefa2e4b8bbf.html" target="n" data-glyph="44,1">RegularStringRule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6fd534749e013e1b">StringRepresentation_RegularString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <span class="s">&quot;Regular string&quot;</span>,
+            <span class="s">&quot;Change to regular string&quot;</span>,
+            <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6fd534749e013e1b">StringRepresentation_RegularString</a>));
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="606990998e377e77" href="../R/606990998e377e77.html" target="n" data-glyph="44,1">VerbatimStringRule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#42d4606f3a8dae4e">StringRepresentation_VerbatimString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <span class="s">&quot;Verbatim string&quot;</span>,
+            <span class="s">&quot;Change to verbatim string&quot;</span>,
+            <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#42d4606f3a8dae4e">StringRepresentation_VerbatimString</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="ce91bca98595ba5d" href="../R/ce91bca98595ba5d.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#89b2fefa2e4b8bbf">RegularStringRule</a>, <a href="#606990998e377e77">VerbatimStringRule</a>);
+ 
+        <b>public override void</b> <a id="13f9cf86884ed698" href="../R/13f9cf86884ed698.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt; <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#f8c2700757291756">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1fe7c08d8ff2a9e9">StringLiteralExpression</a>);
+ 
+        <b>private static void</b> <a id="f8c2700757291756" href="../R/f8c2700757291756.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r4 rd" class="r4 r">literalExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>)<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>var</b> <span id="r5 rd" class="r5 r">isVerbatim</span> = <span class="r4 r">literalExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>.Length &gt; 0
+                &amp;&amp; <span class="r4 r">literalExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>.StartsWith(<span class="s">&quot;@\&quot;&quot;</span>);
+ 
+            <b>var</b> <span id="r6 rd" class="r6 r">properties</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt;
+            {
+                { <b>nameof</b>(<span class="r5 r">isVerbatim</span>), <span class="r5 r">isVerbatim</span> ? <span class="s">&quot;1&quot;</span> : <span class="s">&quot;0&quot;</span> },
+                { <span class="s">&quot;truncatedString&quot;</span>, <a href="#3e028a44ba0b7973">Truncate</a>((<b>string</b>)<span class="r4 r">literalExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>, 20) }
+            }.ToImmutableDictionary();
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(
+                    <span class="r5 r">isVerbatim</span> ? <a href="#606990998e377e77">VerbatimStringRule</a> : <a href="#89b2fefa2e4b8bbf">RegularStringRule</a>,
+                    <span class="r4 r">literalExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(),
+                    <span class="r6 r">properties</span>));
+        }
+ 
+        <b>private static string</b> <a id="3e028a44ba0b7973" href="../R/3e028a44ba0b7973.html" target="n" data-glyph="76,1">Truncate</a>(<b>string</b> <span id="r7 rd" class="r7 r">text</span>, <b>int</b> <span id="r8 rd" class="r8 r">length</span>)
+        {
+            <b>var</b> <span id="r9 rd" class="r9 r">normalized</span> = <b>new</b> <b>string</b>(<span class="r7 r">text</span>.Cast&lt;<b>char</b>&gt;().Where(<span id="r10 rd" class="r10 r">c</span> =&gt; !<b>char</b>.IsControl(<span class="r10 r">c</span>)).ToArray());
+            <b>return</b> <span class="r9 r">normalized</span>.Length &lt;= <span class="r8 r">length</span>
+                ? <span class="r9 r">normalized</span>
+                : <span class="r9 r">normalized</span>.Substring(0, <span class="r8 r">length</span> - 1) + <span class="s">&quot;\u2026&quot;</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

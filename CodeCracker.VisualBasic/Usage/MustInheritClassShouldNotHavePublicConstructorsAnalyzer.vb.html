@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html><head><title>MustInheritClassShouldNotHavePublicConstructorsAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(48);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/MustInheritClassShouldNotHavePublicConstructorsAnalyzer.vb" target="_top">Usage\MustInheritClassShouldNotHavePublicConstructorsAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="c31c37931da562bd" href="../R/c31c37931da562bd.html" target="n" data-glyph="0,0" class="t"><span id="48e7d724338ce715">MustInheritClassShouldNotHavePublicConstructorsAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="79ab5570fdac535c" href="../R/79ab5570fdac535c.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;MustInherit class should not have public constructors.&quot;</span>
+        <b>Friend Const</b> <a id="2d661444650d0149" href="../R/2d661444650d0149.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Constructor should not be public.&quot;</span>
+ 
+        <b>Friend Shared</b> <a id="5846273ca2763059" href="../R/5846273ca2763059.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6f74ff04dad45b67">AbstractClassShouldNotHavePublicCtors</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#79ab5570fdac535c">Title</a>,
+            <a href="#2d661444650d0149">MessageFormat</a>,
+            <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6f74ff04dad45b67">AbstractClassShouldNotHavePublicCtors</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="62f1b6f63a32ff5c" href="../R/62f1b6f63a32ff5c.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#5846273ca2763059">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="089188ce6ad78e79" href="../R/089188ce6ad78e79.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r2 rd" class="r2 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#161022fa47833b7d">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f4c8d95a9de9019d">SubNewStatement</a>)
+        <b>End Sub
+        Private Sub</b> <a id="161022fa47833b7d" href="../R/161022fa47833b7d.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r3 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r4 rd" class="r4 r">constructor</span> = <b>DirectCast</b>(<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a>)
+            <b>If Not</b> <span class="r4 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#76f03a4146e01759">Modifiers</a>.Any(<b>Function</b>(<span id="r5 rd" class="r5 r">m</span>) <span class="r5 r">m</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5356018116dfe1f9">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4ba2b22149b0d72b">PublicKeyword</a>)) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r6 rd" class="r6 r">classDeclaration</span> = <span class="r4 r">constructor</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>)
+            <b>If</b> <span class="r6 r">classDeclaration</span> <b>Is Nothing Then Exit Sub
+            If Not</b> <span class="r6 r">classDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cbbbebcffeffb4a6">ClassStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19cb7abb40b83a0d">Modifiers</a>.Any(<b>Function</b>(<span id="r7 rd" class="r7 r">m</span>) <span class="r7 r">m</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5356018116dfe1f9">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e837970af10ccf5">MustInheritKeyword</a>)) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r8 rd" class="r8 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#5846273ca2763059">Rule</a>, <span class="r4 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>())
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r8 r">diag</span>)
+        <b>End Sub
+    End Class
+End Namespace</b>
+ 
+</pre></td></tr></table></div></body></html>

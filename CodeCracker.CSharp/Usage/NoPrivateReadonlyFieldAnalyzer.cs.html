@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html><head><title>NoPrivateReadonlyFieldAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(162);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/NoPrivateReadonlyFieldAnalyzer.cs" target="_top">Usage\NoPrivateReadonlyFieldAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="c9e65446c7a84063" href="../R/c9e65446c7a84063.html" target="n" data-glyph="0,0" class="t"><span id="a05663de65ce00df">NoPrivateReadonlyFieldAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="1edfee168f0676d5" href="../R/1edfee168f0676d5.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Make field readonly&quot;</span>;
+        <b>internal const string</b> <a id="1e53042e96dd7c3d" href="../R/1e53042e96dd7c3d.html" target="n" data-glyph="8,1">Message</a> = <span class="s">&quot;Make &#39;{0}&#39; readonly&quot;</span>;
+        <b>internal const string</b> <a id="5c6d769113968c52" href="../R/5c6d769113968c52.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="58aa36f220d4d012" href="../R/58aa36f220d4d012.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;A field that is only assigned on the constructor can be made readonly.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="ea3035939ff1702b" href="../R/ea3035939ff1702b.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#74ea83b0cf8eb548">NoPrivateReadonlyField</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#1edfee168f0676d5">Title</a>,
+            <a href="#1e53042e96dd7c3d">Message</a>,
+            <a href="#5c6d769113968c52">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#58aa36f220d4d012">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#74ea83b0cf8eb548">NoPrivateReadonlyField</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="d2e6d8bd113237e4" href="../R/d2e6d8bd113237e4.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> { <b>get</b> { <b>return</b> <span class="t">ImmutableArray</span>.Create(<a href="#ea3035939ff1702b">Rule</a>); } }
+ 
+        <b>public override void</b> <a id="27cf535e1d9d7aa7" href="../R/27cf535e1d9d7aa7.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">analysisContext</span>)
+        {
+            <span class="r3 r">analysisContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8384470b7136049">RegisterCompilationStartAction</a>(<span id="r4 rd" class="r4 r">compilationStartContext</span> =&gt;
+            {
+                <b>var</b> <span id="r5 rd" class="r5 r">candidateFields</span> = <b>new</b> <span class="t">List</span>&lt;<a href="#045cdaa8b8012e6b" class="t">FieldCandidate</a>&gt;();
+                <b>var</b> <span id="r6 rd" class="r6 r">assignedFields</span> = <b>new</b> <span class="t">List</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a>&gt;();
+ 
+                <span class="r4 r">compilationStartContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5bcffd3f9d32603">RegisterSyntaxNodeAction</a>(
+                    <span id="r7 rd" class="r7 r">syntaxNodeAnalysisContext</span> =&gt; <a href="#e8ef5c0489c8828e">CaptureCandidateFields</a>(<span class="r7 r">syntaxNodeAnalysisContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>, <span class="r7 r">syntaxNodeAnalysisContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>, <span class="r5 r">candidateFields</span>),
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bd66e06e32389030">FieldDeclaration</a>);
+ 
+                <span class="r4 r">compilationStartContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5bcffd3f9d32603">RegisterSyntaxNodeAction</a>(
+                    <span id="r8 rd" class="r8 r">syntaxNodeAnalysisContext</span> =&gt; <a href="#e6711b870e07e872">CaptureAssignedFields</a>(<span class="r8 r">syntaxNodeAnalysisContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a>, <span class="r8 r">syntaxNodeAnalysisContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>, <span class="r6 r">assignedFields</span>),
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#355c0c4b8e3c18ce">ClassDeclaration</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#49f2e628b56c8599">StructDeclaration</a>);
+ 
+                <span class="r4 r">compilationStartContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5fd094c7eff54efd">RegisterCompilationEndAction</a>(<span id="r9 rd" class="r9 r">compilationEndContext</span> =&gt;
+                {
+                    <b>var</b> <span id="r10 rd" class="r10 r">fieldsWithoutAssignment</span> = <span class="r5 r">candidateFields</span>.Distinct().Where(<span id="r11 rd" class="r11 r">field</span> =&gt; <a href="#df6e25010ccb61c8">HasNoAssignment</a>(<span class="r11 r">field</span>, <span class="r6 r">assignedFields</span>));
+                    <b>foreach</b> (<a href="#045cdaa8b8012e6b" class="k">var</a> <span id="r12 rd" class="r12 r">candidateField</span> <b>in</b> <span class="r10 r">fieldsWithoutAssignment</span>)
+                    {
+                        <b>var</b> <span id="r13 rd" class="r13 r">props</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt; { { <span class="s">&quot;identifier&quot;</span>, <span class="r12 r">candidateField</span>.<a href="#c9971d79383eb3ae">Variable</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a> } }.ToImmutableDictionary();
+                        <span class="r9 r">compilationEndContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#372a4e6d7d86262f">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(
+                            <a href="#ea3035939ff1702b">Rule</a>,
+                            <span class="r12 r">candidateField</span>.<a href="#c9971d79383eb3ae">Variable</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#20b085a124dddfb0">GetLocation</a>(),
+                            <span class="r13 r">props</span>,
+                            <span class="r12 r">candidateField</span>.<a href="#c9971d79383eb3ae">Variable</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>));
+                    }
+                });
+            });
+        }
+ 
+        <b>private static void</b> <a id="e6711b870e07e872" href="../R/e6711b870e07e872.html" target="n" data-glyph="76,1">CaptureAssignedFields</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r14 rd" class="r14 r">typeDeclaration</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r15 rd" class="r15 r">semanticModel</span>, <span class="t">List</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a>&gt; <span id="r16 rd" class="r16 r">assignedFields</span>)
+        {
+            <a href="#da67602f697e5998" class="k">var</a> <span id="r17 rd" class="r17 r">t</span> = <b>new</b> <a href="#da67602f697e5998" class="t">TypeDeclarationWithSymbol</a> { <a href="#29bebfc02a824dce">TypeDeclaration</a> = <span class="r14 r">typeDeclaration</span>, <a href="#4b338eb86c4d6484">NamedTypeSymbol</a> = <span class="r15 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#11c7f4e436914356">GetDeclaredSymbol</a>(<span class="r14 r">typeDeclaration</span>) };
+            <b>var</b> <span id="r18 rd" class="r18 r">fields</span> = <a href="#b5c2abba667f48f8">GetAssignedFieldsFromType</a>(<span class="r17 r">t</span>, <span class="r15 r">semanticModel</span>);
+            <span class="r16 r">assignedFields</span>.AddRange(<span class="r18 r">fields</span>);
+        }
+        <b>private static void</b> <a id="e8ef5c0489c8828e" href="../R/e8ef5c0489c8828e.html" target="n" data-glyph="76,1">CaptureCandidateFields</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a> <span id="r19 rd" class="r19 r">field</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r20 rd" class="r20 r">semanticModel</span>, <span class="t">List</span>&lt;<a href="#045cdaa8b8012e6b" class="t">FieldCandidate</a>&gt; <span id="r21 rd" class="r21 r">candidateFields</span>)
+        {
+ 
+            <b>if</b> (!<a href="#e500a65324a22db1">CanBecameReadOnlyField</a>(<span class="r19 r">field</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="k">var</a> <span id="r22 rd" class="r22 r">variables</span> = <span class="r19 r">field</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c49a28b1ba615695">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>;
+            <b>var</b> <span id="r23 rd" class="r23 r">currentAnalysisCandidateFields</span> = <span class="r22 r">variables</span>.Select(<span id="r24 rd" class="r24 r">s</span> =&gt; <b>new</b> <a href="#045cdaa8b8012e6b" class="t">FieldCandidate</a> { <a href="#c9971d79383eb3ae">Variable</a> = <span class="r24 r">s</span>, <a href="#4e28696b3eb640cd">FieldSymbol</a> = <span class="r20 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#01b404a339e77444">GetDeclaredSymbol</a>(<span class="r24 r">s</span>) <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a> })
+                .Where(<span id="r25 rd" class="r25 r">p</span> =&gt; <span class="r25 r">p</span>.<a href="#4e28696b3eb640cd">FieldSymbol</a> != <b>null</b> &amp;&amp; <span class="r25 r">p</span>.<a href="#4e28696b3eb640cd">FieldSymbol</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a> != <b>null</b>);
+ 
+            <b>if</b> (!<span class="r23 r">currentAnalysisCandidateFields</span>.Any()) <b>return</b>;
+            <span class="r21 r">candidateFields</span>.AddRange(<span class="r23 r">currentAnalysisCandidateFields</span>);
+        }
+ 
+        <b>private static bool</b> <a id="e500a65324a22db1" href="../R/e500a65324a22db1.html" target="n" data-glyph="76,1">CanBecameReadOnlyField</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a> <span id="r26 rd" class="r26 r">field</span>)
+        {
+            <b>var</b> <span id="r27 rd" class="r27 r">noPrivate</span> = <span class="r26 r">field</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8ee2483e955bd570">Modifiers</a>.Any(<span id="r28 rd" class="r28 r">p</span> =&gt; <span class="r28 r">p</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b4701da0ca687ba5">PublicKeyword</a>) || <span class="r28 r">p</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c00358d30ac54cb3">ProtectedKeyword</a>) || <span class="r28 r">p</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df597579a4251569">InternalKeyword</a>));
+            <b>return</b> <span class="r27 r">noPrivate</span> ? !<span class="r26 r">field</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8ee2483e955bd570">Modifiers</a>.Any(<span id="r29 rd" class="r29 r">p</span> =&gt; <span class="r29 r">p</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3342344fece4043d">ConstKeyword</a>) || <span class="r29 r">p</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e8f46cc0b1bdbe4d">ReadOnlyKeyword</a>)) : <b>false</b>;
+        }
+ 
+        <b>#</b><b>region</b> GetAssignedField
+ 
+        <b>private static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a>&gt; <a id="b5c2abba667f48f8" href="../R/b5c2abba667f48f8.html" target="n" data-glyph="76,1">GetAssignedFieldsFromType</a>(<a href="#da67602f697e5998" class="t">TypeDeclarationWithSymbol</a> <span id="r30 rd" class="r30 r">typeDeclarationWithSymbol</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r31 rd" class="r31 r">model</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="k">var</a> <span id="r32 rd" class="r32 r">typeDeclaration</span> = <span class="r30 r">typeDeclarationWithSymbol</span>.<a href="#29bebfc02a824dce">TypeDeclaration</a>;
+            <b>var</b> <span id="r33 rd" class="r33 r">descendants</span> = <span class="r32 r">typeDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>(<span id="r34 rd" class="r34 r">p</span> =&gt; <a href="#5a6a5aaa3896a82f">SkipNestedTypes</a>(<span class="r32 r">typeDeclaration</span>, <span class="r34 r">p</span>));
+            <b>return</b> <span class="r33 r">descendants</span>
+                .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#12e2a42c0608e8a3" class="t">AssignmentExpressionSyntax</a>&gt;()
+                .Select(<span id="r35 rd" class="r35 r">s</span> =&gt; <span class="r35 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1d7f0768983e3662">Left</a>)
+                .Union(
+                    <span class="r33 r">descendants</span>
+                        .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#cd85186419a51c0c" class="t">PostfixUnaryExpressionSyntax</a>&gt;()
+                        .Select(<span id="r36 rd" class="r36 r">s</span> =&gt; <span class="r36 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#476cb56a48ece06e">Operand</a>))
+                .Union(
+                    <span class="r33 r">descendants</span>
+                        .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b6a58b7e45838a95" class="t">PrefixUnaryExpressionSyntax</a>&gt;()
+                        .Select(<span id="r37 rd" class="r37 r">s</span> =&gt; <span class="r37 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d96e27d485b171bc">Operand</a>)
+                )
+                .Union(
+                    <span class="r33 r">descendants</span>
+                        .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>&gt;()
+                        .SelectMany(<span id="r38 rd" class="r38 r">s</span> =&gt; <span class="r38 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.Where(<span id="r39 rd" class="r39 r">p</span> =&gt; !<span class="r39 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f99d97544f81a2c5">RefOrOutKeyword</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27f33f60c2da8704">None</a>)))
+                        .Select(<span id="r40 rd" class="r40 r">s</span> =&gt; <span class="r40 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>)
+                )
+                .Select(<span id="r41 rd" class="r41 r">s</span> =&gt; <b>new</b> { <a href="#7ed4e78f34fcd89b">Symbol</a> = <span class="r31 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r41 r">s</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>, <a href="#9687a84db769dc6d">Expression</a> = <span class="r41 r">s</span> })
+                .Where(<span id="r42 rd" class="r42 r">p</span> =&gt; <span class="r42 r">p</span>.<a href="#7ed4e78f34fcd89b">Symbol</a> != <b>null</b>)
+                .Where(<span id="r43 rd" class="r43 r">p</span> =&gt; <a href="#e163680740cfc1c5">SkipFieldsFromItsOwnConstructor</a>(<span class="r30 r">typeDeclarationWithSymbol</span>, <span class="r43 r">p</span>.<a href="#9687a84db769dc6d">Expression</a>, <span class="r43 r">p</span>.<a href="#7ed4e78f34fcd89b">Symbol</a>))
+                .Select(<span id="r44 rd" class="r44 r">s</span> =&gt; <span class="r44 r">s</span>.<a href="#7ed4e78f34fcd89b">Symbol</a>);
+        }
+ 
+        <b>private static bool</b> <a id="5a6a5aaa3896a82f" href="../R/5a6a5aaa3896a82f.html" target="n" data-glyph="76,1">SkipNestedTypes</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r45 rd" class="r45 r">typeDeclaration</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r46 rd" class="r46 r">node</span>) =&gt;
+            <span class="r46 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> ? <span class="r46 r">node</span> == <span class="r45 r">typeDeclaration</span> : <b>true</b>;
+ 
+        <b>private static bool</b> <a id="e163680740cfc1c5" href="../R/e163680740cfc1c5.html" target="n" data-glyph="76,1">SkipFieldsFromItsOwnConstructor</a>(<a href="#da67602f697e5998" class="t">TypeDeclarationWithSymbol</a> <span id="r47 rd" class="r47 r">type</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r48 rd" class="r48 r">assignmentExpression</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a> <span id="r49 rd" class="r49 r">assignmentSymbol</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="k">var</a> <span id="r50 rd" class="r50 r">parentConstructor</span> = <span class="r48 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#70d1b9c06b5b04c7">Ancestors</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>&gt;().FirstOrDefault();
+ 
+            <b>if</b> (<span class="r50 r">parentConstructor</span> == <b>null</b>)
+                <b>return true</b>;
+ 
+            <b>return</b>
+                <span class="r49 r">assignmentSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a> != <span class="r47 r">type</span>.<a href="#4b338eb86c4d6484">NamedTypeSymbol</a> ||
+                <span class="r49 r">assignmentSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5cc1bb47b7a78367">IsStatic</a> != <span class="r50 r">parentConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1f9f2eadc49600a7">Modifiers</a>.Any(<span id="r51 rd" class="r51 r">p</span> =&gt; <span class="r51 r">p</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9a5af18d43921abb">StaticKeyword</a>));
+        }
+ 
+        <b>#</b><b>endregion</b>
+ 
+        <b>private static bool</b> <a id="df6e25010ccb61c8" href="../R/df6e25010ccb61c8.html" target="n" data-glyph="76,1">HasNoAssignment</a>(<a href="#045cdaa8b8012e6b" class="t">FieldCandidate</a> <span id="r52 rd" class="r52 r">field</span>, <span class="t">List</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a>&gt; <span id="r53 rd" class="r53 r">assignedFields</span>) =&gt;
+            !<span class="r53 r">assignedFields</span>.Any(<span id="r54 rd" class="r54 r">assignedField</span> =&gt; <span class="r54 r">assignedField</span> == <span class="r52 r">field</span>.<a href="#4e28696b3eb640cd">FieldSymbol</a>);
+ 
+        <b>private sealed class</b> <a id="045cdaa8b8012e6b" href="../R/045cdaa8b8012e6b.html" target="n" data-glyph="4,1" class="t"><span id="2882da14c4b749d8">FieldCandidate</span></a>
+        {
+            <b>internal</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a> <a id="c9971d79383eb3ae" href="../R/c9971d79383eb3ae.html" target="n" data-glyph="104,2">Variable</a> { <b>get</b>; <b>set</b>; }
+            <b>internal</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a> <a id="4e28696b3eb640cd" href="../R/4e28696b3eb640cd.html" target="n" data-glyph="104,2">FieldSymbol</a> { <b>get</b>; <b>set</b>; }
+ 
+            <b>public override bool</b> <a id="e232e46385770675" href="../R/e232e46385770675.html" target="n" data-glyph="72,2">Equals</a>(<b>object</b> <span id="r55 rd" class="r55 r">obj</span>)
+            {
+                <b>if</b> (<b>object</b>.Equals(<span class="r55 r">obj</span>, <b>null</b>)) <b>return false</b>;
+                <b>if</b> (GetType() != <span class="r55 r">obj</span>.GetType()) <b>return false</b>;
+                <b>return</b> ((<a href="#045cdaa8b8012e6b" class="t">FieldCandidate</a>)<span class="r55 r">obj</span>).<a href="#4e28696b3eb640cd">FieldSymbol</a>.Equals(<a href="#4e28696b3eb640cd">FieldSymbol</a>);
+            }
+            <b>public override int</b> <a id="cc6edf03a5c18fed" href="../R/cc6edf03a5c18fed.html" target="n" data-glyph="72,2">GetHashCode</a>()
+            {
+                <b>var</b> <span id="r56 rd" class="r56 r">hash</span> = 13;
+                <span class="r56 r">hash</span> = (<span class="r56 r">hash</span> * 7) + <a href="#4e28696b3eb640cd">FieldSymbol</a>.GetHashCode();
+                <b>return</b> <span class="r56 r">hash</span>;
+            }
+ 
+        }
+ 
+        <b>private class</b> <a id="da67602f697e5998" href="../R/da67602f697e5998.html" target="n" data-glyph="4,1" class="t"><span id="b5e8d589789e5e41">TypeDeclarationWithSymbol</span></a>
+        {
+            <b>internal</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <a id="29bebfc02a824dce" href="../R/29bebfc02a824dce.html" target="n" data-glyph="104,2">TypeDeclaration</a> { <b>get</b>; <b>set</b>; }
+            <b>internal</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <a id="4b338eb86c4d6484" href="../R/4b338eb86c4d6484.html" target="n" data-glyph="104,2">NamedTypeSymbol</a> { <b>get</b>; <b>set</b>; }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,13 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveUnusedVariablesCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">1 instantiation of RemoveUnusedVariablesCodeFixProvider</div><div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Usage\RemoveUnusedVariablesTest.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Usage/RemoveUnusedVariablesTest.cs.html#10"><b>10</b>protected override CodeFixProvider GetCodeFixProvider() =&gt; new <i>RemoveUnusedVariablesCodeFixProvider</i>();</a>
+</div>
+</div>
+<div class="rH">3 references to RemoveUnusedVariablesCodeFixProvider</div><div class="rA">CodeCracker.CSharp (3)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Usage\RemoveUnusedVariablesCodeFixProvider.cs (3)</div>
+<a href="../Usage/RemoveUnusedVariablesCodeFixProvider.cs.html#13"><b>13</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>RemoveUnusedVariablesCodeFixProvider</i>)), Shared]</a>
+<a href="../Usage/RemoveUnusedVariablesCodeFixProvider.cs.html#32"><b>32</b>context.RegisterCodeFix(CodeAction.Create($&quot;Remove unused variable : &#39;{ variableUnused.Declaration.Variables.First()}&#39;&quot;, c =&gt; RemoveVariableAsync(context.Document, variableUnused, c), nameof(<i>RemoveUnusedVariablesCodeFixProvider</i>)), diagnostic);</a>
+<a href="../Usage/RemoveUnusedVariablesCodeFixProvider.cs.html#37"><b>37</b>context.RegisterCodeFix(CodeAction.Create($&quot;Remove unused variable : &#39;{ variableUnused.Identifier }&#39;&quot;, c =&gt; RemoveVariableAsync(context.Document, variableUnused, c), nameof(<i>RemoveUnusedVariablesCodeFixProvider</i>)), diagnostic);</a>
+</div>
+</div>
+</body></html>

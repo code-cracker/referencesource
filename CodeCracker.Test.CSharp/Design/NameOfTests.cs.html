@@ -1,0 +1,709 @@
+﻿<!DOCTYPE html>
+<html><head><title>NameOfTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(700);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Design/NameOfTests.cs" target="_top">Design\NameOfTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Design;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Design
+{
+    <b>public class</b> <a id="e3aeee3d2c8f2d5d" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="b7214154c29a459d">NameOfTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#07eb1c00637db4fd" class="t">NameOfAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#1cd2a9a1809782cd" class="t">NameOfCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;null&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;b&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;string a&quot;</span>, <span class="s">&quot;b&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e2b02d9761070aed" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenStringLiteralInMethodShouldNotReportDiagnostic</a>(<b>string</b> <span id="r0 rd" class="r0 r">parameters</span>, <b>string</b> <span id="r1 rd" class="r1 r">stringLiteral</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(&quot;</span> + <span class="r0 r">parameters</span> + <span class="s">@&quot;)
+    {
+        var whatever = &quot;&quot;&quot;</span> + <span class="r1 r">stringLiteral</span> + <span class="s">@&quot;&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;string b&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;b&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;string @for&quot;</span>, <span class="s">&quot;for&quot;</span>, <span class="s">&quot;@for&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;string @xyz&quot;</span>, <span class="s">&quot;xyz&quot;</span>, <span class="s">&quot;@xyz&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="293517a299757e95" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenStringLiteralInMethodShouldReportDiagnostic</a>(<b>string</b> <span id="r3 rd" class="r3 r">parameters</span>, <b>string</b> <span id="r4 rd" class="r4 r">stringLiteral</span>, <b>string</b> <span id="r5 rd" class="r5 r">nameofArgument</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(&quot;</span> + <span class="r3 r">parameters</span> + <span class="s">@&quot;)
+    {
+        var whatever = &quot;&quot;&quot;</span> + <span class="r4 r">stringLiteral</span> + <span class="s">@&quot;&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r7 rd" class="r7 r">expected</span> = <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="r5 r">nameofArgument</span>, 6, 24);
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">source</span>, <span class="r7 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6051e9884cd36c86" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreIfConstructorHasNoParameters</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">@&quot;
+public class TypeName()
+{
+    public TypeName()
+    {
+        string whatever = &quot;&quot;b&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bc95e1c841bc0398" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreInVariableDeclaration</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">@&quot;
+public class TypeName()
+{
+    public TypeName()
+    {
+        var @var = string.IsNullOrEmpty(&quot;&quot;var&quot;&quot;);
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3d4b7459a63739c9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreOnPropertyDeclaration</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">test</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public string MyProperty { get; set; } = &quot;&quot;MyProperty&quot;&quot;;
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r10 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="de8ded5ed59ae32a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreNamesNotDeclaredYet</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">test</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo()
+    {
+        var str = &quot;&quot;x&quot;&quot;;
+        var x = 1;
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b213dc115f3cd9e6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingSomeStringInAttributeShouldNotReportDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">test</span> = <span class="s">@&quot;
+public class TypeName
+{
+    [Whatever(&quot;&quot;a&quot;&quot;)]
+    [Whatever(&quot;&quot;xyz&quot;&quot;]
+    void Foo(string a)
+    {
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">test</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;xyz&quot;</span>, <b>false</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;OtherProperty&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeStruct&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;readonlyField&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;Property&quot;</span>, <b>true</b>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2d8754a0752a1554" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringAsIndexerParameter</a>(<b>string</b> <span id="r13 rd" class="r13 r">stringLiteral</span>, <b>bool</b> <span id="r14 rd" class="r14 r">shouldReportDiagnostic</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    private readonly int readonlyField;
+    public int OtherProperty { get; set; }
+    public event EventHandler ParticularEvent;
+    public delegate int SomeDelegate(int c, double d);
+ 
+    public interface IInterface {}
+    public struct SomeStruct {}
+    public enum SomeEnum {}
+    public class NestedClass {}
+ 
+    public int Property
+    {
+        set
+        {
+            this[&quot;&quot;&quot;</span> + <span class="r13 r">stringLiteral</span> + <span class="s">@&quot;&quot;&quot;] = value;
+        }
+    }
+ 
+    public int this[string s]
+    {
+        get { return 0;}
+        set { }
+    }
+}&quot;</span>;
+            <b>if</b> (!<span class="r14 r">shouldReportDiagnostic</span>)
+            {
+                <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>);
+            }
+            <b>else</b>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r16 rd" class="r16 r">expected</span> = <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="r13 r">stringLiteral</span>, 18, 18);
+ 
+                <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r15 r">source</span>, <span class="r16 r">expected</span>);
+            }
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;xyz&quot;</span>, <b>false</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;NestedClass&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeStruct&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeEnum&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;IInterface&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;N2&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeDelegate&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;readonlyField&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;ParticularEvent&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;Property&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;TypeName&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;Invoke&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;N1&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;N3&quot;</span>, <b>true</b>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="16b0c70046ed5729" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringInMethodInvocation</a>(<b>string</b> <span id="r17 rd" class="r17 r">stringLiteral</span>, <b>bool</b> <span id="r18 rd" class="r18 r">shouldReportDiagnostic</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r19 rd" class="r19 r">source</span> = <span class="s">@&quot;
+namespace N1.N2
+{
+    namespace N3
+    {
+        public class TypeName
+        {
+            private readonly int readonlyField;
+            public int Property { get; set; }
+            public event EventHandler ParticularEvent;
+            public delegate int SomeDelegate(int c, double d);
+ 
+            public interface IInterface {}
+            public struct SomeStruct {}
+            public enum SomeEnum {}
+            public class NestedClass {}
+ 
+            public int Property
+            {
+                set
+                {
+                    Invoke(&quot;&quot;abc&quot;&quot;, &quot;&quot;&quot;</span> + <span class="r17 r">stringLiteral</span> + <span class="s">@&quot;&quot;&quot;);
+                }
+            }
+ 
+            private void Invoke(string arg1, string arg2)
+            {
+            }
+        }
+    }
+}&quot;</span>;
+            <b>if</b> (!<span class="r18 r">shouldReportDiagnostic</span>)
+            {
+                <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r19 r">source</span>);
+            }
+            <b>else</b>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r20 rd" class="r20 r">expected</span> = <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="r17 r">stringLiteral</span>, 22, 35);
+ 
+                <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r19 r">source</span>, <span class="r20 r">expected</span>);
+            }
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bc4d69db61d8ad26" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementStringInVariableAssignment</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    private readonly int readonlyField;
+    public class NestedClass {}
+ 
+    public int Property
+    {
+        set
+        {
+            string variable = &quot;&quot;NestedClass&quot;&quot;;
+            variable = &quot;&quot;xyz&quot;&quot;;
+            variable = &quot;&quot;readonlyField&quot;&quot;;
+        }
+    }
+}&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r22 rd" class="r22 r">expectedForFirstAssignment</span> = <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;NestedClass&quot;</span>, 11, 31);
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r23 rd" class="r23 r">expectedForSecondAssignment</span> = <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 13, 24);
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r21 r">source</span>, <span class="r22 r">expectedForFirstAssignment</span>, <span class="r23 r">expectedForSecondAssignment</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3636d908215c9709" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringInAttributeShouldReportDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+namespace N1.N2
+{
+    public class TypeName
+    {
+        private readonly int readonlyField;
+        public int Property { get; set; }
+        public event EventHandler ParticularEvent;
+        public delegate int SomeDelegate(int c, double d);
+ 
+        [Whatever(&quot;&quot;N2&quot;&quot;)]
+        [Whatever(&quot;&quot;SomeDelegate&quot;&quot;)]
+        [Whatever(&quot;&quot;readonlyField&quot;&quot;)]
+        [Whatever(&quot;&quot;ParticularEvent&quot;&quot;)]
+        [Whatever(&quot;&quot;Property&quot;&quot;)]
+        [Whatever(&quot;&quot;TypeName&quot;&quot;)]
+        [Whatever(&quot;&quot;Foo&quot;&quot;)]
+        [Whatever(&quot;&quot;N1&quot;&quot;)]
+        void Foo(string a)
+        {
+        }
+    }
+}&quot;</span>;
+            <b>var</b> <span id="r25 rd" class="r25 r">expected</span> = <b>new</b>[]
+            {
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N2&quot;</span>, 11, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;SomeDelegate&quot;</span>, 12, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 13, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;ParticularEvent&quot;</span>, 14, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;Property&quot;</span>, 15, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;TypeName&quot;</span>, 16, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;Foo&quot;</span>, 17, 19),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N1&quot;</span>, 18, 19)
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#525ea8bdc7c8943a">VerifyCSharpDiagnosticAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6d8675de97e8c1de" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralInObjectInitializer</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">@&quot;
+namespace N1.N2
+{
+    public class OtherTypeName
+    {
+        public string Property { get; set; }
+        private string Property2 { get; set; }
+        public string Property3 { get; set; }
+    }
+ 
+    public class TypeName
+    {
+   
+        void Foo(string a)
+        {
+            var instance = new OtherTypeName
+            {
+                Property = &quot;&quot;xyz&quot;&quot;,
+                Property2 = &quot;&quot;OtherTypeName&quot;&quot;,
+                Property3 = &quot;&quot;Property2&quot;&quot;
+            }
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r26 r">source</span>, <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;OtherTypeName&quot;</span>, 19, 29));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1ea5f7ad24afcbe4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameInArrayInitializer</a>()
+        {
+            <b>const string</b> <span id="r27 rd" class="r27 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    private readonly int readonlyField;
+    public interface IInterface {}
+    
+    void Foo(string a)
+    {
+        var tab = new[] { &quot;&quot;readonlyField&quot;&quot;, &quot;&quot;xyz&quot;&quot;, &quot;&quot;IInterface&quot;&quot; };
+    }
+}&quot;</span>;
+            <b>var</b> <span id="r28 rd" class="r28 r">expected</span> = <b>new</b>[]
+            {
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 9, 27),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;IInterface&quot;</span>, 9, 51)
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#525ea8bdc7c8943a">VerifyCSharpDiagnosticAsync</a>(<span class="r27 r">source</span>, <span class="r28 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7bfe39288fbe8925" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenCreatingNewObjectWithStringLiterals</a>()
+        {
+            <b>const string</b> <span id="r29 rd" class="r29 r">source</span> = <span class="s">@&quot;
+public struct TypeName
+{
+   
+    void Foo(string a)
+    {
+        var instance = new OtherTypeName(&quot;&quot;b&quot;&quot;, &quot;&quot;xyz&quot;&quot;);
+        instance2 = new OtherTypeName(&quot;&quot;TypeName&quot;&quot;, &quot;&quot;a&quot;&quot;);
+    }
+}&quot;</span>;
+            <b>var</b> <span id="r30 rd" class="r30 r">expected</span> = <b>new</b>[]
+            {
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;TypeName&quot;</span>, 8, 39),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;a&quot;</span>, 8, 51)
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#525ea8bdc7c8943a">VerifyCSharpDiagnosticAsync</a>(<span class="r29 r">source</span>, <span class="r30 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f1a2695b911409f9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralInVariousPlaces</a>()
+        {
+            <b>const string</b> <span id="r31 rd" class="r31 r">source</span> = <span class="s">@&quot;
+namespace N1.N2
+{
+    namespace @using
+    {
+        public delegate int SomeDelegate(int a, int b);
+ 
+        public class BaseTypeName
+        {
+            public BaseTypeName(string a)
+            {
+            }
+        }
+ 
+        public class @class : BaseTypeName
+        {
+            private readonly int readonlyField;
+            public event EventHandler ParticularEvent;
+ 
+            public string className = &quot;&quot;class&quot;&quot;;
+            public string fieldName = &quot;&quot;field&quot;&quot;;
+            public string someName = &quot;&quot;variable&quot;&quot;;
+            public string namespaceName = &quot;&quot;using&quot;&quot;;
+            public string namespaceName2 = &quot;&quot;N2&quot;&quot;;
+    
+            void Foo() =&gt; string.Format(&quot;&quot;{0}&quot;&quot;, &quot;&quot;xyz&quot;&quot;);
+            void Foo2() =&gt; string.Format(&quot;&quot;{0}&quot;&quot;, &quot;&quot;readonlyField&quot;&quot;);
+ 
+            public @class() : base(&quot;&quot;SomeDelegate&quot;&quot;) { }
+ 
+            void Foo3(string a)
+            {
+                Dictionary&lt;string, string&gt; dict = new Dictionary&lt;string, string&gt;
+                {
+                    { &quot;&quot;b&quot;&quot;, &quot;&quot;readonlyField&quot;&quot; },
+                    { &quot;&quot;xyz&quot;&quot;, &quot;&quot;ParticularEvent&quot;&quot; }
+                };
+            }
+ 
+            public int Property
+            {
+                get
+                {
+                    var variable = 5;
+                    return variable;
+                }
+            }
+ 
+            public string namespaceName3 = &quot;&quot;N1.N2&quot;&quot;;
+ 
+            public string verbatimString = @&quot;&quot;
+verbatim
+string
+lines&quot;&quot;;
+        }
+    }
+}&quot;</span>;
+            <b>var</b> <span id="r32 rd" class="r32 r">expected</span> = <b>new</b>[]
+            {
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;@class&quot;</span>, 20, 39),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;@using&quot;</span>, 23, 43),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;N2&quot;</span>, 24, 44),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 27, 49),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;SomeDelegate&quot;</span>, 29, 36),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;readonlyField&quot;</span>, 35, 28),
+                <a href="#71f4381f5d1ae9f3">CreateNameofDiagnosticResult</a>(<span class="s">&quot;ParticularEvent&quot;</span>, 36, 30)
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#525ea8bdc7c8943a">VerifyCSharpDiagnosticAsync</a>(<span class="r31 r">source</span>, <span class="r32 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9cd5c1ba7c8c501a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWithVerbatimIdentifiers</a>()
+        {
+            <b>const string</b> <span id="r33 rd" class="r33 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public TypeName(int @object)
+    {
+        var name = &quot;&quot;object&quot;&quot;;
+    }
+ 
+    void Foo(string a, int @for, string b, object @int)
+    {
+        var whatever = &quot;&quot;for&quot;&quot;;
+        var whatever1 = &quot;&quot;b&quot;&quot;;
+        var whatever2 = &quot;&quot;a&quot;&quot;;
+        var whatever3 = &quot;&quot;int&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r34 rd" class="r34 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public TypeName(int @object)
+    {
+        var name = nameof(@object);
+    }
+ 
+    void Foo(string a, int @for, string b, object @int)
+    {
+        var whatever = nameof(@for);
+        var whatever1 = nameof(b);
+        var whatever2 = nameof(a);
+        var whatever3 = nameof(@int);
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r33 r">source</span>, <span class="r34 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5f98f27bbaaaab86" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInConstructorFixItToNameof</a>()
+        {
+            <b>const string</b> <span id="r35 rd" class="r35 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public TypeName(string b)
+    {
+        string whatever = &quot;&quot;b&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r36 rd" class="r36 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public TypeName(string b)
+    {
+        string whatever = nameof(b);
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r35 r">source</span>, <span class="r36 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="006d582c461a203c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInConstructorFixItToNameofMustKeepComments</a>()
+        {
+            <b>const string</b> <span id="r37 rd" class="r37 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public TypeName(string b)
+    {
+        //a
+        string whatever = &quot;&quot;b&quot;&quot;;//d
+        //b
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r38 rd" class="r38 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    public TypeName(string b)
+    {
+        //a
+        string whatever = nameof(b);//d
+        //b
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r37 r">source</span>, <span class="r38 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="35a9b33294e94d38" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInMethodFixItToNameof</a>()
+        {
+            <b>const string</b> <span id="r39 rd" class="r39 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string b)
+    {
+        string whatever = &quot;&quot;b&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r40 rd" class="r40 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string b)
+    {
+        string whatever = nameof(b);
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r39 r">source</span>, <span class="r40 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7d37816405d2213b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsSecondParameterNameInMethodFixItToNameof</a>()
+        {
+            <b>const string</b> <span id="r41 rd" class="r41 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string a, string b)
+    {
+        string whatever = &quot;&quot;b&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r42 rd" class="r42 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string a, string b)
+    {
+        string whatever = nameof(b);
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r41 r">source</span>, <span class="r42 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0ce245dbfc100203" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingStringLiteralEqualsParameterNameInMethodMustKeepComments</a>()
+        {
+            <b>const string</b> <span id="r43 rd" class="r43 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string b)
+    {
+        //a
+        string whatever = &quot;&quot;b&quot;&quot;//d;
+        //b
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r44 rd" class="r44 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string b)
+    {
+        //a
+        string whatever = nameof(b)//d;
+        //b
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r43 r">source</span>, <span class="r44 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6af344e11930fc7b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAll</a>()
+        {
+            <b>const string</b> <span id="r45 rd" class="r45 r">source</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string a, string b)
+    {
+        var whatever = &quot;&quot;a&quot;&quot;;
+        var whatever2 = &quot;&quot;b&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r46 rd" class="r46 r">fixtest</span> = <span class="s">@&quot;
+public class TypeName
+{
+    void Foo(string a, string b)
+    {
+        var whatever = nameof(a);
+        var whatever2 = nameof(b);
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#26c6f53dff524c44">VerifyCSharpFixAllAsync</a>(<span class="r45 r">source</span>, <span class="r46 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;NestedClass&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeStruct&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeEnum&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;IInterface&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;N2&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;SomeDelegate&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;readonlyField&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;ParticularEvent&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;Property&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;TypeName&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;Invoke&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;N1&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;N3&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0fa5d86fcfbab5dc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenUsingProgramElementNameStringInMethodInvocationThenFixUpdatesAsExpected</a>(<b>string</b> <span id="r47 rd" class="r47 r">stringLiteral</span>)
+        {
+            <b>const string</b> <span id="r48 rd" class="r48 r">source</span> = <span class="s">@&quot;
+namespace N1.N2
+{
+    namespace N3
+    {
+        public class TypeName
+        {
+            private readonly int readonlyField;
+            public int Property { get; set; }
+            public event EventHandler ParticularEvent;
+            public delegate int SomeDelegate(int c, double d);
+ 
+            public interface IInterface {}
+            public struct SomeStruct {}
+            public enum SomeEnum {}
+            public class NestedClass {}
+ 
+            public int Property2
+            {
+                set
+                {
+                    Invoke(&quot;&quot;abc&quot;&quot;, &lt;REPLACE&gt;);
+                }
+            }
+ 
+            private void Invoke(string arg1, string arg2)
+            {
+            }
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#26c6f53dff524c44">VerifyCSharpFixAllAsync</a>(<span class="r48 r">source</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;&lt;REPLACE&gt;&quot;</span>, <span class="s">$@&quot;</span><span class="s">&quot;&quot;</span>{<span class="r47 r">stringLiteral</span>}<span class="s">&quot;&quot;</span><span class="s">&quot;</span>), <span class="r48 r">source</span>.<a href="@0@mscorlib/A.html#69fc1d0aa6df8a90">Replace</a>(<span class="s">&quot;&lt;REPLACE&gt;&quot;</span>, <span class="s">$@&quot;</span><span class="s">nameof(</span>{<span class="r47 r">stringLiteral</span>}<span class="s">)</span><span class="s">&quot;</span>));
+        }
+ 
+        <b>private static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="71f4381f5d1ae9f3" href="../R/71f4381f5d1ae9f3.html" target="n" data-glyph="76,1">CreateNameofDiagnosticResult</a>(<b>string</b> <span id="r49 rd" class="r49 r">nameofArgument</span>, <b>int</b> <span id="r50 rd" class="r50 r">diagnosticLine</span>, <b>int</b> <span id="r51 rd" class="r51 r">diagnosticColumn</span>)
+        {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#833011b017224aed">NameOf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">$&quot;</span><span class="s">Use &#39;nameof(</span>{<span class="r49 r">nameofArgument</span>}<span class="s">)&#39; instead of specifying the program element name.</span><span class="s">&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r50 r">diagnosticLine</span>, <span class="r51 r">diagnosticColumn</span>) }
+            };
+        }
+    }
+}</pre></td></tr></table></div></body></html>

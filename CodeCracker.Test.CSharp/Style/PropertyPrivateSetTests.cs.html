@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html><head><title>PropertyPrivateSetTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(232);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/PropertyPrivateSetTests.cs" target="_top">Style\PropertyPrivateSetTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="b22a1849f2298e52" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="bd3b265e28aedf6e">PropertyPrivateSetTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#d428fca4c2f2457a" class="t">PropertyPrivateSetAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#2b9e354e2c20df66" class="t">PropertyPrivateSetCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6d850ecbe9582c39" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyPrivateDeclaration</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty { get; private set; }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="757323f0dd73fadd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyPrivateBrackets</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty 
+            {
+               get { return 0; }
+               private set {  }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a78d8257c3cb93d8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ExpressionBodiedPropertyDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty =&gt; 0;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f622e97f79885963" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyPrivateFixAutoProperty</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty { get; set; }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r4 rd" class="r4 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty { get; private set; }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r3 r">test</span>, <span class="r4 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a1c3eee84d5dcd0b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyProtectedFixAutoProperty</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty { get; set; }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r6 rd" class="r6 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty { get; protected set; }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">expected</span>, 1);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f32b0d2bbfd2757d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyPrivateFixAutoPropertyBrackets</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty 
+            {
+               get { return 0; }
+               set {  }
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r8 rd" class="r8 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty 
+            {
+               get { return 0; }
+               private set 
+               {  }
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">test</span>, <span class="r8 r">expected</span>, 0);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5db4f45fdac75670" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyProtectedFixAutoPropertyBrackets</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty 
+            {
+               get { return 0; }
+               set {  }
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r10 rd" class="r10 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int MyProperty 
+            {
+               get { return 0; }
+               protected set 
+               {  }
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">expected</span>, 1);
+        }
+ 
+    [<span class="t">Fact</span>]
+    <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2ac978e140971f5c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PropertyWithAttributeProtectedFix</a>()
+    {
+        <b>const string</b> <span id="r11 rd" class="r11 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            [Obsolete(&quot;&quot;this property is obsolete&quot;&quot;)]
+            public int MyProperty 
+            {
+               get { return 0; }
+               set {  }
+            }
+        }
+    }&quot;</span>;
+ 
+        <b>const string</b> <span id="r12 rd" class="r12 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            [Obsolete(&quot;&quot;this property is obsolete&quot;&quot;)]
+            public int MyProperty 
+            {
+               get { return 0; }
+               protected set 
+               {  }
+            }
+        }
+    }&quot;</span>;
+ 
+        <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">test</span>, <span class="r12 r">expected</span>, 1);
+    }
+}
+}</pre></td></tr></table></div></body></html>

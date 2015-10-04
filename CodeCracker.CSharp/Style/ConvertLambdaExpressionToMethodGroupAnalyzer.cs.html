@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html><head><title>ConvertLambdaExpressionToMethodGroupAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(138);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/ConvertLambdaExpressionToMethodGroupAnalyzer.cs" target="_top">Style\ConvertLambdaExpressionToMethodGroupAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="7dda2181ef1ab1a1" href="../R/7dda2181ef1ab1a1.html" target="n" data-glyph="0,0" class="t"><span id="4ba48ddfd330ed9e">ConvertLambdaExpressionToMethodGroupAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="9c9f82489ce3185c" href="../R/9c9f82489ce3185c.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;You should remove the lambda expression when it only invokes a method with the same signature&quot;</span>;
+        <b>internal const string</b> <a id="36595af0c0394211" href="../R/36595af0c0394211.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;You should remove the lambda expression and pass just &#39;{0}&#39; instead.&quot;</span>;
+        <b>internal const string</b> <a id="a9b006e422329f18" href="../R/a9b006e422329f18.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="e61c048b30fbfb03" href="../R/e61c048b30fbfb03.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;The extra unnecessary layer of indirection induced by the lambda expression may be avoided by passing the method group instead.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="559882280ca61729" href="../R/559882280ca61729.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#95437da29e289131">ConvertLambdaExpressionToMethodGroup</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#9c9f82489ce3185c">Title</a>,
+            <a href="#36595af0c0394211">MessageFormat</a>,
+            <a href="#a9b006e422329f18">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#e61c048b30fbfb03">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#95437da29e289131">ConvertLambdaExpressionToMethodGroup</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="445ce4d8b0c6d72b" href="../R/445ce4d8b0c6d72b.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#559882280ca61729">Rule</a>);
+ 
+        <b>public override void</b> <a id="73ce9bd80433920a" href="../R/73ce9bd80433920a.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#08cb84305f9294dd">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ffd44919357c2469">SimpleLambdaExpression</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#af06994df554ae4c">ParenthesizedLambdaExpression</a>);
+ 
+        <b>private static void</b> <a id="08cb84305f9294dd" href="../R/08cb84305f9294dd.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="k">var</a> <span id="r5 rd" class="r5 r">lambda</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r6 rd" class="r6 r">invocation</span> = <a href="#7d5e2f1b2f40f0c5">GetInvocationIfAny</a>(<span class="r5 r">lambda</span>);
+            <b>if</b> (<span class="r6 r">invocation</span> == <b>null</b> || <span class="r6 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> == 0) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b1c0088f7b71bd8" class="k">var</a> <span id="r7 rd" class="r7 r">lambdaParameters</span> = <a href="#53c08f55e016ea30">BuildParameters</a>(<span class="r5 r">lambda</span>);
+            <b>if</b> (!<a href="#e69e06c61d0ed937">MatchArguments</a>(<span class="r7 r">lambdaParameters</span>, <span class="r6 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a>)) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r8 rd" class="r8 r">root</span> = <span class="r5 r">lambda</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b30be67e513158eb">SyntaxTree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r9 rd" class="r9 r">newRoot</span> = <span class="r8 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r5 r">lambda</span>, <span class="r6 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r10 rd" class="r10 r">semanticNode</span> = <a href="#dbffdc1f5e653e42">GetNodeRootForAnalysis</a>(<span class="r5 r">lambda</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r11 rd" class="r11 r">newSemanticNode</span> = <span class="r9 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0486ce360964263b">DescendantNodesAndSelf</a>()
+                .Where(<span id="r12 rd" class="r12 r">x</span> =&gt; <span class="r12 r">x</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7a460700c8fc789c">SpanStart</a> == <span class="r10 r">semanticNode</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7a460700c8fc789c">SpanStart</a> &amp;&amp; <span class="r12 r">x</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5b32036d766a0ea2">Span</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#c78b17ef813a9c6b">OverlapsWith</a>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5b32036d766a0ea2">Span</a>))
+                .LastOrDefault(<span id="r13 rd" class="r13 r">x</span> =&gt; <span class="r13 r">x</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() == <span class="r10 r">semanticNode</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>());
+ 
+            <b>if</b> (<span class="r11 r">newSemanticNode</span> == <b>null</b> || <a href="#8314b20665ce3aa6">ReplacementChangesSemantics</a>(<span class="r10 r">semanticNode</span>, <span class="r11 r">newSemanticNode</span>, <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>)) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r14 rd" class="r14 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(
+                <a href="#559882280ca61729">Rule</a>,
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#111ac3d15ffccc76">GetLocation</a>(),
+                <span class="r6 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>());
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r14 r">diagnostic</span>);
+        }
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a> <a id="7d5e2f1b2f40f0c5" href="../R/7d5e2f1b2f40f0c5.html" target="n" data-glyph="74,1">GetInvocationIfAny</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r15 rd" class="r15 r">node</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4613b6e98c550186" class="k">var</a> <span id="r16 rd" class="r16 r">body</span> = <span class="r15 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="t">SimpleLambdaExpressionSyntax</a>
+                ? (<span class="r15 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="t">SimpleLambdaExpressionSyntax</a>)?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#23b976b58130cec2">Body</a>
+                : (<span class="r15 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f05f866236de7ccc" class="t">ParenthesizedLambdaExpressionSyntax</a>)?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5af061b00e06d292">Body</a>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r17 rd" class="r17 r">invocation</span> = <span class="r16 r">body</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>;
+            <b>if</b> (<span class="r17 r">invocation</span> != <b>null</b>) <b>return</b> <span class="r17 r">invocation</span>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="k">var</a> <span id="r18 rd" class="r18 r">possibleBlock</span> = <span class="r16 r">body</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="t">BlockSyntax</a>;
+            <b>if</b> (<span class="r18 r">possibleBlock</span> == <b>null</b> || <span class="r18 r">possibleBlock</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bc3b9b57b05e7d0">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#83189d65513d4ea2">Count</a> != 1) <b>return null</b>;
+ 
+            <b>return</b> <span class="r16 r">body</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0486ce360964263b">DescendantNodesAndSelf</a>()
+                .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>&gt;()
+                .FirstOrDefault();
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b1c0088f7b71bd8" class="t">ParameterListSyntax</a> <a id="53c08f55e016ea30" href="../R/53c08f55e016ea30.html" target="n" data-glyph="76,1">BuildParameters</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r19 rd" class="r19 r">node</span>)
+        {
+            <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="t">SimpleLambdaExpressionSyntax</a>)
+                <b>return</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#22c500f5ed7684a6">ParameterList</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7fdc09ab8550b916">SeparatedList</a>(<b>new</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>[] { ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="t">SimpleLambdaExpressionSyntax</a>)<span class="r19 r">node</span>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#48c73cdf61304d80">Parameter</a> }));
+            <b>if</b> (<span class="r19 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f05f866236de7ccc" class="t">ParenthesizedLambdaExpressionSyntax</a>)
+                <b>return</b> ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f05f866236de7ccc" class="t">ParenthesizedLambdaExpressionSyntax</a>)<span class="r19 r">node</span>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b41a0b7ac038d9a6">ParameterList</a>;
+            <b>return null</b>;
+        }
+ 
+        <b>private static bool</b> <a id="e69e06c61d0ed937" href="../R/e69e06c61d0ed937.html" target="n" data-glyph="76,1">MatchArguments</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b1c0088f7b71bd8" class="t">ParameterListSyntax</a> <span id="r20 rd" class="r20 r">parameters</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a> <span id="r21 rd" class="r21 r">arguments</span>)
+        {
+            <b>if</b> (<span class="r21 r">arguments</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> != <span class="r20 r">parameters</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a>) <b>return false</b>;
+ 
+            <b>var</b> <span id="r22 rd" class="r22 r">paramNameList</span> = <span class="r20 r">parameters</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.Select(<span id="r23 rd" class="r23 r">p</span> =&gt; <span class="r23 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>);
+            <b>var</b> <span id="r24 rd" class="r24 r">argNameList</span> = <span class="r21 r">arguments</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>
+                .Where(<span id="r25 rd" class="r25 r">a</span> =&gt; <span class="r25 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>)
+                .Select(<span id="r26 rd" class="r26 r">a</span> =&gt; (<span class="r26 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>);
+ 
+            <b>return</b> <span class="r22 r">paramNameList</span>.SequenceEqual(<span class="r24 r">argNameList</span>);
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="343bbfff698d989d" href="../R/343bbfff698d989d.html" target="n" data-glyph="76,1">GetSemanticRootForSpeculation</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r27 rd" class="r27 r">expression</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r28 rd" class="r28 r">parentNodeToSpeculate</span> = <span class="r27 r">expression</span>
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>(<span class="r29 r">ascendOutOfTrivia</span>: <b>false</b>)
+                .LastOrDefault(<span id="r30 rd" class="r30 r">node</span> =&gt; <a href="#344332dab8842ce1">CanSpeculateOnNode</a>(<span class="r30 r">node</span>));
+            <b>return</b> <span class="r28 r">parentNodeToSpeculate</span> ?? <span class="r27 r">expression</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="dbffdc1f5e653e42" href="../R/dbffdc1f5e653e42.html" target="n" data-glyph="76,1">GetNodeRootForAnalysis</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r31 rd" class="r31 r">expression</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r32 rd" class="r32 r">parentNodeToSpeculate</span> = <span class="r31 r">expression</span>
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#70d1b9c06b5b04c7">Ancestors</a>(<span class="r33 r">ascendOutOfTrivia</span>: <b>false</b>)
+                .FirstOrDefault(<span id="r34 rd" class="r34 r">node</span> =&gt;
+                <span class="r34 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() != <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bc5e7cefa01c4fbe">Argument</a> &amp;&amp;
+                <span class="r34 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() != <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#974f38cec465522c">ArgumentList</a>);
+            <b>return</b> <span class="r32 r">parentNodeToSpeculate</span> ?? <span class="r31 r">expression</span>;
+        }
+ 
+        <b>public static bool</b> <a id="344332dab8842ce1" href="../R/344332dab8842ce1.html" target="n" data-glyph="72,1">CanSpeculateOnNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r35 rd" class="r35 r">node</span>)
+        {
+            <b>return</b> (<span class="r35 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#994532e1525a7cd0" class="t">StatementSyntax</a> &amp;&amp; <span class="r35 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() != <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3965eb19de02ab36">Block</a>) ||
+                <span class="r35 r">node</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3f12b8c1d6a44784" class="t">CrefSyntax</a> ||
+                <span class="r35 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() == <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e33930a1d1ec98a7">Attribute</a> ||
+                <span class="r35 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() == <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#318030aa713d108c">ThisConstructorInitializer</a> ||
+                <span class="r35 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() == <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52368fe42c6f079e">BaseConstructorInitializer</a> ||
+                <span class="r35 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() == <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1f568536a8ed71f1">EqualsValueClause</a> ||
+                <span class="r35 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d6cc2af95462e57">Kind</a>() == <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#dc56d07fe72ca813">ArrowExpressionClause</a>;
+        }
+ 
+        <b>private static bool</b> <a id="8314b20665ce3aa6" href="../R/8314b20665ce3aa6.html" target="n" data-glyph="76,1">ReplacementChangesSemantics</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r36 rd" class="r36 r">originalExpression</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r37 rd" class="r37 r">replacedExpression</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r38 rd" class="r38 r">semanticModel</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r39 rd" class="r39 r">speculativeModel</span>;
+            <b>if</b> (!Microsoft.CodeAnalysis.CSharp.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#68ef7cd613671210" class="t">CSharpExtensions</a>.TryGetSpeculativeSemanticModel(<span class="r38 r">semanticModel</span>, <span class="r36 r">originalExpression</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7a460700c8fc789c">SpanStart</a>, (<b>dynamic</b>)<a href="#343bbfff698d989d">GetSemanticRootForSpeculation</a>(<span class="r37 r">replacedExpression</span>), <b>out</b> <span class="r39 r">speculativeModel</span>))
+                <b>return true</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3d4da02369016847" class="k">var</a> <span id="r40 rd" class="r40 r">originalInfo</span> = <span class="r38 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d0ce5ad095fe519">GetSymbolInfo</a>(<span class="r36 r">originalExpression</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3d4da02369016847" class="k">var</a> <span id="r41 rd" class="r41 r">replacementInfo</span> = <span class="r39 r">speculativeModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d0ce5ad095fe519">GetSymbolInfo</a>(<span class="r37 r">replacedExpression</span>);
+            <b>return</b> !<span class="r40 r">originalInfo</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b21d326813e9262f">Equals</a>(<span class="r41 r">replacementInfo</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

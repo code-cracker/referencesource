@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityInfo.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(18);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/InconsistentAccessibility/InconsistentAccessibilityInfo.cs" target="_top">Design\InconsistentAccessibility\InconsistentAccessibilityInfo.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design.InconsistentAccessibility
+{
+    <b>public class</b> <a id="c3a636994e7617fd" href="../../R/c3a636994e7617fd.html" target="n" data-glyph="0,0" class="t"><span id="b1ae298919b6e298">InconsistentAccessibilityInfo</span></a>
+    {
+        <b>public string</b> <a id="11c7b496002fdf66" href="../../R/11c7b496002fdf66.html" target="n" data-glyph="102,1">CodeActionMessage</a> { <b>get</b>; <b>set</b>; }
+        <b>public</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29171ac4ad60a546" class="t">TypeSyntax</a> <a id="f4b95516972fae93" href="../../R/f4b95516972fae93.html" target="n" data-glyph="102,1">TypeToChangeAccessibility</a> { <b>get</b>; <b>set</b>; }
+        <b>public</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <a id="ff2a5ab993a79b76" href="../../R/ff2a5ab993a79b76.html" target="n" data-glyph="102,1">NewAccessibilityModifiers</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public bool</b> <a id="4c813f0d35eb047c" href="../../R/4c813f0d35eb047c.html" target="n" data-glyph="72,1">TypeToChangeFound</a>()
+        {
+            <b>return</b> <a href="#f4b95516972fae93">TypeToChangeAccessibility</a> != <b>null</b>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

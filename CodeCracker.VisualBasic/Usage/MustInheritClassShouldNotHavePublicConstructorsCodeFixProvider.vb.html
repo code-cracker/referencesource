@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html><head><title>MustInheritClassShouldNotHavePublicConstructorsCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(42);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/MustInheritClassShouldNotHavePublicConstructorsCodeFixProvider.vb" target="_top">Usage\MustInheritClassShouldNotHavePublicConstructorsCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#ecee4322b7b34a9d" class="t">MustInheritClassShouldNotHavePublicConstructorsCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="ecee4322b7b34a9d" href="../R/ecee4322b7b34a9d.html" target="n" data-glyph="0,0" class="t"><span id="00299dca7a086129">MustInheritClassShouldNotHavePublicConstructorsCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public Overrides Async Function</b> <a id="4a0deed2a11d8dda" href="../R/4a0deed2a11d8dda.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r2 rd" class="r2 r">diag</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First()
+            <b>Dim</b> <span id="r3 rd" class="r3 r">span</span> = <span class="r2 r">diag</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+ 
+            <b>Dim</b> <span id="r4 rd" class="r4 r">constructor</span> = <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">span</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a>)
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Use &#39;Protected&#39; in stead of &#39;Public&#39;&quot;</span>, <b>Function</b>(<span id="r5 rd" class="r5 r">c</span>) <a href="#5e138bdf76b42b90">ReplacePublicWithProtectedAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">constructor</span>, <span class="r5 r">c</span>), <b>NameOf</b>(<a href="#ecee4322b7b34a9d" class="t">MustInheritClassShouldNotHavePublicConstructorsCodeFixProvider</a>)), <span class="r2 r">diag</span>)
+        <b>End Function
+ 
+ 
+        Public NotOverridable Overrides Function</b> <a id="235de2108601be0d" href="../R/235de2108601be0d.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public NotOverridable Overrides ReadOnly Property</b> <a id="ba47770f912bfeac" href="../R/ba47770f912bfeac.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6f74ff04dad45b67">AbstractClassShouldNotHavePublicCtors</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>())
+ 
+        <b>Private Async Function</b> <a id="5e138bdf76b42b90" href="../R/5e138bdf76b42b90.html" target="n" data-glyph="76,1">ReplacePublicWithProtectedAsync</a>(<span id="r6 rd" class="r6 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r7 rd" class="r7 r">constructor</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a>, <span id="r8 rd" class="r8 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>)
+            <b>Dim</b> <span id="r9 rd" class="r9 r">[public]</span> = <span class="r7 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#76f03a4146e01759">Modifiers</a>.First(<b>Function</b>(<span id="r10 rd" class="r10 r">m</span>) <span class="r10 r">m</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5356018116dfe1f9">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4ba2b22149b0d72b">PublicKeyword</a>))
+            <b>Dim</b> <span id="r11 rd" class="r11 r">[protected]</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#dc6728c9ae445065">Token</a>(<span class="r9 r">[public]</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d5462e5990d8c94b">ProtectedKeyword</a>, <span class="r9 r">[public]</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#54ca4a6e9f8e1738">TrailingTrivia</a>)
+ 
+            <b>Dim</b> <span id="r12 rd" class="r12 r">newModifiers</span> = <span class="r7 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#76f03a4146e01759">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#69729bb8d8d55028">Replace</a>(<span class="r9 r">[public]</span>, <span class="r11 r">[protected]</span>)
+            <b>Dim</b> <span id="r13 rd" class="r13 r">newConstructor</span> = <span class="r7 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#11bb0d60286aa751">WithModifiers</a>(<span class="r12 r">newModifiers</span>)
+            <b>Dim</b> <span id="r14 rd" class="r14 r">root</span> = <b>Await</b> <span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r8 r">cancellationToken</span>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r15 rd" class="r15 r">newRoot</span> = <span class="r14 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r7 r">constructor</span>, <span class="r13 r">newConstructor</span>)
+            <b>Dim</b> <span id="r16 rd" class="r16 r">newDocumnent</span> = <span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r15 r">newRoot</span>)
+            <b>Return</b> <span class="r16 r">newDocumnent</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

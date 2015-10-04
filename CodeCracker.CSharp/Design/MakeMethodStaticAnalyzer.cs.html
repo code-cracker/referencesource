@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeMethodStaticAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(113);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/MakeMethodStaticAnalyzer.cs" target="_top">Design\MakeMethodStaticAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Linq;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="ca3ad11b30b3eb88" href="../R/ca3ad11b30b3eb88.html" target="n" data-glyph="0,0" class="t"><span id="2caa1280c3ef005b">MakeMethodStaticAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="339f001cd46c9f4d" href="../R/339f001cd46c9f4d.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Use static method&quot;</span>;
+        <b>internal const string</b> <a id="9f0f17698e8c20cd" href="../R/9f0f17698e8c20cd.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Make &#39;{0}&#39; method static.&quot;</span>;
+        <b>internal const string</b> <a id="71797732785b2e61" href="../R/71797732785b2e61.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>;
+        <b>const string</b> <a id="fa5aa01adf274d40" href="../R/fa5aa01adf274d40.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;If the method is not referencing any instance variable and if you are &quot;</span> +
+            <span class="s">&quot;not creating a virtual, abstract, new or partial method, and if it is not a method override, &quot;</span> +
+            <span class="s">&quot;your instance method may be changed to a static method.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="1bba40ffef43a5eb" href="../R/1bba40ffef43a5eb.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#9e5436c35093b60e">MakeMethodStatic</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#339f001cd46c9f4d">Title</a>,
+            <a href="#9f0f17698e8c20cd">MessageFormat</a>,
+            <a href="#71797732785b2e61">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <b>true</b>,
+            <span class="r0 r">description</span>: <a href="#fa5aa01adf274d40">Description</a>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#9e5436c35093b60e">MakeMethodStatic</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="f2ce5bee0f938505" href="../R/f2ce5bee0f938505.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#1bba40ffef43a5eb">Rule</a>);
+ 
+        <b>public override void</b> <a id="ced2c2ddc40aead7" href="../R/ced2c2ddc40aead7.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt;
+            <span class="r2 r">context</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#d322de55ea449cc3">RegisterSyntaxNodeAction</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#41ddf4073ec089aa" class="t">LanguageVersion</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4efb4f046fbb6861">CSharp6</a>, <a href="#f78568168701bfbb">AnalyzeMethod</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f888c625ee964f4b">MethodDeclaration</a>);
+ 
+        <b>private static void</b> <a id="f78568168701bfbb" href="../R/f78568168701bfbb.html" target="n" data-glyph="76,1">AnalyzeMethod</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r4 rd" class="r4 r">method</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#8d4c0cb3190fa8df">Any</a>(
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9a5af18d43921abb">StaticKeyword</a>,
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#99956784a34266f9">PartialKeyword</a>,
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2d9bad08fb4fcb53">VirtualKeyword</a>,
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#475afa0a34b01482">NewKeyword</a>,
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d0b9f54bb707a75">AbstractKeyword</a>,
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9b4d409325a027b1">OverrideKeyword</a>))
+                <b>return</b>;
+ 
+            <b>if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7e2cc86c94e162db">ExplicitInterfaceSpecifier</a> != <b>null</b>)
+                <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r5 rd" class="r5 r">semanticModel</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="k">var</a> <span id="r6 rd" class="r6 r">methodSymbol</span> = <span class="r5 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a80d18403a4c5ad2">GetDeclaredSymbol</a>(<span class="r4 r">method</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r7 rd" class="r7 r">theClass</span> = <span class="r6 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>;
+            <b>if</b> (<span class="r7 r">theClass</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#0f5ebbf442bc2145">Interface</a>) <b>return</b>;
+ 
+            <b>var</b> <span id="r8 rd" class="r8 r">interfaceMembersWithSameName</span> = <span class="r7 r">theClass</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#14726631ee5c2e02">AllInterfaces</a>.SelectMany(<span id="r9 rd" class="r9 r">i</span> =&gt; <span class="r9 r">i</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fe6409ce749ade4e">GetMembers</a>(<span class="r6 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>));
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r10 rd" class="r10 r">memberSymbol</span> <b>in</b> <span class="r8 r">interfaceMembersWithSameName</span>)
+            {
+                <b>if</b> (<span class="r10 r">memberSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d2adba436e8e1d01">Kind</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#845b35d752f6a8e5">Method</a>) <b>continue</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r11 rd" class="r11 r">implementation</span> = <span class="r7 r">theClass</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1ebe0554a546dcf3">FindImplementationForInterfaceMember</a>(<span class="r10 r">memberSymbol</span>);
+                <b>if</b> (<span class="r11 r">implementation</span> != <b>null</b> &amp;&amp; <span class="r11 r">implementation</span>.Equals(<span class="r6 r">methodSymbol</span>)) <b>return</b>;
+            }
+ 
+            <b>if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a> == <b>null</b>)
+            {
+                <b>if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5a985306fc043f7e">ExpressionBody</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c7670c85cd2ce0cd">Expression</a> == <b>null</b>) <b>return</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#bfbcd96bb21963de" class="k">var</a> <span id="r12 rd" class="r12 r">dataFlowAnalysis</span> = <span class="r5 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bcbb2b75ae60b1bd">AnalyzeDataFlow</a>(<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5a985306fc043f7e">ExpressionBody</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c7670c85cd2ce0cd">Expression</a>);
+                <b>if</b> (!<span class="r12 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9f6993ed01c8c373">Succeeded</a>) <b>return</b>;
+                <b>if</b> (<span class="r12 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b07bcbe1a6c7445b">DataFlowsIn</a>.Any(<span id="r13 rd" class="r13 r">inSymbol</span> =&gt; <span class="r13 r">inSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> == <span class="s">&quot;this&quot;</span>)) <b>return</b>;
+            }
+            <b>else if</b> (<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bc3b9b57b05e7d0">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7409ba70634b172">Any</a>())
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#bfbcd96bb21963de" class="k">var</a> <span id="r14 rd" class="r14 r">dataFlowAnalysis</span> = <span class="r5 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#54557b485747d6a7">AnalyzeDataFlow</a>(<span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a>);
+                <b>if</b> (!<span class="r14 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9f6993ed01c8c373">Succeeded</a>) <b>return</b>;
+                <b>if</b> (<span class="r14 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b07bcbe1a6c7445b">DataFlowsIn</a>.Any(<span id="r15 rd" class="r15 r">inSymbol</span> =&gt; <span class="r15 r">inSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> == <span class="s">&quot;this&quot;</span>)) <b>return</b>;
+            }
+ 
+            <b>if</b> (<a href="#2f936a4a86bf85fc">IsTestMethod</a>(<span class="r4 r">method</span>, <span class="r6 r">methodSymbol</span>)) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r16 rd" class="r16 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#1bba40ffef43a5eb">Rule</a>, <span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#20b085a124dddfb0">GetLocation</a>(), <span class="r4 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>);
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r16 r">diagnostic</span>);
+        }
+ 
+        <b>private static bool</b> <a id="2f936a4a86bf85fc" href="../R/2f936a4a86bf85fc.html" target="n" data-glyph="76,1">IsTestMethod</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r17 rd" class="r17 r">method</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a> <span id="r18 rd" class="r18 r">methodSymbol</span>)
+        {
+            <b>var</b> <span id="r19 rd" class="r19 r">result</span> = <b>false</b>;
+ 
+            <span class="c">// Test if the method has any known test framework&#39;s attribute.</span>
+            <span class="r19 r">result</span> = <span class="r17 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#69b85d69221522e4">AttributeLists</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#5fba25eafcb7d5b8">HasAnyAttribute</a>(<a href="#ffb8ce176e391ba1">AllTestFrameworksMethodAttributes</a>.Value);
+ 
+            <b>if</b> (!<span class="r19 r">result</span> &amp;&amp; <span class="r18 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>.IndexOf(<span class="s">&quot;Test&quot;</span>, System.<span class="t">StringComparison</span>.OrdinalIgnoreCase) &gt;= 0)
+            {
+                <span class="c">// Test if the containing class has any NUnit class attribute</span>
+                <span class="r19 r">result</span> = <span class="r18 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8622f45e65193eb8">GetAttributes</a>().Any(<span id="r20 rd" class="r20 r">attribute</span> =&gt; <span class="r20 r">attribute</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e2ab2f3df65902de">AttributeClass</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> == <a href="#72ceb7b0f28a6d2a">NUnitTestClassAttribute</a>);
+ 
+                <b>if</b> (!<span class="r19 r">result</span>)
+                {
+                    <span class="c">// Test if any other method in the containing class has an NUnit method attribute.</span>
+                    <span class="r19 r">result</span> = <span class="r17 r">method</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>().Any(<span id="r21 rd" class="r21 r">descendant</span> =&gt; <span class="r21 r">descendant</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f888c625ee964f4b">MethodDeclaration</a>) &amp;&amp; ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)<span class="r21 r">descendant</span>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#69b85d69221522e4">AttributeLists</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#5fba25eafcb7d5b8">HasAnyAttribute</a>(<a href="#bfbba374fe753a26">NUnitTestMethodAttributes</a>));
+                }
+            }
+ 
+            <b>return</b> <span class="r19 r">result</span>;
+        }
+ 
+        <b>internal const string</b> <a id="72ceb7b0f28a6d2a" href="../R/72ceb7b0f28a6d2a.html" target="n" data-glyph="8,1">NUnitTestClassAttribute</a> = <span class="s">&quot;TestFixtureAttribute&quot;</span>;
+        <b>internal static readonly string</b>[] <a id="2ebe0f5e9c63d41f" href="../R/2ebe0f5e9c63d41f.html" target="n" data-glyph="44,1">MicrosoftTestMethodAttributes</a> = <b>new</b> <b>string</b>[] { <span class="s">&quot;TestMethod&quot;</span>, <span class="s">&quot;ClassInitialize&quot;</span>, <span class="s">&quot;ClassCleanup&quot;</span>, <span class="s">&quot;TestInitialize&quot;</span>, <span class="s">&quot;TestCleanup&quot;</span>, <span class="s">&quot;AssemblyInitialize&quot;</span>, <span class="s">&quot;AssemblyCleanup&quot;</span> };
+        <b>internal static readonly string</b>[] <a id="8302ac4390d24e2c" href="../R/8302ac4390d24e2c.html" target="n" data-glyph="44,1">XUnitTestMethodAttributes</a> = <b>new</b> <b>string</b>[] { <span class="s">&quot;Fact&quot;</span>, <span class="s">&quot;Theory&quot;</span> };
+        <b>internal static readonly string</b>[] <a id="bfbba374fe753a26" href="../R/bfbba374fe753a26.html" target="n" data-glyph="44,1">NUnitTestMethodAttributes</a> = <b>new</b> <b>string</b>[] { <span class="s">&quot;Test&quot;</span>, <span class="s">&quot;TestCase&quot;</span>, <span class="s">&quot;TestCaseSource&quot;</span>, <span class="s">&quot;TestFixtureSetup&quot;</span>, <span class="s">&quot;TestFixtureTeardown&quot;</span>, <span class="s">&quot;SetUp&quot;</span>, <span class="s">&quot;TearDown&quot;</span>, <span class="s">&quot;OneTimeSetUp&quot;</span>, <span class="s">&quot;OneTimeTearDown&quot;</span> };
+        <b>internal static readonly</b> System.<span class="t">Lazy</span>&lt;<b>string</b>[]&gt; <a id="ffb8ce176e391ba1" href="../R/ffb8ce176e391ba1.html" target="n" data-glyph="44,1">AllTestFrameworksMethodAttributes</a> = <b>new</b> System.<span class="t">Lazy</span>&lt;<b>string</b>[]&gt;(() =&gt; { <b>return</b> <a href="#8302ac4390d24e2c">XUnitTestMethodAttributes</a>.Concat(<a href="#2ebe0f5e9c63d41f">MicrosoftTestMethodAttributes</a>).Concat(<a href="#bfbba374fe753a26">NUnitTestMethodAttributes</a>).ToArray(); });
+    }
+}</pre></td></tr></table></div></body></html>

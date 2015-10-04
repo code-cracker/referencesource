@@ -1,0 +1,7 @@
+ProjectSourcePath=test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj
+DocumentCount=81
+LinesOfCode=23118
+BytesOfCode=674323
+DeclaredSymbols=1110
+DeclaredTypes=83
+PublicTypes=82

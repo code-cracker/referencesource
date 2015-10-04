@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProviderTests.StyleCop.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(225);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/AllowMembersOrderingCodeFixProviderTests.StyleCop.cs" target="_top">Refactoring\AllowMembersOrderingCodeFixProviderTests.StyleCop.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="58eea90b2b889d8e" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="1295b076df6360ab">StyleCopAllowMembersOrderingCodeFixProviderTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#88f25c5e31db93f8" class="t">AllowMembersOrderingAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#640060f2ed0a8d7d" class="t">StyleCopAllowMembersOrderingCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b88005bd3b5bf791" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderByType</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+            class Foo
+            {
+                public class Class { }
+                public struct Sruct { }
+                void Method() { }
+                public int this[int a] { set { } }
+                public int Property { set { } }
+                public interface Interface { }
+                enum Enum { Enum1 }
+                public event System.Action Event { add { } remove { } }
+                public delegate double Delegate();
+                ~Foo() { }
+                Foo() { }
+                public event System.Action EventField;
+                public int b = 0;
+            }&quot;</span>;
+ 
+            <b>const string</b> <span id="r1 rd" class="r1 r">expected</span> = <span class="s">@&quot;
+            class Foo
+            {
+                public int b = 0;
+                Foo() { }
+                ~Foo() { }
+                public delegate double Delegate();
+                public event System.Action EventField;
+                public event System.Action Event { add { } remove { } }
+                enum Enum { Enum1 }
+                public interface Interface { }
+                public int Property { set { } }
+                public int this[int a] { set { } }
+                void Method() { }
+                public struct Sruct { }
+                public class Class { }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r0 r">source</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="80a17d4292e92c30" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderByModifiers</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+            public class Foo
+            {
+                private int p = 0;
+                protected int q = 0;
+                protected internal int r = 0;
+                internal int s = 0;
+                public int t = 0;
+                static int u = 0;
+                public static int v = 0;
+                const int x = 0;
+                public const int z = 0;
+            }&quot;</span>;
+ 
+            <b>const string</b> <span id="r3 rd" class="r3 r">expected</span> = <span class="s">@&quot;
+            public class Foo
+            {
+                public const int z = 0;
+                public static int v = 0;
+                public int t = 0;
+                internal int s = 0;
+                protected internal int r = 0;
+                protected int q = 0;
+                const int x = 0;
+                static int u = 0;
+                private int p = 0;
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r2 r">source</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="17c8f74e4be3e60d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderByAlphabeticalOrder</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+            class Foo
+            {
+                int c = 2, d = 3;
+                int a = 0, b = 1;
+                event System.Action EventField1;
+                event System.Action EventField;
+                delegate double Delegate2();
+                delegate double Delegate();
+                event System.Action Event1 { add { } remove { } }
+                event System.Action Event { add { } remove { } }
+                enum Enum1 { Enum1 }
+                enum Enum { Enum1 }
+                interface Interface2 { }
+                interface Interface { }
+                int Property1 { set { } }
+                int Property { set { } }
+                public static int operator +(Foo a, Foo b) { return 0; }
+                public static int operator -(Foo a, Foo b) { return 0; }
+                void Method1() { }
+                void Method() { }
+                public struct Sruct1 { }
+                public struct Sruct { }
+                public class Class { }
+                public class Class1 { }
+            }&quot;</span>;
+ 
+            <b>const string</b> <span id="r5 rd" class="r5 r">expected</span> = <span class="s">@&quot;
+            class Foo
+            {
+                int a = 0, b = 1;
+                int c = 2, d = 3;
+                delegate double Delegate();
+                delegate double Delegate2();
+                event System.Action EventField;
+                event System.Action EventField1;
+                event System.Action Event { add { } remove { } }
+                event System.Action Event1 { add { } remove { } }
+                enum Enum { Enum1 }
+                enum Enum1 { Enum1 }
+                interface Interface { }
+                interface Interface2 { }
+                int Property { set { } }
+                int Property1 { set { } }
+                public static int operator -(Foo a, Foo b) { return 0; }
+                public static int operator +(Foo a, Foo b) { return 0; }
+                void Method() { }
+                void Method1() { }
+                public struct Sruct { }
+                public struct Sruct1 { }
+                public class Class { }
+                public class Class1 { }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bbabb384a1fd1859" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderByStyleCopPatterns</a>(<b>string</b> <span id="r6 rd" class="r6 r">typeDeclaration</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+            using System;
+            namespace ConsoleApplication1
+            {
+                &quot;</span> + <span class="r6 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+                {
+                    public class Foo2 { }
+                    public struct Struct { }
+                    public static Foo operator +(Foo f1, Foo f2) { return new Foo(); }
+                    public static Foo operator -(Foo f1, Foo f2) { return new Foo(); }
+                    void Method(string a) { }
+                    internal void Method(int a) { }
+                    public void Method1() { }
+                    public void Method() { }
+                    public string this[int i] { set { } }
+                    public string Property { get; set; }
+                    public interface Interface { }
+                    public enum Enum { Enum1, Enum2 = 1 }
+                    public event Action Event
+                    {
+                        add { EventField += value; }
+                        remove { EventField -= value; }
+                    }
+                    public delegate double Delegate(double num);
+                    public Foo()
+                    {
+                        Property = Field1 = Field = &quot;&quot;;
+                        EventField = EventField1 = () =&gt; { };
+                    }
+                    public event Action EventField1;
+                    public event Action EventField;
+                    public string Field;
+                    public static string Field1;
+                }
+            }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">expected</span> = <span class="s">@&quot;
+            using System;
+            namespace ConsoleApplication1
+            {
+                &quot;</span> + <span class="r6 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+                {
+                    public static string Field1;
+                    public string Field;
+                    public Foo()
+                    {
+                        Property = Field1 = Field = &quot;&quot;;
+                        EventField = EventField1 = () =&gt; { };
+                    }
+                    public delegate double Delegate(double num);
+                    public event Action EventField;
+                    public event Action EventField1;
+                    public event Action Event
+                    {
+                        add { EventField += value; }
+                        remove { EventField -= value; }
+                    }
+                    public enum Enum { Enum1, Enum2 = 1 }
+                    public interface Interface { }
+                    public string Property { get; set; }
+                    public string this[int i] { set { } }
+                    public static Foo operator -(Foo f1, Foo f2) { return new Foo(); }
+                    public static Foo operator +(Foo f1, Foo f2) { return new Foo(); }
+                    public void Method() { }
+                    public void Method1() { }
+                    internal void Method(int a) { }
+                    void Method(string a) { }
+                    public struct Struct { }
+                    public class Foo2 { }
+                }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">expected</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

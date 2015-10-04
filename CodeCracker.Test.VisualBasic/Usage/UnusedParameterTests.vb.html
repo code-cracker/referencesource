@@ -1,0 +1,436 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnusedParameterTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(427);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/UnusedParameterTests.vb" target="_top">Usage\UnusedParameterTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Usage
+    <b>Public Class</b> <a id="d7c1fdf9a45bb0e0" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="5da43404b6eec399">UnusedParameterTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#c643dff42203e20f" class="t">UnusedParametersAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#0dfde03360186c91" class="t">UnusedParametersCodeFixProvider</a>)
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="4730d1355c6abca1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MethodWithoutParametersDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="764fe103729e1b48" href="../R/../../0000000000.html" target="n" data-glyph="72,1">UnusedParametersDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Function Foo(a As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="56f4234b4c0020d2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MethodWithoutStatementsCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo(a As Integer)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r2 r">source</span>, <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;a&quot;</span>, 3, 20))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="5c19545768497095" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnorePartialMethods</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">&quot;
+Partial Class TypeName
+    Public Partial Sub Foo(a As Integer)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="2791dabc081b098f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixUnusedParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo(a As Integer)
+    End Sub
+End Class&quot;</span>
+            <b>Const</b> <span id="r5 rd" class="r5 r">fix</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub Foo()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="c50c39e55c8b24f8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">With2ParametersCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Function Foo(a As Integer, b As Integer) As Integer
+        Return a
+    End Function
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r6 r">source</span>, <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;b&quot;</span>, 3, 39))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a7fbc64ea4980cd1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixUnusedParameterWith2Parameters</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Function Foo(a As Integer, b As Integer) As Integer
+        Return a
+    End Function
+End Class&quot;</span>
+            <b>Const</b> <span id="r8 rd" class="r8 r">fix</span> = <span class="s">&quot;
+Class TypeName
+    Public Function Foo(a As Integer) As Integer
+        Return a
+    End Function
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a9bb3abc271e801d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreOverrides</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">&quot;
+Class Base
+    Public Overridable Function Foo(a As Integer) As Integer
+        Return a
+    End Sub
+End Class
+Class TypeName
+    Inherits Base
+    Public Overrides Function Foo(a As Integer) As Integer
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="c6537a761b5c4eb6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatImplementAnInterfaceMember</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">&quot;
+Interface IBase
+    Function Foo(a As Integer) As Integer
+End Interface
+Class TypeName
+    Implements IBase
+    Public Function Foo(a As Integer) As Integer Implements IBase.Foo
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r10 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="b5eabdc5d7a400f5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatMatchEventHandlerPattern</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">&quot;
+Imports System
+Class TypeName
+    Public Sub Foo(sender As Object, args As EventArgs)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="68dadc5051033337" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatMatchEventHandlerPatternWithDerivedEventArgs</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">&quot;
+Imports System
+Class MyArgs
+    Inherits EventArgs
+End Class
+Class TypeName
+    Public Sub Foo(sender As Object, args As MyArgs)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r12 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a84719080b82797b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotIgnoreMethodsThatMatchEventHandlerPatternButDoesNotReturnVoid</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">&quot;
+Imports System
+Class TypeName
+    Public Function Foo(sender As Object, args As EventArgs) As Integer
+        Throw New Exception()
+    End Function
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e69846c21794f630">VerifyBasicDiagnosticAsync</a>(<span class="r13 r">source</span>,
+                                              <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;sender&quot;</span>, 4, 25),
+                                              <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;args&quot;</span>, 4, 43))
+        <b>End Function</b>
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e0206406f5538b6b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorWithoutStatementsCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub New(a As Integer)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r14 r">source</span>, <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;a&quot;</span>, 3, 20))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="1d534b207470d99f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreSerializableConstructor</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">&quot;
+Imports System
+Imports System.Runtime.Serialization
+&lt;Serializable&gt;
+Class TypeName
+    Implements ISerializable
+ 
+    Protected Sub New(info As SerializationInfo, context As StreamingContext)
+    End Sub
+    Public Overridable Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="434a50dbcc8533d6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotIgnoreSerializableConstructorIfTypeDoesNotImplementISerializable</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">&quot;
+Imports System
+Imports System.Runtime.Serialization
+&lt;Serializable&gt;
+Class TypeName
+ 
+    Protected Sub New(info As SerializationInfo, context As StreamingContext)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e69846c21794f630">VerifyBasicDiagnosticAsync</a>(<span class="r16 r">source</span>, <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;info&quot;</span>, 7, 23), <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;context&quot;</span>, 7, 50))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="28b6c0f70e091d84" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotIgnoreSerializableConstructorIfTypeDoesNotHaveSerializableAttribute</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r17 rd" class="r17 r">source</span> = <span class="s">&quot;
+Imports System
+Imports System.Runtime.Serialization
+Class TypeName
+    Implements ISerializable
+    Protected Sub New(info As SerializationInfo, context As StreamingContext)
+    End Sub
+    Public Overridable Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e69846c21794f630">VerifyBasicDiagnosticAsync</a>(<span class="r17 r">source</span>, <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;info&quot;</span>, 6, 23), <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;context&quot;</span>, 6, 50))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a34141bfabf5f3d2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnSameClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub IsReferencing()
+        Foo(1, 2)
+    End Sub
+    Public Function Foo(a As Integer, b As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+            <b>Const</b> <span id="r19 rd" class="r19 r">fix</span> = <span class="s">&quot;
+Class TypeName
+    Public Sub IsReferencing()
+        Foo(1)
+    End Sub
+    Public Function Foo(a As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f33a98bc2b8271ab" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnDifferentClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">&quot;
+Class HasRef
+    Public Sub IsReferencing()
+        Dim x = New TypeName().Foo(1, 2)
+    End Sub
+End Class
+Class TypeName 
+    Public Function Foo(a As Integer, b As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+            <b>Const</b> <span id="r21 rd" class="r21 r">fix</span> = <span class="s">&quot;
+Class HasRef
+    Public Sub IsReferencing()
+        Dim x = New TypeName().Foo(1)
+    End Sub
+End Class
+Class TypeName 
+    Public Function Foo(a As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="1ae564f296091430" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnDifferentClassOnSharedMethod</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">&quot;
+Class HasRef
+    Public Sub IsReferencing()
+        TypeName.Foo(1, 2)
+    End Sub
+End Class
+Class TypeName 
+    Public Shared Function Foo(a As Integer, b As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+            <b>Const</b> <span id="r23 rd" class="r23 r">fix</span> = <span class="s">&quot;
+Class HasRef
+    Public Sub IsReferencing()
+        TypeName.Foo(1)
+    End Sub
+End Class
+Class TypeName 
+    Public Shared Function Foo(a As Integer) as Integer
+        Return a
+    End Function
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="73974bd0f1a928fc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnConstructor</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">&quot;
+Class HasRef
+    Public Sub IsReferencing()
+        Dim x = New TypeName(1, 2)
+    End Sub
+End Class
+Class TypeName 
+    Public Sub New(a As Integer, b As Integer)
+        Dim x = a
+    End Sub
+End Class&quot;</span>
+            <b>Const</b> <span id="r25 rd" class="r25 r">fix</span> = <span class="s">&quot;
+Class HasRef
+    Public Sub IsReferencing()
+        Dim x = New TypeName(1)
+    End Sub
+End Class
+Class TypeName 
+    Public Sub New(a As Integer)
+        Dim x = a
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">fix</span>)
+        <b>End Function</b>
+ 
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6825cd8418a9be3e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallToBaseDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">&quot;
+Class Base
+    Protected Sub New(a As Integer)
+        Dim x = a
+    End Sub
+End Class
+Class Derived
+    Inherits Base
+    Public Sub New(a As Integer)
+        MyBase.New(a)
+    End Sub
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r26 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a97fc308f2627edc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallToBaseWithExpressionDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r27 rd" class="r27 r">source</span> = <span class="s">&quot;
+Class Base
+    Protected Sub New(a As Integer)
+        dim x = a
+    End Sub
+End Class
+Class Derived
+    Inherits Base
+    Public Sub New(a As Integer)
+        MyBase.New(a + 1)
+    End Sub
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r27 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="fd5004655bd426a8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithRefParameterDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r28 rd" class="r28 r">source</span> = <span class="s">&quot;
+Class Base
+        Private Function TryParse(input As String, ByRef output As Integer) As Boolean
+            output = CInt(input)
+            Return True
+        End Function
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r28 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="7f464be5819675bd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithUnusedRefParameterDoesCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r29 rd" class="r29 r">source</span> = <span class="s">&quot;
+Class Base
+        Private Function TryParse(input As String, ByRef output As Integer, ByRef out2 As Integer) As Boolean
+            output = CInt(input)
+            Return True
+        End Function
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r29 r">source</span>, <a href="#2ef9a7ff6c6cd923">CreateDiagnosticResult</a>(<span class="s">&quot;out2&quot;</span>, 3, 77))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="c20af004c51f2545" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithRefAndEnumerableDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r30 rd" class="r30 r">source</span> = <span class="s">&quot;
+Imports Microsoft.CodeAnalysis
+Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
+Class Base
+        Private Function TryReplaceTypeMembers(typeBlock As TypeBlockSyntax, membersDeclaration As IEnumerable(Of DeclarationStatementSyntax), sortedMembers As IEnumerable(Of DeclarationStatementSyntax), ByRef orderedType As TypeBlockSyntax) As Boolean
+            Dim sortedMembersQueue = New Queue(Of DeclarationStatementSyntax)(sortedMembers)
+            Dim orderChanged = False
+            orderedType = typeBlock.ReplaceNodes(membersDeclaration,
+                                                 Function(original, rewritten)
+                                                     Dim newMember = sortedMembersQueue.Dequeue()
+                                                     If Not orderChanged And Not original.Equals(newMember) Then
+                                                         orderChanged = True
+                                                     End If
+                                                     Return newMember
+                                                 End Function)
+            Return orderChanged
+        End Function
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r30 r">source</span>)
+        <b>End Function
+ 
+ 
+        Private Function</b> <a id="2ef9a7ff6c6cd923" href="../R/2ef9a7ff6c6cd923.html" target="n" data-glyph="76,1">CreateDiagnosticResult</a>(<span id="r31 rd" class="r31 r">parameterName</span> <b>As String</b>, <span id="r32 rd" class="r32 r">line</span> <b>As Integer</b>, <span id="r33 rd" class="r33 r">column</span> <b>As Integer</b>) <b>As</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            <b>Return</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3c47a0e6723314bc">UnusedParameters</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#c643dff42203e20f" class="t">UnusedParametersAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#3b5406c598799890">Message</a>, <span class="r31 r">parameterName</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, <span class="r32 r">line</span>, <span class="r33 r">column</span>)}
+                }
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

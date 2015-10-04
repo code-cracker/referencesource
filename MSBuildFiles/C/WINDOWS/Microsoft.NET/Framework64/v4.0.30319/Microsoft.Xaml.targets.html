@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Xaml.targets</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(430);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/WINDOWS/Microsoft.NET/Framework64/v4.0.30319/Microsoft.Xaml.targets" target="_top">C\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Microsoft.Xaml.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.Xaml.targets
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+ 
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/LoadTimeSensitiveTargets.html" target="n" class="msbuildlink">LoadTimeSensitiveTargets</a></span><span class="xd">&gt;</span>
+      $(<a href="/MSBuildProperties/R/LoadTimeSensitiveTargets.html" target="n" class="msbuildlink">LoadTimeSensitiveTargets</a>);
+      XamlMarkupCompilePass1;
+    <span class="xd">&lt;/</span><span class="xn">LoadTimeSensitiveTargets</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/LoadTimeSensitiveProperties.html" target="n" class="msbuildlink">LoadTimeSensitiveProperties</a></span><span class="xd">&gt;</span>
+      $(<a href="/MSBuildProperties/R/LoadTimeSensitiveProperties.html" target="n" class="msbuildlink">LoadTimeSensitiveProperties</a>);
+    <span class="xd">&lt;/</span><span class="xn">LoadTimeSensitiveProperties</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TaskVersion.html" target="n" class="msbuildlink">TaskVersion</a></span><span class="xd">&gt;</span>4.0.0.0<span class="xd">&lt;/</span><span class="xn">TaskVersion</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TaskKeyToken.html" target="n" class="msbuildlink">TaskKeyToken</a></span><span class="xd">&gt;</span>31bf3856ad364e35<span class="xd">&lt;/</span><span class="xn">TaskKeyToken</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlBuildTaskAssemblyName.html" target="n" class="msbuildlink">XamlBuildTaskAssemblyName</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskAssemblyName.html" target="n" class="msbuildlink">XamlBuildTaskAssemblyName</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>XamlBuildTask, Version=$(<a href="/MSBuildProperties/R/TaskVersion.html" target="n" class="msbuildlink">TaskVersion</a>), Culture=neutral, PublicKeyToken=$(<a href="/MSBuildProperties/R/TaskKeyToken.html" target="n" class="msbuildlink">TaskKeyToken</a>)<span class="xd">&lt;/</span><span class="xn">XamlBuildTaskAssemblyName</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">XamlRequiresCompilationPass2</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/AssemblyName.html" target="n" class="msbuildlink">AssemblyName</a>)<span class="xd">&lt;/</span><span class="xn">XamlTemporaryAssemblyName</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CompileTargetNameForTemporaryAssembly.html" target="n" class="msbuildlink">CompileTargetNameForTemporaryAssembly</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CompileTargetNameForTemporaryAssembly.html" target="n" class="msbuildlink">CompileTargetNameForTemporaryAssembly</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>CompileTemporaryAssembly<span class="xd">&lt;/</span><span class="xn">CompileTargetNameForTemporaryAssembly</span><span class="xd">&gt;</span><span class="xd">
+    
+  &lt;!--</span><span class="c"> Microsoft.Xaml.targets needs to be included after Microsoft.Fx.targets and Microsoft.DevDiv.targets
+       to have a chance to add these tasks to the PrepareResources target&#39;s dependencies. 
+       Unfortunately, Microsoft.DevDiv.targets completely overwrites the PrepareResourcesDependsOnProperty 
+       (as a bug workaround-see comment there).
+  </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/PrepareResourcesDependsOn.html" target="n" class="msbuildlink">PrepareResourcesDependsOn</a></span><span class="xd">&gt;</span>
+      <a href="/MSBuildTargets/R/XamlMarkupCompilePass1.html" target="n" class="msbuildlink">XamlMarkupCompilePass1</a>;
+      <a href="/MSBuildTargets/R/XamlMarkupCompilePass2.html" target="n" class="msbuildlink">XamlMarkupCompilePass2</a>;
+      $(<a href="/MSBuildProperties/R/PrepareResourcesDependsOn.html" target="n" class="msbuildlink">PrepareResourcesDependsOn</a>) 
+    <span class="xd">&lt;/</span><span class="xn">PrepareResourcesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+    
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlBuildTaskLocation.html" target="n" class="msbuildlink">XamlBuildTaskLocation</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildBinPath.html" target="n" class="msbuildlink">MSBuildBinPath</a>)<span class="xd">&lt;/</span><span class="xn">XamlBuildTaskLocation</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlBuildTaskLocation.html" target="n" class="msbuildlink">XamlBuildTaskLocation</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;!=&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)<span class="xd">&lt;/</span><span class="xn">XamlBuildTaskLocation</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a>);$(<a href="/MSBuildProperties/R/MSBuildToolsPath.html" target="n" class="msbuildlink">MSBuildToolsPath</a>)\Microsoft.Xaml.targets<span class="xd">&lt;/</span><span class="xn">MSBuildAllProjects</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildProjectFile.html" target="n" class="msbuildlink">MSBuildProjectFile</a>).XamlGeneratedCodeFileListAbsolute.txt<span class="xd">&lt;/</span><span class="xn">XamlGenCodeFileNames</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlGenMarkupFileNames.html" target="n" class="msbuildlink">XamlGenMarkupFileNames</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlGenMarkupFileNames.html" target="n" class="msbuildlink">XamlGenMarkupFileNames</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildProjectFile.html" target="n" class="msbuildlink">MSBuildProjectFile</a>).XamlGeneratedXamlFileListAbsolute.txt<span class="xd">&lt;/</span><span class="xn">XamlGenMarkupFileNames</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlPass2FlagFile.html" target="n" class="msbuildlink">XamlPass2FlagFile</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlPass2FlagFile.html" target="n" class="msbuildlink">XamlPass2FlagFile</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildProjectFile.html" target="n" class="msbuildlink">MSBuildProjectFile</a>).XamlPass2Flag.txt<span class="xd">&lt;/</span><span class="xn">XamlPass2FlagFile</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/BuildingInsideVisualStudio.html" target="n" class="msbuildlink">BuildingInsideVisualStudio</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildItems/R/AvailableItemName.html" target="n" class="msbuildlink">AvailableItemName</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">XamlAppDef</span>&quot; <span class="xd">/&gt;</span><span class="xd">  
+  &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/PartialClassGenerationTask.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;==&#39;&#39;</span>&quot; <span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/XamlBuildTask/A.html#326e1d0f6592d3f9" class="msbuildlink">Microsoft.Build.Tasks.Xaml.PartialClassGenerationTask</a></span>&quot; <span class="xan">AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskAssemblyName.html" target="n" class="msbuildlink">XamlBuildTaskAssemblyName</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/PartialClassGenerationTask.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;!=&#39;&#39;</span>&quot; <span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/XamlBuildTask/A.html#326e1d0f6592d3f9" class="msbuildlink">Microsoft.Build.Tasks.Xaml.PartialClassGenerationTask</a></span>&quot; <span class="xan">AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)\XamlBuildTask.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GenerateTemporaryAssemblyTask.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;==&#39;&#39;</span>&quot; <span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/XamlBuildTask/A.html#8f3c2ffdaca7977c" class="msbuildlink">Microsoft.Build.Tasks.Xaml.GenerateTemporaryAssemblyTask</a></span>&quot; <span class="xan">AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskAssemblyName.html" target="n" class="msbuildlink">XamlBuildTaskAssemblyName</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GenerateTemporaryAssemblyTask.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;!=&#39;&#39;</span>&quot; <span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/XamlBuildTask/A.html#8f3c2ffdaca7977c" class="msbuildlink">Microsoft.Build.Tasks.Xaml.GenerateTemporaryAssemblyTask</a></span>&quot; <span class="xan">AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)\XamlBuildTask.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">  
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CompilationPass2Task.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;==&#39;&#39;</span>&quot; <span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/XamlBuildTask/A.html#b5f8aa9a7f36ce91" class="msbuildlink">Microsoft.Build.Tasks.Xaml.CompilationPass2Task</a></span>&quot; <span class="xan">AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskAssemblyName.html" target="n" class="msbuildlink">XamlBuildTaskAssemblyName</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CompilationPass2Task.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)&#39;!=&#39;&#39;</span>&quot; <span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/XamlBuildTask/A.html#b5f8aa9a7f36ce91" class="msbuildlink">Microsoft.Build.Tasks.Xaml.CompilationPass2Task</a></span>&quot; <span class="xan">AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskPath.html" target="n" class="msbuildlink">XamlBuildTaskPath</a>)\XamlBuildTask.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">  
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         DesignTimeXamlMarkupCompilation
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CoreCompileDependsOn.html" target="n" class="msbuildlink">CoreCompileDependsOn</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/BuildingInsideVisualStudio.html" target="n" class="msbuildlink">BuildingInsideVisualStudio</a>)&#39; == &#39;true&#39;</span>&quot;<span class="xd">&gt;</span>
+        <a href="/MSBuildTargets/R/DesignTimeXamlMarkupCompilation.html" target="n" class="msbuildlink">DesignTimeXamlMarkupCompilation</a>;
+        $(<a href="/MSBuildProperties/R/CoreCompileDependsOn.html" target="n" class="msbuildlink">CoreCompileDependsOn</a>)
+    <span class="xd">&lt;/</span><span class="xn">CoreCompileDependsOn</span><span class="xd">&gt;</span><span class="xd">
+    
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DesignTimeIntermediateOutputPath.html" target="n" class="msbuildlink">DesignTimeIntermediateOutputPath</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/DesignTimeIntermediateOutputPath.html" target="n" class="msbuildlink">DesignTimeIntermediateOutputPath</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)InProcessTempFiles\<span class="xd">&lt;/</span><span class="xn">DesignTimeIntermediateOutputPath</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/DesignTimeXamlMarkupCompilation.html" target="n" class="msbuildlink">DesignTimeXamlMarkupCompilation</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Make sure the directory exists. </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/MakeDir.html" target="n" class="msbuildlink">MakeDir</a> </span><span class="xan">Directories</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DesignTimeIntermediateOutputPath.html" target="n" class="msbuildlink">DesignTimeIntermediateOutputPath</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CallTarget.html" target="n" class="msbuildlink">CallTarget</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/BuildingProject.html" target="n" class="msbuildlink">BuildingProject</a>)&#39; != &#39;true&#39; and &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+        Targets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/InProcessXamlMarkupCompilePass1.html" target="n" class="msbuildlink">InProcessXamlMarkupCompilePass1</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+       
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+  
+  &lt;!--</span><span class="c">
+  ================================================================
+                         InProcessXamlMarkupCompilePass1
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/InProcessXamlMarkupCompilePass1.html" target="n" class="msbuildlink">InProcessXamlMarkupCompilePass1</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/BuildingProject.html" target="n" class="msbuildlink">BuildingProject</a>)&#39; != &#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+   
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/PartialClassGenerationTask.html" target="n" class="msbuildlink">PartialClassGenerationTask</a></span><span class="xan">
+      BuildTaskPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskLocation.html" target="n" class="msbuildlink">XamlBuildTaskLocation</a>)</span>&quot;<span class="xan">
+      OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DesignTimeIntermediateOutputPath.html" target="n" class="msbuildlink">DesignTimeIntermediateOutputPath</a>)</span>&quot;<span class="xan">
+      Language</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Language.html" target="n" class="msbuildlink">Language</a>)</span>&quot; <span class="xan">
+      ApplicationMarkup</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)</span>&quot; <span class="xan">
+      References</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+      RootNamespace</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/RootNamespace.html" target="n" class="msbuildlink">RootNamespace</a>)</span>&quot; <span class="xan">
+      SourceCodeFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>)</span>&quot;<span class="xan">
+      AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AssemblyName.html" target="n" class="msbuildlink">AssemblyName</a>)</span>&quot;<span class="xan">
+      IsInProcessXamlMarkupCompile</span><span class="xd">=</span>&quot;<span class="xav">true</span>&quot;<span class="xan">
+      MSBuildProjectDirectory</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectDirectory.html" target="n" class="msbuildlink">MSBuildProjectDirectory</a>)</span>&quot;<span class="xan">
+      XamlBuildTypeInspectionExtensionNames</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlBuildTaskTypeInspectionExtensionName.html" target="n" class="msbuildlink">XamlBuildTaskTypeInspectionExtensionName</a>)</span>&quot;<span class="xan">
+      XamlBuildTypeGenerationExtensionNames</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlBuildTaskTypeGenerationExtensionName.html" target="n" class="msbuildlink">XamlBuildTaskTypeGenerationExtensionName</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn">Output </span><span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlInProcessGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlInProcessGeneratedCodeFiles</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">GeneratedCodeFiles</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlInProcessGeneratedResources.html" target="n" class="msbuildlink">XamlInProcessGeneratedResources</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">GeneratedResources</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;!--</span><span class="c"> This property is not required. However we need to populate it as the output of the task. </span><span class="xd">--&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">PropertyName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildProperties/R/XamlInProcessRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlInProcessRequiresCompilationPass2</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">RequiresCompilationPass2</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">PartialClassGenerationTask</span><span class="xd">&gt;</span><span class="xd">
+   
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Compile </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlInProcessGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlInProcessGeneratedCodeFiles</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         CleanInProcessXamlGeneratedFiles
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/CleanInProcessXamlGeneratedFiles.html" target="n" class="msbuildlink">CleanInProcessXamlGeneratedFiles</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+          AfterTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/DesignTimeXamlMarkupCompilation.html" target="n" class="msbuildlink">DesignTimeXamlMarkupCompilation</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+     
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/FileWrites.html" target="n" class="msbuildlink">FileWrites</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DesignTimeIntermediateOutputPath.html" target="n" class="msbuildlink">DesignTimeIntermediateOutputPath</a>)\*</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+                   
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+   
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlMarkupCompileReadGeneratedFileList
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompileReadGeneratedFileList.html" target="n" class="msbuildlink">XamlMarkupCompileReadGeneratedFileList</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39; != &#39;&#39; or &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+          BeforeTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass1.html" target="n" class="msbuildlink">XamlMarkupCompilePass1</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/ReadLinesFromFile.html" target="n" class="msbuildlink">ReadLinesFromFile</a> </span><span class="xan">File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">Lines</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlOutputCodeFilesList.html" target="n" class="msbuildlink">XamlOutputCodeFilesList</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ReadLinesFromFile</span><span class="xd">&gt;</span><span class="xd">
+	
+	&lt;</span><span class="xn"><a href="/MSBuildTasks/R/ReadLinesFromFile.html" target="n" class="msbuildlink">ReadLinesFromFile</a> </span><span class="xan">File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenMarkupFileNames.html" target="n" class="msbuildlink">XamlGenMarkupFileNames</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">Lines</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlOutputMarkupFilesList.html" target="n" class="msbuildlink">XamlOutputMarkupFilesList</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ReadLinesFromFile</span><span class="xd">&gt;</span><span class="xd">
+   
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd"> 
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlMarkupCompilePass1
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass1.html" target="n" class="msbuildlink">XamlMarkupCompilePass1</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39; != &#39;&#39; or &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+          Inputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>);@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>);$(<a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a>);@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+          Outputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlOutputMarkupFilesList.html" target="n" class="msbuildlink">XamlOutputMarkupFilesList</a>);
+                  @(<a href="/MSBuildItems/R/XamlOutputCodeFilesList.html" target="n" class="msbuildlink">XamlOutputCodeFilesList</a>);
+                  $(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a>);
+                  $(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenMarkupFileNames.html" target="n" class="msbuildlink">XamlGenMarkupFileNames</a>);
+                  $(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlPass2FlagFile.html" target="n" class="msbuildlink">XamlPass2FlagFile</a>);</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) XamlPage: &#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) XamlAppDef: &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) SourceCodeFiles: &#39;@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a> </span><span class="xan">Remove</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a> </span><span class="xan">Remove</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+     
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/PartialClassGenerationTask.html" target="n" class="msbuildlink">PartialClassGenerationTask</a></span><span class="xan">
+      BuildTaskPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskLocation.html" target="n" class="msbuildlink">XamlBuildTaskLocation</a>)</span>&quot;<span class="xan">
+      OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)</span>&quot;<span class="xan">
+      Language</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Language.html" target="n" class="msbuildlink">Language</a>)</span>&quot; <span class="xan">
+      ApplicationMarkup</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)</span>&quot; <span class="xan">
+      References</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+      RootNamespace</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/RootNamespace.html" target="n" class="msbuildlink">RootNamespace</a>)</span>&quot; <span class="xan">
+      SourceCodeFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>)</span>&quot;<span class="xan">
+      AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AssemblyName.html" target="n" class="msbuildlink">AssemblyName</a>)</span>&quot;<span class="xan">
+      IsInProcessXamlMarkupCompile</span><span class="xd">=</span>&quot;<span class="xav">false</span>&quot;<span class="xan">
+      MSBuildProjectDirectory</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectDirectory.html" target="n" class="msbuildlink">MSBuildProjectDirectory</a>)</span>&quot;<span class="xan">
+      XamlBuildTypeGenerationExtensionNames</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlBuildTaskTypeGenerationExtensionName.html" target="n" class="msbuildlink">XamlBuildTaskTypeGenerationExtensionName</a>)</span>&quot;<span class="xan">
+      XamlBuildTypeInspectionExtensionNames</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlBuildTaskTypeInspectionExtensionName.html" target="n" class="msbuildlink">XamlBuildTaskTypeInspectionExtensionName</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn">Output </span><span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">GeneratedCodeFiles</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">GeneratedResources</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlFileNames.html" target="n" class="msbuildlink">XamlFileNames</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ApplicationMarkup</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      
+      &lt;</span><span class="xn">Output </span><span class="xan">PropertyName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildProperties/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">RequiresCompilationPass2</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">PartialClassGenerationTask</span><span class="xd">&gt;</span><span class="xd">
+    
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/WriteLinesToFile.html" target="n" class="msbuildlink">WriteLinesToFile</a></span><span class="xan">
+      File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a>)</span>&quot;<span class="xan">
+      Lines</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>)</span>&quot;<span class="xan">
+      Overwrite</span><span class="xd">=</span>&quot;<span class="xav">true</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+	  
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/WriteLinesToFile.html" target="n" class="msbuildlink">WriteLinesToFile</a></span><span class="xan">
+      File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenMarkupFileNames.html" target="n" class="msbuildlink">XamlGenMarkupFileNames</a>)</span>&quot;<span class="xan">
+      Lines</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>)</span>&quot;<span class="xan">
+      Overwrite</span><span class="xd">=</span>&quot;<span class="xav">true</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/WriteLinesToFile.html" target="n" class="msbuildlink">WriteLinesToFile</a></span><span class="xan">
+      File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlPass2FlagFile.html" target="n" class="msbuildlink">XamlPass2FlagFile</a>)</span>&quot;<span class="xan">
+      Lines</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a>)</span>&quot;<span class="xan">
+      Overwrite</span><span class="xd">=</span>&quot;<span class="xav">true</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(out) XamlGeneratedCodeFiles: &#39;@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(out) XamlGeneratedResources: &#39;@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(out) XamlRequiresCompilationPass2 : &#39;$(<a href="/MSBuildProperties/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlMarkupCompileAddFilesGenerated
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompileAddFilesGenerated.html" target="n" class="msbuildlink">XamlMarkupCompileAddFilesGenerated</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39; != &#39;&#39; or &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+          AfterTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass1.html" target="n" class="msbuildlink">XamlMarkupCompilePass1</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+      
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>)&#39; == &#39;&#39;</span>&quot;<span class="xan">
+                              Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlOutputCodeFilesList.html" target="n" class="msbuildlink">XamlOutputCodeFilesList</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd"> 
+ 
+	&lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>)&#39; == &#39;&#39;</span>&quot;<span class="xan">
+                              Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlOutputMarkupFilesList.html" target="n" class="msbuildlink">XamlOutputMarkupFilesList</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd"> 	
+      
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/FileWrites.html" target="n" class="msbuildlink">FileWrites</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>);
+                           @(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>);
+                           $(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a>);
+                           $(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenMarkupFileNames.html" target="n" class="msbuildlink">XamlGenMarkupFileNames</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+    
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Compile </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+                  
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+          &lt;</span><span class="xn">GenerateResource</span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">GenerateResource</span><span class="xd">&gt;</span><span class="xd">
+          &lt;</span><span class="xn">Type</span><span class="xd">&gt;</span>Non-Resx<span class="xd">&lt;/</span><span class="xn">Type</span><span class="xd">&gt;</span><span class="xd">
+          &lt;</span><span class="xn">WithCulture</span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">WithCulture</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">EmbeddedResource</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+                  
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlMarkupCompileReadPass2Flag
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+ &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompileReadPass2Flag.html" target="n" class="msbuildlink">XamlMarkupCompileReadPass2Flag</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39; != &#39;&#39; or &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+          BeforeTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass2.html" target="n" class="msbuildlink">XamlMarkupCompilePass2</a>;<a href="/MSBuildTargets/R/XamlTemporaryAssemblyGeneration.html" target="n" class="msbuildlink">XamlTemporaryAssemblyGeneration</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/ReadLinesFromFile.html" target="n" class="msbuildlink">ReadLinesFromFile</a> </span><span class="xan">File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlPass2FlagFile.html" target="n" class="msbuildlink">XamlPass2FlagFile</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">Lines</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ReadLinesFromFile</span><span class="xd">&gt;</span><span class="xd">
+	
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlTemporaryAssemblyGeneration
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlTemporaryAssemblyGeneration.html" target="n" class="msbuildlink">XamlTemporaryAssemblyGeneration</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a>)&#39; == &#39;true&#39; </span>&quot;<span class="xan">
+          Inputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>);@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>);$(<a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a>);@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>);@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+          Outputs</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a>).dll;
+                   $(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a>).pdb</span>&quot;<span class="xan">
+          DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass1.html" target="n" class="msbuildlink">XamlMarkupCompilePass1</a>;<a href="/MSBuildTargets/R/MarkupCompilePass1.html" target="n" class="msbuildlink">MarkupCompilePass1</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) MSBuildProjectFile: &#39;$(<a href="/MSBuildProperties/R/MSBuildProjectFile.html" target="n" class="msbuildlink">MSBuildProjectFile</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39; == &#39;true&#39;</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) CompileTargetName: &#39;$(<a href="/MSBuildProperties/R/CompileTargetName.html" target="n" class="msbuildlink">CompileTargetName</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) SourceCodeFiles: &#39;@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GenerateTemporaryAssemblyTask.html" target="n" class="msbuildlink">GenerateTemporaryAssemblyTask</a></span><span class="xan">
+             OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)</span>&quot;<span class="xan">
+             CurrentProject</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectFullPath.html" target="n" class="msbuildlink">MSBuildProjectFullPath</a>)</span>&quot;<span class="xan">
+             SourceCodeFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedCodeFiles.html" target="n" class="msbuildlink">XamlGeneratedCodeFiles</a>);@(<a href="/MSBuildItems/R/_GeneratedCodeFiles.html" target="n" class="msbuildlink">_GeneratedCodeFiles</a>)</span>&quot;<span class="xan">
+             AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a>)</span>&quot;<span class="xan">
+             ApplicationMarkupTypeName</span><span class="xd">=</span>&quot;<span class="xav">XamlAppDef</span>&quot;<span class="xan">
+             CompileTargetName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CompileTargetNameForTemporaryAssembly.html" target="n" class="msbuildlink">CompileTargetNameForTemporaryAssembly</a>)</span>&quot;<span class="xan">
+             ReferencePaths</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+             GeneratedResourcesFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlGeneratedResources.html" target="n" class="msbuildlink">XamlGeneratedResources</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">GenerateTemporaryAssemblyTask</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildProperties/R/_XamlTemporaryAssemblyPath_.html" target="n" class="msbuildlink">_XamlTemporaryAssemblyPath_</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a>).dll<span class="xd">&lt;/</span><span class="xn">_XamlTemporaryAssemblyPath_</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildProperties/R/NonExistentFile.html" target="n" class="msbuildlink">NonExistentFile</a></span><span class="xd">&gt;</span>__NonExistentSubDir__\__NonExistentFile__<span class="xd">&lt;/</span><span class="xn">NonExistentFile</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/FileWrites.html" target="n" class="msbuildlink">FileWrites</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlTemporaryAssemblyName.html" target="n" class="msbuildlink">XamlTemporaryAssemblyName</a>).*</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+	
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/CompileTemporaryAssembly.html" target="n" class="msbuildlink">CompileTemporaryAssembly</a></span>&quot; <span class="xan">DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/BuildOnlySettings.html" target="n" class="msbuildlink">BuildOnlySettings</a>;<a href="/MSBuildTargets/R/ResolveKeySource.html" target="n" class="msbuildlink">ResolveKeySource</a>;<a href="/MSBuildTargets/R/_GenerateCompileInputs.html" target="n" class="msbuildlink">_GenerateCompileInputs</a>;<a href="/MSBuildTargets/R/CoreCompile.html" target="n" class="msbuildlink">CoreCompile</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlMarkupCompilePass2
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass2.html" target="n" class="msbuildlink">XamlMarkupCompilePass2</a></span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlRequiresCompilationPass2.html" target="n" class="msbuildlink">XamlRequiresCompilationPass2</a>)&#39; == &#39;true&#39; </span>&quot;<span class="xan">
+          Outputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ExtensionGeneratedCodeFiles.html" target="n" class="msbuildlink">ExtensionGeneratedCodeFiles</a>)</span>&quot;<span class="xan">
+          DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlTemporaryAssemblyGeneration.html" target="n" class="msbuildlink">XamlTemporaryAssemblyGeneration</a></span>&quot;<span class="xd">&gt;</span><span class="xd"> 
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) XamlPage: &#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) XamlAppDef: &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(in) References: &#39;@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>);$(<a href="/MSBuildProperties/R/_XamlTemporaryAssemblyPath_.html" target="n" class="msbuildlink">_XamlTemporaryAssemblyPath_</a>)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/MSBuildTargetsVerbose.html" target="n" class="msbuildlink">MSBuildTargetsVerbose</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CompilationPass2Task.html" target="n" class="msbuildlink">CompilationPass2Task</a></span><span class="xan">
+      BuildTaskPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/XamlBuildTaskLocation.html" target="n" class="msbuildlink">XamlBuildTaskLocation</a>)</span>&quot;    <span class="xan">
+      ApplicationMarkup</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)</span>&quot;<span class="xan">
+      References</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+      LocalAssemblyReference</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/_XamlTemporaryAssemblyPath_.html" target="n" class="msbuildlink">_XamlTemporaryAssemblyPath_</a>)</span>&quot;<span class="xan">
+      AssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AssemblyName.html" target="n" class="msbuildlink">AssemblyName</a>)</span>&quot;<span class="xan">
+      RootNamespace</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/RootNamespace.html" target="n" class="msbuildlink">RootNamespace</a>)</span>&quot;<span class="xan">
+      OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)</span>&quot;<span class="xan">
+      Language</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Language.html" target="n" class="msbuildlink">Language</a>)</span>&quot;<span class="xan">
+      SourceCodeFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>)</span>&quot;<span class="xan">
+      IsInProcessXamlMarkupCompile</span><span class="xd">=</span>&quot;<span class="xav">false</span>&quot;<span class="xan">
+      MSBuildProjectDirectory</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectDirectory.html" target="n" class="msbuildlink">MSBuildProjectDirectory</a>)</span>&quot;<span class="xan">
+      MSBuildArchitecture</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/PlatformTargetAsMSBuildArchitecture.html" target="n" class="msbuildlink">PlatformTargetAsMSBuildArchitecture</a>)</span>&quot;<span class="xan">
+      XamlBuildTypeInspectionExtensionNames</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlBuildTaskTypeInspectionExtensionName.html" target="n" class="msbuildlink">XamlBuildTaskTypeInspectionExtensionName</a>)</span>&quot;<span class="xan">
+      ApplicationMarkupWithTypeName</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlFileNames.html" target="n" class="msbuildlink">XamlFileNames</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn">Output </span><span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/ExtensionGeneratedCodeFiles.html" target="n" class="msbuildlink">ExtensionGeneratedCodeFiles</a></span>&quot; <span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ExtensionGeneratedCodeFiles</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">CompilationPass2Task</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/WriteLinesToFile.html" target="n" class="msbuildlink">WriteLinesToFile</a></span><span class="xan">
+      File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlPass2FlagFile.html" target="n" class="msbuildlink">XamlPass2FlagFile</a>)</span>&quot;<span class="xan">
+      Lines</span><span class="xd">=</span>&quot;<span class="xav">false</span>&quot;<span class="xan">
+      Overwrite</span><span class="xd">=</span>&quot;<span class="xav">true</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">(out) ExtensionGeneratedCodeFiles: &#39;@(<a href="/MSBuildItems/R/ExtensionGeneratedCodeFiles.html" target="n" class="msbuildlink">ExtensionGeneratedCodeFiles</a>)&#39;</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Add extension files to the list of generated files so that they can be monitored and cleaned up </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/WriteLinesToFile.html" target="n" class="msbuildlink">WriteLinesToFile</a></span><span class="xan">
+      File</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/XamlGenCodeFileNames.html" target="n" class="msbuildlink">XamlGenCodeFileNames</a>)</span>&quot;<span class="xan">
+      Lines</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ExtensionGeneratedCodeFiles.html" target="n" class="msbuildlink">ExtensionGeneratedCodeFiles</a>)</span>&quot;<span class="xan">
+      Overwrite</span><span class="xd">=</span>&quot;<span class="xav">false</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                         XamlMarkupCompileAddFilesGenerated
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompileAddExtensionFilesGenerated.html" target="n" class="msbuildlink">XamlMarkupCompileAddExtensionFilesGenerated</a></span>&quot;<span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/XamlPage.html" target="n" class="msbuildlink">XamlPage</a>)&#39; != &#39;&#39; or &#39;@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+          AfterTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlMarkupCompilePass2.html" target="n" class="msbuildlink">XamlMarkupCompilePass2</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/FileWrites.html" target="n" class="msbuildlink">FileWrites</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ExtensionGeneratedCodeFiles.html" target="n" class="msbuildlink">ExtensionGeneratedCodeFiles</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Compile </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ExtensionGeneratedCodeFiles.html" target="n" class="msbuildlink">ExtensionGeneratedCodeFiles</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c">
+  ================================================================
+                 GetCopyToOutputDirectoryXamlAppDefs
+ 
+  Get all XamlAppDefs that may need to be transferred to the output directory.
+  Compare GetCopyToOutputDirectoryItems in Microsoft.Common.targets
+  ================================================================
+  </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GetCopyToOutputDirectoryXamlAppDefs.html" target="n" class="msbuildlink">GetCopyToOutputDirectoryXamlAppDefs</a></span>&quot; <span class="xan">BeforeTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GetCopyToOutputDirectoryItems.html" target="n" class="msbuildlink">GetCopyToOutputDirectoryItems</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/_XamlAppDefItemsToCopy.html" target="n" class="msbuildlink">_XamlAppDefItemsToCopy</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlAppDef.html" target="n" class="msbuildlink">XamlAppDef</a>-&gt;&#39;%(FullPath)&#39;)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(XamlAppDef.CopyToOutputDirectory)&#39;==&#39;Always&#39; or &#39;%(XamlAppDef.CopyToOutputDirectory)&#39;==&#39;PreserveNewest&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/AssignTargetPath.html" target="n" class="msbuildlink">AssignTargetPath</a> </span><span class="xan">Files</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_XamlAppDefItemsToCopy.html" target="n" class="msbuildlink">_XamlAppDefItemsToCopy</a>)</span>&quot; <span class="xan">RootFolder</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectDirectory.html" target="n" class="msbuildlink">MSBuildProjectDirectory</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">AssignedFiles</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/_XamlAppDefItemsToCopyWithTargetPath.html" target="n" class="msbuildlink">_XamlAppDefItemsToCopyWithTargetPath</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">AssignTargetPath</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> The _SourceItems properties are internal to Microsoft.Common.targets,
+         but necessary to use here because there is no public equivalent </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/AllItemsFullPathWithTargetPath.html" target="n" class="msbuildlink">AllItemsFullPathWithTargetPath</a>            </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_XamlAppDefItemsToCopyWithTargetPath.html" target="n" class="msbuildlink">_XamlAppDefItemsToCopyWithTargetPath</a>)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/_SourceItemsToCopyToOutputDirectoryAlways.html" target="n" class="msbuildlink">_SourceItemsToCopyToOutputDirectoryAlways</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_XamlAppDefItemsToCopyWithTargetPath.html" target="n" class="msbuildlink">_XamlAppDefItemsToCopyWithTargetPath</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(_XamlAppDefItemsToCopyWithTargetPath.CopyToOutputDirectory)&#39;==&#39;Always&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/_SourceItemsToCopyToOutputDirectory.html" target="n" class="msbuildlink">_SourceItemsToCopyToOutputDirectory</a>       </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_XamlAppDefItemsToCopyWithTargetPath.html" target="n" class="msbuildlink">_XamlAppDefItemsToCopyWithTargetPath</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(_XamlAppDefItemsToCopyWithTargetPath.CopyToOutputDirectory)&#39;==&#39;PreserveNewest&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+  
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

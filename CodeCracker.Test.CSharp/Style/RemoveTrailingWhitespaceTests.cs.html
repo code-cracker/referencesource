@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveTrailingWhitespaceTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(143);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/RemoveTrailingWhitespaceTests.cs" target="_top">Style\RemoveTrailingWhitespaceTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    [System.Diagnostics.CodeAnalysis.<a href="@0@mscorlib/A.html#5e00de6576fb9ce7" class="t">SuppressMessage</a>(<b>nameof</b>(Style), <span class="s">&quot;CC0065&quot;</span>, <a href="@0@mscorlib/A.html#ce02a652a479502a">Justification</a> = <span class="s">&quot;This is the remove trailing whitespace test class.&quot;</span>)]
+    <b>public class</b> <a id="897e68fd2e1c3857" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="71df9011a5d3b4fe">RemoveTrailingWhitespaceTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#a1cd568d1f605fcd" class="t">RemoveTrailingWhitespaceAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#2e1c672847687555" class="t">RemoveTrailingWhitespaceCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="655dead7a641786b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SingleStatementWithTrailingSpaceCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">&quot;using System; &quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">source</span>, <a href="#baee7d8b442c7ef6">CreateDiagnostic</a>(1, 13));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3a5d0b60db400d64" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoTrailingWhitespaceDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">&quot;using System;\r\n&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f07f5acf78700d4b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">LineWithSpaceDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">&quot;\r\n&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="13df014ee6593996" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SingleStatementWithTrailingSpaceAndNewLineCreatesOnlyOneDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">&quot;using System; \r\n&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r3 r">source</span>, <a href="#baee7d8b442c7ef6">CreateDiagnostic</a>(1, 13));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="200449652f6e303f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">TwoStatementsWithTrailingWhiteSpaceCreatesTwoDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;using System; 
+namespace Foo 
+{}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">source</span>, <a href="#baee7d8b442c7ef6">CreateDiagnostic</a>(1, 13), <a href="#baee7d8b442c7ef6">CreateDiagnostic</a>(2, 14));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bc2657fc7c9a1569" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemoveTrailingWhiteSpace</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">&quot;using System; \r\n&quot;</span>;
+            <b>const string</b> <span id="r6 rd" class="r6 r">expected</span> = <span class="s">&quot;using System;\r\n&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r5 r">source</span>, <span class="r6 r">expected</span>, <span class="r7 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="19145326589a43f8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemoveTrailingSpaceWithoutNewLine</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">&quot;using System; &quot;</span>;
+            <b>const string</b> <span id="r9 rd" class="r9 r">expected</span> = <span class="s">&quot;using System;&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">source</span>, <span class="r9 r">expected</span>, <span class="r7 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="620636d994a98c4a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemoveTrailingTabWithoutNewLine</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">&quot;using System;	&quot;</span>;
+            <b>const string</b> <span id="r11 rd" class="r11 r">expected</span> = <span class="s">&quot;using System;&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r10 r">source</span>, <span class="r11 r">expected</span>, <span class="r7 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1c9323aaec616014" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SingleStatementWithCommentAndTrailingSpaceCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">&quot;using System;//a &quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r12 r">source</span>, <a href="#baee7d8b442c7ef6">CreateDiagnostic</a>(1, 16));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d1b27666dc7ba0f3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCommentTrailingSpaceAndNewLine</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">&quot;using System;//a \r\n&quot;</span>;
+            <b>const string</b> <span id="r14 rd" class="r14 r">expected</span> = <span class="s">&quot;using System;//a\r\n&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">source</span>, <span class="r14 r">expected</span>, <span class="r7 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="332488d9c6c9de8e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringWithTrailingWhitespaceDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;var s = @&quot;&quot; 
+&quot;&quot;;&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>);
+        }
+ 
+        <b>public static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="baee7d8b442c7ef6" href="../R/baee7d8b442c7ef6.html" target="n" data-glyph="72,1">CreateDiagnostic</a>(<b>int</b> <span id="r16 rd" class="r16 r">line</span>, <b>int</b> <span id="r17 rd" class="r17 r">column</span>)
+        {
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r18 rd" class="r18 r">diagnostic</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#5171fb5bf8c79d3f">RemoveTrailingWhitespace</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#a1cd568d1f605fcd" class="t">RemoveTrailingWhitespaceAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#7d065d4207a41306">MessageFormat</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r16 r">line</span>, <span class="r17 r">column</span>) }
+            };
+            <b>return</b> <span class="r18 r">diagnostic</span>;
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c7e3fad9c7c4095c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixSingleLineXmlComments</a>()
+        {
+            <b>const string</b> <span id="r19 rd" class="r19 r">source</span> = <span class="s">@&quot;
+/// &lt;summary&gt;
+/// Comment 
+/// &lt;/summary&gt;
+class Foo { }&quot;</span>;
+            <b>const string</b> <span id="r20 rd" class="r20 r">expected</span> = <span class="s">@&quot;
+/// &lt;summary&gt;
+/// Comment
+/// &lt;/summary&gt;
+class Foo { }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r19 r">source</span>, <span class="r20 r">expected</span>, <span class="r7 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="85718098714ead31" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMultiLineXmlComments</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">source</span> = <span class="s">@&quot;
+/**
+* &lt;summary&gt;
+* Comment 
+* &lt;/summary&gt;
+*/
+class Foo { }&quot;</span>;
+            <b>const string</b> <span id="r22 rd" class="r22 r">expected</span> = <span class="s">@&quot;
+/**
+* &lt;summary&gt;
+* Comment
+* &lt;/summary&gt;
+*/
+class Foo { }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r21 r">source</span>, <span class="r22 r">expected</span>, <span class="r7 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

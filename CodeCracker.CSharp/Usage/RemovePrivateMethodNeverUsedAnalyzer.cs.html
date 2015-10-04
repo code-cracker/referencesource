@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemovePrivateMethodNeverUsedAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(95);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/RemovePrivateMethodNeverUsedAnalyzer.cs" target="_top">Usage\RemovePrivateMethodNeverUsedAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="a530fb7b1593ff67" href="../R/a530fb7b1593ff67.html" target="n" data-glyph="0,0" class="t"><span id="997de93d4432aba7">RemovePrivateMethodNeverUsedAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+ 
+        <b>internal const string</b> <a id="2fbc87161d094d52" href="../R/2fbc87161d094d52.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Unused Method&quot;</span>;
+        <b>internal const string</b> <a id="3c3e51648dec4300" href="../R/3c3e51648dec4300.html" target="n" data-glyph="8,1">Message</a> = <span class="s">&quot;Method is not used.&quot;</span>;
+        <b>internal const string</b> <a id="5285acd90a5b0e91" href="../R/5285acd90a5b0e91.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="33c4a42f42221bb7" href="../R/33c4a42f42221bb7.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;When a private method declared  does not used might bring incorrect conclusions.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="2e4fb30ca73b3e85" href="../R/2e4fb30ca73b3e85.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+             <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6001b257c1992b0e">RemovePrivateMethodNeverUsed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#2fbc87161d094d52">Title</a>,
+            <a href="#3c3e51648dec4300">Message</a>,
+            <a href="#5285acd90a5b0e91">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#33c4a42f42221bb7">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6001b257c1992b0e">RemovePrivateMethodNeverUsed</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="e2c19991c425c225" href="../R/e2c19991c425c225.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#2e4fb30ca73b3e85">Rule</a>);
+ 
+        <b>public override void</b> <a id="bdeec05a18e3e07f" href="../R/bdeec05a18e3e07f.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#3c531b3238cc0415">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f888c625ee964f4b">MethodDeclaration</a>);
+ 
+        <b>private static void</b> <a id="3c531b3238cc0415" href="../R/3c531b3238cc0415.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r5 rd" class="r5 r">methodDeclaration</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (<span class="r5 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7e2cc86c94e162db">ExplicitInterfaceSpecifier</a> != <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="k">var</a> <span id="r6 rd" class="r6 r">methodSymbol</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a80d18403a4c5ad2">GetDeclaredSymbol</a>(<span class="r5 r">methodDeclaration</span>);
+            <b>if</b> (<span class="r6 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0684dd47edcdbeff">DeclaredAccessibility</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#96ec9a52e8b1305b" class="t">Accessibility</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#42080aaf5bad0b91">Private</a>) <b>return</b>;
+            <b>if</b> (<a href="#f97b01aa5a489180">IsMethodUsed</a>(<span class="r5 r">methodDeclaration</span>, <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>)) <b>return</b>;
+            <b>if</b> (<a href="#80a2d33c052551c1">IsMainMethodEntryPoint</a>(<span class="r5 r">methodDeclaration</span>, <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>)) <b>return</b>;
+            <b>if</b> (<span class="r5 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21f487672c2ad64b">Any</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#547e20dfc16c45fd">ExternKeyword</a>)) <b>return</b>;
+            <b>var</b> <span id="r7 rd" class="r7 r">props</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt; { { <span class="s">&quot;identifier&quot;</span>, <span class="r5 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a> } }.ToImmutableDictionary();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r8 rd" class="r8 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#2e4fb30ca73b3e85">Rule</a>, <span class="r5 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r7 r">props</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r8 r">diagnostic</span>);
+        }
+ 
+        <b>private static bool</b> <a id="f97b01aa5a489180" href="../R/f97b01aa5a489180.html" target="n" data-glyph="76,1">IsMethodUsed</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r9 rd" class="r9 r">methodTarget</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r10 rd" class="r10 r">semanticModel</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="k">var</a> <span id="r11 rd" class="r11 r">typeDeclaration</span> = <span class="r9 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a>;
+            <b>if</b> (<span class="r11 r">typeDeclaration</span> == <b>null</b>) <b>return true</b>;
+ 
+            <b>if</b> (!<span class="r11 r">typeDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ed1423197b981825">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21f487672c2ad64b">Any</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#99956784a34266f9">PartialKeyword</a>))
+                <b>return</b> <a href="#883ea4b5ba9dcb4c">IsMethodUsed</a>(<span class="r9 r">methodTarget</span>, <span class="r11 r">typeDeclaration</span>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r12 rd" class="r12 r">symbol</span> = <span class="r10 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#11c7f4e436914356">GetDeclaredSymbol</a>(<span class="r11 r">typeDeclaration</span>);
+ 
+            <b>return</b>
+                <span class="r12 r">symbol</span> == <b>null</b> ||
+                <span class="r12 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>.Any(<span id="r13 rd" class="r13 r">reference</span> =&gt; <a href="#883ea4b5ba9dcb4c">IsMethodUsed</a>(<span class="r9 r">methodTarget</span>, <span class="r13 r">reference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4bca9697879fc0f6">GetSyntax</a>()));
+        }
+ 
+        <b>private static bool</b> <a id="883ea4b5ba9dcb4c" href="../R/883ea4b5ba9dcb4c.html" target="n" data-glyph="76,1">IsMethodUsed</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r14 rd" class="r14 r">methodTarget</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r15 rd" class="r15 r">typeDeclaration</span>)
+        {
+            <b>var</b> <span id="r16 rd" class="r16 r">descendents</span> = <span class="r15 r">typeDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>();
+            <b>var</b> <span id="r17 rd" class="r17 r">hasIdentifier</span> = <span class="r16 r">descendents</span>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>&gt;();
+            <b>if</b> (<span class="r17 r">hasIdentifier</span>.Any(<span id="r18 rd" class="r18 r">a</span> =&gt; <span class="r18 r">a</span> != <b>null</b> &amp;&amp; <span class="r18 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>.Equals(<span class="r14 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>)))
+                <b>return true</b>;
+            <b>var</b> <span id="r19 rd" class="r19 r">genericNames</span> = <span class="r16 r">descendents</span>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e8eac64ecc436e25" class="t">GenericNameSyntax</a>&gt;();
+            <b>return</b> <span class="r19 r">genericNames</span>.Any(<span id="r20 rd" class="r20 r">n</span> =&gt; <span class="r20 r">n</span> != <b>null</b> &amp;&amp; <span class="r20 r">n</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#95fd107eb52a9b4b">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>.Equals(<span class="r14 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>));
+        }
+ 
+        <b>private static bool</b> <a id="80a2d33c052551c1" href="../R/80a2d33c052551c1.html" target="n" data-glyph="76,1">IsMainMethodEntryPoint</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r21 rd" class="r21 r">methodTarget</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r22 rd" class="r22 r">semanticModel</span>)
+        {
+            <b>if</b> (!<span class="r21 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>.Equals(<span class="s">&quot;Main&quot;</span>, <span class="t">StringComparison</span>.Ordinal)) <b>return false</b>;
+            <b>if</b> (!<span class="r21 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21f487672c2ad64b">Any</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9a5af18d43921abb">StaticKeyword</a>)) <b>return false</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="k">var</a> <span id="r23 rd" class="r23 r">returnType</span> = <span class="r22 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#937bca6b4366cf65">GetTypeInfo</a>(<span class="r21 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2391566ab6c3f1ba">ReturnType</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>;
+            <b>if</b> (<span class="r23 r">returnType</span> == <b>null</b>) <b>return false</b>;
+            <b>if</b> (!<span class="r23 r">returnType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>.Equals(<span class="s">&quot;Void&quot;</span>, <span class="t">StringComparison</span>.OrdinalIgnoreCase) &amp;&amp;
+                !<span class="r23 r">returnType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>.Equals(<span class="s">&quot;Int32&quot;</span>, <span class="t">StringComparison</span>.OrdinalIgnoreCase))
+                <b>return false</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="k">var</a> <span id="r24 rd" class="r24 r">parameters</span> = <span class="r21 r">methodTarget</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#885475f5cb2513b6">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>;
+            <b>if</b> (<span class="r24 r">parameters</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> &gt; 1) <b>return false</b>;
+            <b>if</b> (<span class="r24 r">parameters</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> == 0) <b>return true</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="k">var</a> <span id="r25 rd" class="r25 r">parameterType</span> = <span class="r22 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#937bca6b4366cf65">GetTypeInfo</a>(<span class="r24 r">parameters</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed0e49a5740d359">First</a>().<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#03f908677efe1575">Type</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>;
+            <b>if</b> (!<span class="r25 r">parameterType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#001dbe54ab60ea5f">OriginalDefinition</a>.ToString().Equals(<span class="s">&quot;String[]&quot;</span>, <span class="t">StringComparison</span>.OrdinalIgnoreCase)) <b>return false</b>;
+            <b>return true</b>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

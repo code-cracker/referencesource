@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html><head><title>CatchEmptyTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(59);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Design/CatchEmptyTests.vb" target="_top">Design\CatchEmptyTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Design
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Design
+    <b>Public Class</b> <a id="27903e0e436e4338" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="9180302a17e9bcde">CatchEmptyTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#6075819765fbead0" class="t">CatchEmptyAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#18d17f522538223a" class="t">CatchEmptyCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a5fdae21bf408a7f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CatchEmptyAnalyserCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Async Function Foo() As Task
+            Try
+                &#39; Do something
+            Catch ex as Exception
+                Dim x = 0
+            End Try
+        End Function
+    End Class
+End Namespace&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="5721df766fef874b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenFindCatchEmptyThenPutExceptionClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Try
+                &#39; Do something
+            Catch
+                Dim x = 0
+            End Try
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r2 rd" class="r2 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo()
+            Try
+                &#39; Do something
+            Catch ex As Exception
+                Dim x = 0
+            End Try
+        End Sub
+    End Class
+End Namespace&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r1 r">source</span>, <span class="r2 r">fix</span>, 0)
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

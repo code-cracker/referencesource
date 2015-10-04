@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html><head><title>GeneratedCodeAnalysisExtensionsTests.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(407);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/GeneratedCodeAnalysisExtensionsTests.cs" target="_top">GeneratedCodeAnalysisExtensionsTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> FluentAssertions;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp
+{
+    <b>public class</b> <a id="f7a053f6f4835948" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="b01c188905af12a4">GeneratedCodeAnalysisExtensionsTests</span></a>
+    {
+        <b>private const string</b> <a id="a13e5760c07e1a1a" href="R/a13e5760c07e1a1a.html" target="n" data-glyph="10,1">baseProjectPath</a> = <span class="s">@&quot;D:\ClassLibrary11\&quot;</span>;
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.g.CS&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.g.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;B.g.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.g.i.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;B.g.i.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.designer.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.generated.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;B.generated.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;AssemblyInfo.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.AssemblyAttributes.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;B.AssemblyAttributes.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;AssemblyAttributes.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;Service.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_A.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_B.cs&quot;</span>)]
+        <b>public static void</b> <a id="c0d3b0a972306eac" href="R/../../0000000000.html" target="n" data-glyph="72,1">IsOnGeneratedFile</a>(<b>string</b> <span id="r0 rd" class="r0 r">fileName</span>) =&gt; <span class="r0 r">fileName</span>.<a href="/CodeCracker.Common/A.html#d2c79ffe8bcf600f">IsOnGeneratedFile</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TheAssemblyInfo.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;A.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TheTemporaryGeneratedFile_A.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TheService.cs&quot;</span>)]
+        [<span class="t">InlineData</span>(<a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TheAssemblyAttributes.cs&quot;</span>)]
+        <b>public static void</b> <a id="5da342559aeffff9" href="R/../../0000000000.html" target="n" data-glyph="72,1">IsNotOnGeneratedFile</a>(<b>string</b> <span id="r1 rd" class="r1 r">fileName</span>) =&gt; <span class="r1 r">fileName</span>.<a href="/CodeCracker.Common/A.html#d2c79ffe8bcf600f">IsOnGeneratedFile</a>().Should().BeFalse();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="acf191cf23116867" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_IsContextOnGeneratedFile</a>() =&gt;
+            <a href="#99ce73d09070ad99">GetSyntaxNodeAnalysisContext</a>(<span class="s">&quot;class TypeName { }&quot;</span>, <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_.cs&quot;</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="a3dc8c75b75ad815" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_IsContextOnGeneratedFile</a>() =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="s">&quot;class TypeName { }&quot;</span>, <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_.cs&quot;</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="bc9e230102e8505e" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxTreeAnalysis_IsContextOnGeneratedFile</a>() =&gt;
+            <a href="#bd4a1c07f492a9c3">GetSyntaxTreeAnalysisContext</a>(<span class="s">&quot;class TypeName { }&quot;</span>, <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_.cs&quot;</span>).<a href="/CodeCracker.CSharp/A.html#248a77262c748d6c">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.Diagnostics.DebuggerNonUserCode] class TypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.Diagnostics.DebuggerNonUserCodeAttribute] class TypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="04f8519c213dd5fe" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAClass</a>(<b>string</b> <span id="r2 rd" class="r2 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="r2 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.Diagnostics.DebuggerNonUserCode] class TypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.Diagnostics.DebuggerNonUserCodeAttribute] class TypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="3ed4e93eed443021" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAClass</a>(<b>string</b> <span id="r3 rd" class="r3 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="r3 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;using System.Diagnostics; [DebuggerNonUserCode] class TypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;using System.Diagnostics; [DebuggerNonUserCodeAttribute] class TypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="8a2fd07f57ba9610" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasAbbreviatedDebuggerNonUserCodeAttributeOnAClass</a>(<b>string</b> <span id="r4 rd" class="r4 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="r4 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;using System.Diagnostics; [DebuggerNonUserCode] class TypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;using System.Diagnostics; [DebuggerNonUserCodeAttribute] class TypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="bbc7f3b9155a2a0c" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasAbbreviatedDebuggerNonUserCodeAttributeOnAClass</a>(<b>string</b> <span id="r5 rd" class="r5 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="r5 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCode] void Foo() { } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCodeAttribute] void Foo() { } }&quot;</span>)]
+        <b>public static void</b> <a id="3e52e0dd2f09f07a" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAMethod</a>(<b>string</b> <span id="r6 rd" class="r6 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>&gt;(<span class="r6 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCode] void Foo() { } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCodeAttribute] void Foo() { } }&quot;</span>)]
+        <b>public static void</b> <a id="8f925e7700b84978" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAMethod</a>(<b>string</b> <span id="r7 rd" class="r7 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>&gt;(<span class="r7 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCode] void Foo() { System.Console.WriteLine(1); } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCodeAttribute] void Foo() { System.Console.WriteLine(1); } }&quot;</span>)]
+        <b>public static void</b> <a id="0d8c2c7e8f2b2309" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAStatementWithinAMethod</a>(<b>string</b> <span id="r8 rd" class="r8 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>&gt;(<span class="r8 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCode] void Foo() { var i = 1; } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCodeAttribute] void Foo() { var i = 1; } }&quot;</span>)]
+        <b>public static void</b> <a id="1d922476eb54e62a" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAStatementWithinAMethod</a>(<b>string</b> <span id="r9 rd" class="r9 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a>&gt;(<span class="r9 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCode] int Foo { get; set; } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCodeAttribute] int Foo { get; set; } }&quot;</span>)]
+        <b>public static void</b> <a id="c1567b343c70756d" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAProperty</a>(<b>string</b> <span id="r10 rd" class="r10 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="t">PropertyDeclarationSyntax</a>&gt;(<span class="r10 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCode] int Foo { get; set; } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.Diagnostics.DebuggerNonUserCodeAttribute] int Foo { get; set; } }&quot;</span>)]
+        <b>public static void</b> <a id="2fe59d60b160d567" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAProperty</a>(<b>string</b> <span id="r11 rd" class="r11 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#117d8f2f6e3276b5" class="t">PropertyDeclarationSyntax</a>&gt;(<span class="r11 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; [System.Diagnostics.DebuggerNonUserCode] int Foo { get { return foo; } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; [System.Diagnostics.DebuggerNonUserCodeAttribute] int Foo { get { return foo; } } }&quot;</span>)]
+        <b>public static void</b> <a id="c2fc58311fa6869c" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAPropertyCheckGet</a>(<b>string</b> <span id="r12 rd" class="r12 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r12 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; [System.Diagnostics.DebuggerNonUserCode] int Foo { get { return foo; } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; [System.Diagnostics.DebuggerNonUserCodeAttribute] int Foo { get { return foo; } } }&quot;</span>)]
+        <b>public static void</b> <a id="4a55b1c99b2aa6d0" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAPropertyCheckGet</a>(<b>string</b> <span id="r13 rd" class="r13 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r13 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCode] get { return foo; } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCodeAttribute] get { return foo; } } }&quot;</span>)]
+        <b>public static void</b> <a id="fbeb4756fc1bb6db" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAPropertyGet</a>(<b>string</b> <span id="r14 rd" class="r14 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r14 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCode] get { return foo; } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCodeAttribute] get { return foo; } } }&quot;</span>)]
+        <b>public static void</b> <a id="0004fd30929dd8d4" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAPropertyGet</a>(<b>string</b> <span id="r15 rd" class="r15 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r15 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCode] set { foo = value; } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCodeAttribute] set { foo = value; } } }&quot;</span>)]
+        <b>public static void</b> <a id="5e529161886fd21b" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasDebuggerNonUserCodeAttributeOnAPropertySet</a>(<b>string</b> <span id="r16 rd" class="r16 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r16 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCode] set { foo = value; } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { private int foo; int Foo { [System.Diagnostics.DebuggerNonUserCodeAttribute] set { foo = value; } } }&quot;</span>)]
+        <b>public static void</b> <a id="91447c4ae1d2bff5" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasDebuggerNonUserCodeAttributeOnAPropertySet</a>(<b>string</b> <span id="r17 rd" class="r17 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r17 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] class TypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] class TypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="dc2b912ce81c4775" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAClass</a>(<b>string</b> <span id="r18 rd" class="r18 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="r18 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] class TypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] class TypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="2480d5be641a4bde" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAClass</a>(<b>string</b> <span id="r19 rd" class="r19 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(<span class="r19 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] interface ITypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] interface ITypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="8e56429b3a11bcbb" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAnInterface</a>(<b>string</b> <span id="r20 rd" class="r20 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#260ed6457d1bea56" class="t">InterfaceDeclarationSyntax</a>&gt;(<span class="r20 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] interface ITypeName { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] interface ITypeName { }&quot;</span>)]
+        <b>public static void</b> <a id="a5e5facdda5059e1" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAnInterface</a>(<b>string</b> <span id="r21 rd" class="r21 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#260ed6457d1bea56" class="t">InterfaceDeclarationSyntax</a>&gt;(<span class="r21 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] enum A { a }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] enum A { a }&quot;</span>)]
+        <b>public static void</b> <a id="1bf6838143e60e3a" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnEnum</a>(<b>string</b> <span id="r22 rd" class="r22 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#79f10d58f910c0dc" class="t">EnumDeclarationSyntax</a>&gt;(<span class="r22 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] enum A { a }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] enum A { a }&quot;</span>)]
+        <b>public static void</b> <a id="c5bf1d28606f0e31" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnEnum</a>(<b>string</b> <span id="r23 rd" class="r23 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#79f10d58f910c0dc" class="t">EnumDeclarationSyntax</a>&gt;(<span class="r23 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] private int i; }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] private int i; }&quot;</span>)]
+        <b>public static void</b> <a id="636deb47fa709805" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAField</a>(<b>string</b> <span id="r24 rd" class="r24 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>&gt;(<span class="r24 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] private int i; }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] private int i; }&quot;</span>)]
+        <b>public static void</b> <a id="cb4fc6a4a611f68c" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAField</a>(<b>string</b> <span id="r25 rd" class="r25 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a>&gt;(<span class="r25 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] event System.Action a; }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] event System.Action a; }&quot;</span>)]
+        <b>public static void</b> <a id="9b764aec185aa5bb" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAnEventField</a>(<b>string</b> <span id="r26 rd" class="r26 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#235f9d42f8b7ed3c" class="t">EventFieldDeclarationSyntax</a>&gt;(<span class="r26 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] event System.Action a; }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] event System.Action a; }&quot;</span>)]
+        <b>public static void</b> <a id="8554166bcff2969a" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAnEventField</a>(<b>string</b> <span id="r27 rd" class="r27 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a>&gt;(<span class="r27 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        <b>public static void</b> <a id="de1445340515ac70" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAnEventDeclaration</a>(<b>string</b> <span id="r28 rd" class="r28 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#18e71d51f69a42d9" class="t">EventDeclarationSyntax</a>&gt;(<span class="r28 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        <b>public static void</b> <a id="2b55faa6a2110dfd" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAnEventDeclaration</a>(<b>string</b> <span id="r29 rd" class="r29 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#18e71d51f69a42d9" class="t">EventDeclarationSyntax</a>&gt;(<span class="r29 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        <b>public static void</b> <a id="c61beeb8804aa4b5" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAnEventDeclarationCheckingAccessor</a>(<b>string</b> <span id="r30 rd" class="r30 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r30 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] event EventHandler A { add { } remove { } } }&quot;</span>)]
+        <b>public static void</b> <a id="acc2c13777765e4b" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAnEventDeclarationCheckingAccessor</a>(<b>string</b> <span id="r31 rd" class="r31 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r31 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { event EventHandler A { [System.CodeDom.Compiler.GeneratedCode(null, null)] add { } remove { } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { event EventHandler A { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] add { } remove { } } }&quot;</span>)]
+        <b>public static void</b> <a id="9b880470a2048e57" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnAnEventDeclarationAccessor</a>(<b>string</b> <span id="r32 rd" class="r32 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r32 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { event EventHandler A { [System.CodeDom.Compiler.GeneratedCode(null, null)] add { } remove { } } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { event EventHandler A { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] add { } remove { } } }&quot;</span>)]
+        <b>public static void</b> <a id="1f38854c88055bb8" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnAnEventDeclarationAccessor</a>(<b>string</b> <span id="r33 rd" class="r33 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;(<span class="r33 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { void Foo([System.CodeDom.Compiler.GeneratedCode(null, null)] int i) { } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { void Foo([System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] int i) { } }&quot;</span>)]
+        <b>public static void</b> <a id="ea1cbfee155c096d" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnParameter</a>(<b>string</b> <span id="r34 rd" class="r34 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>&gt;(<span class="r34 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { void Foo([System.CodeDom.Compiler.GeneratedCode(null, null)] int i) { } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { void Foo([System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] int i) { } }&quot;</span>)]
+        <b>public static void</b> <a id="7b6c56217dfbaf17" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnParameter</a>(<b>string</b> <span id="r35 rd" class="r35 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>&gt;(<span class="r35 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] delegate void A(); }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] delegate void A(); }&quot;</span>)]
+        <b>public static void</b> <a id="ad2d1d88a2981457" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnDelegate</a>(<b>string</b> <span id="r36 rd" class="r36 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>&gt;(<span class="r36 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCode(null, null)] delegate void A(); }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName { [System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] delegate void A(); }&quot;</span>)]
+        <b>public static void</b> <a id="34b30332101776b9" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnDelegate</a>(<b>string</b> <span id="r37 rd" class="r37 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#adfe91868cac3737" class="t">DelegateDeclarationSyntax</a>&gt;(<span class="r37 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName {[return: System.CodeDom.Compiler.GeneratedCode(null, null)] int Foo() { return 1; } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class TypeName {[return: System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] int Foo() { return 1; } }&quot;</span>)]
+        <b>public static void</b> <a id="254feadd042e82df" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnReturnValue</a>(<b>string</b> <span id="r38 rd" class="r38 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7b882edb31b3369a" class="t">ReturnStatementSyntax</a>&gt;(<span class="r38 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] class TypeName { struct Nested { } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] class TypeName { struct Nested { } }&quot;</span>)]
+        <b>public static void</b> <a id="b36f2d9ce765a3b3" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_HasGeneratedCodeAttributeOnNestedClass</a>(<b>string</b> <span id="r39 rd" class="r39 r">source</span>) =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8cfe7b539562640d" class="t">StructDeclarationSyntax</a>&gt;(<span class="r39 r">source</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCode(null, null)] class TypeName { struct Nested { } }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;[System.CodeDom.Compiler.GeneratedCodeAttribute(null, null)] class TypeName { struct Nested { } }&quot;</span>)]
+        <b>public static void</b> <a id="e5794ce17970d30f" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_HasGeneratedCodeAttributeOnNestedClass</a>(<b>string</b> <span id="r40 rd" class="r40 r">source</span>) =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8cfe7b539562640d" class="t">StructDeclarationSyntax</a>&gt;(<span class="r40 r">source</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="97cc2d0a265cf1b5" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_WithAutoGeneratedCommentBasedOnWebForms</a>() =&gt;
+            <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(
+<span class="s">@&quot;//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+ 
+namespace WebApplication3
+{
+    public partial class _Default
+    {
+    }
+}&quot;</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="93b85c9bf779c246" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxTreeAnalysis_WithAutoGeneratedCommentBasedOnWebForms</a>() =&gt;
+            <a href="#bd4a1c07f492a9c3">GetSyntaxTreeAnalysisContext</a>(
+<span class="s">@&quot;//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+ 
+namespace WebApplication3
+{
+    public partial class _Default
+    {
+    }
+}&quot;</span>).<a href="/CodeCracker.CSharp/A.html#248a77262c748d6c">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="0bd839fd3c7d46d0" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxTreeAnalysis_WithAutoGeneratedCommentEmpty</a>() =&gt;
+            <a href="#bd4a1c07f492a9c3">GetSyntaxTreeAnalysisContext</a>(
+<span class="s">@&quot;//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------&quot;</span>).<a href="/CodeCracker.CSharp/A.html#248a77262c748d6c">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="7a38d06b802745b1" href="R/../../0000000000.html" target="n" data-glyph="72,1">SymbolicAnalysis_WithAutoGeneratedCommentBasedOnWebForms</a>() =&gt;
+            <a href="#c185c5cdec50d967">GetSymbolAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0769193bf6c7311f" class="t">ClassDeclarationSyntax</a>&gt;(
+<span class="s">@&quot;//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+ 
+namespace WebApplication3
+{
+    public partial class _Default
+    {
+    }
+}&quot;</span>).<a href="/CodeCracker.CSharp/A.html#2fdf5467e5e35082">IsGenerated</a>().Should().BeTrue();
+ 
+        [<span class="t">Fact</span>]
+        <b>public static void</b> <a id="054c9f38b3b63e9a" href="R/../../0000000000.html" target="n" data-glyph="72,1">SyntaxNodeAnalysis_WithAutoGeneratedCommentEmpty</a>() =&gt;
+            <a href="#99ce73d09070ad99">GetSyntaxNodeAnalysisContext</a>(
+<span class="s">@&quot;//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------&quot;</span>).<a href="/CodeCracker.CSharp/A.html#009121599af66016">IsGenerated</a>().Should().BeTrue();
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <a id="99ce73d09070ad99" href="R/99ce73d09070ad99.html" target="n" data-glyph="76,1">GetSyntaxNodeAnalysisContext</a>(<b>string</b> <span id="r41 rd" class="r41 r">code</span>, <b>string</b> <span id="r42 rd" class="r42 r">fileName</span> = <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;a.cs&quot;</span>) =&gt; <a href="#c2cca6b1026e7163">GetSyntaxNodeAnalysisContext</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a>&gt;(<span class="r41 r">code</span>, <span class="r42 r">fileName</span>);
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <a id="c2cca6b1026e7163" href="R/c2cca6b1026e7163.html" target="n" data-glyph="76,1">GetSyntaxNodeAnalysisContext</a>&lt;<span id="r43 rd t" class="r43 r t">T</span>&gt;(<b>string</b> <span id="r44 rd" class="r44 r">code</span>, <b>string</b> <span id="r45 rd" class="r45 r">fileName</span> = <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;a.cs&quot;</span>) <b>where</b> <span class="r43 r t">T</span> : <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="k">var</a> <span id="r46 rd" class="r46 r">tree</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7db6ea0c0ecc7675">ParseSyntaxTree</a>(<span class="r44 r">code</span>, <span class="r47 r">path</span>: <span class="r45 r">fileName</span>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2feff326a54617bb" class="k">var</a> <span id="r48 rd" class="r48 r">compilation</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2feff326a54617bb" class="t">CSharpCompilation</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#cb0be8b9d3027ce8">Create</a>(<span class="s">&quot;comp.dll&quot;</span>, <b>new</b>[] { <span class="r46 r">tree</span> });
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r49 rd" class="r49 r">root</span> = <span class="r46 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r50 rd" class="r50 r">semanticModel</span> = <span class="r48 r">compilation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#53e11cf29c3c4036">GetSemanticModel</a>(<span class="r46 r">tree</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#ca6a55d28dddda74" class="k">var</a> <span id="r51 rd" class="r51 r">analyzerOptions</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2ce0645d852c5702" class="t">AnalyzerOptions</a>(<span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#b8deffdb74556ee2" class="t">AdditionalText</a>&gt;.Empty);
+            <span class="r43 r t">var</span> <span id="r52 rd" class="r52 r">node</span> = <span class="r49 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0486ce360964263b">DescendantNodesAndSelf</a>().<a href="@0@System.Core/A.html#4ba4a3f8a5530e33">OfType</a>&lt;<span class="r43 r t">T</span>&gt;().<a href="@0@System.Core/A.html#bc8ae402a61dd9d6">First</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="k">var</a> <span id="r53 rd" class="r53 r">context</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2712bb715ffcdbb5" class="t">SyntaxNodeAnalysisContext</a>(<span class="r52 r">node</span>, <span class="r50 r">semanticModel</span>, <span class="r51 r">analyzerOptions</span>, <span id="r54 rd" class="r54 r">diag</span> =&gt; { }, <span id="r55 rd" class="r55 r">diag</span> =&gt; <b>true</b>, <b>default</b>(<a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>));
+            <b>return</b> <span class="r53 r">context</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a> <a id="c185c5cdec50d967" href="R/c185c5cdec50d967.html" target="n" data-glyph="76,1">GetSymbolAnalysisContext</a>&lt;<span id="r56 rd t" class="r56 r t">T</span>&gt;(<b>string</b> <span id="r57 rd" class="r57 r">code</span>, <b>string</b> <span id="r58 rd" class="r58 r">fileName</span> = <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;a.cs&quot;</span>) <b>where</b> <span class="r56 r t">T</span> : <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="k">var</a> <span id="r59 rd" class="r59 r">tree</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7db6ea0c0ecc7675">ParseSyntaxTree</a>(<span class="r57 r">code</span>, <span class="r47 r">path</span>: <span class="r58 r">fileName</span>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2feff326a54617bb" class="k">var</a> <span id="r60 rd" class="r60 r">compilation</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2feff326a54617bb" class="t">CSharpCompilation</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#cb0be8b9d3027ce8">Create</a>(<span class="s">&quot;comp.dll&quot;</span>, <b>new</b>[] { <span class="r59 r">tree</span> });
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r61 rd" class="r61 r">root</span> = <span class="r59 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r62 rd" class="r62 r">semanticModel</span> = <span class="r60 r">compilation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#53e11cf29c3c4036">GetSemanticModel</a>(<span class="r59 r">tree</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#ca6a55d28dddda74" class="k">var</a> <span id="r63 rd" class="r63 r">analyzerOptions</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2ce0645d852c5702" class="t">AnalyzerOptions</a>(<span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#b8deffdb74556ee2" class="t">AdditionalText</a>&gt;.Empty);
+            <span class="r56 r t">var</span> <span id="r64 rd" class="r64 r">node</span> = <span class="r61 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0486ce360964263b">DescendantNodesAndSelf</a>().<a href="@0@System.Core/A.html#4ba4a3f8a5530e33">OfType</a>&lt;<span class="r56 r t">T</span>&gt;().<a href="@0@System.Core/A.html#bc8ae402a61dd9d6">First</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r65 rd" class="r65 r">symbol</span> = <span class="r62 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d0ce5ad095fe519">GetSymbolInfo</a>(<span class="r64 r">node</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <b>if</b> (<span class="r65 r">symbol</span> == <b>null</b>) <span class="r65 r">symbol</span> = <span class="r62 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8ee3f65d466216e">GetDeclaredSymbol</a>(<span class="r64 r">node</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="k">var</a> <span id="r66 rd" class="r66 r">context</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#983dadcb6ac5fbc7" class="t">SymbolAnalysisContext</a>(<span class="r65 r">symbol</span>, <span class="r60 r">compilation</span>, <span class="r63 r">analyzerOptions</span>, <span id="r67 rd" class="r67 r">diag</span> =&gt; { }, <span id="r68 rd" class="r68 r">diag</span> =&gt; <b>true</b>, <b>default</b>(<a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>));
+            <b>return</b> <span class="r66 r">context</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#90d92645ff9f3d2f" class="t">SyntaxTreeAnalysisContext</a> <a id="bd4a1c07f492a9c3" href="R/bd4a1c07f492a9c3.html" target="n" data-glyph="76,1">GetSyntaxTreeAnalysisContext</a>(<b>string</b> <span id="r69 rd" class="r69 r">code</span>, <b>string</b> <span id="r70 rd" class="r70 r">fileName</span> = <a href="#a13e5760c07e1a1a">baseProjectPath</a> + <span class="s">&quot;a.cs&quot;</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="k">var</a> <span id="r71 rd" class="r71 r">tree</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7db6ea0c0ecc7675">ParseSyntaxTree</a>(<span class="r69 r">code</span>, <span class="r47 r">path</span>: <span class="r70 r">fileName</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#ca6a55d28dddda74" class="k">var</a> <span id="r72 rd" class="r72 r">analyzerOptions</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2ce0645d852c5702" class="t">AnalyzerOptions</a>(<span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#b8deffdb74556ee2" class="t">AdditionalText</a>&gt;.Empty);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#90d92645ff9f3d2f" class="k">var</a> <span id="r73 rd" class="r73 r">context</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#473d8d0d622a26a0" class="t">SyntaxTreeAnalysisContext</a>(<span class="r71 r">tree</span>, <span class="r72 r">analyzerOptions</span>, <span id="r74 rd" class="r74 r">diag</span> =&gt; { }, <span id="r75 rd" class="r75 r">diag</span> =&gt; <b>true</b>, <b>default</b>(<a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>));
+            <b>return</b> <span class="r73 r">context</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

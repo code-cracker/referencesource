@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html><head><title>RedundantFieldAssignmentAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(143);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/RedundantFieldAssignmentAnalyzer.cs" target="_top">Usage\RedundantFieldAssignmentAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="4de6b2d3e79e995b" href="../R/4de6b2d3e79e995b.html" target="n" data-glyph="0,0" class="t"><span id="682cbc3b023ae809">RedundantFieldAssignmentAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="4f43595573a2dc98" href="../R/4f43595573a2dc98.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Redundant field assignment&quot;</span>;
+        <b>internal const string</b> <a id="5732f77ecd800752" href="../R/5732f77ecd800752.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Field {0} is assigning to default value {1}. Remove the assignment.&quot;</span>;
+        <b>internal const string</b> <a id="e3e1bdd61ae55fa5" href="../R/e3e1bdd61ae55fa5.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="acfa7c910118a7dc" href="../R/acfa7c910118a7dc.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;It&#39;s recommend not to assign the default value to a field as a performance optimization.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="924f82a1e3d92092" href="../R/924f82a1e3d92092.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#4ee3f946cabd0c36">RedundantFieldAssignment</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#4f43595573a2dc98">Title</a>,
+            <a href="#5732f77ecd800752">MessageFormat</a>,
+            <a href="#e3e1bdd61ae55fa5">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">customTags</span>: <a href="@1@Microsoft.CodeAnalysis/A.html#03ef56ba68ffca36" class="t">WellKnownDiagnosticTags</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#4312437e59bf4b2d">Unnecessary</a>,
+            <span class="r2 r">description</span>: <a href="#acfa7c910118a7dc">Description</a>,
+            <span class="r3 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#4ee3f946cabd0c36">RedundantFieldAssignment</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="5c2de31ab1ed9e3f" href="../R/5c2de31ab1ed9e3f.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#924f82a1e3d92092">Rule</a>);
+ 
+        <b>public override void</b> <a id="f6e0659ece5473b0" href="../R/f6e0659ece5473b0.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>) =&gt; <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#960db2f030b6fbad">AnalyzeFieldDeclaration</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bd66e06e32389030">FieldDeclaration</a>);
+ 
+        <b>private static void</b> <a id="960db2f030b6fbad" href="../R/960db2f030b6fbad.html" target="n" data-glyph="76,1">AnalyzeFieldDeclaration</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r5 rd" class="r5 r">context</span>)
+        {
+            <b>if</b> (<span class="r5 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="k">var</a> <span id="r6 rd" class="r6 r">fieldDeclaration</span> = <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="k">var</a> <span id="r7 rd" class="r7 r">variable</span> = <span class="r6 r">fieldDeclaration</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c49a28b1ba615695">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#362a4c6155793e15">LastOrDefault</a>();
+            <b>if</b> (<span class="r7 r">variable</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<span class="r6 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8ee2483e955bd570">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21f487672c2ad64b">Any</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3342344fece4043d">ConstKeyword</a>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="k">var</a> <span id="r8 rd" class="r8 r">initializerValue</span> = <span class="r7 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a>;
+            <b>if</b> (<span class="r8 r">initializerValue</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52d3c94fa2fb983a">DefaultExpression</a>))
+            {
+                <a href="#7741ccf98b3d1c6d">ReportDiagnostic</a>(<span class="r5 r">context</span>, <span class="r7 r">variable</span>, <span class="r8 r">initializerValue</span>);
+                <b>return</b>;
+            }
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r9 rd" class="r9 r">semanticModel</span> = <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="k">var</a> <span id="r10 rd" class="r10 r">fieldSymbol</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#01b404a339e77444">GetDeclaredSymbol</a>(<span class="r7 r">variable</span>) <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>;
+            <b>if</b> (<span class="r10 r">fieldSymbol</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (!<a href="#7e528245544f82e7">IsAssigningToDefault</a>(<span class="r10 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#823c491f63842556">Type</a>, <span class="r8 r">initializerValue</span>, <span class="r9 r">semanticModel</span>)) <b>return</b>;
+            <a href="#7741ccf98b3d1c6d">ReportDiagnostic</a>(<span class="r5 r">context</span>, <span class="r7 r">variable</span>, <span class="r8 r">initializerValue</span>);
+        }
+ 
+        <b>private static void</b> <a id="7741ccf98b3d1c6d" href="../R/7741ccf98b3d1c6d.html" target="n" data-glyph="76,1">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r11 rd" class="r11 r">context</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a> <span id="r12 rd" class="r12 r">variable</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r13 rd" class="r13 r">initializerValue</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r14 rd" class="r14 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#924f82a1e3d92092">Rule</a>, <span class="r12 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r12 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>, <span class="r13 r">initializerValue</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>());
+            <span class="r11 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r14 r">diag</span>);
+        }
+ 
+        <b>private static bool</b> <a id="7e528245544f82e7" href="../R/7e528245544f82e7.html" target="n" data-glyph="76,1">IsAssigningToDefault</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="t">ITypeSymbol</a> <span id="r15 rd" class="r15 r">fieldType</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r16 rd" class="r16 r">initializerValue</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r17 rd" class="r17 r">semanticModel</span>)
+        {
+            <b>if</b> (<span class="r15 r">fieldType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#ceee05362776c494">IsReferenceType</a>)
+            {
+                <b>if</b> (!<span class="r16 r">initializerValue</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b7fbcbea9b2d3554">NullLiteralExpression</a>)) <b>return false</b>;
+            }
+            <b>else</b>
+            {
+                <b>if</b> (!<a href="#1e561f5306ae19e5">IsValueTypeAssigningToDefault</a>(<span class="r15 r">fieldType</span>, <span class="r16 r">initializerValue</span>, <span class="r17 r">semanticModel</span>)) <b>return false</b>;
+            }
+            <b>return true</b>;
+        }
+ 
+        <b>private static bool</b> <a id="1e561f5306ae19e5" href="../R/1e561f5306ae19e5.html" target="n" data-glyph="76,1">IsValueTypeAssigningToDefault</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="t">ITypeSymbol</a> <span id="r18 rd" class="r18 r">fieldType</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r19 rd" class="r19 r">initializerValue</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r20 rd" class="r20 r">semanticModel</span>)
+        {
+            <b>switch</b> (<span class="r18 r">fieldType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a>)
+            {
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#55ffa1f9765df31a">System_Boolean</a>:
+                    {
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r21 rd" class="r21 r">literal</span> = <span class="r19 r">initializerValue</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+                        <b>if</b> (<span class="r21 r">literal</span> == <b>null</b>) <b>return false</b>;
+                        <b>var</b> <span id="r22 rd" class="r22 r">boolValue</span> = (<b>bool</b>)<span class="r21 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>;
+                        <b>if</b> (<span class="r22 r">boolValue</span>) <b>return false</b>;
+                        <b>break</b>;
+                    }
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ac556df001854df">System_SByte</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a7cb177ce51aa064">System_Byte</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#23a048266dd32739">System_Int16</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#4a48829d1473d438">System_UInt16</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#48057de3124afdf0">System_Int32</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#55958815a557d8eb">System_UInt32</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8b3b6b6dec3da72c">System_Int64</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e05ccc8ab1974ea0">System_UInt64</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bdae502a8f7ea3e5">System_Decimal</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9584b319d68bc505">System_Single</a>:
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2b30a7ed761f2fee">System_Double</a>:
+                    <b>if</b> (<span class="r19 r">initializerValue</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>() != <span class="s">&quot;0&quot;</span>)
+                    {
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r23 rd" class="r23 r">literal</span> = <span class="r19 r">initializerValue</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+                        <b>if</b> (<span class="r23 r">literal</span> == <b>null</b>) <b>return false</b>;
+                        <b>var</b> <span id="r24 rd" class="r24 r">possibleZero</span> = <span class="t">Convert</span>.ToDouble(<span class="r23 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>);
+                        <b>if</b> (<span class="r24 r">possibleZero</span> != 0) <b>return false</b>;
+                    }
+                    <b>break</b>;
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#29d1bfe1e6fa052c">System_IntPtr</a>:
+                    {
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r25 rd" class="r25 r">memberAccess</span> = <span class="r19 r">initializerValue</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+                        <b>if</b> (<span class="r25 r">memberAccess</span> == <b>null</b>) <b>return false</b>;
+                        <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="k">var</a> <span id="r26 rd" class="r26 r">memberAccessFieldSymbol</span> = <span class="r20 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r25 r">memberAccess</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>;
+                        <b>if</b> (<span class="r26 r">memberAccessFieldSymbol</span>?.ToString() != <span class="s">&quot;System.IntPtr.Zero&quot;</span>) <b>return false</b>;
+                        <b>break</b>;
+                    }
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#284e1c4a6e4e07f4">System_UIntPtr</a>:
+                    {
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r27 rd" class="r27 r">memberAccess</span> = <span class="r19 r">initializerValue</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+                        <b>if</b> (<span class="r27 r">memberAccess</span> == <b>null</b>) <b>return false</b>;
+                        <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="k">var</a> <span id="r28 rd" class="r28 r">memberAccessFieldSymbol</span> = <span class="r20 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r27 r">memberAccess</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>;
+                        <b>if</b> (<span class="r28 r">memberAccessFieldSymbol</span>?.ToString() != <span class="s">&quot;System.UIntPtr.Zero&quot;</span>) <b>return false</b>;
+                        <b>break</b>;
+                    }
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#19f4fa21e8ff0c6f">System_DateTime</a>:
+                    {
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r29 rd" class="r29 r">memberAccess</span> = <span class="r19 r">initializerValue</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+                        <b>if</b> (<span class="r29 r">memberAccess</span> == <b>null</b>) <b>return false</b>;
+                        <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="k">var</a> <span id="r30 rd" class="r30 r">memberAccessFieldSymbol</span> = <span class="r20 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r29 r">memberAccess</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>;
+                        <b>if</b> (<span class="r30 r">memberAccessFieldSymbol</span>?.ToString() != <span class="s">&quot;System.DateTime.MinValue&quot;</span>) <b>return false</b>;
+                        <b>break</b>;
+                    }
+                <span class="c">//case SpecialType.System_Enum: //does not work, enums come back as none. Bug on roslyn? See solution below.</span>
+                <b>default</b>:
+                    <b>if</b> (<span class="r18 r">fieldType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#284ec7250c7ee0f7">Enum</a>) <b>return false</b>;
+                    <b>if</b> (<span class="r19 r">initializerValue</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>() != <span class="s">&quot;0&quot;</span>)
+                    {
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r31 rd" class="r31 r">literal</span> = <span class="r19 r">initializerValue</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+                        <b>if</b> (<span class="r31 r">literal</span> == <b>null</b>) <b>return false</b>;
+                        <b>var</b> <span id="r32 rd" class="r32 r">possibleZero</span> = <span class="t">Convert</span>.ToDouble(<span class="r31 r">literal</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#16a27924913bd6b0">Value</a>);
+                        <b>if</b> (<span class="r32 r">possibleZero</span> != 0) <b>return false</b>;
+                    }
+                    <b>break</b>;
+            }
+            <b>return true</b>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,14 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseStaticRegexIsMatchCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">5 references to UseStaticRegexIsMatchCodeFixProvider</div><div class="rA">CodeCracker.CSharp (4)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Performance\UseStaticRegexIsMatchCodeFixProvider.cs (4)</div>
+<a href="../Performance/UseStaticRegexIsMatchCodeFixProvider.cs.html#14"><b>14</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>UseStaticRegexIsMatchCodeFixProvider</i>)), Shared]</a>
+<a href="../Performance/UseStaticRegexIsMatchCodeFixProvider.cs.html#25"><b>25</b>context.RegisterCodeFix(CodeAction.Create(&quot;Use static Regex.IsMatch&quot;, c =&gt; UseStaticRegexIsMatchAsync(context.Document, diagnostic, c), nameof(<i>UseStaticRegexIsMatchCodeFixProvider</i>) + nameof(UseStaticRegexIsMatchAsync)), diagnostic);</a>
+<a href="../Performance/UseStaticRegexIsMatchCodeFixProvider.cs.html#26"><b>26</b>context.RegisterCodeFix(CodeAction.Create(&quot;Use static and compiled Regex.IsMatch&quot;, c =&gt; UseCompiledAndStaticRegexAsync(context.Document, diagnostic, c), nameof(<i>UseStaticRegexIsMatchCodeFixProvider</i>) + nameof(UseCompiledAndStaticRegexAsync)), diagnostic);</a>
+<a href="../Performance/UseStaticRegexIsMatchCodeFixProvider.cs.html#27"><b>27</b>context.RegisterCodeFix(CodeAction.Create(&quot;Use Compiled Regex&quot;, c =&gt; UseCompiledRegexAsync(context.Document, diagnostic, c), nameof(<i>UseStaticRegexIsMatchCodeFixProvider</i>) + nameof(UseCompiledRegexAsync)), diagnostic);</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Performance\UseStaticRegexIsMatchTests.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Performance/UseStaticRegexIsMatchTests.cs.html#8"><b>8</b>public class UseStaticRegexIsMatchTests : CodeFixVerifier&lt;UseStaticRegexIsMatchAnalyzer, <i>UseStaticRegexIsMatchCodeFixProvider</i>&gt;</a>
+</div>
+</div>
+</body></html>

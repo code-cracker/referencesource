@@ -1,0 +1,6 @@
+﻿src\Common\CodeCracker.Common\CodeCracker.Common.csproj
+src\CSharp\CodeCracker\CodeCracker.csproj
+src\VisualBasic\CodeCracker\CodeCracker.vbproj
+test\Common\CodeCracker.Test.Common\CodeCracker.Test.Common.csproj
+test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj
+test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj

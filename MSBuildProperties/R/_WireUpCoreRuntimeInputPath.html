@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<html><head><title>_WireUpCoreRuntimeInputPath</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">1 assignment to MSBuild property _WireUpCoreRuntimeInputPath</div><div class="rA">MSBuildFiles (1)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\.NetNative\Microsoft.Net.CoreRuntime.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#114"><b>114</b>&lt;Output TaskParameter=&quot;AbsolutePaths&quot; PropertyName=&quot;<i>_WireUpCoreRuntimeInputPath</i>&quot;/&gt;</a>
+</div>
+</div>
+<div class="rH">6 usages of MSBuild property _WireUpCoreRuntimeInputPath</div><div class="rA">MSBuildFiles (6)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\.NetNative\Microsoft.Net.CoreRuntime.targets (6)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#209"><b>209</b>Outputs=&quot;@(AppxPackagePayload -&gt; &#39;$(<i>_WireUpCoreRuntimeInputPath</i>)%(TargetPath)&#39;);@(FinalAppxManifest -&gt; &#39;$(<i>_WireUpCoreRuntimeInputPath</i>)%(Filename)%(Extension)&#39;)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#215"><b>215</b>&lt;_WireUpCoreRuntimeInputPayload Include=&quot;@(AppxPackagePayload-&gt;&#39;$(<i>_WireUpCoreRuntimeInputPath</i>)%(TargetPath)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#232"><b>232</b>DestinationFolder=&quot;$(<i>_WireUpCoreRuntimeInputPath</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#258"><b>258</b>&lt;AppLocalFrameworkLibsFiltered Include=&quot;@(AppLocalFrameworkLibsUnfiltered)&quot; Condition=&quot;!Exists(&#39;$(<i>_WireUpCoreRuntimeInputPath</i>)%(Filename)%(Extension)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#384"><b>384</b>AppxPackageInput=&quot;$(<i>_WireUpCoreRuntimeInputPath</i>.TrimEnd(&#39;\&#39;))&quot;</a>
+</div>
+</div>
+</body></html>

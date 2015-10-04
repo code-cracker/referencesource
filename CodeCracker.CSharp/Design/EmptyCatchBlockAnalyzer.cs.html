@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyCatchBlockAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/EmptyCatchBlockAnalyzer.cs" target="_top">Design\EmptyCatchBlockAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="8635c873924fa8e1" href="../R/8635c873924fa8e1.html" target="n" data-glyph="0,0" class="t"><span id="70efed0812857d80">EmptyCatchBlockAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="df95afdd84362307" href="../R/df95afdd84362307.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Catch block cannot be empty&quot;</span>;
+        <b>internal const string</b> <a id="648179a81f698007" href="../R/648179a81f698007.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="5de9133d2f793ab3" href="../R/5de9133d2f793ab3.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>;
+        <b>const string</b> <a id="4e0f024f9852e9af" href="../R/4e0f024f9852e9af.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;An empty catch block suppress all errors and shouldn&#39;t be used.\r\n&quot;</span>
+            +<span class="s">&quot;If the error is expected consider logging it or changing the control flow such that it is explicit.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="8d2afd5a53cdcc65" href="../R/8d2afd5a53cdcc65.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#875dd9780f6cb85c">EmptyCatchBlock</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#df95afdd84362307">Title</a>,
+            <a href="#648179a81f698007">MessageFormat</a>,
+            <a href="#5de9133d2f793ab3">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#4e0f024f9852e9af">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#875dd9780f6cb85c">EmptyCatchBlock</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="bc09275888bfba95" href="../R/bc09275888bfba95.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#8d2afd5a53cdcc65">Rule</a>);
+ 
+        <b>public override void</b> <a id="71d704113d7cf4b4" href="../R/71d704113d7cf4b4.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#1f47b9edaf0e3a48">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a654ecbb9afb11d0">CatchClause</a>);
+ 
+        <b>private static void</b> <a id="1f47b9edaf0e3a48" href="../R/1f47b9edaf0e3a48.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8df4eebb38b3deda" class="k">var</a> <span id="r5 rd" class="r5 r">catchStatement</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8df4eebb38b3deda" class="t">CatchClauseSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (<span class="r5 r">catchStatement</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff66c78015ab4a82">Block</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bc3b9b57b05e7d0">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#83189d65513d4ea2">Count</a> != 0) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r6 rd" class="r6 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#8d2afd5a53cdcc65">Rule</a>, <span class="r5 r">catchStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="s">&quot;Empty Catch Block.&quot;</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r6 r">diagnostic</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

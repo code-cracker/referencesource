@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html>
+<html><head><title>SplitIntoNestedIfCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">7 references to SplitIntoNestedIfCodeFixProvider</div><div class="rA">CodeCracker.CSharp (6)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfCodeFixProvider.cs (2)</div>
+<a href="../Refactoring/SplitIntoNestedIfCodeFixProvider.cs.html#16"><b>16</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>SplitIntoNestedIfCodeFixProvider</i>)), Shared]</a>
+<a href="../Refactoring/SplitIntoNestedIfCodeFixProvider.cs.html#29"><b>29</b>context.RegisterCodeFix(CodeAction.Create(MessageFormat, c =&gt; CreateNestedIfAsync(context.Document, diagnostic.Location, c), nameof(<i>SplitIntoNestedIfCodeFixProvider</i>)), diagnostic);</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfFixAllProvider.cs (4)</div>
+<a href="../Refactoring/SplitIntoNestedIfFixAllProvider.cs.html#20"><b>20</b>return Task.FromResult(CodeAction.Create(<i>SplitIntoNestedIfCodeFixProvider</i>.MessageFormat,</a>
+<a href="../Refactoring/SplitIntoNestedIfFixAllProvider.cs.html#23"><b>23</b>return Task.FromResult(CodeAction.Create(<i>SplitIntoNestedIfCodeFixProvider</i>.MessageFormat,</a>
+<a href="../Refactoring/SplitIntoNestedIfFixAllProvider.cs.html#26"><b>26</b>return Task.FromResult(CodeAction.Create(<i>SplitIntoNestedIfCodeFixProvider</i>.MessageFormat,</a>
+<a href="../Refactoring/SplitIntoNestedIfFixAllProvider.cs.html#62"><b>62</b>newRoot = <i>SplitIntoNestedIfCodeFixProvider</i>.CreateNestedIf(condition, newRoot);</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfTests.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Refactoring/SplitIntoNestedIfTests.cs.html#8"><b>8</b>public class SplitIntoNestedIfTests : CodeFixVerifier&lt;SplitIntoNestedIfAnalyzer, <i>SplitIntoNestedIfCodeFixProvider</i>&gt;</a>
+</div>
+</div>
+</body></html>

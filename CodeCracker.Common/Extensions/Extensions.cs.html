@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html><head><title>Extensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(28);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Common/Extensions/Extensions.cs" target="_top">Extensions\Extensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Common" target="_top">src\Common\CodeCracker.Common\CodeCracker.Common.csproj</a> (CodeCracker.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+ 
+<b>namespace</b> CodeCracker
+{
+    <b>public static class</b> <a id="25d677bf263b1e48" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t">Extensions</a>
+    {
+        <b>public static string</b> <a id="3101118681cb0e9b" href="../R/3101118681cb0e9b.html" target="n" data-glyph="220,1">ToDiagnosticId</a>(<b>this</b> <a href="../DiagnosticId.cs.html#285b925c1a09c261" class="t">DiagnosticId</a> <span id="r0 rd" class="r0 r">diagnosticId</span>) =&gt; <span class="s">$&quot;</span><span class="s">CC</span>{(<b>int</b>)<span class="r0 r">diagnosticId</span> :<span class="s">D4</span>}<span class="s">&quot;</span>;
+ 
+        <b>public static</b> <span class="t">IDictionary</span>&lt;<span class="r1 r t">K</span>, <span class="r2 r t">V</span>&gt; <a id="a6bbc7aa3de5678b" href="../R/a6bbc7aa3de5678b.html" target="n" data-glyph="220,1">AddRange</a>&lt;<span id="r1 rd t" class="r1 r t">K</span>, <span id="r2 rd t" class="r2 r t">V</span>&gt;(<b>this</b> <span class="t">IDictionary</span>&lt;<span class="r1 r t">K</span>, <span class="r2 r t">V</span>&gt; <span id="r3 rd" class="r3 r">dictionary</span>, <span class="t">IDictionary</span>&lt;<span class="r1 r t">K</span>, <span class="r2 r t">V</span>&gt; <span id="r4 rd" class="r4 r">newValues</span>)
+        {
+            <b>if</b> (<span class="r3 r">dictionary</span> == <b>null</b> || <span class="r4 r">newValues</span> == <b>null</b>) <b>return</b> <span class="r3 r">dictionary</span>;
+            <b>foreach</b> (<b>var</b> <span id="r5 rd" class="r5 r">kv</span> <b>in</b> <span class="r4 r">newValues</span>) <span class="r3 r">dictionary</span>.Add(<span class="r5 r">kv</span>);
+            <b>return</b> <span class="r3 r">dictionary</span>;
+        }
+ 
+        <b>public static bool</b> <a id="848d4c043f209792" href="../R/848d4c043f209792.html" target="n" data-glyph="220,1">EndsWithAny</a>(<b>this</b> <b>string</b> <span id="r6 rd" class="r6 r">text</span>, <b>params string</b>[] <span id="r7 rd" class="r7 r">values</span>) =&gt;
+            <span class="r6 r">text</span>.<a href="#81aba2b11e576015">EndsWithAny</a>(<span class="t">StringComparison</span>.CurrentCulture, <span class="r7 r">values</span>);
+ 
+        <b>public static bool</b> <a id="81aba2b11e576015" href="../R/81aba2b11e576015.html" target="n" data-glyph="220,1">EndsWithAny</a>(<b>this</b> <b>string</b> <span id="r8 rd" class="r8 r">text</span>, <span class="t">StringComparison</span> <span id="r9 rd" class="r9 r">comparisonType</span>, <b>params string</b>[] <span id="r10 rd" class="r10 r">values</span>)
+        {
+            <b>foreach</b> (<b>var</b> <span id="r11 rd" class="r11 r">value</span> <b>in</b> <span class="r10 r">values</span>)
+                <b>if</b> (<span class="r8 r">text</span>.EndsWith(<span class="r11 r">value</span>, <span class="r9 r">comparisonType</span>)) <b>return true</b>;
+            <b>return false</b>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

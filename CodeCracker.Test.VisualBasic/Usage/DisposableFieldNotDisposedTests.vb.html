@@ -1,0 +1,695 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposableFieldNotDisposedTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(686);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/DisposableFieldNotDisposedTests.vb" target="_top">Usage\DisposableFieldNotDisposedTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Usage
+    <b>Public Class</b> <a id="a1131629f17959af" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="8ae0edb1988faf82">DisposableFieldNotDisposedTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#c61fdccbfc03b339" class="t">DisposableFieldNotDisposedCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6d5d95b76cbc0006" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldNotDisposableDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">&quot;
+Namespace ConsoleApplication1
+    Class TypeName
+        Private i As Integer
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="0e90112ed74acf81" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsAssignedThroughAMethodCallCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D = D.Create()
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Shared Create = Function() New D()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r2 rd" class="r2 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 17)}
+            }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r1 r">source</span>, <span class="r2 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="0d97e6bb3c8e52cd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldDeclarationIsNotAssignedDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="446986ba3521b9a6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldDeclarationHas2VariableItCreates2Diagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D = D.Create()
+        Private field2 As D = D.Create()
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Shared Create = Function() New D()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r5 rd" class="r5 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 17)}
+            }
+            <b>Dim</b> <span id="r6 rd" class="r6 r">expected2</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field2&quot;</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 17)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e69846c21794f630">VerifyBasicDiagnosticAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">expected</span>, <span class="r6 r">expected2</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="518add2abc512a1b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsDisposedOnATypeThatIsNotDisposableCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D = D.Create()
+        Public Sub Dispose
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Shared Create = Function() New D()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r8 rd" class="r8 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 17)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="2186eca3f85181c0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsNotDisposedCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+        Public Sub Dispose Implements IDisposable.Dispose
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Shared Create = Function() New D()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r10 rd" class="r10 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 17)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r9 r">source</span>, <span class="r10 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="da62e905be343d28" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsDisposedDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+        Public Sub Dispose Implements IDisposable.Dispose
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Shared Create = Function() New D()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="39136c1c1bbe5f87" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WithStructCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">&quot;
+Option Infer On
+Option Strict On
+Imports System
+Namespace ConsoleApplication1
+    Structure TypeName
+        Private field As New D()
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r13 rd" class="r13 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 7, 17)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r12 r">source</span>, <span class="r13 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a365118717968e44" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WithPartialClassCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Partial Class TypeName
+        Implements IDisposable
+    End Class
+    Class TypeName
+        Private field As New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r15 rd" class="r15 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                    {
+                    .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                    .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                    .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                    .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 8, 17)}
+                }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r14 r">source</span>, <span class="r15 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="357b3581a11faedc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsCallingIncorrectDisposeCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field.Dispose(False)
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+        Public Sub Dispose(disposing As Boolean)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r17 rd" class="r17 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                        {
+                        .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                        .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                        .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                        .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 17)}
+                    }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r16 r">source</span>, <span class="r17 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="52dbd4ac70d7eff4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsBeingDisposedNotOnCorrectDisposeCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As New D()
+        Public Sub Dispose(value As Boolean)
+            field.Dispose(False)
+        End Sub
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r19 rd" class="r19 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                        {
+                        .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                        .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                        .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                        .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 17)}
+                    }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a00f7925f1f9470f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAFieldThatImplementsIDisposableIsAssignedThroughAnObjectConstructionCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As New D()
+    End Class
+    Class D
+        Implements IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r21 rd" class="r21 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                        {
+                        .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                        .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                        .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                        .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 17)}
+                    }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6abd88faf71fbc81" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAnIDisposablefieldIsAssignedThroughAMethodCallCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D = D.Create()
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r23 rd" class="r23 r">expected</span> <b>As</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                        {
+                        .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                        .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.VisualBasic/A.html#d096466648f64e5c" class="t">DisposableFieldNotDisposedAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#dea8cc0c886163af">MessageFormat</a>, <span class="s">&quot;field&quot;</span>),
+                        .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                        .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 17)}
+                    }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="96105460e8e2146b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAFieldThatImplementsIDisposableAndIsAssignedThroughAMethodCallWithoutSimplifiedTypes</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D = D.Create()
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r25 rd" class="r25 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="bf5bd9dee07e15a4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAFieldThatImplementsIDisposableAndIsAssignedThroughAMethodCall</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As D = D.Create()
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Function Create() As D
+            Return New D()
+        End Function
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r27 rd" class="r27 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Function Create() As D
+            Return New D()
+        End Function
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r26 r">source</span>, <span class="r27 r">fix</span>)
+        <b>End Function</b>
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f77d93471a2700d0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAFieldThatImplementsIDisposableAndIsAssignedThroughAMethodCallAndEnclosingClassHasBaseListOfInheritance</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r28 rd" class="r28 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class OtherClass
+    End Class
+    Class TypeName
+        Inherits OtherClass
+        Private field As D = D.Create()
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r29 rd" class="r29 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class OtherClass
+    End Class
+    Class TypeName
+        Inherits OtherClass
+        Implements IDisposable
+        Private field As D = D.Create()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r28 r">source</span>, <span class="r29 r">fix</span>)
+        <b>End Function</b>
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f8e00b6729839a51" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAFieldThatImplementsIDisposableAndIsAssignedThroughAMethodCallAndDisposeMethodAlreadyExists</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r30 rd" class="r30 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+        Private field2 As D = D.Create()
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field2.Dispose() &#39; Comment1
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r31 rd" class="r31 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+        Private field2 As D = D.Create()
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field2.Dispose() &#39; Comment1
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r30 r">source</span>, <span class="r31 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="312fae47953ada93" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAFieldThatImplementsIDisposableAndIsAssignedThroughAMethodCallAndDisposeMethodAlreadyExistsAndEnclosingTypeImplementsIDipososable</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r32 rd" class="r32 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+        Private field2 As D = D.Create()
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field2.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r33 rd" class="r33 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As D = D.Create()
+        Private field2 As D = D.Create()
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field2.Dispose()
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Shared Create = Function() New D()
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r32 r">source</span>, <span class="r33 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="bc69677295ed845c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAFieldThatImplementsIDisposableAndIsAssignedThroughObjectCreation</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r34 rd" class="r34 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Private field As New D()
+    End Class
+    Class D
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r35 rd" class="r35 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Implements IDisposable
+        Private field As New D()
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+            field.Dispose()
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r34 r">source</span>, <span class="r35 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="480de3c5b616353f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWithDisposeMethodOnPartialClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r36 rd" class="r36 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Partial Class TypeName
+        Private field As New D()
+    End Class
+    Class TypeName
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r37 rd" class="r37 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Partial Class TypeName
+        Private field As New D()&#39; Add field.Dispose() to the Dispose method on the partial file.
+    End Class
+    Class TypeName
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r36 r">source</span>, <span class="r37 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d0b5ee19ee2d7a15" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableFieldOnAbstractClassWithAbstractDisposableDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r38 rd" class="r38 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    MustInherit Class TypeName
+        Implements IDisposable
+        Private field As New D()
+        Public MustInherit Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+    Class D
+        Implements IDisposable
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r38 r">source</span>)
+        <b>End Function
+    End Class
+ 
+End Namespace</b>
+ 
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyCatchBlockTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(126);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Design/EmptyCatchBlockTests.cs" target="_top">Design\EmptyCatchBlockTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Design;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Design
+{
+    <b>public class</b> <a id="9eb1ceaca5d8180f" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="33ea9a37eb1b87c6">EmptyCatchBlockTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#8635c873924fa8e1" class="t">EmptyCatchBlockAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#57a9f31e5d956feb" class="t">EmptyCatchBlockCodeFixProvider</a>&gt;
+    {
+        <b>readonly string</b> <a id="1edd9f82ab006e5b" href="../R/1edd9f82ab006e5b.html" target="n" data-glyph="46,1">test</a> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try
+                {
+                   // do something
+                }
+                catch
+                {
+                }
+            }
+        }
+    }&quot;</span>;
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4d9e215e779d2e08" href="../R/../../0000000000.html" target="n" data-glyph="72,1">EmptyCatchBlockAnalyzerCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try
+                {
+                   // do something
+                }
+                catch (Exception ex)
+                {
+                   throw;
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="098862064d8e260c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenRemoveTryCatchStatement</a>()
+        {
+ 
+            <b>const string</b> <span id="r1 rd" class="r1 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                {
+                   // do something
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#1edd9f82ab006e5b">test</a>, <span class="r1 r">fixtest</span>, 0,<b>false</b>,<b>true</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="261935ef0ec74a88" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenRemoveTryCatchStatementAndPutComment</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                {
+                   // do something
+                }
+                //TODO: Consider reading MSDN Documentation about how to use Try...Catch =&gt; http://msdn.microsoft.com/en-us/library/0yd65esw.aspx
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#1edd9f82ab006e5b">test</a>, <span class="r2 r">fixtest</span>, 1, <b>false</b>, <b>true</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="40f5c5f40c53a75f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPutExceptionClassInCatchBlock</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try
+                {
+                   // do something
+                }
+                catch (Exception ex)
+                {
+                   throw;
+                }
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#1edd9f82ab006e5b">test</a>, <span class="r3 r">fixtest</span>, 2, <b>false</b>, <b>true</b>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

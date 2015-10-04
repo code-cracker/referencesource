@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html><head><title>VBGeneratedCodeAnalysisExtensions.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(60);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Extensions/VBGeneratedCodeAnalysisExtensions.vb" target="_top">Extensions\VBGeneratedCodeAnalysisExtensions.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> System.Linq
+<span class="c">&#39;Imports System.Text.RegularExpressions</span>
+ 
+<b>Public Module</b> <a id="348b88c6166bbed6" href="../R/../../0000000000.html" target="n" data-glyph="84,0" class="t">VBGeneratedCodeAnalysisExtensions</a>
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="5761500a6910397e" href="../R/5761500a6910397e.html" target="n" data-glyph="220,1">IsGenerated</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> Microsoft.CodeAnalysis.Diagnostics.<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>) <b>As Boolean
+        Return If</b>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#196efcb3181a4a4e">SyntaxTree</a>?.<a href="#4bfccd4cedf00f77">IsGenerated</a>(), <b>False</b>) <b>OrElse If</b>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>?.<a href="#3baecdea3e113435">IsGenerated</a>(), <b>False</b>)
+    <b>End Function
+ 
+    Private ReadOnly</b> <a id="a0fd936e1e277a59" href="../R/a0fd936e1e277a59.html" target="n" data-glyph="46,1">generatedCodeAttributes</a>() <b>As String</b> = {<span class="s">&quot;DebuggerNonUserCode&quot;</span>, <span class="s">&quot;GeneratedCode&quot;</span>, <b>NameOf</b>(<span class="t">DebuggerNonUserCodeAttribute</span>), <span class="s">&quot;GeneratedCodeAttribute&quot;</span>}
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="3baecdea3e113435" href="../R/3baecdea3e113435.html" target="n" data-glyph="220,1">IsGenerated</a>(<span id="r1 rd" class="r1 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>) <b>As Boolean
+        Return</b> <span class="r1 r">node</span>.<a href="VBAnalyzerExtensions.vb.html#6220ea29623508dd">HasAttributeOnAncestorOrSelf</a>(<a href="#a0fd936e1e277a59">generatedCodeAttributes</a>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="67018350b450c91d" href="../R/../../0000000000.html" target="n" data-glyph="220,1">IsGenerated</a>(<span id="r2 rd" class="r2 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#90d92645ff9f3d2f" class="t">SyntaxTreeAnalysisContext</a>) <b>As Boolean
+        Return If</b>(<span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>?.<a href="#4bfccd4cedf00f77">IsGenerated</a>(), <b>False</b>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="24b89e371c62f308" href="../R/24b89e371c62f308.html" target="n" data-glyph="220,1">IsGenerated</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a>) <b>As Boolean
+        If</b> (<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a> <b>Is Nothing</b>) <b>Then Return False
+        For Each</b> <span class="r4 r">syntaxReference</span> <b>In</b> <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>
+            <b>If</b> (<span class="r4 r">syntaxReference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d7a9281f07d40af6">SyntaxTree</a>.<a href="#4bfccd4cedf00f77">IsGenerated</a>()) <b>Then Return True
+            Dim</b> <span id="r5 rd" class="r5 r">root</span> = <span class="r4 r">syntaxReference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d7a9281f07d40af6">SyntaxTree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>()
+            <b>Dim</b> <span id="r6 rd" class="r6 r">node</span> = <span class="r5 r">root</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">syntaxReference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5f209a7983fd1563">Span</a>)
+            <b>If</b> (<span class="r6 r">node</span>.<a href="#3baecdea3e113435">IsGenerated</a>()) <b>Then Return True
+        Next
+        Return False
+    End Function</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="4bfccd4cedf00f77" href="../R/4bfccd4cedf00f77.html" target="n" data-glyph="220,1">IsGenerated</a>(<span id="r7 rd" class="r7 r">tree</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="t">SyntaxTree</a>) <b>As Boolean
+        Return If</b>(<span class="r7 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e12956b59d7683ea">FilePath</a>?.<a href="/CodeCracker.Common/A.html#d2c79ffe8bcf600f">IsOnGeneratedFile</a>(), <b>False</b>) <b>OrElse</b> <span class="r7 r">tree</span>.<a href="#ba40ce013de9e1b7">HasAutoGeneratedComment</a>()
+    <b>End Function</b>
+ 
+    <span class="c">&#39;&lt;Extension&gt; Public Function IsOnGeneratedFile(filePath As String) As Boolean</span>
+    <span class="c">&#39;    Return Regex.IsMatch(filePath, &quot;(\\service|\\TemporaryGeneratedFile_.*|\\assemblyinfo|\\assemblyattributes|\.(g\.i|g|designer|generated|assemblyattributes))\.(cs|vb)$&quot;,</span>
+    <span class="c">&#39;            RegexOptions.IgnoreCase)</span>
+    <span class="c">&#39;End Function</span>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="ba40ce013de9e1b7" href="../R/ba40ce013de9e1b7.html" target="n" data-glyph="220,1">HasAutoGeneratedComment</a>(<span id="r8 rd" class="r8 r">tree</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="t">SyntaxTree</a>) <b>As Boolean
+        Dim</b> <span id="r9 rd" class="r9 r">root</span> = <span class="r8 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>()
+        <b>If</b> (<span class="r9 r">root</span> <b>Is Nothing</b>) <b>Then Return False
+        Dim</b> <span id="r10 rd" class="r10 r">firstToken</span> = <span class="r9 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b583ecde97c0fa5c">GetFirstToken</a>()
+        <b>Dim</b> <span id="r11 rd" class="r11 r">trivia</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a>
+        <b>If</b> (<span class="r10 r">firstToken</span> = <b>Nothing</b>) <b>Then
+            Dim</b> <span id="r12 rd" class="r12 r">token</span> = <b>DirectCast</b>(<span class="r9 r">root</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d79aac101c1808e2" class="t">CompilationUnitSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#147123e326bcd23a">EndOfFileToken</a>
+            <b>If</b> (<span class="r12 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92f67dcd545e072">HasLeadingTrivia</a> = <b>False</b>) <b>Then Return False</b>
+            <span class="r11 r">trivia</span> = <span class="r12 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>
+        <b>Else
+            If</b> (<span class="r10 r">firstToken</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92f67dcd545e072">HasLeadingTrivia</a> = <b>False</b>) <b>Then Return False</b>
+            <span class="r11 r">trivia</span> = <span class="r10 r">firstToken</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>
+        <b>End If
+        Dim</b> <span id="r13 rd" class="r13 r">commentLines</span> = <span class="r11 r">trivia</span>.Where(<b>Function</b>(<span id="r14 rd" class="r14 r">t</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#df1cc9c731108516" class="t">SyntaxTrivia</a>) <span class="r14 r">t</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#25bef4c8f9604a10">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d93da93080fa11ad">CommentTrivia</a>)).Take(2).ToList()
+        <b>If</b> (<span class="r13 r">commentLines</span>.Count &lt;&gt; 2) <b>Then Return False
+        Return</b> <span class="r13 r">commentLines</span>(1).<a href="@1@Microsoft.CodeAnalysis/A.html#b9a2cb8779d1aa3f">ToString</a>() = <span class="s">&quot;&#39; &lt;auto-generated&gt;&quot;</span>
+    <b>End Function
+End Module</b></pre></td></tr></table></div></body></html>

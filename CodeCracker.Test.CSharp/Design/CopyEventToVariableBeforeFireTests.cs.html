@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html><head><title>CopyEventToVariableBeforeFireTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(272);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Design/CopyEventToVariableBeforeFireTests.cs" target="_top">Design\CopyEventToVariableBeforeFireTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Design;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Design
+{
+    <b>public class</b> <a id="278ec9c63e69b18b" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="2be15870184cee3d">CopyEventToVariableBeforeFireTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#48525784bb5520ae" class="t">CopyEventToVariableBeforeFireAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#25199aeb6267efd1" class="t">CopyEventToVariableBeforeFireCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="9c655f8bd7a4f51b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfEventIsFiredDirectly</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+ 
+                    public void Execute()
+                    {
+                        MyEvent(this, System.EventArgs.Empty);
+                    }
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0a55f767e425c802">CopyEventToVariableBeforeFire</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Copy the &#39;MyEvent&#39; event to a variable before fire it.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 8, 25) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="a89c50485a0247be" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfCustomEventIsFiredDirectly</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+                public class MyArgs : System.EventArgs
+                {
+                    public string Info { get; set; }
+                }
+ 
+                public class MyClass
+                {
+                    public event System.EventHandler&lt;MyArgs&gt; MyEvent;
+ 
+                    public void Execute()
+                    {
+                        MyEvent(this, new MyArgs() { Info = &quot;&quot;ping&quot;&quot; });
+                    }
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0a55f767e425c802">CopyEventToVariableBeforeFire</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Copy the &#39;MyEvent&#39; event to a variable before fire it.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 13, 25) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="3b97a27efdb80059" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfCustomEventWithCustomDelegateIsFiredDirectly</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+                public class MyArgs : System.EventArgs
+                {
+                    public string Info { get; set; }
+                }
+ 
+                public delegate void Executed (object sender, MyArgs args);
+ 
+                public class MyClass
+                {
+                    public event Executed MyEvent;
+ 
+                    public void Execute()
+                    {
+                        MyEvent(this, new MyArgs() { Info = &quot;&quot;ping&quot;&quot; });
+                    }
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0a55f767e425c802">CopyEventToVariableBeforeFire</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Copy the &#39;MyEvent&#39; event to a variable before fire it.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 15, 25) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">test</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="230ea64a7eb757ff" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotWarningIfEventIsCopiedToLocalVariableBeforeFire</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+ 
+                    public void Execute()
+                    {
+                        var handler = MyEvent;
+                        if (handler != null)
+                            handler(this, System.EventArgs.Empty);
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="8192ebccf9445476" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotWarningIfIsNotAnEvent</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public void Execute()
+                    {
+                        MyClass.Run(null);
+                    }
+ 
+                    public static void Run(object obj)
+                    {
+ 
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="3257de95c4d1704b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotWarningIfIsAParameter</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public void Execute(Action action)
+                    {
+                        action();
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="e699020d27599286" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenEventIsFiredDirectlyShouldCopyItToVariable</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+ 
+                    public void Execute()
+                    {
+                        MyEvent(this, System.EventArgs.Empty);
+                    }
+                }&quot;</span>;
+ 
+            <b>const string</b> <span id="r10 rd" class="r10 r">fixtest</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+ 
+                    public void Execute()
+                    {
+                        var handler = MyEvent;
+                        if (handler != null)
+                            handler(this, System.EventArgs.Empty);
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">source</span>, <span class="r10 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="e14d47b26398e8ef" href="../R/../../0000000000.html" target="n" data-glyph="72,1">KeepCommentsWhenReplacedWithCodeFix</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+ 
+                    public void Execute()
+                    {
+                        //comment
+                        MyEvent(this, System.EventArgs.Empty); //Some Comment
+                    }
+                }&quot;</span>;
+ 
+            <b>const string</b> <span id="r12 rd" class="r12 r">fixtest</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+ 
+                    public void Execute()
+                    {
+                        //comment
+                        var handler = MyEvent;
+                        if (handler != null)
+                            handler(this, System.EventArgs.Empty); //Some Comment
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">source</span>, <span class="r12 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="372e29390e827396" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenInvocationIsInsideABlockWithoutBraces</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+                    bool raiseEvents = true;
+ 
+                    public void Execute()
+                    {
+                        if (raiseEvents) MyEvent(this, System.EventArgs.Empty);
+                    }
+                }&quot;</span>;
+ 
+            <b>const string</b> <span id="r14 rd" class="r14 r">fixtest</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public event System.EventHandler MyEvent;
+                    bool raiseEvents = true;
+ 
+                    public void Execute()
+                    {
+                        if (raiseEvents)
+                        {
+                            var handler = MyEvent;
+                            if (handler != null)
+                                handler(this, System.EventArgs.Empty);
+                        }
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">source</span>, <span class="r14 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="6a3c376a59ffee5f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMemberAccess</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r15 rd" class="r15 r">test</span> = <span class="s">@&quot;var tuple = new Tuple&lt;int, Action&gt;(1, null);
+tuple.Item2();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="6a5635003ceabada" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotWarningIfExpressionBodied</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">test</span> = <span class="s">@&quot;
+                public class MyClass
+                {
+                    public int Foo(int par1, int par2) =&gt; FuncCalc(par1,par2);
+ 
+                    public int FuncCalc(int p1, int p2)
+                    {
+                         return p1*p2;
+                    }
+ 
+                }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r16 r">test</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

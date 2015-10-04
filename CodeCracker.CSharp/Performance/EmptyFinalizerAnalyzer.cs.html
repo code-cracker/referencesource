@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyFinalizerAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(49);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Performance/EmptyFinalizerAnalyzer.cs" target="_top">Performance\EmptyFinalizerAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Performance
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="82717de3e10563bb" href="../R/82717de3e10563bb.html" target="n" data-glyph="0,0" class="t"><span id="96ce3c0e94543944">EmptyFinalizerAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="37a5703caa7bfa8a" href="../R/37a5703caa7bfa8a.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Remove Empty Finalizers&quot;</span>;
+        <b>internal const string</b> <a id="c5b0468399b32b94" href="../R/c5b0468399b32b94.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Remove Empty Finalizers&quot;</span>;
+        <b>internal const string</b> <a id="673fdba7a463f9a0" href="../R/673fdba7a463f9a0.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>;
+        <b>const string</b> <a id="f7a967d03c97a1d0" href="../R/f7a967d03c97a1d0.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;An empty finalizer will stop your object from being collected immediately by the &quot;</span>
+            + <span class="s">&quot;Garbage Collector when no longer used.&quot;</span>
+            + <span class="s">&quot;It will instead be placed in the finalizer queue needlessly using resources.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="6bbb8f19bb62dd20" href="../R/6bbb8f19bb62dd20.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#907e6952da206580">EmptyFinalizer</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#37a5703caa7bfa8a">Title</a>,
+            <a href="#c5b0468399b32b94">MessageFormat</a>,
+            <a href="#673fdba7a463f9a0">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <b>true</b>,
+            <span class="r0 r">customTags</span>: <a href="@1@Microsoft.CodeAnalysis/A.html#03ef56ba68ffca36" class="t">WellKnownDiagnosticTags</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#4312437e59bf4b2d">Unnecessary</a>,
+            <span class="r1 r">description</span>: <a href="#f7a967d03c97a1d0">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#907e6952da206580">EmptyFinalizer</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="962624ca20b9083f" href="../R/962624ca20b9083f.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#6bbb8f19bb62dd20">Rule</a>);
+ 
+        <b>public override void</b> <a id="f0ed96e9f8e1eef2" href="../R/f0ed96e9f8e1eef2.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#e5901f7ac020810e">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#272562b9b9f81bed">DestructorDeclaration</a>);
+ 
+        <b>private static void</b> <a id="e5901f7ac020810e" href="../R/e5901f7ac020810e.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#74831f65e834140c" class="k">var</a> <span id="r5 rd" class="r5 r">finalizer</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#74831f65e834140c" class="t">DestructorDeclarationSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="k">var</a> <span id="r6 rd" class="r6 r">body</span> = <span class="r5 r">finalizer</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c059058487a22d3a">Body</a>;
+ 
+            <b>if</b> (<span class="r6 r">body</span> == <b>null</b>) <b>return</b>;
+ 
+            <b>if</b> (<span class="r6 r">body</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>().Any(<span id="r7 rd" class="r7 r">n</span> =&gt; !<span class="r7 r">n</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#504210015fef4fba">SingleLineCommentTrivia</a> | <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d3239d0944ab7346">MultiLineCommentTrivia</a>))) <b>return</b>;
+ 
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#6bbb8f19bb62dd20">Rule</a>, <span class="r5 r">finalizer</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r5 r">finalizer</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59cc9e7eeb5e39d">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

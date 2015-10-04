@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html><head><title>ChangeCulture.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(25);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.Common/ChangeCulture.cs" target="_top">ChangeCulture.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.Common" target="_top">test\Common\CodeCracker.Test.Common\CodeCracker.Test.Common.csproj</a> (CodeCracker.Test.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Linq;
+<b>using</b> System.Text;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.Test
+{
+    <b>public class</b> <a id="ce78b7892c401f32" href="R/ce78b7892c401f32.html" target="n" data-glyph="0,0" class="t">ChangeCulture</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t">IDisposable</a>
+    {
+        <b>public</b> <a id="31c5c0e13eb81e7e" href="R/31c5c0e13eb81e7e.html" target="n" data-glyph="72,1">ChangeCulture</a>(<b>string</b> <span id="r0 rd" class="r0 r">cultureName</span>)
+        {
+            System.Threading.<a href="@0@mscorlib/A.html#3980e012bae82e96" class="t">Thread</a>.<a href="@0@mscorlib/A.html#89653a7faafd4d23">CurrentThread</a>.<a href="@0@mscorlib/A.html#d90337144e718b0f">CurrentCulture</a> = System.Globalization.<a href="@0@mscorlib/A.html#e319c6636909012f" class="t">CultureInfo</a>.<a href="@0@mscorlib/A.html#fec605b3b773ab26">GetCultureInfo</a>(<span class="r0 r">cultureName</span>);
+            System.Threading.<a href="@0@mscorlib/A.html#3980e012bae82e96" class="t">Thread</a>.<a href="@0@mscorlib/A.html#89653a7faafd4d23">CurrentThread</a>.<a href="@0@mscorlib/A.html#5bb268259118bb83">CurrentUICulture</a> = System.Globalization.<a href="@0@mscorlib/A.html#e319c6636909012f" class="t">CultureInfo</a>.<a href="@0@mscorlib/A.html#fec605b3b773ab26">GetCultureInfo</a>(<span class="r0 r">cultureName</span>);
+        }
+ 
+        <b>public void</b> <a id="4efde24a0408e91f" href="R/4efde24a0408e91f.html" target="n" data-glyph="72,1">Dispose</a>()
+        {
+            System.Threading.<a href="@0@mscorlib/A.html#3980e012bae82e96" class="t">Thread</a>.<a href="@0@mscorlib/A.html#89653a7faafd4d23">CurrentThread</a>.<a href="@0@mscorlib/A.html#d90337144e718b0f">CurrentCulture</a> = System.Globalization.<a href="@0@mscorlib/A.html#e319c6636909012f" class="t">CultureInfo</a>.<a href="@0@mscorlib/A.html#26ef1c020f0dbb7a">InvariantCulture</a>;
+            System.Threading.<a href="@0@mscorlib/A.html#3980e012bae82e96" class="t">Thread</a>.<a href="@0@mscorlib/A.html#89653a7faafd4d23">CurrentThread</a>.<a href="@0@mscorlib/A.html#5bb268259118bb83">CurrentUICulture</a> = System.Globalization.<a href="@0@mscorlib/A.html#e319c6636909012f" class="t">CultureInfo</a>.<a href="@0@mscorlib/A.html#26ef1c020f0dbb7a">InvariantCulture</a>;
+            <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t">GC</a>.<a href="@0@mscorlib/A.html#2673f5220a565bf2">SuppressFinalize</a>(<a href="#ce78b7892c401f32" class="k">this</a>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">1 instantiation of InconsistentAccessibilityCodeFixProvider</div><div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Design\InconsistentAccessibilityTests.MethodIndexerParameter.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Design/InconsistentAccessibilityTests.MethodIndexerParameter.cs.html#398"><b>398</b>protected override CodeFixProvider GetCodeFixProvider() =&gt; new <i>InconsistentAccessibilityCodeFixProvider</i>();</a>
+</div>
+</div>
+<div class="rH">4 references to InconsistentAccessibilityCodeFixProvider</div><div class="rA">CodeCracker.CSharp (4)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\InconsistentAccessibility\InconsistentAccessibilityCodeFixProvider.cs (3)</div>
+<a href="../Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs.html#15"><b>15</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>InconsistentAccessibilityCodeFixProvider</i>)), Shared]</a>
+<a href="../Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs.html#41"><b>41</b>context.RegisterCodeFix(CodeAction.Create(inconsistentAccessibilityInfo.CodeActionMessage, c =&gt; ChangeTypeAccessibilityInDocumentAsync(context.Document.Project.Solution, inconsistentAccessibilityInfo.NewAccessibilityModifiers, typeLocations[0], c), nameof(<i>InconsistentAccessibilityCodeFixProvider</i>)), diagnostic);</a>
+<a href="../Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs.html#45"><b>45</b>context.RegisterCodeFix(CodeAction.Create(inconsistentAccessibilityInfo.CodeActionMessage, c =&gt; ChangeTypeAccessibilityInSolutionAsync(context.Document.Project.Solution, inconsistentAccessibilityInfo.NewAccessibilityModifiers, typeLocations, c), nameof(<i>InconsistentAccessibilityCodeFixProvider</i>)), diagnostic);</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\MakeMethodNonAsyncCodeFixProvider.cs (1)</div>
+<a href="../Refactoring/MakeMethodNonAsyncCodeFixProvider.cs.html#17"><b>17</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>InconsistentAccessibilityCodeFixProvider</i>)), Shared]</a>
+</div>
+</div>
+</body></html>

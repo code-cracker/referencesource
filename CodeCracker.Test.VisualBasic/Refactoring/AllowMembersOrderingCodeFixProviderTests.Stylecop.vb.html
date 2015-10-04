@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProviderTests.Stylecop.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(388);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Refactoring/AllowMembersOrderingCodeFixProviderTests.Stylecop.vb" target="_top">Refactoring\AllowMembersOrderingCodeFixProviderTests.Stylecop.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Refactoring
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Refactoring
+    <b>Public Class</b> <a id="ff2b811b63f71e3e" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="8f22f89d9f415be0">StyleCopAllowMembersOrderingCodeFixProviderTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#e6609d34b1d160ba" class="t">AllowMembersOrderingAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#abb1d0616f6d8375" class="t">StyleCopAllowMembersOrderingCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="458b5df2e8d588b6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderingByType</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">&quot;
+Class Foo
+    Public Class Class1
+ 
+    End Class
+    Public Structure Struct
+ 
+    End Structure
+    Sub Method()
+ 
+    End Sub
+    Public Property Prop As Integer
+    Public Interface IInterface
+ 
+    End Interface
+    Public Enum Enum1
+        EnumVal
+    End Enum
+    Public Custom Event Event1 As System.Action
+        AddHandler(value As System.Action)
+ 
+        End AddHandler
+        RemoveHandler(value As System.Action)
+ 
+        End RemoveHandler
+        RaiseEvent()
+ 
+        End RaiseEvent
+    End Event
+    Public Delegate Function Delegate1() As Double
+    Sub New()
+ 
+    End Sub
+    Public Event EventField As System.Action
+    Public b = 0
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r1 rd" class="r1 r">expected</span> = <span class="s">&quot;
+Class Foo
+    Public b = 0
+    Sub New()
+ 
+    End Sub
+    Public Delegate Function Delegate1() As Double
+    Public Event EventField As System.Action
+    Public Custom Event Event1 As System.Action
+        AddHandler(value As System.Action)
+ 
+        End AddHandler
+        RemoveHandler(value As System.Action)
+ 
+        End RemoveHandler
+        RaiseEvent()
+ 
+        End RaiseEvent
+    End Event
+    Public Enum Enum1
+        EnumVal
+    End Enum
+    Public Interface IInterface
+ 
+    End Interface
+    Public Property Prop As Integer
+    Sub Method()
+ 
+    End Sub
+    Public Structure Struct
+ 
+    End Structure
+    Public Class Class1
+ 
+    End Class
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r0 r">source</span>, <span class="r1 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="085d99ea2ea41c1b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderByModifiers</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">&quot;
+Public Class Foo1
+    Private p = 0
+    Protected q = 0
+    Protected Friend r = 0
+    Friend s = 0
+    Public t = 0
+    Shared u = 0
+    Public Shared v = 0
+    Const x = 0
+    Public Const z = 0
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r3 rd" class="r3 r">expected</span> = <span class="s">&quot;
+Public Class Foo1
+    Public Const z = 0
+    Public Shared v = 0
+    Public t = 0
+    Friend s = 0
+    Protected Friend r = 0
+    Protected q = 0
+    Const x = 0
+    Shared u = 0
+    Private p = 0
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r2 r">source</span>, <span class="r3 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="7d4d630a1ac8fa05" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowmembersOrderingShouldAssureMembersOrderByAlphabeticalOrder</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">&quot;
+Public Class Foo2
+    Private c = 2, d = 3
+    Private a = 0, b = 1
+    Event EventField1 As System.Action
+    Event EventField As System.Action
+    Delegate Function Delegate2() As Double
+    Delegate Function Delegate1() As Double
+    Custom Event Event2 As System.Action
+        AddHandler(value As System.Action)
+ 
+        End AddHandler
+        RemoveHandler(value As System.Action)
+ 
+        End RemoveHandler
+        RaiseEvent()
+ 
+        End RaiseEvent
+    End Event
+    Custom Event Event1 As System.Action
+        AddHandler(value As Action)
+ 
+        End AddHandler
+        RemoveHandler(value As Action)
+ 
+        End RemoveHandler
+        RaiseEvent()
+ 
+        End RaiseEvent
+    End Event
+    Enum Enum2
+        Enum1
+    End Enum
+    Enum Enum1
+        Enum1
+    End Enum
+    Interface Interface2
+ 
+    End Interface
+    Interface Interface1
+ 
+    End Interface
+    Property Property2 As Integer
+    Property Property1 As Integer
+    Public Shared Operator +(A As Foo2, B As Foo2)
+        Return 0
+    End Operator
+    Public Shared Operator -(a As Foo2, b As Foo2)
+        Return 0
+    End Operator
+    Sub Method2()
+ 
+    End Sub
+    Sub Method1()
+ 
+    End Sub
+    Public Structure Sruct1
+ 
+    End Structure
+    Public Structure Sruct
+ 
+    End Structure
+    Public Class Class2
+ 
+    End Class
+    Public Class Class1
+    End Class
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r5 rd" class="r5 r">expected</span> = <span class="s">&quot;
+Public Class Foo2
+    Private a = 0, b = 1
+    Private c = 2, d = 3
+    Delegate Function Delegate1() As Double
+    Delegate Function Delegate2() As Double
+    Event EventField As System.Action
+    Event EventField1 As System.Action
+    Custom Event Event1 As System.Action
+        AddHandler(value As Action)
+ 
+        End AddHandler
+        RemoveHandler(value As Action)
+ 
+        End RemoveHandler
+        RaiseEvent()
+ 
+        End RaiseEvent
+    End Event
+    Custom Event Event2 As System.Action
+        AddHandler(value As System.Action)
+ 
+        End AddHandler
+        RemoveHandler(value As System.Action)
+ 
+        End RemoveHandler
+        RaiseEvent()
+ 
+        End RaiseEvent
+    End Event
+    Enum Enum1
+        Enum1
+    End Enum
+    Enum Enum2
+        Enum1
+    End Enum
+    Interface Interface1
+ 
+    End Interface
+    Interface Interface2
+ 
+    End Interface
+    Property Property1 As Integer
+    Property Property2 As Integer
+    Public Shared Operator -(a As Foo2, b As Foo2)
+        Return 0
+    End Operator
+    Public Shared Operator +(A As Foo2, B As Foo2)
+        Return 0
+    End Operator
+    Sub Method1()
+ 
+    End Sub
+    Sub Method2()
+ 
+    End Sub
+    Public Structure Sruct
+ 
+    End Structure
+    Public Structure Sruct1
+ 
+    End Structure
+    Public Class Class1
+    End Class
+    Public Class Class2
+ 
+    End Class
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Structure&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="b794b69df2b0fa62" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StyleCopAllowMembersOrderingShouldAssureMembersOrderByStyleCopPatterns</a>(<span id="r6 rd" class="r6 r">typeDeclaration</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    &quot;</span> &amp; <span class="r6 r">typeDeclaration</span> &amp; <span class="s">&quot; Foo3
+        Public Class Foo4
+        End Class
+        Public Structure Struct
+ 
+        End Structure
+        Public Shared Operator +(f1 As Foo3, f2 As Foo3)
+            Return New Foo3
+        End Operator
+        Public Shared Operator -(f1 As Foo3, f2 As Foo3)
+            Return New Foo3
+        End Operator
+        Sub Method(a As String)
+ 
+        End Sub
+        Friend Sub Method(a As Integer)
+ 
+        End Sub
+        Public Sub Method1()
+ 
+        End Sub
+        Public Sub Method()
+ 
+        End Sub
+        Public Property Prop As String
+        Public Interface IInterface
+ 
+        End Interface
+        Public Enum Enum1
+            Enum1
+            Enum2
+        End Enum
+        Public Custom Event Event1 As Action
+            AddHandler(value As Action)
+ 
+            End AddHandler
+            RemoveHandler(value As Action)
+ 
+            End RemoveHandler
+            RaiseEvent()
+ 
+            End RaiseEvent
+        End Event
+        Public Delegate Function Delegate1(num As Double) As Double
+        Public Sub New()
+            Prop = &quot;&quot;&quot;&quot;
+            Field1 = &quot;&quot;&quot;&quot;
+            Field = &quot;&quot;&quot;&quot;
+        End Sub
+        Public Event EventField1 As Action
+        Public Event EventField As Action
+        Public Field As String
+        Public Shared Field1 As String
+    End &quot;</span> &amp; <span class="r6 r">typeDeclaration</span> &amp; <span class="s">&quot;
+ 
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r8 rd" class="r8 r">expected</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    &quot;</span> &amp; <span class="r6 r">typeDeclaration</span> &amp; <span class="s">&quot; Foo3
+        Public Shared Field1 As String
+        Public Field As String
+        Public Sub New()
+            Prop = &quot;&quot;&quot;&quot;
+            Field1 = &quot;&quot;&quot;&quot;
+            Field = &quot;&quot;&quot;&quot;
+        End Sub
+        Public Delegate Function Delegate1(num As Double) As Double
+        Public Event EventField As Action
+        Public Event EventField1 As Action
+        Public Custom Event Event1 As Action
+            AddHandler(value As Action)
+ 
+            End AddHandler
+            RemoveHandler(value As Action)
+ 
+            End RemoveHandler
+            RaiseEvent()
+ 
+            End RaiseEvent
+        End Event
+        Public Enum Enum1
+            Enum1
+            Enum2
+        End Enum
+        Public Interface IInterface
+ 
+        End Interface
+        Public Property Prop As String
+        Public Shared Operator -(f1 As Foo3, f2 As Foo3)
+            Return New Foo3
+        End Operator
+        Public Shared Operator +(f1 As Foo3, f2 As Foo3)
+            Return New Foo3
+        End Operator
+        Public Sub Method()
+ 
+        End Sub
+        Public Sub Method1()
+ 
+        End Sub
+        Friend Sub Method(a As Integer)
+ 
+        End Sub
+        Sub Method(a As String)
+ 
+        End Sub
+        Public Structure Struct
+ 
+        End Structure
+        Public Class Foo4
+        End Class
+    End &quot;</span> &amp; <span class="r6 r">typeDeclaration</span> &amp; <span class="s">&quot;
+ 
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">expected</span>)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

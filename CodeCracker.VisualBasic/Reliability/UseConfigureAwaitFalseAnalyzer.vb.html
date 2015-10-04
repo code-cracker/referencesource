@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseConfigureAwaitFalseAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(60);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Reliability/UseConfigureAwaitFalseAnalyzer.vb" target="_top">Reliability\UseConfigureAwaitFalseAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.Text
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Reliability
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="0f699e8f34d05f6f" href="../R/0f699e8f34d05f6f.html" target="n" data-glyph="0,0" class="t"><span id="65212238a6d26963">UseConfigureAwaitFalseAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="05b886451dd9362a" href="../R/05b886451dd9362a.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Use ConfigureAwait(False) on awaited task.&quot;</span>
+        <b>Friend Const</b> <a id="0fdd234b160d1e3c" href="../R/0fdd234b160d1e3c.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Consider using ConfigureAwait(False) on the awaited task.&quot;</span>
+        <b>Friend Const</b> <a id="814c46f9bf7bf8f9" href="../R/814c46f9bf7bf8f9.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#daff3fa5fd8f2bf2">Reliability</a>
+ 
+        <b>Friend Shared</b> <a id="585d80dd0a0467c5" href="../R/585d80dd0a0467c5.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+        <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#352a24b30260dc0b">UseConfigureAwaitFalse</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+        <a href="#05b886451dd9362a">Title</a>,
+        <a href="#0fdd234b160d1e3c">MessageFormat</a>,
+        <a href="#814c46f9bf7bf8f9">Category</a>,
+        <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+        <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+        <span class="r1 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#352a24b30260dc0b">UseConfigureAwaitFalse</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="211b42d0c970eb47" href="../R/211b42d0c970eb47.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#585d80dd0a0467c5">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="69d83f88f9b4944d" href="../R/69d83f88f9b4944d.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r2 rd" class="r2 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#08a49b6ccfeae382">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3063c74a8ebb0f2c">AwaitExpression</a>)
+        <b>End Sub
+ 
+        Private Shared Sub</b> <a id="08a49b6ccfeae382" href="../R/08a49b6ccfeae382.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r3 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r4 rd" class="r4 r">awaitExpression</span> = <b>DirectCast</b>(<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5f4a7819c46edf71" class="t">AwaitExpressionSyntax</a>)
+            <b>Dim</b> <span id="r5 rd" class="r5 r">awaitedExpression</span> = <span class="r4 r">awaitExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#42eebabe87a78715">Expression</a>
+            <b>If Not</b> <a href="#32f8aef0158cc64f">IsTask</a>(<span class="r5 r">awaitedExpression</span>, <span class="r3 r">context</span>) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r6 rd" class="r6 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#585d80dd0a0467c5">Rule</a>, <span class="r4 r">awaitExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>())
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r6 r">diag</span>)
+        <b>End Sub
+ 
+        Private Shared Function</b> <a id="32f8aef0158cc64f" href="../R/32f8aef0158cc64f.html" target="n" data-glyph="76,1">IsTask</a>(<span id="r7 rd" class="r7 r">expression</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fb90f2182ef45411" class="t">ExpressionSyntax</a>, <span id="r8 rd" class="r8 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>) <b>As Boolean
+            Dim</b> <span id="r9 rd" class="r9 r">type</span> = <b>TryCast</b>(<span class="r8 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r7 r">expression</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)
+            <b>If</b> <span class="r9 r">type</span> <b>Is Nothing Then Return False
+            Dim</b> <span id="r10 rd" class="r10 r">taskType</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>
+            <b>If</b> <span class="r9 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#964cfdcd96d807e9">IsGenericType</a> <b>Then</b>
+                <span class="r9 r">type</span> = <span class="r9 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2b034eb9d8cd5598">ConstructedFrom</a>
+                <span class="r10 r">taskType</span> = <span class="r8 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#449599e541c0c273">Compilation</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b69619b653a39389">GetTypeByMetadataName</a>(<span class="s">&quot;System.Threading.Tasks.Task`1&quot;</span>)
+            <b>Else</b>
+                <span class="r10 r">taskType</span> = <span class="r8 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#449599e541c0c273">Compilation</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b69619b653a39389">GetTypeByMetadataName</a>(<span class="s">&quot;System.Threading.Tasks.Task&quot;</span>)
+            <b>End If
+            Return</b> <span class="r9 r">type</span>.Equals(<span class="r10 r">taskType</span>)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

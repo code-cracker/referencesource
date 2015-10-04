@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveUnreachableCodeCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">1 instantiation of RemoveUnreachableCodeCodeFixProvider</div><div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Usage\RemoveUnreachableCodeTest.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Usage/RemoveUnreachableCodeTest.cs.html#9"><b>9</b>protected override CodeFixProvider GetCodeFixProvider() =&gt; new <i>RemoveUnreachableCodeCodeFixProvider</i>();</a>
+</div>
+</div>
+<div class="rH">6 references to RemoveUnreachableCodeCodeFixProvider</div><div class="rA">CodeCracker.CSharp (6)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Usage\RemoveUnreachableCodeCodeFixProvider.cs (2)</div>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#14"><b>14</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>RemoveUnreachableCodeCodeFixProvider</i>)), Shared]</a>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#26"><b>26</b>context.RegisterCodeFix(CodeAction.Create(Message, ct =&gt; RemoveUnreachableCodeAsync(context.Document, diagnostic, ct), nameof(<i>RemoveUnreachableCodeCodeFixProvider</i>)), diagnostic);</a>
+</div>
+<div class="rF"><div class="rN">Usage\RemoveUnreachableCodeFixAllProvider.cs (4)</div>
+<a href="../Usage/RemoveUnreachableCodeFixAllProvider.cs.html#20"><b>20</b>return Task.FromResult(CodeAction.Create(<i>RemoveUnreachableCodeCodeFixProvider</i>.Message,</a>
+<a href="../Usage/RemoveUnreachableCodeFixAllProvider.cs.html#23"><b>23</b>return Task.FromResult(CodeAction.Create(<i>RemoveUnreachableCodeCodeFixProvider</i>.Message,</a>
+<a href="../Usage/RemoveUnreachableCodeFixAllProvider.cs.html#26"><b>26</b>return Task.FromResult(CodeAction.Create(<i>RemoveUnreachableCodeCodeFixProvider</i>.Message,</a>
+<a href="../Usage/RemoveUnreachableCodeFixAllProvider.cs.html#64"><b>64</b>newRoot = <i>RemoveUnreachableCodeCodeFixProvider</i>.RemoveUnreachableStatement(newRoot, node);</a>
+</div>
+</div>
+</body></html>

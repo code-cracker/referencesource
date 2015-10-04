@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<html><head><title>XmlDocumentationTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(488);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Maintainability/XmlDocumentationTests.cs" target="_top">Maintainability\XmlDocumentationTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Maintainability;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Maintainability
+{
+    <b>public class</b> <a id="e5118d4164d86d19" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="2895f1b184b7c12f">XmlDocumentationAnalyzerTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#9af8ce16452d9eac" class="t">XmlDocumentationAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#f2c5a2b8c9b9fe37" class="t">XmlDocumentationRemoveNonExistentParametersCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="74cde8165a136cbc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresClassDocs</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+namespace ConsoleApplication1
+{
+    /// &lt;summary&gt;
+    ///
+    /// &lt;/summary&gt;
+    class TypeName
+    {
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6f458454dbb102f8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">XmlDocumentationInsideMethodWithAttributeDoesNotCreateDiagnostic</a>()
+        {
+<a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">source</span> = <span class="s">@&quot;
+/// &lt;summary&gt;
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;&quot;value&quot;&quot; &gt;&lt;/param&gt;
+/// &lt;returns&gt;&lt;/returns&gt;
+[System.Runtime.CompilerServices.MethodImpl]
+public int Foo(int value)
+{
+    ///
+    var a = 1;
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="67cd13345facc5ea" href="../R/../../0000000000.html" target="n" data-glyph="72,1">XmlDocumentationInsideMethodDoesNotCreateDiagnostic</a>()
+        {
+<a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+/// &lt;summary&gt;
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;&quot;value&quot;&quot; &gt;&lt;/param&gt;
+/// &lt;returns&gt;&lt;/returns&gt;
+public int Foo(int value)
+{
+    ///
+    var a = 1;
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8db2138513df9c92" href="../R/../../0000000000.html" target="n" data-glyph="72,1">XmlDocumentationWithNonexistentParameterOfMethodAnalyzerCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;analyzer&quot;&quot;&gt;The analyzer to run on the documents&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;documents&quot;&quot;&gt;The Documents that the analyzer will be run on&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;spans&quot;&quot;&gt;Optional TextSpan indicating where a Diagnostic will be found&lt;/param&gt;
+            /// &lt;returns&gt;An IEnumerable of Diagnostics that surfaced in teh source code, sorted by Location&lt;/returns&gt;
+            [System.Runtime.CompilerServices.MethodImpl]
+            protected async static Task&lt;Diagnostic[]&gt; GetSortedDiagnosticsFromDocumentsAsync(DiagnosticAnalyzer analyzer, Document[] documents)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r4 rd" class="r4 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#affeb52510950583">XmlDocumentation</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You have missing/unexistent parameters in Xml Docs&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 16) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r3 r">source</span>, <span class="r4 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="98af0cfa9dd1b8a6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">XmlDocumentationWithMissingParametersFromMethodAnalyzerCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;Classes in the form of strings&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;The language the source code is in&lt;/param&gt;
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r6 rd" class="r6 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#affeb52510950583">XmlDocumentation</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You have missing/unexistent parameters in Xml Docs&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 16) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r5 r">source</span>, <span class="r6 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="415037bbe68dec72" href="../R/../../0000000000.html" target="n" data-glyph="72,1">XmlDocumentationWithMatchingParametersFromMethodAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;value&quot;&quot; &gt;&lt;/param&gt;
+            /// &lt;returns&gt;&lt;/returns&gt;
+            public int Foo(int value)
+            {
+            }
+    }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="fedddfa0acb3d1e0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MethodWithoutXmlDocumentationAnalyzerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public int Foo(int value)
+            {
+            }
+    }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">source</span>);
+        }
+    }
+ 
+    <b>public class</b> <a id="fad5fde773b91d5c" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="eae5cb3f55c41a94">XmlDocumentationRemoveUnexistentParametersCodeFixTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#9af8ce16452d9eac" class="t">XmlDocumentationAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#f2c5a2b8c9b9fe37" class="t">XmlDocumentationRemoveNonExistentParametersCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d31596be218e781d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixRemoveParameterDoc</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;analyzer&quot;&quot;&gt;The analyzer to run on the documents&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;documents&quot;&quot;&gt;The Documents that the analyzer will be run on&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;spans&quot;&quot;&gt;Optional TextSpan indicating where a Diagnostic will be found&lt;/param&gt;
+            /// &lt;returns&gt;An IEnumerable of Diagnostics that surfaced in teh source code, sorted by Location&lt;/returns&gt;
+            protected async static Task&lt;Diagnostic[]&gt; GetSortedDiagnosticsFromDocumentsAsync(DiagnosticAnalyzer analyzer, Document[] documents)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r10 rd" class="r10 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;analyzer&quot;&quot;&gt;The analyzer to run on the documents&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;documents&quot;&quot;&gt;The Documents that the analyzer will be run on&lt;/param&gt;
+            /// &lt;returns&gt;An IEnumerable of Diagnostics that surfaced in teh source code, sorted by Location&lt;/returns&gt;
+            protected async static Task&lt;Diagnostic[]&gt; GetSortedDiagnosticsFromDocumentsAsync(DiagnosticAnalyzer analyzer, Document[] documents)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">source</span>, <span class="r10 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="29a138f15a56bfec" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixRemoveManyParameterDoc</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;analyzer&quot;&quot;&gt;The analyzer to run on the documents&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;anotherToBeRemoved&quot;&quot;&gt;Optional TextSpan indicating where a Diagnostic will be found&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;documents&quot;&quot;&gt;The Documents that the analyzer will be run on&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;spansToBeRemoved&quot;&quot;&gt;Optional TextSpan indicating where a Diagnostic will be found&lt;/param&gt;
+            /// &lt;returns&gt;An IEnumerable of Diagnostics that surfaced in teh source code, sorted by Location&lt;/returns&gt;
+            protected async static Task&lt;Diagnostic[]&gt; GetSortedDiagnosticsFromDocumentsAsync(DiagnosticAnalyzer analyzer, Document[] documents)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r12 rd" class="r12 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;analyzer&quot;&quot;&gt;The analyzer to run on the documents&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;documents&quot;&quot;&gt;The Documents that the analyzer will be run on&lt;/param&gt;
+            /// &lt;returns&gt;An IEnumerable of Diagnostics that surfaced in teh source code, sorted by Location&lt;/returns&gt;
+            protected async static Task&lt;Diagnostic[]&gt; GetSortedDiagnosticsFromDocumentsAsync(DiagnosticAnalyzer analyzer, Document[] documents)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">source</span>, <span class="r12 r">expected</span>);
+        }
+ 
+ 
+    }
+ 
+    <b>public class</b> <a id="70516a64f4e4c0ca" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="7b683a31dfaa067a">XmlDocumentationCreateMissingParametersCodeFixTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#9af8ce16452d9eac" class="t">XmlDocumentationAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#f304eca48f942b6c" class="t">XmlDocumentationCreateMissingParametersCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e9e294d1218f40e5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCreateOneParameterDoc</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;Classes in the form of strings&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;The language the source code is in&lt;/param&gt;
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r14 rd" class="r14 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;Classes in the form of strings&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;The language the source code is in&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;workspace&quot;&quot;&gt;todo: describe workspace parameter on CreateProject&lt;/param&gt;
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">source</span>, <span class="r14 r">expected</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="75c4b1c2e04607bb" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCreateManyParameterDoc</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r16 rd" class="r16 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;todo: describe sources parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;workspace&quot;&quot;&gt;todo: describe workspace parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;todo: describe language parameter on CreateProject&lt;/param&gt;
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r15 r">source</span>, <span class="r16 r">expected</span>);
+        }
+        
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="08d96471de0c647b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCreateManyParameterDocWhenHaveFullDocSyntax</a>()
+        {
+            <b>const string</b> <span id="r17 rd" class="r17 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            /// Some text
+            /// &lt;/summary&gt;
+            /// &lt;remarks&gt;Remarks&lt;/remarks&gt;
+            /// &lt;code&gt;Code sample&lt;/code&gt;
+            /// &lt;exception cref=&quot;&quot;System.ArgumentException&quot;&quot;&gt;&lt;/exception&gt;
+            /// &lt;example&gt;Some sample&lt;/example&gt;
+            /// &lt;returns&gt;A &lt;see cref=&quot;&quot;System.Threading.Tasks.Task&quot;&quot;/&gt; to you&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r18 rd" class="r18 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            /// Some text
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;todo: describe sources parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;workspace&quot;&quot;&gt;todo: describe workspace parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;todo: describe language parameter on CreateProject&lt;/param&gt;
+            /// &lt;remarks&gt;Remarks&lt;/remarks&gt;
+            /// &lt;code&gt;Code sample&lt;/code&gt;
+            /// &lt;exception cref=&quot;&quot;System.ArgumentException&quot;&quot;&gt;&lt;/exception&gt;
+            /// &lt;example&gt;Some sample&lt;/example&gt;
+            /// &lt;returns&gt;A &lt;see cref=&quot;&quot;System.Threading.Tasks.Task&quot;&quot;/&gt; to you&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r17 r">source</span>, <span class="r18 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d8c0a7abb549c003" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCreateManyParameterDocWhenHaveOnlySummary</a>()
+        {
+            <b>const string</b> <span id="r19 rd" class="r19 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r20 rd" class="r20 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;summary&gt;
+            ///
+            /// &lt;/summary&gt;
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;todo: describe sources parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;workspace&quot;&quot;&gt;todo: describe workspace parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;todo: describe language parameter on CreateProject&lt;/param&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r19 r">source</span>, <span class="r20 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7b4e26587c3ef970" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCreateManyParameterDocWhenHaveOnlyReturns</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r22 rd" class="r22 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;param name=&quot;&quot;sources&quot;&quot;&gt;todo: describe sources parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;workspace&quot;&quot;&gt;todo: describe workspace parameter on CreateProject&lt;/param&gt;
+            /// &lt;param name=&quot;&quot;language&quot;&quot;&gt;todo: describe language parameter on CreateProject&lt;/param&gt;
+            /// &lt;returns&gt;A Project created out of the Douments created from the source strings&lt;/returns&gt;
+            public static Project CreateProject(string[] sources, out AdhocWorkspace workspace, string language = LanguageNames.CSharp)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r21 r">source</span>, <span class="r22 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8a30c82df09e7473" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixCreateManyParameterDocWhenHaveOnlyRemarks</a>()
+        {
+            <b>const string</b> <span id="r23 rd" class="r23 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;remarks&gt;
+            /// Todo: Remove/Update when https://github.com/dotnet/roslyn/issues/2580 is completed and there is
+            /// an api to check for analyzer exceptions
+            /// &lt;/remarks&gt;
+            private static void CheckIfAnalyzerThrew(ImmutableArray&lt;Diagnostic&gt; diags)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r24 rd" class="r24 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            /// &lt;param name=&quot;&quot;diags&quot;&quot;&gt;todo: describe diags parameter on CheckIfAnalyzerThrew&lt;/param&gt;
+            /// &lt;remarks&gt;
+            /// Todo: Remove/Update when https://github.com/dotnet/roslyn/issues/2580 is completed and there is
+            /// an api to check for analyzer exceptions
+            /// &lt;/remarks&gt;
+            private static void CheckIfAnalyzerThrew(ImmutableArray&lt;Diagnostic&gt; diags)
+            {
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r23 r">source</span>, <span class="r24 r">expected</span>);
+        }
+ 
+    }
+}
+</pre></td></tr></table></div></body></html>

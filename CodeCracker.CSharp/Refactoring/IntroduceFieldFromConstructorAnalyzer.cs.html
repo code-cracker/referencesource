@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html><head><title>IntroduceFieldFromConstructorAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(56);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/IntroduceFieldFromConstructorAnalyzer.cs" target="_top">Refactoring\IntroduceFieldFromConstructorAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="f8917b6e6bb5f16c" href="../R/f8917b6e6bb5f16c.html" target="n" data-glyph="0,0" class="t"><span id="17a84a28526e58fd">IntroduceFieldFromConstructorAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="18a7e8bae44501f7" href="../R/18a7e8bae44501f7.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Consider introduce field for constructor parameters.&quot;</span>;
+        <b>internal const string</b> <a id="12c48b64cee8a5a7" href="../R/12c48b64cee8a5a7.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Introduce a field for parameter: {0}&quot;</span>;
+        <b>internal const string</b> <a id="e682e7277342bc46" href="../R/e682e7277342bc46.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>;
+        <b>const string</b> <a id="8bd21393a58f7943" href="../R/8bd21393a58f7943.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Consider introduce field for constructor parameters.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="8e6fb927518b2efc" href="../R/8e6fb927518b2efc.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#4e56ae6a51741704">IntroduceFieldFromConstructor</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#18a7e8bae44501f7">Title</a>,
+            <a href="#12c48b64cee8a5a7">MessageFormat</a>,
+            <a href="#e682e7277342bc46">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#8bd21393a58f7943">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#4e56ae6a51741704">IntroduceFieldFromConstructor</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="54d77f2501962eed" href="../R/54d77f2501962eed.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#8e6fb927518b2efc">Rule</a>);
+ 
+        <b>public override void</b> <a id="baa9318234060637" href="../R/baa9318234060637.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#87f477ef00346cf6">AnalyzeConstructor</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5441df22b7fa0844">ConstructorDeclaration</a>);
+ 
+        <b>private static void</b> <a id="87f477ef00346cf6" href="../R/87f477ef00346cf6.html" target="n" data-glyph="76,1">AnalyzeConstructor</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="k">var</a> <span id="r5 rd" class="r5 r">constructorMethod</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="k">var</a> <span id="r6 rd" class="r6 r">parameters</span> = <span class="r5 r">constructorMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#859b93e811cac381">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>;
+ 
+            <b>if</b> (<span class="r5 r">constructorMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e089891c937c014a">Body</a> == <b>null</b>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#bfbcd96bb21963de" class="k">var</a> <span id="r7 rd" class="r7 r">analysis</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#54557b485747d6a7">AnalyzeDataFlow</a>(<span class="r5 r">constructorMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e089891c937c014a">Body</a>);
+            <b>if</b> (!<span class="r7 r">analysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9f6993ed01c8c373">Succeeded</a>) <b>return</b>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="k">var</a> <span id="r8 rd" class="r8 r">par</span> <b>in</b> <span class="r6 r">parameters</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#b5352bfcd232fa51" class="k">var</a> <span id="r9 rd" class="r9 r">parSymbol</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d09eaafefcea7011">GetDeclaredSymbol</a>(<span class="r8 r">par</span>);
+                <b>if</b>(!<span class="r7 r">analysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#514953450f22dc28">ReadInside</a>.Any(<span id="r10 rd" class="r10 r">s</span> =&gt; <span class="r10 r">s</span>.Equals(<span class="r9 r">parSymbol</span>)))
+                {
+                    <b>var</b> <span id="r11 rd" class="r11 r">parameterName</span> = <span class="r8 r">par</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>;
+                    <b>var</b> <span id="r12 rd" class="r12 r">properties</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt; { { <b>nameof</b>(<span class="r11 r">parameterName</span>), <span class="r11 r">parameterName</span> } }.ToImmutableDictionary();
+                    <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r13 rd" class="r13 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#8e6fb927518b2efc">Rule</a>, <span class="r8 r">par</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r12 r">properties</span>, <span class="r11 r">parameterName</span>);
+                    <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r13 r">diag</span>);
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

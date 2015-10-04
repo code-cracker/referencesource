@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html><head><title>XmlDocumentationRemoveNonExistentParametersCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(48);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Maintainability/XmlDocumentationRemoveNonExistentParametersCodeFixProvider.cs" target="_top">Maintainability\XmlDocumentationRemoveNonExistentParametersCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.Properties;
+ 
+<b>namespace</b> CodeCracker.CSharp.Maintainability
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <b>nameof</b>(<a href="XmlDocumentationCodeFixProvider.cs.html#6b4e5f9c75eb1f26" class="t">XmlDocumentationCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public sealed class</b> <a id="f2c5a2b8c9b9fe37" href="../R/f2c5a2b8c9b9fe37.html" target="n" data-glyph="0,0" class="t"><span id="d50f0020b7ec6f23">XmlDocumentationRemoveNonExistentParametersCodeFixProvider</span></a> : <a href="XmlDocumentationCodeFixProvider.cs.html#6b4e5f9c75eb1f26" class="t">XmlDocumentationCodeFixProvider</a>
+    {
+        <b>public override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="01a57ffde9dafb59" href="../R/01a57ffde9dafb59.html" target="n" data-glyph="72,1">FixParameters</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r0 rd" class="r0 r">method</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r1 rd" class="r1 r">root</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3a36c23c9de118dc" class="k">var</a> <span id="r2 rd" class="r2 r">documentationNode</span> = <span class="r0 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>().Select(<span id="r3 rd" class="r3 r">x</span> =&gt; <span class="r3 r">x</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2abb108dad54fc3d">GetStructure</a>()).OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3a36c23c9de118dc" class="t">DocumentationCommentTriviaSyntax</a>&gt;().First();
+ 
+            <b>var</b> <span id="r4 rd" class="r4 r">allNodesToRemove</span> = <a href="#1831a5c5860991af">GetAllNodesToRemove</a>(<a href="XmlDocumentationCodeFixProvider.cs.html#7b7f2a7744e77206">GetMethodParametersWithDocParameters</a>(<span class="r0 r">method</span>, <span class="r2 r">documentationNode</span>), <span class="r2 r">documentationNode</span>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3a36c23c9de118dc" class="k">var</a> <span id="r5 rd" class="r5 r">newDocumentationNode</span> = <span class="r2 r">documentationNode</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f89b92e57b022973">RemoveNodes</a>(<span class="r4 r">allNodesToRemove</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#55d4a245cfef7ac7" class="t">SyntaxRemoveOptions</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#33ad1b4532e3d717">KeepNoTrivia</a>);
+ 
+            <b>return</b> <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r2 r">documentationNode</span>, <span class="r5 r">newDocumentationNode</span>);
+        }
+ 
+        <b>private static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>&gt; <a id="1831a5c5860991af" href="../R/1831a5c5860991af.html" target="n" data-glyph="76,1">GetAllNodesToRemove</a>(<span class="t">IEnumerable</span>&lt;<span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>, <span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27a7afadf701abe4" class="t">XmlElementSyntax</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e4d120a3c07c8abf" class="t">XmlNameAttributeSyntax</a>&gt;&gt;&gt; <span id="r6 rd" class="r6 r">paramterWithDocParameter</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3a36c23c9de118dc" class="t">DocumentationCommentTriviaSyntax</a> <span id="r7 rd" class="r7 r">documentationNode</span>)
+        {
+            <b>var</b> <span id="r8 rd" class="r8 r">nodesToRemove</span> = <span class="r6 r">paramterWithDocParameter</span>.Where(<span id="r9 rd" class="r9 r">p</span> =&gt; <span class="r9 r">p</span>.Item1 == <b>null</b>).Select(<span id="r10 rd" class="r10 r">x</span> =&gt; <span class="r10 r">x</span>.Item2.Item1).ToList();
+ 
+            <b>var</b> <span id="r11 rd" class="r11 r">xmlTextNodesToRemove</span> = <span class="r7 r">documentationNode</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff45c2309de3f286">Content</a>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2b32073651117d97" class="t">XmlTextSyntax</a>&gt;()
+                .Join(<span class="r8 r">nodesToRemove</span>, <span id="r12 rd" class="r12 r">textNode</span> =&gt; <span class="r12 r">textNode</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1f00aadbedf1ea2c">FullSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#742855f910d38688">End</a>, <span id="r13 rd" class="r13 r">tagNode</span> =&gt; <span class="r13 r">tagNode</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1f00aadbedf1ea2c">FullSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>, (<span id="r14 rd" class="r14 r">textNode</span>, <span id="r15 rd" class="r15 r">tagNode</span>) =&gt; <span class="r14 r">textNode</span>);
+ 
+            <b>var</b> <span id="r16 rd" class="r16 r">allNodesToRemove</span> = <span class="r8 r">nodesToRemove</span>.Cast&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>&gt;().Union(<span class="r11 r">xmlTextNodesToRemove</span>);
+            <b>return</b> <span class="r16 r">allNodesToRemove</span>;
+        }
+ 
+        <b>public override sealed</b> <span class="t">Task</span> <a id="7336859e7fd78070" href="../R/7336859e7fd78070.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r17 rd" class="r17 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r18 rd" class="r18 r">diagnostic</span> = <span class="r17 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <b>if</b> (<span class="r18 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ba4b6448b981d28">Properties</a>[<span class="s">&quot;kind&quot;</span>] == <span class="s">&quot;nonexistentParam&quot;</span>)
+                <span class="r17 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#d9b06a64f68f4880">XmlDocumentationRemoveNonExistentParametersCodeFixProvider_Title</a>, <span id="r19 rd" class="r19 r">c</span> =&gt; <a href="XmlDocumentationCodeFixProvider.cs.html#757f9f90b11c0ac8">FixParametersAsync</a>(<span class="r17 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r18 r">diagnostic</span>, <span class="r19 r">c</span>)), <span class="r18 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

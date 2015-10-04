@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveCommentedCodeAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(133);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/RemoveCommentedCodeAnalyzer.cs" target="_top">Style\RemoveCommentedCodeAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> Microsoft.CodeAnalysis.Text;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> System.Text;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="58c5308d1e3d8d5d" href="../R/58c5308d1e3d8d5d.html" target="n" data-glyph="0,0" class="t"><span id="9638138f6c762b73">RemoveCommentedCodeAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="d74a11af8ce13b77" href="../R/d74a11af8ce13b77.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Remove commented code.&quot;</span>;
+        <b>internal const string</b> <a id="3d0f79d56408e395" href="../R/3d0f79d56408e395.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Commented code should be removed.&quot;</span>;
+        <b>internal const string</b> <a id="3029fe7d6768e3da" href="../R/3029fe7d6768e3da.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="72e632770bbcbf59" href="../R/72e632770bbcbf59.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#008f2537f4688a57">RemoveCommentedCode</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#d74a11af8ce13b77">Title</a>,
+            <a href="#3d0f79d56408e395">MessageFormat</a>,
+            <a href="#3029fe7d6768e3da">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#008f2537f4688a57">RemoveCommentedCode</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="de6b835f7b5e1c22" href="../R/de6b835f7b5e1c22.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#72e632770bbcbf59">Rule</a>);
+ 
+        <b>public override void</b> <a id="d9b35c573d4c48d3" href="../R/d9b35c573d4c48d3.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt;
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#04c5589f62816c61">RegisterSyntaxTreeAction</a>(<a href="#6a40f9516c5c8aff">AnalyzeSingleLineCommentTrivia</a>);
+ 
+        <b>private void</b> <a id="6a40f9516c5c8aff" href="../R/6a40f9516c5c8aff.html" target="n" data-glyph="76,1">AnalyzeSingleLineCommentTrivia</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#90d92645ff9f3d2f" class="t">SyntaxTreeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#248a77262c748d6c">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r4 rd" class="r4 r">root</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>();
+ 
+            <b>var</b> <span id="r5 rd" class="r5 r">comments</span> = <span class="r4 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d67f7a1a96f8f594">DescendantTrivia</a>()
+                .Where(<span id="r6 rd" class="r6 r">trivia</span> =&gt; <span class="r6 r">trivia</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#380d33c095dd8a8f">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#504210015fef4fba">SingleLineCommentTrivia</a>))
+                .ToArray();
+ 
+            <b>for</b> (<b>var</b> <span id="r7 rd" class="r7 r">i</span> = 0; <span class="r7 r">i</span> &lt; <span class="r5 r">comments</span>.Length; <span class="r7 r">i</span>++)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#df1cc9c731108516" class="k">var</a> <span id="r8 rd" class="r8 r">comment</span> = <span class="r5 r">comments</span>[<span class="r7 r">i</span>];
+ 
+                <a href="#43c8a467cf899a49" class="k">var</a> <span id="r9 rd" class="r9 r">code</span> = <a href="#cde71659a8fe4bd4">GetFullCommentedCode</a>(<span class="r4 r">root</span>, <span class="r8 r">comment</span>);
+                <b>if</b> (!<a href="#87dd0374b06dcfba">CouldBeSourceCode</a>(<span class="r9 r">code</span>.<a href="#3e37c8e1db0c5e8a">Code</a>)) <b>continue</b>;
+ 
+                <span class="r7 r">i</span> += <span class="r9 r">code</span>.<a href="#fe9d06fcae3f5bd6">NumberOfComments</a> - 1;
+ 
+                <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#033628ec7bb8f365">Create</a>(<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>, <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#e229722e0f1b3dd9" class="t">TextSpan</a>(<span class="r9 r">code</span>.<a href="#a0168e2ec16d6e98">Start</a>, <span class="r9 r">code</span>.<a href="#0d332efb4c3756d0">End</a>));
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r10 rd" class="r10 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#72e632770bbcbf59">Rule</a>, <span class="r8 r">comment</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5095a8dd5db103ee">GetLocation</a>());
+                <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#66b0da0ad461de54">ReportDiagnostic</a>(<span class="r10 r">diagnostic</span>);
+            }
+        }
+ 
+        <b>readonly</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e0ecdc139c0fd573" class="t">CSharpParseOptions</a> <a id="d2c0a791ffd59d75" href="../R/d2c0a791ffd59d75.html" target="n" data-glyph="46,1">options</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2c957702f498e076" class="t">CSharpParseOptions</a>(<span class="r11 r">documentationMode</span>: <a href="@1@Microsoft.CodeAnalysis/A.html#71ebb552d028e767" class="t">DocumentationMode</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed3e659f991f645">None</a>);<span class="c">//todo:bring kind: SourceCodeKind.Interactive back, it is not supported at the current release</span>
+        <b>bool</b> <a id="87dd0374b06dcfba" href="../R/87dd0374b06dcfba.html" target="n" data-glyph="76,1">CouldBeSourceCode</a>(<b>string</b> <span id="r12 rd" class="r12 r">source</span>)
+        {
+            <span class="r12 r">source</span> = <span class="r12 r">source</span>.Trim();
+            <span class="c">//single word is valid C#, but we don&#39;t want to remove that</span>
+            <b>if</b> (<span class="r12 r">source</span>.IndexOf(<span class="s">&quot; &quot;</span>) == -1) <b>return false</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="k">var</a> <span id="r13 rd" class="r13 r">compilation</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7db6ea0c0ecc7675">ParseSyntaxTree</a>(<span class="r12 r">source</span>, <a href="#d2c0a791ffd59d75">options</a>);
+ 
+            <b>var</b> <span id="r14 rd" class="r14 r">diagnostics</span> = <span class="r13 r">compilation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#db56928440c2ab3b">GetDiagnostics</a>()
+                .Where(<span id="r15 rd" class="r15 r">d</span> =&gt; <span class="r15 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#bae9652819d4d9be">Severity</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>).ToArray();
+ 
+            <span class="c">// class?</span>
+            <b>if</b> (<span class="r14 r">diagnostics</span>.Length == 2)
+            {
+                <span class="c">// missing {</span>
+                <b>if</b> (!<span class="r14 r">diagnostics</span>[0].<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a>.Equals(<span class="s">&quot;CS1514&quot;</span>)) <b>return false</b>;
+                <span class="c">// missing }</span>
+                <b>if</b> (!<span class="r14 r">diagnostics</span>[1].<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a>.Equals(<span class="s">&quot;CS1513&quot;</span>)) <b>return false</b>;
+                <b>return true</b>;
+            }
+ 
+            <span class="c">// if / while</span>
+            <b>else if</b> (<span class="r14 r">diagnostics</span>.Length == 1)
+            {
+                <span class="c">// missing statement</span>
+                <b>if</b> (!<span class="r14 r">diagnostics</span>[0].<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a>.Equals(<span class="s">&quot;CS1733&quot;</span>)) <b>return false</b>;
+                <b>return true</b>;
+            }
+ 
+            <b>if</b> (<span class="r14 r">diagnostics</span>.Length != 0) <b>return false</b>;
+ 
+            <b>return true</b>;
+        }
+ 
+        <b>internal static</b> <a href="#43c8a467cf899a49" class="t">GetFullCommentedCodeResult</a> <a id="cde71659a8fe4bd4" href="../R/cde71659a8fe4bd4.html" target="n" data-glyph="74,1">GetFullCommentedCode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r16 rd" class="r16 r">root</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#df1cc9c731108516" class="t">SyntaxTrivia</a> <span id="r17 rd" class="r17 r">firstComment</span>)
+        {
+            <b>var</b> <span id="r18 rd" class="r18 r">result</span> = <b>new</b> <span class="t">StringBuilder</span>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#df1cc9c731108516" class="k">var</a> <span id="r19 rd" class="r19 r">current</span> = <span class="r17 r">firstComment</span>;
+            <b>var</b> <span id="r20 rd" class="r20 r">numberOfComments</span> = 1;
+            <b>var</b> <span id="r21 rd" class="r21 r">start</span> = <span class="r17 r">firstComment</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5095a8dd5db103ee">GetLocation</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>;
+            <b>int</b> <span id="r22 rd" class="r22 r">end</span>;
+            <b>do</b>
+            {
+                <span class="r22 r">end</span> = <span class="r19 r">current</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5095a8dd5db103ee">GetLocation</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#742855f910d38688">End</a>;
+                <span class="r18 r">result</span>.Append(<span class="r19 r">current</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b9a2cb8779d1aa3f">ToString</a>().Substring(2));
+ 
+                <a href="@1@Microsoft.CodeAnalysis/A.html#df1cc9c731108516" class="k">var</a> <span id="r23 rd" class="r23 r">eol</span> = <span class="r16 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1be29dcfd055624d">FindTrivia</a>(<span class="r19 r">current</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5095a8dd5db103ee">GetLocation</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#742855f910d38688">End</a> + 1);
+                <b>if</b> (!<span class="r23 r">eol</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#380d33c095dd8a8f">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2c91b4623bea6586">EndOfLineTrivia</a>)) <b>break</b>;
+ 
+                <a href="@1@Microsoft.CodeAnalysis/A.html#df1cc9c731108516" class="k">var</a> <span id="r24 rd" class="r24 r">whitespace</span> = <span class="r16 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1be29dcfd055624d">FindTrivia</a>(<span class="r23 r">eol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5095a8dd5db103ee">GetLocation</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#742855f910d38688">End</a> + 1);
+                <b>if</b> (!<span class="r24 r">whitespace</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#380d33c095dd8a8f">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b8e8530e329b069b">WhitespaceTrivia</a>)) <b>break</b>;
+ 
+                <span class="r19 r">current</span> = <span class="r16 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1be29dcfd055624d">FindTrivia</a>(<span class="r24 r">whitespace</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5095a8dd5db103ee">GetLocation</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#742855f910d38688">End</a> + 1);
+                <b>if</b> (!<span class="r19 r">current</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#380d33c095dd8a8f">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#504210015fef4fba">SingleLineCommentTrivia</a>)) <b>break</b>;
+ 
+                <span class="r20 r">numberOfComments</span> ++;
+ 
+            } <b>while</b> (<b>true</b>);
+            <b>return</b> <b>new</b> <a href="#7b6ecd65e6bb356e" class="t">GetFullCommentedCodeResult</a>(<span class="r18 r">result</span>.ToString(), <span class="r20 r">numberOfComments</span>, <span class="r21 r">start</span>, <span class="r22 r">end</span>);
+        }
+ 
+        <b>internal class</b> <a id="43c8a467cf899a49" href="../R/43c8a467cf899a49.html" target="n" data-glyph="2,1" class="t">GetFullCommentedCodeResult</a>
+        {
+            <b>public string</b> <a id="3e37c8e1db0c5e8a" href="../R/3e37c8e1db0c5e8a.html" target="n" data-glyph="102,2">Code</a> { <b>get</b>; }
+            <b>public int</b> <a id="fe9d06fcae3f5bd6" href="../R/fe9d06fcae3f5bd6.html" target="n" data-glyph="102,2">NumberOfComments</a>{ <b>get</b>; }
+            <b>public int</b> <a id="a0168e2ec16d6e98" href="../R/a0168e2ec16d6e98.html" target="n" data-glyph="102,2">Start</a> { <b>get</b>; }
+            <b>public int</b> <a id="0d332efb4c3756d0" href="../R/0d332efb4c3756d0.html" target="n" data-glyph="102,2">End</a> { <b>get</b>; }
+ 
+            <b>public</b> <a id="7b6ecd65e6bb356e" href="../R/7b6ecd65e6bb356e.html" target="n" data-glyph="72,2">GetFullCommentedCodeResult</a>(<b>string</b> <span id="r25 rd" class="r25 r">code</span>, <b>int</b> <span id="r26 rd" class="r26 r">numberOfComments</span>, <b>int</b> <span id="r27 rd" class="r27 r">start</span>, <b>int</b> <span id="r28 rd" class="r28 r">end</span>)
+            {
+                <a href="#3e37c8e1db0c5e8a">Code</a> = <span class="r25 r">code</span>;
+                <a href="#fe9d06fcae3f5bd6">NumberOfComments</a> = <span class="r26 r">numberOfComments</span>;
+                <a href="#a0168e2ec16d6e98">Start</a> = <span class="r27 r">start</span>;
+                <a href="#0d332efb4c3756d0">End</a> = <span class="r28 r">end</span>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

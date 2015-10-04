@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html><head><title>SplitIntoNestedIfFixAllProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(67);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/SplitIntoNestedIfFixAllProvider.cs" target="_top">Refactoring\SplitIntoNestedIfFixAllProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    <b>public sealed class</b> <a id="ed93f609b83b26f1" href="../R/ed93f609b83b26f1.html" target="n" data-glyph="0,0" class="t">SplitIntoNestedIfFixAllProvider</a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+    {
+        <b>private static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5df4388ff3239a2c" class="t">SyntaxAnnotation</a> <a id="208a724f34f6f7aa" href="../R/208a724f34f6f7aa.html" target="n" data-glyph="46,1">nestedIfAnnotation</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#a029520aa34217c5" class="t">SyntaxAnnotation</a>(<b>nameof</b>(<a href="#ed93f609b83b26f1" class="t">SplitIntoNestedIfFixAllProvider</a>));
+        <b>private</b> <a id="aa4f77641fc93037" href="../R/aa4f77641fc93037.html" target="n" data-glyph="76,1">SplitIntoNestedIfFixAllProvider</a>() { }
+        <b>public static</b> <a href="#ed93f609b83b26f1" class="t">SplitIntoNestedIfFixAllProvider</a> <a id="03dc4f2413215eb4" href="../R/03dc4f2413215eb4.html" target="n" data-glyph="42,1">Instance</a> = <b>new</b> <a href="#aa4f77641fc93037" class="t">SplitIntoNestedIfFixAllProvider</a>();
+        <b>public override</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>&gt; <a id="9883e373aee329bb" href="../R/9883e373aee329bb.html" target="n" data-glyph="72,1">GetFixAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r0 rd" class="r0 r">fixAllContext</span>)
+        {
+            <b>switch</b> (<span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b9bff38165d5d1e8">Scope</a>)
+            {
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#97fa69e6457fca10">Document</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<a href="SplitIntoNestedIfCodeFixProvider.cs.html#dabf6da2849df496" class="t">SplitIntoNestedIfCodeFixProvider</a>.<a href="SplitIntoNestedIfCodeFixProvider.cs.html#bc1b67482d4d7565">MessageFormat</a>,
+                        <b>async</b> <span id="r1 rd" class="r1 r">ct</span> =&gt; <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<b>await</b> <a href="#a8da16565fb04123">GetFixedDocumentAsync</a>(<span class="r0 r">fixAllContext</span>, <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>).ConfigureAwait(<b>false</b>))));
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6ea2f449b2d95b0d">Project</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<a href="SplitIntoNestedIfCodeFixProvider.cs.html#dabf6da2849df496" class="t">SplitIntoNestedIfCodeFixProvider</a>.<a href="SplitIntoNestedIfCodeFixProvider.cs.html#bc1b67482d4d7565">MessageFormat</a>,
+                        <span id="r2 rd" class="r2 r">ct</span> =&gt; <a href="#301c9df11ac4558f">GetFixedProjectAsync</a>(<span class="r0 r">fixAllContext</span>, <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#2ac5d9c985a8d9bf">Project</a>)));
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9c02b956ab631d88">Solution</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<a href="SplitIntoNestedIfCodeFixProvider.cs.html#dabf6da2849df496" class="t">SplitIntoNestedIfCodeFixProvider</a>.<a href="SplitIntoNestedIfCodeFixProvider.cs.html#bc1b67482d4d7565">MessageFormat</a>,
+                        <span id="r3 rd" class="r3 r">ct</span> =&gt; <a href="#3ca17a7d79a8194b">GetFixedSolutionAsync</a>(<span class="r0 r">fixAllContext</span>)));
+            }
+            <b>return null</b>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="3ca17a7d79a8194b" href="../R/3ca17a7d79a8194b.html" target="n" data-glyph="76,1">GetFixedSolutionAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r4 rd" class="r4 r">fixAllContext</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r5 rd" class="r5 r">newSolution</span> = <span class="r4 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#814dea7e1160077e">Solution</a>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d57a45799bc4a52e" class="k">var</a> <span id="r6 rd" class="r6 r">projectId</span> <b>in</b> <span class="r5 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#2800abcd032f3c15">ProjectIds</a>)
+                <span class="r5 r">newSolution</span> = <b>await</b> <a href="#301c9df11ac4558f">GetFixedProjectAsync</a>(<span class="r4 r">fixAllContext</span>, <span class="r5 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c554b9964ab32f06">GetProject</a>(<span class="r6 r">projectId</span>)).ConfigureAwait(<b>false</b>);
+            <b>return</b> <span class="r5 r">newSolution</span>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="301c9df11ac4558f" href="../R/301c9df11ac4558f.html" target="n" data-glyph="76,1">GetFixedProjectAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r7 rd" class="r7 r">fixAllContext</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a> <span id="r8 rd" class="r8 r">project</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r9 rd" class="r9 r">solution</span> = <span class="r8 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4c4d2a069da85c41">Solution</a>;
+            <b>var</b> <span id="r10 rd" class="r10 r">newDocuments</span> = <span class="r8 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9e72271524e0d9b3">Documents</a>.ToDictionary(<span id="r11 rd" class="r11 r">d</span> =&gt; <span class="r11 r">d</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>, <span id="r12 rd" class="r12 r">d</span> =&gt; <a href="#a8da16565fb04123">GetFixedDocumentAsync</a>(<span class="r7 r">fixAllContext</span>, <span class="r12 r">d</span>));
+            <b>await</b> <span class="t">Task</span>.WhenAll(<span class="r10 r">newDocuments</span>.Values).ConfigureAwait(<b>false</b>);
+            <b>foreach</b> (<b>var</b> <span id="r13 rd" class="r13 r">newDoc</span> <b>in</b> <span class="r10 r">newDocuments</span>)
+                <span class="r9 r">solution</span> = <span class="r9 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d63e3a736f35fb26">WithDocumentSyntaxRoot</a>(<span class="r13 r">newDoc</span>.Key, <span class="r13 r">newDoc</span>.Value.Result);
+            <b>return</b> <span class="r9 r">solution</span>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>&gt; <a id="a8da16565fb04123" href="../R/a8da16565fb04123.html" target="n" data-glyph="76,1">GetFixedDocumentAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r14 rd" class="r14 r">fixAllContext</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r15 rd" class="r15 r">document</span>)
+        {
+            <b>var</b> <span id="r16 rd" class="r16 r">diagnostics</span> = <b>await</b> <span class="r14 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#095faaf998f0da13">GetDocumentDiagnosticsAsync</a>(<span class="r15 r">document</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r17 rd" class="r17 r">root</span> = <b>await</b> <span class="r15 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r14 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#46f6905548a61514">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+            <b>var</b> <span id="r18 rd" class="r18 r">nodes</span> = <span class="r16 r">diagnostics</span>.Select(<span id="r19 rd" class="r19 r">d</span> =&gt; <span class="r17 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r19 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>)).Where(<span id="r20 rd" class="r20 r">n</span> =&gt; !<span class="r20 r">n</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#295e4dfa32129e54">IsMissing</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r21 rd" class="r21 r">newRoot</span> = <span class="r17 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(<span class="r18 r">nodes</span>, (<span id="r22 rd" class="r22 r">original</span>, <span id="r23 rd" class="r23 r">rewritten</span>) =&gt; <span class="r22 r">original</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="#208a724f34f6f7aa">nestedIfAnnotation</a>));
+            <b>while</b> (<b>true</b>)
+            {
+                <b>var</b> <span id="r24 rd" class="r24 r">annotatedNodes</span> = <span class="r21 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5dbd5590ba4a012b">GetAnnotatedNodes</a>(<a href="#208a724f34f6f7aa">nestedIfAnnotation</a>);
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="k">var</a> <span id="r25 rd" class="r25 r">condition</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>)<span class="r24 r">annotatedNodes</span>.FirstOrDefault();
+                <b>if</b> (<span class="r25 r">condition</span> == <b>null</b>) <b>break</b>;
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r26 rd" class="r26 r">ifStatement</span> = <span class="r25 r">condition</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>&gt;();
+                <span class="r21 r">newRoot</span> = <a href="SplitIntoNestedIfCodeFixProvider.cs.html#dabf6da2849df496" class="t">SplitIntoNestedIfCodeFixProvider</a>.<a href="SplitIntoNestedIfCodeFixProvider.cs.html#8aece31f792293dc">CreateNestedIf</a>(<span class="r25 r">condition</span>, <span class="r21 r">newRoot</span>);
+            }
+            <b>return</b> <span class="r21 r">newRoot</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html><head><title>ChangeAnyToAllTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(172);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Refactoring/ChangeAnyToAllTests.vb" target="_top">Refactoring\ChangeAnyToAllTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Refactoring
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> System.Threading.Tasks
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Refactoring
+    <b>Public Class</b> <a id="ee087d12c589bbfe" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="3b1e73e7180649d8">ChangeAnyToAllTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#068b79d77ae56e68" class="t">ChangeAnyToAllAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#9876476d60c1895d" class="t">ChangeAnyToAllCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}.AsQueryable()
+            Dim query = ints.Any(Function(i) i &gt; 0)&quot;</span>, 30, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}.AsQueryable()
+            Dim query = Not ints.Any(function(i) i &gt; 0)&quot;</span>, 34, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(function(i) i &gt; 0)&quot;</span>, 30, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.Any(function(i) i &gt; 0)&quot;</span>, 34, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}.AsQueryable()
+            Dim query = Not ints.All(function(i) i &gt; 0)&quot;</span>, 34, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#8a82651fe7956cec">ChangeAllToAny</a>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(function(i) i &gt; 0)&quot;</span>, 34, <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#8a82651fe7956cec">ChangeAllToAny</a>)&gt;
+        <b>Public Async Function</b> <a id="d212e5a5905e76c9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AnyAndAllWithLinqCreatesDiagnostic</a>(<span id="r0 rd" class="r0 r">code</span> <b>As String</b>, <span id="r1 rd" class="r1 r">column</span> <b>As Integer</b>, <span id="r2 rd" class="r2 r">diagnosticId</span> <b>As</b> <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r3 rd" class="r3 r">source</span> = <span class="r0 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">imports</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>)
+            <b>Dim</b> <span id="r5 rd" class="r5 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <span class="r2 r">diagnosticId</span>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>If</b>(<span class="r2 r">diagnosticId</span> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f73fe4fc69fc0996">ChangeAnyToAll</a>, <a href="/CodeCracker.VisualBasic/A.html#068b79d77ae56e68" class="t">ChangeAnyToAllAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#e999985238c4585b">MessageAny</a>, <a href="/CodeCracker.VisualBasic/A.html#068b79d77ae56e68" class="t">ChangeAnyToAllAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#9a94f950473e074b">MessageAll</a>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 9, <span class="r1 r">column</span>)}
+            }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r3 r">source</span>, <span class="r5 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="af59c05ad72eaeb2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ComplexLambdaDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim notAll = Not ints.All(Function(i) 
+                    Const zero As Integer = 0
+                    Return i &gt; zero
+                End Function)&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">[imports]</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r6 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="007fc13aa03d39dd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">InvokingMethodThatIsNotAnyDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">&quot;Console.WriteLine(1)&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="c4fe1f994672934b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertsConditionalExpression</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r8 rd" class="r8 r">original</span> = <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) If(True, True, False))&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">[imports]</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>)
+            <b>Dim</b> <span id="r9 rd" class="r9 r">fix</span> = <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) If(True, True, False) = False)&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">[imports]</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r8 r">original</span>, <span class="r9 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            ints.Any(Function(i) True)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            ints.All(Function(i) True)&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="7c4754b3ba750a12" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ExpressionStatementsDoNotCreateDiagnostic</a>(<span id="r10 rd" class="r10 r">code</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r11 rd" class="r11 r">original</span> = <span class="r10 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">[imports]</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">original</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) i &gt; 1)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i &lt;= 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) i &gt;= 1)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i &lt; 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) i &lt; 1)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i &gt;= 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) i &lt;&gt; 1)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i = 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) Not True)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) True)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) i &gt; Not(i = 1))&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i &lt;= Not (i = 1))&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) True)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) False)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) True)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) True = (i = 1))&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) False = (i = 1))&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) (i = 1) = False)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i = 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) False = (i = 1))&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i = 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) (i = 1) &lt;&gt; True)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i = 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) True &lt;&gt; (i = 1))&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i = 1)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) (i = 1) &lt;&gt; False)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) (i = 1) = False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) False &lt;&gt; (i = 1))&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) False = (i = 1))&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = ints.Any(Function(i) i = 1)&quot;</span>, <span class="s">&quot;
+            Dim ints = {1, 2}
+            Dim query = Not ints.All(Function(i) i &lt;&gt; 1)&quot;</span>)&gt;
+        &lt;<span class="t">Theory</span>&gt;
+        <b>Public Async Function</b> <a id="8249c8e9bf810177" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertsSpecialCases</a>(<span id="r12 rd" class="r12 r">original</span> <b>As String</b>, <span id="r13 rd" class="r13 r">fix</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r12 r">original</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">[imports]</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>), <span class="r13 r">fix</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r4 r">[imports]</span>:=<span class="s">&quot;
+Imports System.Linq&quot;</span>))
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

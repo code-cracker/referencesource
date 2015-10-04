@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnusedParametersTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(546);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/UnusedParametersTests.cs" target="_top">Usage\UnusedParametersTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="ca3f5bfa22c1811c" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="2c39318f29a078f1">UnusedParametersTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#300afacf5a9085f4" class="t">UnusedParametersAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#a452f103c32a3c14" class="t">UnusedParametersCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5124497627199711" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MethodWithoutParametersDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public void Foo()
+        {
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e86d736a6365e253" href="../R/../../0000000000.html" target="n" data-glyph="72,1">UsedParameterDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public int Foo(int a)
+        {
+            return a;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e63cf28b33b1211c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MethodWithoutStatementsCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public void Foo(int a)
+        {
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">source</span>, <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;a&quot;</span>, 4, 25));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3bd028f0f286ee15" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnorePartialMethods</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+    partial class TypeName
+    {
+        public partial void Foo(int a)
+        {
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="445dbdcebe871b11" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixUnusedParameter</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public void Foo(int a)
+        {
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r5 rd" class="r5 r">fixtest</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public void Foo()
+        {
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="af523633dc924976" href="../R/../../0000000000.html" target="n" data-glyph="72,1">With2ParametersCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public int Foo(int a, int b)
+        {
+            return a;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">source</span>, <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;b&quot;</span>, 4, 31));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cac1f5eeae82044b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixUnusedParameterWith2Parameters</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public int Foo(int a, int b)
+        {
+            return a;
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r8 rd" class="r8 r">fixtest</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public int Foo(int a)
+        {
+            return a;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8fc77ac0a8595447" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreOverrides</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+    class Base
+    {
+        public virtual int Foo(int a)
+        {
+            return a;
+        }
+    }
+    class TypeName : Base
+    {
+        public override int Foo(int a)
+        {
+            throw new System.Exception();
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5ec94a99d3f14451" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatImplementExplicitlyAnInterfaceMember</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+    interface IBase
+    {
+        int Foo(int a);
+    }
+    class TypeName : IBase
+    {
+        int IBase.Foo(int a)
+        {
+            throw new System.Exception();
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r10 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="423730ef6b918f43" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatImplementAnInterfaceMember</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+    interface IBase
+    {
+        int Foo(int a);
+    }
+    class TypeName : IBase
+    {
+        public int Foo(int a)
+        {
+            throw new System.Exception();
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3beaecbeaf6fd353" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatMatchEventHandlerPattern</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+    using System;
+    class TypeName
+    {
+        public void Foo(object sender, EventArgs args)
+        {
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3127f3ef482eedd3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreMethodsThatMatchEventHandlerPatternWithDerivedEventArgs</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+    using System;
+    class MyArgs : EventArgs { }
+    class TypeName
+    {
+        public void Foo(object sender, MyArgs args) { }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3ad1a03b8b29298e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotIgnoreMethodsThatMatchEventHandlerPatternButDoesNotReturnVoid</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+    using System;
+    class TypeName
+    {
+        public int Foo(object sender, EventArgs args)
+        {
+            throw new Exception();
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r14 r">source</span>,
+                <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;sender&quot;</span>, 5, 24), <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;args&quot;</span>, 5, 39));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e87bf7727c7f4e96" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstructorWithoutStatementsCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        public TypeName(int a) { }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r15 r">source</span>, <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;a&quot;</span>, 4, 25));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b03f771d49c4a082" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoreSerializableConstructor</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+    using System.Runtime.Serialization;
+    using System;
+    [Serializable]
+    public class MyObject : ISerializable
+    {
+        protected MyObject(SerializationInfo info, StreamingContext context) { }
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context) { }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r16 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e5143fc2bc33c332" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotIgnoreSerializableConstructorIfTypeDoesNotImplementISerializable</a>()
+        {
+            <b>const string</b> <span id="r17 rd" class="r17 r">source</span> = <span class="s">@&quot;
+    using System.Runtime.Serialization;
+    using System;
+    [Serializable]
+    public class MyObject
+    {
+        protected MyObject(SerializationInfo info, StreamingContext context) { }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r17 r">source</span>,
+                <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;info&quot;</span>, 7, 28), <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;context&quot;</span>, 7, 52));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1dda9cd36f934bc2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotIgnoreSerializableConstructorIfTypeDoesNotHaveSerializableAttribute</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+    using System.Runtime.Serialization;
+    public class MyObject : ISerializable
+    {
+        protected MyObject(SerializationInfo info, StreamingContext context) { }
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context) { }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r18 r">source</span>,
+                <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;info&quot;</span>, 5, 28), <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;context&quot;</span>, 5, 52));
+        }
+ 
+        <b>public static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="be94c657a83e9b07" href="../R/be94c657a83e9b07.html" target="n" data-glyph="72,1">CreateDiagnosticResult</a>(<b>string</b> <span id="r19 rd" class="r19 r">parameterName</span>, <b>int</b> <span id="r20 rd" class="r20 r">line</span>, <b>int</b> <span id="r21 rd" class="r21 r">column</span>)
+        {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3c47a0e6723314bc">UnusedParameters</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#300afacf5a9085f4" class="t">UnusedParametersAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#d02659be0f493e49">Message</a>, <span class="r19 r">parameterName</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r20 r">line</span>, <span class="r21 r">column</span>) }
+            };
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="843522106ea7bf79" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnSameClass</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">@&quot;
+class TypeName
+{
+    public void IsReferencing()
+    {
+        Foo(1, 2);
+    }
+    public int Foo(int a, int b)
+    {
+        return a;
+    }
+}&quot;</span>;
+            <b>const string</b> <span id="r23 rd" class="r23 r">fixtest</span> = <span class="s">@&quot;
+class TypeName
+{
+    public void IsReferencing()
+    {
+        Foo(1);
+    }
+    public int Foo(int a)
+    {
+        return a;
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f2c1a7ee4373a6d0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnDifferentClass</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+class HasRef
+{
+    public void IsReferencing()
+    {
+        new TypeName().Foo(1, 2);
+    }
+}
+class TypeName
+{
+    public int Foo(int a, int b)
+    {
+        return a;
+    }
+}&quot;</span>;
+            <b>const string</b> <span id="r25 rd" class="r25 r">fixtest</span> = <span class="s">@&quot;
+class HasRef
+{
+    public void IsReferencing()
+    {
+        new TypeName().Foo(1);
+    }
+}
+class TypeName
+{
+    public int Foo(int a)
+    {
+        return a;
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a56e5bc7568f5ee0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnDifferentClassOnStaticMethod</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">@&quot;
+class HasRef
+{
+    public void IsReferencing()
+    {
+        TypeName.Foo(1, 2);
+    }
+}
+class TypeName
+{
+    public static int Foo(int a, int b)
+    {
+        return a;
+    }
+}&quot;</span>;
+            <b>const string</b> <span id="r27 rd" class="r27 r">fixtest</span> = <span class="s">@&quot;
+class HasRef
+{
+    public void IsReferencing()
+    {
+        TypeName.Foo(1);
+    }
+}
+class TypeName
+{
+    public static int Foo(int a)
+    {
+        return a;
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r26 r">source</span>, <span class="r27 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b4273b59648dd702" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixWhenTheParametersHasReferenceOnConstructor</a>()
+        {
+            <b>const string</b> <span id="r28 rd" class="r28 r">source</span> = <span class="s">@&quot;
+class HasRef
+{
+    public void IsReferencing()
+    {
+        new TypeName(1, 2);
+    }
+}
+class TypeName
+{
+    public TypeName(int a, int b)
+    {
+        a = 1;
+    }
+}&quot;</span>;
+            <b>const string</b> <span id="r29 rd" class="r29 r">fixtest</span> = <span class="s">@&quot;
+class HasRef
+{
+    public void IsReferencing()
+    {
+        new TypeName(1);
+    }
+}
+class TypeName
+{
+    public TypeName(int a)
+    {
+        a = 1;
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r28 r">source</span>, <span class="r29 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b54b33d960b446e3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallToBaseDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r30 rd" class="r30 r">source</span> = <span class="s">@&quot;
+class Base
+{
+  protected Base(int a) { a = 1; }
+}
+class Derived : Base
+{
+  Derived(int a) : base(a) { }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r30 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9997aac6461a1694" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallToBaseWithExpressionDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r31 rd" class="r31 r">source</span> = <span class="s">@&quot;
+class Base
+{
+  protected Base(int a) { a = 1; }
+}
+class Derived : Base
+{
+  Derived(int a) : base(a + 1) { }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r31 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7d580fba1ec54fb2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithRefPeremeterDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r32 rd" class="r32 r">source</span> = <span class="s">@&quot;
+class TypeName
+{
+    bool TryParse(string input, ref int output)
+    {
+        try
+        {
+            output = int.Parse(input);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r32 r">source</span>);
+        }
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6651cdecb11edb4f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithUnusedRefPeremeterCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r33 rd" class="r33 r">source</span> = <span class="s">@&quot;
+class TypeName
+{
+    bool TryParse(string input, ref int output, ref int out2)
+    {
+        try
+        {
+            output = int.Parse(input);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r33 r">source</span>, <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;out2&quot;</span>, 4, 49));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1cb6c0d13ff2d1e4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithOutPeremeterDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r34 rd" class="r34 r">source</span> = <span class="s">@&quot;
+class TypeName
+{
+    bool TryParse(string input, out int output)
+    {
+        try
+        {
+            output = int.Parse(input);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r34 r">source</span>);
+        }
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3946cf4c03ace0a0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CallWithUnusedOutPeremeterCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r35 rd" class="r35 r">source</span> = <span class="s">@&quot;
+class TypeName
+{
+    bool TryParse(string input, out int output, out int out2)
+    {
+        try
+        {
+            output = int.Parse(input);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r35 r">source</span>, <a href="#be94c657a83e9b07">CreateDiagnosticResult</a>(<span class="s">&quot;out2&quot;</span>, 4, 49));
+        }
+ 
+    }
+ 
+}
+ 
+ 
+</pre></td></tr></table></div></body></html>

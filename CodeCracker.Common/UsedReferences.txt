@@ -1,0 +1,10 @@
+Microsoft.Build.Tasks.v12.0
+FxCopTask
+Microsoft.ReportViewer.WebForms
+XamlBuildTask
+Microsoft.Activities.Build
+Microsoft.VisualStudio.TestTools.BuildShadowsTask
+Microsoft.Build.AppxPackage
+Microsoft.Build.Net.CoreRuntimeTask
+XsdBuildTask
+Microsoft.VisualStudio.PortableLibrary.Build.Tasks

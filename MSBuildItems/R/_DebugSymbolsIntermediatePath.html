@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html><head><title>_DebugSymbolsIntermediatePath</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">4 assignments to MSBuild item _DebugSymbolsIntermediatePath</div><div class="rA">MSBuildFiles (4)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Common.CurrentVersion.targets (2)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#350"><b>350</b>&lt;<i>_DebugSymbolsIntermediatePath</i> Include=&quot;$(IntermediateOutputPath)$(TargetName).compile.pdb&quot; Condition=&quot;&#39;$(OutputType)&#39; == &#39;winmdobj&#39; and &#39;@(_DebugSymbolsIntermediatePath)&#39; == &#39;&#39;&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#351"><b>351</b>&lt;<i>_DebugSymbolsIntermediatePath</i> Include=&quot;$(IntermediateOutputPath)$(TargetName).pdb&quot; Condition=&quot;&#39;$(OutputType)&#39; != &#39;winmdobj&#39; and &#39;@(_DebugSymbolsIntermediatePath)&#39; == &#39;&#39;&quot;/&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.CurrentVersion.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.CurrentVersion.targets.html#161"><b>161</b>&lt;<i>_DebugSymbolsIntermediatePath</i> Include=&quot;@(_DebugSymbolsIntermediatePathTemporary-&gt;&#39;%(RootDir)%(Directory)%(Filename).pdb&#39;)&quot;/&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.VisualBasic.CurrentVersion.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.CurrentVersion.targets.html#164"><b>164</b>&lt;<i>_DebugSymbolsIntermediatePath</i> Include=&quot;@(_DebugSymbolsIntermediatePathTemporary-&gt;&#39;%(RootDir)%(Directory)%(Filename).pdb&#39;)&quot;/&gt;</a>
+</div>
+</div>
+<div class="rH">15 usages of MSBuild item _DebugSymbolsIntermediatePath</div><div class="rA">MSBuildFiles (15)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Common.CurrentVersion.targets (11)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#350"><b>350</b>&lt;_DebugSymbolsIntermediatePath Include=&quot;$(IntermediateOutputPath)$(TargetName).compile.pdb&quot; Condition=&quot;&#39;$(OutputType)&#39; == &#39;winmdobj&#39; and &#39;@(<i>_DebugSymbolsIntermediatePath</i>)&#39; == &#39;&#39;&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#351"><b>351</b>&lt;_DebugSymbolsIntermediatePath Include=&quot;$(IntermediateOutputPath)$(TargetName).pdb&quot; Condition=&quot;&#39;$(OutputType)&#39; != &#39;winmdobj&#39; and &#39;@(<i>_DebugSymbolsIntermediatePath</i>)&#39; == &#39;&#39;&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#352"><b>352</b>&lt;_DebugSymbolsOutputPath Include=&quot;@(<i>_DebugSymbolsIntermediatePath</i>-&gt;&#39;$(OutDir)%(Filename)%(Extension)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#2190"><b>2190</b>Inputs=&quot;@(IntermediateAssembly);@(DocFileItem);@(<i>_DebugSymbolsIntermediatePath</i>);@(ReferencePath);$(MSBuildAllProjects)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#2209"><b>2209</b>InputPDBFile=&quot;@(<i>_DebugSymbolsIntermediatePath</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#3627"><b>3627</b>ExtraFiles=&quot;@(<i>_DebugSymbolsIntermediatePath</i>);$(IntermediateOutputPath)$(TargetName).xml;@(_ReferenceRelatedPaths)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#3863"><b>3863</b>SourceFiles=&quot;@(<i>_DebugSymbolsIntermediatePath</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#4258"><b>4258</b>&lt;_DebugSymbolsProduced Condition=&quot;!Exists(&#39;@(<i>_DebugSymbolsIntermediatePath</i>)&#39;)&quot;&gt;false&lt;/_DebugSymbolsProduced&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#4262"><b>4262</b>&lt;FileWrites Include=&quot;@(<i>_DebugSymbolsIntermediatePath</i>)&quot; Condition=&quot;&#39;$(_DebugSymbolsProduced)&#39;==&#39;true&#39;&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5119"><b>5119</b>&lt;DebugSymbolsProjectOutputGroupOutput Include=&quot;@(<i>_DebugSymbolsIntermediatePath</i>-&gt;&#39;%(FullPath)&#39;)&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5121"><b>5121</b>&lt;TargetPath&gt;@(<i>_DebugSymbolsIntermediatePath</i>-&gt;&#39;%(Filename)%(Extension)&#39;)&lt;/TargetPath&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.Core.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.Core.targets.html#19"><b>19</b>@(<i>_DebugSymbolsIntermediatePath</i>);</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.CurrentVersion.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.CurrentVersion.targets.html#194"><b>194</b>@(<i>_DebugSymbolsIntermediatePath</i>);</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.VisualBasic.Core.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.Core.targets.html#19"><b>19</b>@(<i>_DebugSymbolsIntermediatePath</i>);</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.VisualBasic.CurrentVersion.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.CurrentVersion.targets.html#196"><b>196</b>@(<i>_DebugSymbolsIntermediatePath</i>);</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveRedundantElseClauseCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(35);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/RemoveRedundantElseClauseCodeFixProvider.cs" target="_top">Usage\RemoveRedundantElseClauseCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#aaa539b79e2a4379" class="t">RemoveRedundantElseClauseCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="aaa539b79e2a4379" href="../R/aaa539b79e2a4379.html" target="n" data-glyph="0,0" class="t"><span id="c000ff529a1b38d2">RemoveRedundantElseClauseCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="90027d22cdbc3db2" href="../R/90027d22cdbc3db2.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0da4f4c7609454f9">RemoveRedundantElseClause</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="4b2e1f84dda224f7" href="../R/4b2e1f84dda224f7.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<a href="RemoveRedundantElseClauseAnalyzer.cs.html#598c06a1d9572abf" class="t">RemoveRedundantElseClauseAnalyzer</a>.<a href="RemoveRedundantElseClauseAnalyzer.cs.html#beab96e030bc6cd7">MessageFormat</a>, <span id="r2 rd" class="r2 r">c</span> =&gt; <a href="#7ea9f9a9b5eb80e1">RemoveElseAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r2 r">c</span>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="7ea9f9a9b5eb80e1" href="../R/7ea9f9a9b5eb80e1.html" target="n" data-glyph="76,1">RemoveElseAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r4 rd" class="r4 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="k">var</a> <span id="r7 rd" class="r7 r">diagnosticSpan</span> = <span class="r4 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4c606c85bd0ab648" class="k">var</a> <span id="r8 rd" class="r8 r">@else</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r7 r">diagnosticSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#665ad13c612b3744">GetAncestor</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4c606c85bd0ab648" class="t">ElseClauseSyntax</a>&gt;();
+            <span class="r6 r">root</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03fbd5239cc1fb6f">RemoveNode</a>(<span class="r8 r">@else</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#55d4a245cfef7ac7" class="t">SyntaxRemoveOptions</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#33ad1b4532e3d717">KeepNoTrivia</a>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r9 rd" class="r9 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r6 r">root</span>);
+            <b>return</b> <span class="r9 r">newDocument</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

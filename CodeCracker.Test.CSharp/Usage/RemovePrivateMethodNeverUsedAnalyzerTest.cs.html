@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemovePrivateMethodNeverUsedAnalyzerTest.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(363);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/RemovePrivateMethodNeverUsedAnalyzerTest.cs" target="_top">Usage\RemovePrivateMethodNeverUsedAnalyzerTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="73d56e1f0ee44390" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="b575c8551ab5e1be">RemovePrivateMethodNeverUsedAnalyzerTest</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#a530fb7b1593ff67" class="t">RemovePrivateMethodNeverUsedAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#4979053948b5c49b" class="t">RemovePrivateMethodNeverUsedCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="12506fbdbb60d469" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotGenerateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+  public class Foo
+{
+    public void PublicFoo()
+    {
+        PrivateFoo();
+    }
+ 
+    private void PrivateFoo()
+    {
+       PrivateFoo2();
+    }
+ 
+    private void PrivateFoo2() { }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="ac83cf0dfc91d4ac" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotGenerateDiagnosticsWhenPrivateMethodIsInvokedInPartialClasses</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+public partial class Foo
+{
+    public void PublicFoo()
+    {
+        PrivateFoo();
+    }
+}
+ 
+public partial class Foo
+{
+    private void PrivateFoo()
+    {
+    }
+}
+&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="698c2aa242d20485" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotGenerateDiagnosticsWhenPrivateMethodIsInvokedInPartialClasses2</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+public partial class foo
+{
+    public foo()
+    {
+ 
+    }
+ 
+    private void test()
+    {
+    }
+}
+ 
+public partial class foo
+{
+    public void test2()
+    {
+        test();
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="d93a71993fe25600" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixRemovesPrivateMethodWhenItIsNotInvokedInPartialClasses</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">@&quot;
+public partial class Foo
+{
+    public void PublicFoo()
+    {
+    }
+}
+ 
+public partial class Foo
+{
+    private void PrivateFoo()
+    {
+    }
+}
+&quot;</span>;
+ 
+            <b>const string</b> <span id="r4 rd" class="r4 r">expected</span> = <span class="s">@&quot;
+public partial class Foo
+{
+    public void PublicFoo()
+    {
+    }
+}
+ 
+public partial class Foo
+{
+}
+&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r3 r">test</span>, <span class="r4 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="b0986333a0c8d609" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodUsedDoesNotGenerateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+  public class Foo
+{
+    public void PublicFoo()
+    {
+        PrivateFoo();
+    }
+ 
+    private void PrivateFoo() { }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="95dacd9bd5df7c7e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodUsedInAttributionDoesNotGenerateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+using System;
+ 
+public class Foo
+{
+    public void PublicFoo()
+    {
+        Action method = PrivateFoo;
+    }
+ 
+    private void PrivateFoo() { }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="ef4f9d30515cabd6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodDoesNotUsedShouldCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    private void PrivateFoo() { }
+}&quot;</span>;
+            <b>const string</b> <span id="r8 rd" class="r8 r">fixtest</span> = <span class="s">@&quot;
+class Foo
+{
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">fixtest</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="146516515db6cf7a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">GenericMethodDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    void PrivateFoo&lt;T&gt;() { }
+    public void Go()
+    {
+        PrivateFoo&lt;int&gt;();
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="b22fbf0e3818c8e4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">GenericMethodWithConstraintDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    void PrivateFoo&lt;T&gt;() where T : Foo { }
+    public void Go()
+    {
+        PrivateFoo&lt;Foo&gt;();
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r10 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="e5251fa7f5cff424" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StaticMethodDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static void PrivateFoo() { }
+    public void Go()
+    {
+        PrivateFoo();
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="36515a1cf5b8e322" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PrivateGenericStaticWithConstraintDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    private static SymbolAnalysisContext GetSymbolAnalysisContext&lt;T&gt;(string code, string fileName = &quot;&quot;a.cs&quot;&quot;) where T : SyntaxNode
+    {
+    }
+    public void Go()
+    {
+        GetSymbolAnalysisContext&lt;ClassDeclarationSyntax&gt;(&quot;&quot;class TypeName { }&quot;&quot;, &quot;&quot;TemporaryGeneratedFile_.cs&quot;&quot;);
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="6e48ec4901d6d03d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointReturningVoidDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static void Main(String[] args)
+    {
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="825ebfb336bf839d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointReturningIntegerDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static int Main(string[] args)
+    {
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r14 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="6d2294d803e4c0b2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointWithoutParameterDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static int Main()
+    {
+    }
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="596b581d34873a86" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointWithoutStaticModifierShouldCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    int Main(string[] args)
+    {
+    }
+}
+&quot;</span>;
+            <b>const string</b> <span id="r17 rd" class="r17 r">fixtest</span> = <span class="s">@&quot;
+class Foo
+{
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r16 r">source</span>, <span class="r17 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="7135870ab7da1db8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointWithMoreThanOneParameterShouldCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static int Main(string[] args, string[] args2)
+    {
+    }
+}
+&quot;</span>;
+            <b>const string</b> <span id="r19 rd" class="r19 r">fixtest</span> = <span class="s">@&quot;
+class Foo
+{
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="b9b81a6d15a10ea2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointWithDifferentParameterShouldCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static int Main(string args)
+    {
+    }
+}
+&quot;</span>;
+            <b>const string</b> <span id="r21 rd" class="r21 r">fixtest</span> = <span class="s">@&quot;
+class Foo
+{
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="be81a639ed3fcdb7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MainMethodEntryPointWithDifferentReturnTypeShouldCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">@&quot;
+class Foo
+{
+    static string Main(string[] args)
+    {
+    }
+}
+&quot;</span>;
+            <b>const string</b> <span id="r23 rd" class="r23 r">fixtest</span> = <span class="s">@&quot;
+class Foo
+{
+}
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="794d83cf198e99f6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ExplicitlyImplementedInterfaceMethodDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+public class Foo : System.IEquatable&lt;Foo&gt;
+{
+    bool System.IEquatable&lt;Foo&gt;.Equals(Foo other)
+    {
+        throw new System.NotImplementedException();
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r24 r">source</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

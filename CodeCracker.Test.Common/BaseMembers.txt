@@ -1,0 +1,6 @@
+1ba651d493501fd9;Microsoft.CodeAnalysis.Workspaces;2cb181b082a3151b
+292410b359b9a901;Microsoft.CodeAnalysis.Workspaces;1169ade77d102545
+2c8089079f5b7396;CodeCracker.Test.Common;9fd26734cb6ca021
+342cba5641037222;CodeCracker.Test.Common;cd501df9a1c444ec
+468ccd169740efea;Microsoft.CodeAnalysis.Workspaces;936ba4cdcb17d0d8
+ab3f83b554a8f21e;CodeCracker.Test.Common;cd501df9a1c444ec

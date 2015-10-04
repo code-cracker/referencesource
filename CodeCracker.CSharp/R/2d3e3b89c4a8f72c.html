@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html><head><title>IsKind</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">27 references to IsKind</div><div class="rA">CodeCracker.CSharp (27)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\InconsistentAccessibility\InconsistentAccessibilityCodeFixProvider.cs (2)</div>
+<a href="../Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs.html#181"><b>181</b>private static IEnumerable&lt;SyntaxToken&gt; GetAccessibilityModifiersFromMember(MemberDeclarationSyntax member) =&gt; member.GetModifiers().Where(token =&gt; token.<i>IsKind</i>(SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.InternalKeyword, SyntaxKind.PrivateKeyword));</a>
+<a href="../Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs.html#205"><b>205</b>replacedModifiers = replacedModifiers.Remove(replacedModifiers.SingleOrDefault(token =&gt; token.<i>IsKind</i>(oldAccessibilityModifiers[1].Kind())));</a>
+</div>
+<div class="rF"><div class="rN">Extensions\CSharpAnalyzerExtensions.cs (4)</div>
+<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#421"><b>421</b>var accessibilityModifiers = modifiers.Where(token =&gt; token.<i>IsKind</i>(SyntaxKind.PublicKeyword) || token.<i>IsKind</i>(SyntaxKind.ProtectedKeyword) || token.<i>IsKind</i>(SyntaxKind.InternalKeyword) || token.<i>IsKind</i>(SyntaxKind.PrivateKeyword)).Select(token =&gt; SyntaxFactory.Token(token.Kind()));</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\InvertForAnalyzer.cs (2)</div>
+<a href="../Refactoring/InvertForAnalyzer.cs.html#64"><b>64</b>(postIncrement &amp;&amp; condition.OperatorToken.<i>IsKind</i>(SyntaxKind.LessThanToken)) ||</a>
+<a href="../Refactoring/InvertForAnalyzer.cs.html#65"><b>65</b>(!postIncrement &amp;&amp; condition.OperatorToken.<i>IsKind</i>(SyntaxKind.GreaterThanEqualsToken))</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\ParameterRefactoryAnalyzer.cs (4)</div>
+<a href="../Refactoring/ParameterRefactoryAnalyzer.cs.html#38"><b>38</b>.Any(modifier =&gt; modifier.<i>IsKind</i>(SyntaxKind.RefKeyword) ||</a>
+<a href="../Refactoring/ParameterRefactoryAnalyzer.cs.html#39"><b>39</b>modifier.<i>IsKind</i>(SyntaxKind.OutKeyword) ||</a>
+<a href="../Refactoring/ParameterRefactoryAnalyzer.cs.html#40"><b>40</b>modifier.<i>IsKind</i>(SyntaxKind.ThisKeyword) ||</a>
+<a href="../Refactoring/ParameterRefactoryAnalyzer.cs.html#41"><b>41</b>modifier.<i>IsKind</i>(SyntaxKind.ParamsKeyword))) return;</a>
+</div>
+<div class="rF"><div class="rN">Usage\AbstractClassShouldNotHavePublicCtorsAnalyzer.cs (2)</div>
+<a href="../Usage/AbstractClassShouldNotHavePublicCtorsAnalyzer.cs.html#34"><b>34</b>if (!ctor.Modifiers.Any(m =&gt; m.<i>IsKind</i>(SyntaxKind.PublicKeyword))) return;</a>
+<a href="../Usage/AbstractClassShouldNotHavePublicCtorsAnalyzer.cs.html#38"><b>38</b>if (!@class.Modifiers.Any(m =&gt; m.<i>IsKind</i>(SyntaxKind.AbstractKeyword))) return;</a>
+</div>
+<div class="rF"><div class="rN">Usage\AbstractClassShouldNotHavePublicCtorsCodeFixProvider.cs (1)</div>
+<a href="../Usage/AbstractClassShouldNotHavePublicCtorsCodeFixProvider.cs.html#34"><b>34</b>var @public = ctor.Modifiers.First(m =&gt; m.<i>IsKind</i>(SyntaxKind.PublicKeyword));</a>
+</div>
+<div class="rF"><div class="rN">Usage\NoPrivateReadonlyFieldAnalyzer.cs (7)</div>
+<a href="../Usage/NoPrivateReadonlyFieldAnalyzer.cs.html#82"><b>82</b>var noPrivate = field.Modifiers.Any(p =&gt; p.<i>IsKind</i>(SyntaxKind.PublicKeyword) || p.<i>IsKind</i>(SyntaxKind.ProtectedKeyword) || p.<i>IsKind</i>(SyntaxKind.InternalKeyword));</a>
+<a href="../Usage/NoPrivateReadonlyFieldAnalyzer.cs.html#83"><b>83</b>return noPrivate ? !field.Modifiers.Any(p =&gt; p.<i>IsKind</i>(SyntaxKind.ConstKeyword) || p.<i>IsKind</i>(SyntaxKind.ReadOnlyKeyword)) : false;</a>
+<a href="../Usage/NoPrivateReadonlyFieldAnalyzer.cs.html#107"><b>107</b>.SelectMany(s =&gt; s.ArgumentList.Arguments.Where(p =&gt; !p.RefOrOutKeyword.<i>IsKind</i>(SyntaxKind.None)))</a>
+<a href="../Usage/NoPrivateReadonlyFieldAnalyzer.cs.html#128"><b>128</b>assignmentSymbol.IsStatic != parentConstructor.Modifiers.Any(p =&gt; p.<i>IsKind</i>(SyntaxKind.StaticKeyword));</a>
+</div>
+<div class="rF"><div class="rN">Usage\ReadonlyFieldAnalyzer.cs (5)</div>
+<a href="../Usage/ReadonlyFieldAnalyzer.cs.html#123"><b>123</b>|| !fieldDeclaration.Modifiers.Any(m =&gt; m.<i>IsKind</i>(SyntaxKind.PublicKeyword)</a>
+<a href="../Usage/ReadonlyFieldAnalyzer.cs.html#124"><b>124</b>|| m.<i>IsKind</i>(SyntaxKind.ProtectedKeyword)</a>
+<a href="../Usage/ReadonlyFieldAnalyzer.cs.html#125"><b>125</b>|| m.<i>IsKind</i>(SyntaxKind.InternalKeyword)</a>
+<a href="../Usage/ReadonlyFieldAnalyzer.cs.html#126"><b>126</b>|| m.<i>IsKind</i>(SyntaxKind.ReadOnlyKeyword)</a>
+<a href="../Usage/ReadonlyFieldAnalyzer.cs.html#127"><b>127</b>|| m.<i>IsKind</i>(SyntaxKind.ConstKeyword));</a>
+</div>
+</div>
+</body></html>

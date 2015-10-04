@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringRepresentationTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(430);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/StringRepresentationTests.cs" target="_top">Refactoring\StringRepresentationTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Diagnostics.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="1a383541fe11b329" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="cf062bdc72b62862">StringRepresentationTests</span></a>
+        : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#dc9285226599b994" class="t">StringRepresentationAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#cf33cf40914d09e4" class="t">StringRepresentationCodeFixProvider</a>&gt;
+    {
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d8e8243e9578ab21" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotTriggerOnEmptySource</a>()
+        {
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="s">&quot;&quot;</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="96d7894894e98f40" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotTriggerNumericLiteral</a>()
+        {
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var i = 5;
+    }
+}&quot;</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2b62b2a31d9d1430" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotTriggerInInterpolatedString</a>()
+        {
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        const int i = 5;
+        var s = $&quot;&quot;Hello {i} world&quot;&quot;;
+    }
+}&quot;</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cd8c1a6f01537e3b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RegularStringProduceDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6fd534749e013e1b">StringRepresentation_RegularString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Change to regular string&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 17) }
+            };
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">source</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="be58459fb9c2ce12" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VerbatimStringProduceDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#42d4606f3a8dae4e">StringRepresentation_VerbatimString</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Change to verbatim string&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 17) }
+            };
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">source</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8dc9db888c7667a5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertStringToVerbatim</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r5 rd" class="r5 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">before</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bebe9f768f2313e8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertStringToVerbatimInMethod</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void Foo(string s) =&gt; s;
+    void M()
+    {
+        var s = Foo(&quot;&quot;Hello world&quot;&quot;);
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r7 rd" class="r7 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void Foo(string s) =&gt; s;
+    void M()
+    {
+        var s = Foo(@&quot;&quot;Hello world&quot;&quot;);
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r6 r">before</span>, <span class="r7 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c6b804979a74e40a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertStringToVerbatimKeepComments</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = /*Hi*/&quot;&quot;Hello world&quot;&quot; // Hello message;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r9 rd" class="r9 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = /*Hi*/@&quot;&quot;Hello world&quot;&quot; // Hello message;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">before</span>, <span class="r9 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cbf9b335adc7e5b5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertStringToVerbatimSelection</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r11 rd" class="r11 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r10 r">before</span>, <span class="r11 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8015a17f698a3a59" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringToVerbatimHandleQuotes</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello \&quot;&quot;world\&quot;&quot;&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r13 rd" class="r13 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello &quot;&quot;&quot;&quot;world&quot;&quot;&quot;&quot;&quot;&quot;;
+    }
+}&quot;</span>;
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r12 r">before</span>, <span class="r13 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        [<a href="@0@mscorlib/A.html#5e00de6576fb9ce7" class="t">SuppressMessage</a>(<b>nameof</b>(Style), <span class="s">&quot;CC0065&quot;</span>, <a href="@0@mscorlib/A.html#ce02a652a479502a">Justification</a> = <span class="s">&quot;Necessary for test&quot;</span>)]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="caba7c25c442055d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringToVerbatimHandleCrLf</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello \r\nworld&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r15 rd" class="r15 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello 
+world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r14 r">before</span>, <span class="r15 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="dea54ce7fd825c07" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringToVerbatimHandleTab</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello\tworld&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r17 rd" class="r17 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello&quot;</span> + <span class="s">&quot;\t&quot;</span> + <span class="s">@&quot;world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r16 r">before</span>, <span class="r17 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c566ccc6331e28e1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringToVerbatimHandleBackslash</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello \\ world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r19 rd" class="r19 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello \ world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r18 r">before</span>, <span class="r19 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d47bcbf7624490f1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertVerbatimToString</a>()
+        {
+            <b>const string</b> <span id="r20 rd" class="r20 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r21 rd" class="r21 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">before</span>, <span class="r21 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0d3c26a297c55120" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertVerbatimToStringKeepComments</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = /*Hi*/@&quot;&quot;Hello world&quot;&quot; // Hello ;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r23 rd" class="r23 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = /*Hi*/&quot;&quot;Hello world&quot;&quot; // Hello ;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">before</span>, <span class="r23 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="90d6e976dab91a59" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConvertVerbatimToStringSelection</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r25 rd" class="r25 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r24 r">before</span>, <span class="r25 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4b395a4f4fb4f4f8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VerbatimToStringHandleCrlf</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello &quot;</span> + <span class="s">&quot;\r\n&quot;</span> + <span class="s">@&quot;world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r27 rd" class="r27 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello \r\nworld&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r26 r">before</span>, <span class="r27 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="04a9a2197d3d0c9c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VerbatimToStringHandleTab</a>()
+        {
+            <b>const string</b> <span id="r28 rd" class="r28 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello&quot;</span>+<span class="s">&quot;\t&quot;</span> + <span class="s">@&quot;world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r29 rd" class="r29 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello\tworld&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r28 r">before</span>, <span class="r29 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6ebd75d3c2a4a255" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VerbatimToStringHandleBacklash</a>()
+        {
+            <b>const string</b> <span id="r30 rd" class="r30 r">before</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = @&quot;&quot;Hello \ world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>const string</b> <span id="r31 rd" class="r31 r">expected</span> = <span class="s">@&quot;
+class C
+{
+    void M()
+    {
+        var s = &quot;&quot;Hello \\ world&quot;&quot;;
+    }
+}&quot;</span>;
+ 
+            <b>return</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r30 r">before</span>, <span class="r31 r">expected</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

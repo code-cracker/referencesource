@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveWhereWhenItIsPossibleAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(73);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Performance/RemoveWhereWhenItIsPossibleAnalyzer.vb" target="_top">Performance\RemoveWhereWhenItIsPossibleAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.Collections.Immutable
+ 
+<b>Namespace</b> Performance
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="ec8e36205b9849ea" href="../R/ec8e36205b9849ea.html" target="n" data-glyph="0,0" class="t"><span id="52ae18fce78f94a8">RemoveWhereWhenItIsPossibleAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="7c0a194c951bb01f" href="../R/7c0a194c951bb01f.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#423a225a78c9d47c">RemoveWhereWhenItIsPossible</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="ff0d091fa8384ca1" href="../R/ff0d091fa8384ca1.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;You should remove the &#39;Where&#39; invocation when it is possible.&quot;</span>
+        <b>Public Const</b> <a id="6ef13324bba865aa" href="../R/6ef13324bba865aa.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;You can remove &#39;Where&#39; moving the predicate to &#39;{0}&#39;.&quot;</span>
+        <b>Public Const</b> <a id="608a85b07117ed51" href="../R/608a85b07117ed51.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>
+        <b>Public Const</b> <a id="28e99b49f5c63762" href="../R/28e99b49f5c63762.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;When a LINQ operator supports a predicate parameter it should be used instead of using &#39;Where&#39; followed by the operator&quot;</span>
+        <b>Protected Shared</b> <a id="e489f665edbdc641" href="../R/e489f665edbdc641.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#7c0a194c951bb01f">Id</a>,
+            <a href="#ff0d091fa8384ca1">Title</a>,
+            <a href="#6ef13324bba865aa">MessageFormat</a>,
+            <a href="#608a85b07117ed51">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#28e99b49f5c63762">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#423a225a78c9d47c">RemoveWhereWhenItIsPossible</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="8cd36d8bc06812c6" href="../R/8cd36d8bc06812c6.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#e489f665edbdc641">Rule</a>)
+ 
+        <b>Shared ReadOnly</b> <a id="c80e5805b739eae6" href="../R/c80e5805b739eae6.html" target="n" data-glyph="46,1">supportedMethods</a>() <b>As String</b> = {<span class="s">&quot;First&quot;</span>, <span class="s">&quot;FirstOrDefault&quot;</span>, <span class="s">&quot;Last&quot;</span>, <span class="s">&quot;LastOrDefault&quot;</span>, <b>NameOf</b>(Any), <span class="s">&quot;Single&quot;</span>, <span class="s">&quot;SingleOrDefault&quot;</span>, <span class="s">&quot;Count&quot;</span>}
+ 
+        <b>Public Overrides Sub</b> <a id="21ff5477e74349cd" href="../R/21ff5477e74349cd.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#3b37c16f533ce610">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e97cc7c28d3fe3dd">InvocationExpression</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="3b37c16f533ce610" href="../R/3b37c16f533ce610.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">whereInvoke</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)
+            <b>If</b> <a href="#51e63bbed0594958">GetNameOfTheInvokeMethod</a>(<span class="r5 r">whereInvoke</span>) &lt;&gt; <span class="s">&quot;Where&quot;</span> <b>Then Exit Sub
+ 
+            Dim</b> <span id="r6 rd" class="r6 r">nextMethodInvoke</span> = <span class="r5 r">whereInvoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)()
+ 
+            <b>Dim</b> <span id="r7 rd" class="r7 r">candidate</span> = <a href="#51e63bbed0594958">GetNameOfTheInvokeMethod</a>(<span class="r6 r">nextMethodInvoke</span>)
+            <b>If Not</b> <a href="#c80e5805b739eae6">supportedMethods</a>.Contains(<span class="r7 r">candidate</span>) <b>Then Exit Sub
+ 
+            If</b> <span class="r6 r">nextMethodInvoke</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f21a8b664c3a1477">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a> <b>Then Return
+ 
+            Dim</b> <span id="r8 rd" class="r8 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#e489f665edbdc641">Rule</a>, <a href="#91ec94ada0cbcfbc">GetNameExpressionOfTheInvokedMethod</a>(<span class="r5 r">whereInvoke</span>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="r7 r">candidate</span>)
+ 
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r8 r">diag</span>)
+        <b>End Sub
+ 
+        Friend Shared Function</b> <a id="51e63bbed0594958" href="../R/51e63bbed0594958.html" target="n" data-glyph="74,1">GetNameOfTheInvokeMethod</a>(<span id="r9 rd" class="r9 r">invoke</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>) <b>As String
+            If</b> (<span class="r9 r">invoke</span> <b>Is Nothing</b>) <b>Then Return Nothing
+            Dim</b> <span id="r10 rd" class="r10 r">memberAccess</span> = <span class="r9 r">invoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>.
+            OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e39b54af392fd89" class="t">MemberAccessExpressionSyntax</a>).
+            FirstOrDefault()
+ 
+            <b>Return</b> <a href="#91ec94ada0cbcfbc">GetNameExpressionOfTheInvokedMethod</a>(<span class="r9 r">invoke</span>)?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>()
+        <b>End Function
+ 
+        Friend Shared Function</b> <a id="91ec94ada0cbcfbc" href="../R/91ec94ada0cbcfbc.html" target="n" data-glyph="74,1">GetNameExpressionOfTheInvokedMethod</a>(<span id="r11 rd" class="r11 r">invoke</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>) <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1021e978137a2810" class="t">SimpleNameSyntax</a>
+            <b>If</b> <span class="r11 r">invoke</span> <b>Is Nothing Then Return Nothing
+ 
+            Dim</b> <span id="r12 rd" class="r12 r">memberAccess</span> = <span class="r11 r">invoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>.
+            OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e39b54af392fd89" class="t">MemberAccessExpressionSyntax</a>)().
+            FirstOrDefault()
+ 
+            <b>Return</b> <span class="r12 r">memberAccess</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19e8a554d3f0fa94">Name</a>
+ 
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

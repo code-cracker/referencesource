@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html><head><title>StaticConstructorExceptionTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(146);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Design/StaticConstructorExceptionTests.vb" target="_top">Design\StaticConstructorExceptionTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Design
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.IO
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Design
+    <b>Public Class</b> <a id="d1949f3a030524d2" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="1e099d0c107320d5">StaticConstructorExceptionTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#672c43180345dc8d" class="t">StaticConstructorExceptionAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#849b25d7fdbc07b6" class="t">StaticConstructorExceptionCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="cc0b231317e69f79" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfExceptionIsThrownInsideStaticConstructor</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">&quot;
+Public Class TestClass
+    Shared Sub New()
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Dim</b> <span id="r1 rd" class="r1 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#56d19a28a236b319">StaticConstructorException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Don&#39;t throw exceptions inside static constructors.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 4, 9)}
+            }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d026f57957c3e374" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotWarningWhenNoExceptionIsThrownInsideStaticConstructor</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">&quot;
+Public Class TestClass
+    Public Sub New()
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="3fe70e48a711f75d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StaticConstructorWithoutException</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">&quot;
+Public Class TestClass
+    Shared Sub New()
+        
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+ 
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f7f1b622f5d7e69d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">InstanceConstructorWithoutException</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;
+Public Class TestClass
+    Public Sub New()
+        
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+ 
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="ea52dab08384ea70" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowIsRemovedFromStaticConstructor</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">&quot;
+Public Class TestClass
+    Shared Sub New()
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r6 rd" class="r6 r">fix</span> = <span class="s">&quot;
+Public Class TestClass
+    Shared Sub New()
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">fix</span>, 0)
+ 
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="fa64ef316c595d5b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowIsRemovedFromAllStaticConstructors</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">test1</span> = <span class="s">&quot;
+Public Class TestClass1
+    Shared Sub New()
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+            <b>Const</b> <span id="r8 rd" class="r8 r">fix1</span> = <span class="s">&quot;
+Public Class TestClass1
+    Shared Sub New()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r9 rd" class="r9 r">test2</span> = <span class="s">&quot;
+Public Class TestClass2
+    Shared Sub New()
+        Throw New System.Exception()
+    End Sub
+End Class&quot;</span>
+            <b>Const</b> <span id="r10 rd" class="r10 r">fix2</span> = <span class="s">&quot;
+Public Class TestClass2
+    Shared Sub New()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<span class="r7 r">test1</span>, <span class="r9 r">test2</span>}, <b>New</b> <b>String</b>() {<span class="r8 r">fix1</span>, <span class="r10 r">fix2</span>})
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Sub</b> <a id="21c2440e3d960928" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CanGetTypeSymbolForInferedString</a>()
+            <b>Const</b> <span id="r11 rd" class="r11 r">code</span> = <span class="s">&quot;
+    Class C
+        Shared Sub Main()
+            Dim b As String = &quot;&quot;&quot;&quot;
+            Dim a = &quot;&quot;&quot;&quot;
+        End Sub
+    End Class&quot;</span>
+ 
+            <b>Dim</b> <span id="r12 rd" class="r12 r">tree</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#32022e14ee3659dc">ParseSyntaxTree</a>(<span class="r11 r">code</span>)
+            <b>Dim</b> <span id="r13 rd" class="r13 r">compilation</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#afe7f5e5e398cb25" class="t">VisualBasicCompilation</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#331e1ac14119a897">Create</a>(<span class="s">&quot;test&quot;</span>, {<span class="r12 r">tree</span>}, {<a href="@1@Microsoft.CodeAnalysis/A.html#2ec3b0a924c06d3f" class="t">MetadataReference</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#ed274aef5ec6fd03">CreateFromFile</a>(<b>GetType</b>(<b>Object</b>).<a href="@0@mscorlib/A.html#e87d536bd07fab01">Assembly</a>.<a href="@0@mscorlib/A.html#3faa3e0e41d8868b">Location</a>)})
+ 
+            <b>Dim</b> <span id="r14 rd" class="r14 r">result</span> = <span class="r13 r">compilation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9f62285c857030a3">Emit</a>(<b>New</b> <a href="@0@mscorlib/A.html#d308091cc690e78d" class="t">MemoryStream</a>)
+ 
+            <b>Dim</b> <span id="r15 rd" class="r15 r">semanticModel</span> = <span class="r13 r">compilation</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#07aaf168902960be">GetSemanticModel</a>(<span class="r12 r">tree</span>)
+ 
+            <b>Dim</b> <span id="r16 rd" class="r16 r">localNodes</span> = <span class="r12 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>().<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>.<a href="@0@System.Core/A.html#4ba4a3f8a5530e33">OfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6edd9e9e8fcc1f0" class="t">LocalDeclarationStatementSyntax</a>)
+            <b>For Each</b> <span class="r17 r">node</span> <b>In</b> <span class="r16 r">localNodes</span>
+                <b>Dim</b> <span id="r18 rd" class="r18 r">localSym</span> = <span class="r15 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f95417d19c703068">GetDeclaredSymbol</a>(<span class="r17 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ec13b065e029e1e8">Declarators</a>.<a href="@0@System.Core/A.html#35e2ff5965cb4b7e">Single</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e1bad758d18bf7e0">Names</a>.<a href="@0@System.Core/A.html#35e2ff5965cb4b7e">Single</a>)
+                <a href="@0@System/A.html#c63a0f19b2d4db69" class="t">Trace</a>.<a href="@0@System/A.html#d389b1410c3e86f5">WriteLine</a>(<span class="r18 r">localSym</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2e1df58bd2fd08c2">ToDisplayString</a>())
+ 
+                <b>Dim</b> <span id="r19 rd" class="r19 r">symbol</span> = <span class="r15 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d90409d281b869e5">GetTypeInfo</a>(<span class="r17 r">node</span>) <span class="c">&#39; Is Nothing</span>
+                <b>Dim</b> <span id="r20 rd" class="r20 r">variableType</span> = <span class="r17 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ec13b065e029e1e8">Declarators</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed0e49a5740d359">First</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aba70ddc7965c2af">AsClause</a>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e637e28f33e08854">Type</a> <span class="c">&#39; This is null for inferred types</span>
+                <b>If</b> <span class="r20 r">variableType</span> <b>IsNot Nothing Then
+                    Dim</b> <span id="r21 rd" class="r21 r">typeSymbol</span> = <span class="r15 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r20 r">variableType</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#7f848b8b3703eab5">ConvertedType</a>
+                <b>End If
+            Next
+        End Sub
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

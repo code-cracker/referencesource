@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html><head><title>ConsoleWriteLineAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(34);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/ConsoleWriteLineAnalyzer.cs" target="_top">Style\ConsoleWriteLineAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.Properties;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="00f628855ede1076" href="../R/00f628855ede1076.html" target="n" data-glyph="0,0" class="t"><span id="d060e517df0e9981">ConsoleWriteLineAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="3619530dd72fe33b" href="../R/3619530dd72fe33b.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="16b0b609682ce696" href="../R/16b0b609682ce696.html" target="n" data-glyph="44,1">Title</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#42992d7d51a84e16">ConsoleWriteLineAnalyzer_Title</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="b2c1bfd59322bfc5" href="../R/b2c1bfd59322bfc5.html" target="n" data-glyph="44,1">MessageFormat</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#28be92c378132d3d">ConsoleWriteLineAnalyzer_MessageFormat</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="f719a84422e1f759" href="../R/f719a84422e1f759.html" target="n" data-glyph="44,1">Description</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#391886988048e080">ConsoleWriteLineAnalyzer_Description</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="3a5f6d902951935d" href="../R/3a5f6d902951935d.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#fb352e176a89c98b" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#7ff476ba1a02fe90">ConsoleWriteLine</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#16b0b609682ce696">Title</a>,
+            <a href="#b2c1bfd59322bfc5">MessageFormat</a>,
+            <a href="#3619530dd72fe33b">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#f719a84422e1f759">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#7ff476ba1a02fe90">ConsoleWriteLine</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="f4d5e1051ad9cf2a" href="../R/f4d5e1051ad9cf2a.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#3a5f6d902951935d">Rule</a>);
+ 
+        <b>public override void</b> <a id="f9098bcd753d62e0" href="../R/f9098bcd753d62e0.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#b40c8acb8fa202b9">AnalyzeWriteLineInvocation</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+ 
+        <b>private static void</b> <a id="b40c8acb8fa202b9" href="../R/b40c8acb8fa202b9.html" target="n" data-glyph="76,1">AnalyzeWriteLineInvocation</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>) =&gt;
+            <a href="StringFormatAnalyzer.cs.html#2f4de393ffff16c4" class="t">StringFormatAnalyzer</a>.<a href="StringFormatAnalyzer.cs.html#6c0cc242b72926a9">AnalyzeFormatInvocation</a>(<span class="r4 r">context</span>, <span class="s">&quot;WriteLine&quot;</span>, <span class="s">&quot;System.Console.WriteLine(string, object&quot;</span>, <span class="s">&quot;System.Console.WriteLine(string, params object[])&quot;</span>, <a href="#3a5f6d902951935d">Rule</a>);
+    }
+}</pre></td></tr></table></div></body></html>

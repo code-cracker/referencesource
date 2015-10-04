@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingAnalyzerTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(55);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Refactoring/AllowMembersOrderingAnalyzerTests.vb" target="_top">Refactoring\AllowMembersOrderingAnalyzerTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> CodeCracker.VisualBasic.Refactoring
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Refactoring
+    <b>Public Class</b> <a id="648f9dde5efdb204" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="b5f6ee61841bd67f">AllowMembersOrderingAnalyzerTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+ 
+        <b>Protected Overrides Function</b> <a id="d16b4905f73afe23" href="../R/d16b4905f73afe23.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+            <b>Return</b> <b>New</b> <a href="/CodeCracker.VisualBasic/A.html#e6609d34b1d160ba" class="t">AllowMembersOrderingAnalyzer</a>()
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Structure&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="e4e81fd14ebaa83e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AllowMembersOrderingForEmptyTypeShouldNotTriggerDiagnostic</a>(<span id="r0 rd" class="r0 r">typeDeclaration</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="s">&quot;{0} Foo
+End {0}&quot;</span>, <span class="r0 r">typeDeclaration</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Structure&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="2b3e6fc1fc787c7e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AllowMembersOrderingForOneMemberShouldNotTriggerDiagnostic</a>(<span id="r2 rd" class="r2 r">typeDeclaration</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r3 rd" class="r3 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="s">&quot;{0} Foo
+    Function bar()
+        Return 0
+    End Function
+End {0}&quot;</span>, <span class="r2 r">typeDeclaration</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Structure&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="1bb3f8357a029a4f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AllowMembersOrderingForMoreThanOneMembersHouldTriggerDiagnostic</a>(<span id="r4 rd" class="r4 r">typeDeclaration</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r5 rd" class="r5 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="s">&quot;{0} Foo
+    Function bar()
+        Return 0
+    End Function
+    Sub car()
+    End Sub
+End {0}&quot;</span>, <span class="r4 r">typeDeclaration</span>)
+ 
+            <b>Dim</b> <span id="r6 rd" class="r6 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#e6609d34b1d160ba" class="t">AllowMembersOrderingAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#397e1a167298ad40">Id</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.VisualBasic/A.html#e6609d34b1d160ba" class="t">AllowMembersOrderingAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#ee1937eb46935fe6">MessageFormat</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 2, 14 + <span class="r4 r">typeDeclaration</span>.<a href="@0@mscorlib/A.html#e13f5829ef28aa07">Length</a>)}
+                }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">expected</span>)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

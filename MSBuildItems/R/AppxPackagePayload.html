@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html><head><title>AppxPackagePayload</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">7 assignments to MSBuild item AppxPackagePayload</div><div class="rA">MSBuildFiles (7)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\.NetNative\Microsoft.Net.CoreRuntime.targets (2)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#415"><b>415</b>&lt;<i>AppxPackagePayload</i> Remove=&quot;@(AppxPackagePayload)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#416"><b>416</b>&lt;<i>AppxPackagePayload</i> Include=&quot;@(_WireUpCoreRuntimeOutputPayload)&quot;&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\AppxPackage\Microsoft.AppXPackage.Targets (5)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1443"><b>1443</b>&lt;Output TaskParameter=&quot;Filtered&quot; ItemName=&quot;<i>AppxPackagePayload</i>&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1469"><b>1469</b>&lt;<i>AppxPackagePayload</i> Remove=&quot;@(AppxPackagePayload)&quot; Condition=&quot;&#39;%(TargetPath)&#39; == &#39;AppxManifest.xml&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1832"><b>1832</b>&lt;<i>AppxPackagePayload</i> Remove=&quot;@(AppxPackagePayload)&quot; Condition=&quot;&#39;%(Extension)&#39; == &#39;.pdb&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1847"><b>1847</b>&lt;<i>AppxPackagePayload</i> Remove=&quot;@(AppxPackagePayload)&quot; Condition=&quot;&#39;%(Extension)&#39; == &#39;.pdb&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2208"><b>2208</b>&lt;<i>AppxPackagePayload</i> Remove=&quot;@(AppxPackagePayload)&quot; Condition=&quot;&#39;%(Extension)&#39; == &#39;.pdb&#39;&quot; /&gt;</a>
+</div>
+</div>
+<div class="rH">17 usages of MSBuild item AppxPackagePayload</div><div class="rA">MSBuildFiles (17)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\.NetNative\Microsoft.Net.CoreRuntime.targets (6)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#208"><b>208</b>Inputs=&quot;@(<i>AppxPackagePayload</i>);@(FinalAppxManifest);@(MSBuildAllProjects)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#209"><b>209</b>Outputs=&quot;@(<i>AppxPackagePayload</i> -&gt; &#39;$(_WireUpCoreRuntimeInputPath)%(TargetPath)&#39;);@(FinalAppxManifest -&gt; &#39;$(_WireUpCoreRuntimeInputPath)%(Filename)%(Extension)&#39;)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#215"><b>215</b>&lt;_WireUpCoreRuntimeInputPayload Include=&quot;@(<i>AppxPackagePayload</i>-&gt;&#39;$(_WireUpCoreRuntimeInputPath)%(TargetPath)&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#220"><b>220</b>&lt;AppLocalMetadataFile Include=&quot;@(<i>AppxPackagePayload</i>)&quot; Condition=&quot;&#39;%(TargetPath)&#39; == &#39;WinMetadata\Windows.winmd&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#223"><b>223</b>&lt;Copy SourceFiles=&quot;@(<i>AppxPackagePayload</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/.NetNative/Microsoft.Net.CoreRuntime.targets.html#415"><b>415</b>&lt;AppxPackagePayload Remove=&quot;@(<i>AppxPackagePayload</i>)&quot; /&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\AppxPackage\Microsoft.AppXPackage.Targets (11)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1457"><b>1457</b>&lt;PDBPayload Include=&quot;@(<i>AppxPackagePayload</i>)&quot; Condition=&quot;&#39;%(Extension)&#39;==&#39;.pdb&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1469"><b>1469</b>&lt;AppxPackagePayload Remove=&quot;@(<i>AppxPackagePayload</i>)&quot; Condition=&quot;&#39;%(TargetPath)&#39; == &#39;AppxManifest.xml&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1827"><b>1827</b>&lt;_GenerateAppxPackageRecipeInput Include=&quot;@(<i>AppxPackagePayload</i>)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1832"><b>1832</b>&lt;AppxPackagePayload Remove=&quot;@(<i>AppxPackagePayload</i>)&quot; Condition=&quot;&#39;%(Extension)&#39; == &#39;.pdb&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1847"><b>1847</b>&lt;AppxPackagePayload Remove=&quot;@(<i>AppxPackagePayload</i>)&quot; Condition=&quot;&#39;%(Extension)&#39; == &#39;.pdb&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#1866"><b>1866</b>PayloadFiles=&quot;@(<i>AppxPackagePayload</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2180"><b>2180</b>AppxPackagePayload=&quot;@(<i>AppxPackagePayload</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2204"><b>2204</b>Inputs=&quot;$(MSBuildAllProjects);@(FinalAppxManifest);@(<i>AppxPackagePayload</i>);$(PackageCertificateKeyFile)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2208"><b>2208</b>&lt;AppxPackagePayload Remove=&quot;@(<i>AppxPackagePayload</i>)&quot; Condition=&quot;&#39;%(Extension)&#39; == &#39;.pdb&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2214"><b>2214</b>@(<i>AppxPackagePayload</i>-&gt;&#39;%22%(Identity)%22 %22%(TargetPath)%22&#39;)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#2566"><b>2566</b>&lt;_PackageLayoutFileSource Include=&quot;@(<i>AppxPackagePayload</i>)&quot; /&gt;</a>
+</div>
+</div>
+</body></html>

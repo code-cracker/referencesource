@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html><head><title>AddBracesToSwitchSectionsAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(54);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/AddBracesToSwitchSectionsAnalyzer.cs" target="_top">Refactoring\AddBracesToSwitchSectionsAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="f2e3a1397be38067" href="../R/f2e3a1397be38067.html" target="n" data-glyph="0,0" class="t"><span id="d707105fee26b6cc">AddBracesToSwitchSectionsAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="0a4423a430deb919" href="../R/0a4423a430deb919.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Add braces to switch sections.&quot;</span>;
+        <b>internal const string</b> <a id="06ed910596f72fee" href="../R/06ed910596f72fee.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Add braces for each section in this switch&quot;</span>;
+        <b>internal const string</b> <a id="20bc92032054ff77" href="../R/20bc92032054ff77.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="96e820f323134d47" href="../R/96e820f323134d47.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#65790a4c540f79d1">AddBracesToSwitchSections</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#0a4423a430deb919">Title</a>,
+            <a href="#06ed910596f72fee">MessageFormat</a>,
+            <a href="#20bc92032054ff77">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#65790a4c540f79d1">AddBracesToSwitchSections</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="818179dd4065188d" href="../R/818179dd4065188d.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#96e820f323134d47">Rule</a>);
+ 
+        <b>public override void</b> <a id="af13c63df90dd276" href="../R/af13c63df90dd276.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt; <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#b86e15cfb6cd4763">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b2d773ce075c4ee">SwitchStatement</a>);
+ 
+        <b>private static void</b> <a id="b86e15cfb6cd4763" href="../R/b86e15cfb6cd4763.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2bd20d0fd2a53894" class="k">var</a> <span id="r4 rd" class="r4 r">@switch</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2bd20d0fd2a53894" class="t">SwitchStatementSyntax</a>)<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (!<span class="r4 r">@switch</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52015ea163990842">Sections</a>.All(<a href="#a0d9843c6a74a788">HasBraces</a>))
+                <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#96e820f323134d47">Rule</a>, <span class="r4 r">@switch</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>()));
+        }
+ 
+        <b>internal static bool</b> <a id="a0d9843c6a74a788" href="../R/a0d9843c6a74a788.html" target="n" data-glyph="74,1">HasBraces</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d8f489fc25a6f833" class="t">SwitchSectionSyntax</a> <span id="r5 rd" class="r5 r">section</span>)
+        {
+            <b>switch</b> (<span class="r5 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21a6f4ec9064c1f7">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#83189d65513d4ea2">Count</a>)
+            {
+                <b>case</b> 1:
+                    <b>if</b> (<span class="r5 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21a6f4ec9064c1f7">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e2384c68a8e35346">First</a>() <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="t">BlockSyntax</a>)
+                        <b>return true</b>;
+                    <b>break</b>;
+                <b>case</b> 2:
+                    <b>if</b> (<span class="r5 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21a6f4ec9064c1f7">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e2384c68a8e35346">First</a>() <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="t">BlockSyntax</a> &amp;&amp; <span class="r5 r">section</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21a6f4ec9064c1f7">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#1522810a84d959f0">Last</a>() <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3d17e8b5113e825b" class="t">BreakStatementSyntax</a>)
+                        <b>return true</b>;
+                    <b>break</b>;
+            }
+            <b>return false</b>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

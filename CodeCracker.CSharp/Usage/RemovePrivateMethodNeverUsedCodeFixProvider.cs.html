@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemovePrivateMethodNeverUsedCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(39);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/RemovePrivateMethodNeverUsedCodeFixProvider.cs" target="_top">Usage\RemovePrivateMethodNeverUsedCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#4979053948b5c49b" class="t">RemovePrivateMethodNeverUsedCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="4979053948b5c49b" href="../R/4979053948b5c49b.html" target="n" data-glyph="0,0" class="t"><span id="92c905df7e4c7a3f">RemovePrivateMethodNeverUsedCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="41d4f00aba4c31ca" href="../R/41d4f00aba4c31ca.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6001b257c1992b0e">RemovePrivateMethodNeverUsed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="fccb7c52f15d05d4" href="../R/fccb7c52f15d05d4.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="b2a73d7baf30b30e" href="../R/b2a73d7baf30b30e.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(
+                <span class="s">$&quot;</span><span class="s">Remove unused private method : &#39;</span>{<span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ba4b6448b981d28">Properties</a>[<span class="s">&quot;identifier&quot;</span>]}<span class="s">&#39;</span><span class="s">&quot;</span>, <span id="r2 rd" class="r2 r">c</span> =&gt; <a href="#5399720edd3ae575">RemoveMethodAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r2 r">c</span>), <b>nameof</b>(<a href="#4979053948b5c49b" class="t">RemovePrivateMethodNeverUsedCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="5399720edd3ae575" href="../R/5399720edd3ae575.html" target="n" data-glyph="76,1">RemoveMethodAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r4 rd" class="r4 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="k">var</a> <span id="r7 rd" class="r7 r">diagnosticSpan</span> = <span class="r4 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r8 rd" class="r8 r">methodNotUsed</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r7 r">diagnosticSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>&gt;().First();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r9 rd" class="r9 r">newRoot</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03fbd5239cc1fb6f">RemoveNode</a>(<span class="r8 r">methodNotUsed</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#55d4a245cfef7ac7" class="t">SyntaxRemoveOptions</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#33ad1b4532e3d717">KeepNoTrivia</a>);
+            <b>return</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r9 r">newRoot</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

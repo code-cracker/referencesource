@@ -1,0 +1,642 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringBuilderInLoopTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(633);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Performance/StringBuilderInLoopTests.cs" target="_top">Performance\StringBuilderInLoopTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Performance
+{
+    <b>public class</b> <a id="36aeb50dc00a01c3" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="8a00e7df29f846f4">StringBuilderInLoopTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#f436e65fd9f465ea" class="t">StringBuilderInLoopCodeFixProvider</a>&gt;
+    {
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b5518ec76e83c970" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithoutAddAssignmentExpressionDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    Method();
+                }
+            }
+            public void Method() { }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="71d32f8e3d099ec5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithoutStringConcatDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">source</span> = <span class="s">@&quot;
+                var a = 0;
+                while (a &lt; 10)
+                {
+                    a += 1;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8be558f7d42bab54" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatOnLocalVariableCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 14, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">source</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="51536251dc012bcd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatOnFieldVariableCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private string myString = &quot;&quot;&quot;&quot;;
+            public void Foo()
+            {
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;&quot;&quot;;
+                }
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">expected</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="611ae15daeaffb20" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatOnPropertyVariableCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public string MyString { get; set; } = &quot;&quot;&quot;&quot;;
+            public void Foo()
+            {
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    MyString += &quot;&quot;&quot;&quot;;
+                }
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r7 rd" class="r7 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;MyString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">source</span>, <span class="r7 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="299c745849ea9e93" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatWithSeveralConcatsOnDifferentVarsCreatesSeveralDiagnostics</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+                var myString1 = &quot;&quot;&quot;&quot;;
+                var myString2 = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString1 += &quot;&quot;&quot;&quot;;
+                    myString2 += &quot;&quot;&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r9 rd" class="r9 r">expected1</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString1&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 15, 21) }
+            };
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r10 rd" class="r10 r">expected2</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString2&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 16, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r8 r">source</span>, <span class="r9 r">expected1</span>, <span class="r10 r">expected2</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="08a3f4380c4c258f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatWithSimpleAssignmentCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString = myString + &quot;&quot;&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r12 rd" class="r12 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 14, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r11 r">source</span>, <span class="r12 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="81694f1b903be956" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatWithSimpleAssignmentOnDifferentVarDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var otherString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString = otherString + &quot;&quot;&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1753f62ab8649839" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentInWhile</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r15 rd" class="r15 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                }
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r14 r">source</span>, <span class="r15 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="72d9255438c6d56a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentInWhileWithoutBlock</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                    myString += &quot;&quot;a&quot;&quot;;&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r17 rd" class="r17 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                while (DateTime.Now.Second % 2 == 0)
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r16 r">source</span>, <span class="r17 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="976f2f9512600f6f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentInWhileWithSystemTextInContext</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+    using System.Text;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r19 rd" class="r19 r">fixtest</span> = <span class="s">@&quot;
+    using System.Text;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new StringBuilder();
+                builder.Append(myString);
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                }
+                myString = builder.ToString();
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="fc7185a2b1b950d3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesSimpleAssignmentInWhile</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r20 rd" class="r20 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                //comment 3
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    //comment 1
+                    myString = myString + &quot;&quot;a&quot;&quot;;//comment 2
+                }//comment 4&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r21 rd" class="r21 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                //comment 3
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    //comment 1
+                    builder.Append(&quot;&quot;a&quot;&quot;);//comment 2
+                }//comment 4
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a5510e7fa359b64c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentWhenThereAre2WhilesOnBlock</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r22 rd" class="r22 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 1)
+                {
+                    var a = 1;
+                }
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r23 rd" class="r23 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 1)
+                {
+                    var a = 1;
+                }
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                }
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="22e552744e0c00b0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentWithoutClashingTheBuilderName</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+                var builder = 1;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r25 rd" class="r25 r">fixtest</span> = <span class="s">@&quot;
+                var builder = 1;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder1 = new System.Text.StringBuilder();
+                builder1.Append(myString);
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    builder1.Append(&quot;&quot;a&quot;&quot;);
+                }
+                myString = builder1.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a643b3aede68ac06" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentWithoutClashingTheBuilderNameOnAField</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private int builder1;
+            public void Foo()
+            {
+                var builder = 1;
+                var myString = &quot;&quot;&quot;&quot;;
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r27 rd" class="r27 r">fixtest</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            private int builder1;
+            public void Foo()
+            {
+                var builder = 1;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder2 = new System.Text.StringBuilder();
+                builder2.Append(myString);
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    builder2.Append(&quot;&quot;a&quot;&quot;);
+                }
+                myString = builder2.ToString();
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r26 r">source</span>, <span class="r27 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f90d512622552ba2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ForWithStringConcatOnLocalVariableCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r28 rd" class="r28 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                for (;;)
+                {
+                    myString += &quot;&quot;&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r29 rd" class="r29 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 14, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r28 r">source</span>, <span class="r29 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9b76f23e132f9b67" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ForWithStringConcatOnLoopLocalVariableShouldNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r30 rd" class="r30 r">source</span> = <span class="s">@&quot;                
+                for (;;)
+                {
+                    var myString = &quot;&quot;&quot;&quot;;
+                    myString += &quot;&quot;&quot;&quot;;
+                    Console.WriteLine(myString);
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r30 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e8e490243d44feca" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentInFor</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r31 rd" class="r31 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                for (;;)
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                    break;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r32 rd" class="r32 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                for (;;)
+                {
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                    break;
+                }
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r31 r">source</span>, <span class="r32 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="224b77e7bd0ba68b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ForeachWithtStringConcatOnLocalVariableCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r33 rd" class="r33 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                foreach (var i in new [] {1,2,3})
+                {
+                    myString += &quot;&quot;&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r34 rd" class="r34 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 14, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r33 r">source</span>, <span class="r34 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ada712c8baf64386" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentInForeach</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r35 rd" class="r35 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                foreach (var i in new [] {1,2,3})
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r36 rd" class="r36 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                foreach (var i in new [] {1,2,3})
+                {
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                }
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r35 r">source</span>, <span class="r36 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ba2aaa6c4ac3a1fe" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoWithtStringConcatOnLocalVariableCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r37 rd" class="r37 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                do
+                {
+                    myString += &quot;&quot;&quot;&quot;;
+                } while (DateTime.Now.Second % 2 == 0);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r38 rd" class="r38 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;myString&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 14, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r37 r">source</span>, <span class="r38 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d2d749e2206fba70" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixesAddAssignmentInDo</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r39 rd" class="r39 r">source</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                do
+                {
+                    myString += &quot;&quot;a&quot;&quot;;
+                } while (DateTime.Now.Second % 2 == 0);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r40 rd" class="r40 r">fixtest</span> = <span class="s">@&quot;
+                var myString = &quot;&quot;&quot;&quot;;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(myString);
+                do
+                {
+                    builder.Append(&quot;&quot;a&quot;&quot;);
+                } while (DateTime.Now.Second % 2 == 0);
+                myString = builder.ToString();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r39 r">source</span>, <span class="r40 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="911c3f2952f613b6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatOnFieldWithAccessCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r41 rd" class="r41 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class SomeObject
+        {
+			public string A = &quot;&quot;;
+        }
+        class TypeName
+        {
+            private SomeObject someObject = new SomeObject();
+            public void Foo()
+            {
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    someObject.A += &quot;&quot;&quot;&quot;;
+                }
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r42 rd" class="r42 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;someObject.A&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 16, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r41 r">source</span>, <span class="r42 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cbd7002d48811d4e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithStringConcatOnFieldWithAccessOnArrayCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r43 rd" class="r43 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class SomeObject
+        {
+			public string[] A;
+        }
+        class TypeName
+        {
+            private SomeObject someObject = new SomeObject();
+            public void Foo()
+            {
+                while (DateTime.Now.Second % 2 == 0)
+                {
+                    someObject.A[DateTime.Now.Second] += &quot;&quot;&quot;&quot;;
+                }
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r44 rd" class="r44 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#1563b39124777dfa" class="t">StringBuilderInLoopAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#e2b81728a7caf752">MessageFormat</a>, <span class="s">&quot;someObject.A[DateTime.Now.Second]&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 16, 21) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r43 r">source</span>, <span class="r44 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1cc178a0b088877e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ForWithAssignmentOnIntArrayDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r45 rd" class="r45 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+				var length = 12;
+				var baseOffset = 4;
+				var branches = new int[length];
+				for (int i = 0; i &lt; length; i++)
+					branches[i] = baseOffset + int.Parse(&quot;&quot;&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r45 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b8581acaaeea5d0f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithoutStringConcatWithMethodParameterDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r46 rd" class="r46 r">source</span> = <span class="s">@&quot;
+public void Looper(int a = 0)
+{
+    while (a &lt; 10)
+    {
+        a += 1;
+    }
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r46 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e7eee11aa0fe7022" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhileWithoutStringConcatWithMethodRefParameterDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r47 rd" class="r47 r">source</span> = <span class="s">@&quot;
+public void Looper(ref int a)
+{
+    a = 0;
+    while (a &lt; 10)
+    {
+        a += 1;
+    }
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r47 r">source</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

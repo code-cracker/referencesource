@@ -1,0 +1,507 @@
+﻿<!DOCTYPE html>
+<html><head><title>GeneratedCodeAnalysisExtensionsTests.vb</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(498);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/GeneratedCodeAnalysisExtensionsTests.vb" target="_top">GeneratedCodeAnalysisExtensionsTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> FluentAssertions
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Xunit
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> CodeCracker.VisualBasic
+ 
+<b>Public Class</b> <a id="9281a3ffab2dca1c" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="cff46794b0433d2d">GeneratedCodeAnalysisExtensionsTests</span></a>
+    <b>Private Const</b> <a id="50d07b848604e031" href="R/50d07b848604e031.html" target="n" data-glyph="10,1">baseProjectPath</a> = <span class="s">&quot;D:\ClassLibrary11\&quot;</span>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.g.VB&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.g.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;B.g.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.g.i.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;B.g.i.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.designer.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.generated.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;B.generated.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;AssemblyInfo.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.AssemblyAttributes.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;B.AssemblyAttributes.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;AssemblyAttributes.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;Service.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_A.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_B.vb&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="bcd9daaeec0f2a10" href="R/../../0000000000.html" target="n" data-glyph="72,1">IsOnGeneratedFile</a>(<span id="r0 rd" class="r0 r">fileName</span> <b>As String</b>)
+        <span class="r0 r">fileName</span>.<a href="/CodeCracker.Common/A.html#d2c79ffe8bcf600f">IsOnGeneratedFile</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TheAssemblyInfo.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;A.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TheTemporaryGeneratedFile_A.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TheService.vb&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TheAssemblyAttributes.vb&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="f8663dd0bfca8052" href="R/../../0000000000.html" target="n" data-glyph="72,1">IsNotOnGeneratedFile</a>(<span id="r1 rd" class="r1 r">fileName</span> <b>As String</b>)
+        <span class="r1 r">fileName</span>.<a href="/CodeCracker.Common/A.html#d2c79ffe8bcf600f">IsOnGeneratedFile</a>().Should().BeFalse()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Sub</b> <a id="f8f3ced812655e61" href="R/../../0000000000.html" target="n" data-glyph="72,1">IsContextOnGeneratedFile</a>()
+        <b>Dim</b> <span id="r2 rd" class="r2 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> = <a href="#d2fe7e1c82e83312">GetContext</a>(
+<span class="s">&quot;Class TypeName
+End Class&quot;</span>, <a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;TemporaryGeneratedFile_.vb&quot;</span>)
+        <span class="r2 r">context</span>.<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.Diagnostics.DebuggerNonUserCode&gt; Class TypeName
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt; Class TypeName
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="f8a1c52fc773389d" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAClass</a>(<span id="r3 rd" class="r3 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>)(<span class="r3 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.Diagnostics.DebuggerNonUserCode&gt; Module TypeName
+    End Module&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt; Module TypeName
+    End Module&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="876e01a7073876f9" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAModule</a>(<span id="r4 rd" class="r4 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b29cc29f13816bd0" class="t">ModuleBlockSyntax</a>)(<span class="r4 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.Diagnostics.DebuggerNonUserCode&gt; Sub Foo()
+        End Sub
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt; Sub Foo()
+        End Sub
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="922b607f7c78a142" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAMethod</a>(<span id="r5 rd" class="r5 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>)(<span class="r5 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.Diagnostics.DebuggerNonUserCode&gt; Sub Foo()
+            System.Console.WriteLine(1)
+        End Sub
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt; Sub Foo()
+            System.Console.WriteLine(1)
+        End Sub
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="cd6b9bf7a5148336" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAStatementWithinAMethod</a>(<span id="r6 rd" class="r6 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)(<span class="r6 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.Diagnostics.DebuggerNonUserCode&gt; Property Foo As Integer
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt; Property Foo As Integer
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="d6201097f70891d2" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAProperty</a>(<span id="r7 rd" class="r7 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a>)(<span class="r7 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private _foo As Integer
+        &lt;System.Diagnostics.DebuggerNonUserCode&gt;
+        Public ReadOnly Property Foo() As Integer
+            Get
+                Return _foo
+            End Get
+        End Property
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private _foo As Integer
+        &lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt;
+        Public ReadOnly Property Foo() As Integer
+            Get
+                Return _foo
+            End Get
+        End Property
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="9fc900a30fbb14a3" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAPropertyCheckingTheGet</a>(<span id="r8 rd" class="r8 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r8 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private _foo As Integer
+        Public ReadOnly Property Foo() As Integer
+            &lt;System.Diagnostics.DebuggerNonUserCode&gt;
+            Get
+                Return _foo
+            End Get
+        End Property
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private _foo As Integer
+        Public ReadOnly Property Foo() As Integer
+            &lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt;
+            Get
+                Return _foo
+            End Get
+        End Property
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="3490018162eb861b" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAPropertyGet</a>(<span id="r9 rd" class="r9 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r9 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private _foo As Integer
+        Public WriteOnly Property Foo() As Integer
+            &lt;System.Diagnostics.DebuggerNonUserCode&gt;
+            Set(ByVal value As Integer)
+                _foo = value
+            End Set
+        End Property
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private _foo As Integer
+        Public WriteOnly Property Foo() As Integer
+            &lt;System.Diagnostics.DebuggerNonUserCodeAttribute&gt;
+            Set(ByVal value As Integer)
+                _foo = value
+            End Set
+        End Property
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="2ba657045a0db16f" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasDebuggerNonUserCodeAttributeOnAPropertySet</a>(<span id="r10 rd" class="r10 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r10 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; Class TypeName
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; Class TypeName
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="5792051deee2c29e" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnAClass</a>(<span id="r11 rd" class="r11 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>)(<span class="r11 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; Interface ITypeName
+    End Interface&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(<span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; Interface ITypeName
+    End Interface&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="292ae68cb87ab77a" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnAnInterface</a>(<span id="r12 rd" class="r12 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df7d91f3de7b93bf" class="t">InterfaceBlockSyntax</a>)(<span class="r12 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt;
+    Enum A
+        a
+    End Enum&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt;
+    Enum A
+        a
+    End Enum&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="8ba6425f90974595" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnEnum</a>(<span id="r13 rd" class="r13 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#774386974bc063e9" class="t">EnumBlockSyntax</a>)(<span class="r13 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; private i as Integer
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; private i as Integer
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="5ec26c514d6546e7" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnAField</a>(<span id="r14 rd" class="r14 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a>)(<span class="r14 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+    &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; Event a As Action
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+    &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; Event a As Action
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="d48de616676d02b9" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnAnEvent</a>(<span id="r15 rd" class="r15 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ccc91f57a91d3b03" class="t">EventStatementSyntax</a>)(<span class="r15 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        public Sub Foo(&lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; i as Integer)
+        End Sub
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        public Sub Foo(&lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; i as Integer)
+        End Sub
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="3b2e37bf74b5149a" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnParameter</a>(<span id="r16 rd" class="r16 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>)(<span class="r16 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; Delegate Sub A()
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; Delegate Sub A()
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="e49fcf4179cd790f" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnDelegate</a>(<span id="r17 rd" class="r17 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a>)(<span class="r17 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt; Class TypeName
+        Structure Nested
+        End Structure
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;&lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt; Class TypeName
+        Structure Nested
+        End Structure
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="9dae28f0490b1f55" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnNestedClass</a>(<span id="r18 rd" class="r18 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a>)(<span class="r18 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt;
+        Public Custom Event Click As EventHandler
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt;
+        Public Custom Event Click As EventHandler
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="898047385706966c" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnCustomEvent</a>(<span id="r19 rd" class="r19 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ccc91f57a91d3b03" class="t">EventStatementSyntax</a>)(<span class="r19 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt;
+        Public Custom Event Click As EventHandler
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt;
+        Public Custom Event Click As EventHandler
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="e4428f5e5c39f7c1" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnCustomEventInsideAccessor</a>(<span id="r20 rd" class="r20 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r20 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        Public Custom Event Click As EventHandler
+            &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt;
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        Public Custom Event Click As EventHandler
+            &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt;
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="387aefacb57c1dfa" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnCustomEventAdd</a>(<span id="r21 rd" class="r21 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r21 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        Public Custom Event Click As EventHandler
+            &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt;
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        Public Custom Event Click As EventHandler
+            &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt;
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+        End Event
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="4a5fda4d0f8dd897" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnCustomEventRemove</a>(<span id="r22 rd" class="r22 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r22 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Theory</span>&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        Public Custom Event Click As EventHandler
+            &lt;System.CodeDom.Compiler.GeneratedCode(Nothing, Nothing)&gt;
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+        End Event
+    End Class&quot;</span>)&gt;
+    &lt;<span class="t">InlineData</span>(
+    <span class="s">&quot;Class TypeName
+        Private Events As New System.ComponentModel.EventHandlerList
+        Public Custom Event Click As EventHandler
+            &lt;System.CodeDom.Compiler.GeneratedCodeAttribute(Nothing, Nothing)&gt;
+            RaiseEvent(ByVal sender As Object, ByVal e As EventArgs)
+            End RaiseEvent
+            AddHandler(ByVal value As EventHandler)
+            End AddHandler
+            RemoveHandler(ByVal value As EventHandler)
+            End RemoveHandler
+        End Event
+    End Class&quot;</span>)&gt;
+    <b>Public Sub</b> <a id="06cd736713f4834a" href="R/../../0000000000.html" target="n" data-glyph="72,1">HasGeneratedCodeAttributeOnCustomEventRaise</a>(<span id="r23 rd" class="r23 r">source</span> <b>As String</b>)
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)(<span class="r23 r">source</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Sub</b> <a id="cdd1b7d53ad2ccf2" href="R/../../0000000000.html" target="n" data-glyph="72,1">WithAutoGeneratedCommentBasedOnWebForms</a>()
+        <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>)(
+<span class="s">&quot;&#39;------------------------------------------------------------------------------
+&#39; &lt;auto-generated&gt;
+&#39;     This code was generated by a tool.
+&#39;
+&#39;     Changes to this file may cause incorrect behavior and will be lost if
+&#39;     the code is regenerated.
+&#39; &lt;/auto-generated&gt;
+&#39;------------------------------------------------------------------------------
+ 
+Option Strict On
+Option Explicit On
+ 
+Partial Public Class _Default
+End Class&quot;</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Sub</b> <a id="5aec58514bf8f6ec" href="R/../../0000000000.html" target="n" data-glyph="72,1">WithAutoGeneratedCommentEmpty</a>()
+        <a href="#d2fe7e1c82e83312">GetContext</a>(
+<span class="s">&quot;&#39;------------------------------------------------------------------------------
+&#39; &lt;auto-generated&gt;
+&#39;     This code was generated by a tool.
+&#39;
+&#39;     Changes to this file may cause incorrect behavior and will be lost if
+&#39;     the code is regenerated.
+&#39; &lt;/auto-generated&gt;
+&#39;------------------------------------------------------------------------------&quot;</span>).<a href="/CodeCracker.VisualBasic/A.html#5761500a6910397e">IsGenerated</a>().Should().BeTrue()
+    <b>End Sub
+ 
+    Private Shared Function</b> <a id="d2fe7e1c82e83312" href="R/d2fe7e1c82e83312.html" target="n" data-glyph="76,1">GetContext</a>(<span id="r24 rd" class="r24 r">code</span> <b>As String</b>, <b>Optional</b> <span id="r25 rd" class="r25 r">fileName</span> <b>As String</b> = <a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;a.vb&quot;</span>) <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>
+        <b>Return</b> <a href="#040fdfb47c2f907b">GetContext</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d79aac101c1808e2" class="t">CompilationUnitSyntax</a>)(<span class="r24 r">code</span>, <span class="r25 r">fileName</span>)
+    <b>End Function
+ 
+    Private Shared Function</b> <a id="040fdfb47c2f907b" href="R/040fdfb47c2f907b.html" target="n" data-glyph="76,1">GetContext</a>(<b>Of</b> <span id="r26 rd t" class="r26 r t">T</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>)(<span id="r27 rd" class="r27 r">code</span> <b>As String</b>, <b>Optional</b> <span id="r28 rd" class="r28 r">fileName</span> <b>As String</b> = <a href="#50d07b848604e031">baseProjectPath</a> + <span class="s">&quot;a.vb&quot;</span>) <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>
+        <b>Dim</b> <span id="r29 rd" class="r29 r">tree</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#32022e14ee3659dc">ParseSyntaxTree</a>(<span class="r27 r">code</span>, <span class="r30 r">path</span>:=<span class="r28 r">fileName</span>)
+        <b>Dim</b> <span id="r31 rd" class="r31 r">compilation</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#afe7f5e5e398cb25" class="t">VisualBasicCompilation</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#331e1ac14119a897">Create</a>(<span class="s">&quot;comp.dll&quot;</span>, <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="t">SyntaxTree</a>() {<span class="r29 r">tree</span>})
+        <b>Dim</b> <span id="r32 rd" class="r32 r">root</span> = <span class="r29 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>()
+        <b>Dim</b> <span id="r33 rd" class="r33 r">semanticModel</span> = <span class="r31 r">compilation</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#07aaf168902960be">GetSemanticModel</a>(<span class="r29 r">tree</span>)
+        <b>Dim</b> <span id="r34 rd" class="r34 r">analyzerOptions</span> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2ce0645d852c5702" class="t">AnalyzerOptions</a>(<span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#b8deffdb74556ee2" class="t">AdditionalText</a>).Empty)
+        <b>Dim</b> <span id="r35 rd" class="r35 r">node</span> = <span class="r32 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0486ce360964263b">DescendantNodesAndSelf</a>().<a href="@0@System.Core/A.html#4ba4a3f8a5530e33">OfType</a>(<b>Of</b> <span class="r26 r t">T</span>)().<a href="@0@System.Core/A.html#bc8ae402a61dd9d6">First</a>()
+        <b>Dim</b> <span id="r36 rd" class="r36 r">context</span> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2712bb715ffcdbb5" class="t">SyntaxNodeAnalysisContext</a>(<span class="r35 r">node</span>, <span class="r33 r">semanticModel</span>, <span class="r34 r">analyzerOptions</span>,
+                                                    <b>Sub</b>(<span id="r37 rd" class="r37 r">diag</span>)
+                                                    <b>End Sub</b>,
+                                                    <b>Function</b>(<span id="r38 rd" class="r38 r">diag</span>)
+                                                        <b>Return True
+                                                    End Function</b>, <b>Nothing</b>)
+        <b>Return</b> <span class="r36 r">context</span>
+    <b>End Function
+End Class</b></pre></td></tr></table></div></body></html>

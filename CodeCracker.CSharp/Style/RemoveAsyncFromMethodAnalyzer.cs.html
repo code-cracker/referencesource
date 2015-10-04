@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveAsyncFromMethodAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(51);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/RemoveAsyncFromMethodAnalyzer.cs" target="_top">Style\RemoveAsyncFromMethodAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="aa47c35c8ad89d2f" href="../R/aa47c35c8ad89d2f.html" target="n" data-glyph="0,0" class="t"><span id="a922d453ee24df26">RemoveAsyncFromMethodAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="77ca0b824261fb0f" href="../R/77ca0b824261fb0f.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Remove Async termination when method is not asynchronous.&quot;</span>;
+        <b>internal const string</b> <a id="1cf3201c398c1fc7" href="../R/1cf3201c398c1fc7.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Consider remove &#39;Async&#39; from method {0}.&quot;</span>;
+        <b>internal const string</b> <a id="1329824a2f5cc04a" href="../R/1329824a2f5cc04a.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="b56539df2403ed63" href="../R/b56539df2403ed63.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Remove Async termination when method is not asynchronous.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="c304c057a400386a" href="../R/c304c057a400386a.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#966ced257585f9ac">RemoveAsyncFromMethod</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#77ca0b824261fb0f">Title</a>,
+            <a href="#1cf3201c398c1fc7">MessageFormat</a>,
+            <a href="#1329824a2f5cc04a">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#b56539df2403ed63">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#966ced257585f9ac">RemoveAsyncFromMethod</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="a4663ca224b8ee5e" href="../R/a4663ca224b8ee5e.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#c304c057a400386a">Rule</a>);
+ 
+        <b>public override void</b> <a id="84015aebb4d76248" href="../R/84015aebb4d76248.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#a9acc584f19f6326">AnalyzeMethod</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f888c625ee964f4b">MethodDeclaration</a>);
+ 
+        <b>private static void</b> <a id="a9acc584f19f6326" href="../R/a9acc584f19f6326.html" target="n" data-glyph="76,1">AnalyzeMethod</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r5 rd" class="r5 r">method</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>;
+            <b>if</b> (!<span class="r5 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>.EndsWith(<span class="s">&quot;Async&quot;</span>)) <b>return</b>;
+            <b>if</b> (<span class="r5 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.Any(<span id="r6 rd" class="r6 r">m</span> =&gt; <span class="r6 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a> == <span class="s">&quot;async&quot;</span>)) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r7 rd" class="r7 r">returnType</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r5 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2391566ab6c3f1ba">ReturnType</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>;
+            <b>if</b> (<span class="r7 r">returnType</span> != <b>null</b>)
+            {
+                <b>if</b> (<span class="r7 r">returnType</span>.ToString() == <span class="s">&quot;System.Threading.Tasks.Task&quot;</span> ||
+                    (<span class="r7 r">returnType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#964cfdcd96d807e9">IsGenericType</a> &amp;&amp; <span class="r7 r">returnType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2b034eb9d8cd5598">ConstructedFrom</a>.ToString() == <span class="s">&quot;System.Threading.Tasks.Task&lt;TResult&gt;&quot;</span>))
+                    <b>return</b>;
+            }
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r8 rd" class="r8 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#c304c057a400386a">Rule</a>, <span class="r5 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#20b085a124dddfb0">GetLocation</a>(), <span class="r5 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0f071bd5f6a853a8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r8 r">diagnostic</span>);
+        }
+ 
+    }
+}</pre></td></tr></table></div></body></html>

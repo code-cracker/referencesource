@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnusedParametersAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(123);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/UnusedParametersAnalyzer.vb" target="_top">Usage\UnusedParametersAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="c643dff42203e20f" href="../R/c643dff42203e20f.html" target="n" data-glyph="0,0" class="t"><span id="c8bf664b8ed181dd">UnusedParametersAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="8fcce1ac4394fff1" href="../R/8fcce1ac4394fff1.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Unused parameters.&quot;</span>
+        <b>Friend Const</b> <a id="3b5406c598799890" href="../R/3b5406c598799890.html" target="n" data-glyph="8,1">Message</a> = <span class="s">&quot;Parameter &#39;{0}&#39; is not used.&quot;</span>
+        <b>Private Const</b> <a id="7da859c931058067" href="../R/7da859c931058067.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;When a method declares a parameter and does not use it might bring incorrect concolusions for anyone reading the code and anso demands the parameter when the method is called unnecessarily.
+You should delete the parameter in such cases.&quot;</span>
+ 
+        <b>Friend Shared</b> <a id="df525b156d0bef20" href="../R/df525b156d0bef20.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+        <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3c47a0e6723314bc">UnusedParameters</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+        <a href="#8fcce1ac4394fff1">Title</a>,
+        <a href="#3b5406c598799890">Message</a>,
+        <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>,
+        <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+        <b>False</b>,
+        <a href="#7da859c931058067">Description</a>,
+        <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3c47a0e6723314bc">UnusedParameters</a>),
+        <a href="@1@Microsoft.CodeAnalysis/A.html#03ef56ba68ffca36" class="t">WellKnownDiagnosticTags</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#4312437e59bf4b2d">Unnecessary</a>)
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="252f2a53094c2b76" href="../R/252f2a53094c2b76.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#df525b156d0bef20">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="c7809b55062390c8" href="../R/c7809b55062390c8.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#85a3b5b1ae55e817">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#a0cfdc448283878a">SubBlock</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e7c45181de310bc1">ConstructorBlock</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2ac049fce489d4a7">FunctionBlock</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="85a3b5b1ae55e817" href="../R/85a3b5b1ae55e817.html" target="n" data-glyph="76,1">Analyzer</a>(<span id="r1 rd" class="r1 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r1 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r2 rd" class="r2 r">methodOrConstructor</span> = <b>TryCast</b>(<span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b675ae543da8cfa8" class="t">MethodBlockBaseSyntax</a>)
+            <b>If</b> <span class="r2 r">methodOrConstructor</span> <b>Is Nothing Then Exit Sub
+            Dim</b> <span id="r3 rd" class="r3 r">model</span> = <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>
+            <b>If Not</b> <a href="#ac0dc7e38192c8cf">IsCandidateForRemoval</a>(<span class="r2 r">methodOrConstructor</span>, <span class="r3 r">model</span>) <b>Then Exit Sub
+            Dim</b> <span id="r4 rd" class="r4 r">parameters</span> = <span class="r2 r">methodOrConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7a79812919fe71ec">BlockStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3c2d055489ab34ed">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.ToDictionary(<b>Function</b>(<span id="r5 rd" class="r5 r">p</span>) <span class="r5 r">p</span>, <b>Function</b>(<span id="r6 rd" class="r6 r">p</span>) <span class="r3 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#29741c0506f99bba">GetDeclaredSymbol</a>(<span class="r6 r">p</span>))
+            <b>Dim</b> <span id="r7 rd" class="r7 r">ctor</span> = <b>TryCast</b>(<span class="r2 r">methodOrConstructor</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>)
+            <span class="c">&#39; TODO: Check if used in MyBase</span>
+            <b>If</b> <span class="r2 r">methodOrConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2371bc4eecc81f3d">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7409ba70634b172">Any</a>() <b>Then
+                Dim</b> <span id="r8 rd" class="r8 r">dataFlowAnalysis</span> = <span class="r3 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0f5b605c88fe8504">AnalyzeDataFlow</a>(<span class="r2 r">methodOrConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2371bc4eecc81f3d">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e2384c68a8e35346">First</a>, <span class="r2 r">methodOrConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2371bc4eecc81f3d">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#1522810a84d959f0">Last</a>)
+                <b>If Not</b> <span class="r8 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9f6993ed01c8c373">Succeeded</a> <b>Then Exit Sub
+                For Each</b> <span class="r9 r">parameter</span> <b>In</b> <span class="r4 r">parameters</span>
+                    <b>Dim</b> <span id="r10 rd" class="r10 r">parameterSymbol</span> = <span class="r9 r">parameter</span>.Value
+                    <b>If</b> <span class="r10 r">parameterSymbol</span> <b>Is Nothing Then Continue For
+                    If Not</b> <span class="r8 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#514953450f22dc28">ReadInside</a>.Contains(<span class="r10 r">parameterSymbol</span>) <b>AndAlso
+                        Not</b> <span class="r8 r">dataFlowAnalysis</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#39b216acbbaddace">WrittenInside</a>.Contains(<span class="r10 r">parameterSymbol</span>) <b>Then</b>
+                        <span class="r1 r">context</span> = <a href="#77ec18712ba1940e">CreateDiagnostic</a>(<span class="r1 r">context</span>, <span class="r9 r">parameter</span>.Key)
+                    <b>End If
+                Next
+            Else
+                For Each</b> <span class="r11 r">parameter</span> <b>In</b> <span class="r4 r">parameters</span>.Keys
+                    <span class="r1 r">context</span> = <a href="#77ec18712ba1940e">CreateDiagnostic</a>(<span class="r1 r">context</span>, <span class="r11 r">parameter</span>)
+                <b>Next
+            End If
+        End Sub
+ 
+        Private Shared Function</b> <a id="ac0dc7e38192c8cf" href="../R/ac0dc7e38192c8cf.html" target="n" data-glyph="76,1">IsCandidateForRemoval</a>(<span id="r12 rd" class="r12 r">methodOrConstructor</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b675ae543da8cfa8" class="t">MethodBlockBaseSyntax</a>, <span id="r13 rd" class="r13 r">semanticModel</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As Boolean
+            If</b> <span class="r12 r">methodOrConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7a79812919fe71ec">BlockStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9654ebb871017936">Modifiers</a>.Any(<b>Function</b>(<span id="r14 rd" class="r14 r">m</span>) <span class="r14 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> = <span class="s">&quot;Partial&quot;</span> <b>OrElse</b> <span class="r14 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> = <span class="s">&quot;Overrides&quot;</span>) <b>OrElse
+            Not</b> <span class="r12 r">methodOrConstructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7a79812919fe71ec">BlockStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3c2d055489ab34ed">ParameterList</a>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a>() <b>Then Return False
+ 
+            Dim</b> <span id="r15 rd" class="r15 r">method</span> = <b>TryCast</b>(<span class="r12 r">methodOrConstructor</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>)
+            <b>If</b> <span class="r15 r">method</span> <b>IsNot Nothing Then
+                If</b> <span class="r15 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9cbd4a8da60f8e7f">ImplementsClause</a> <b>IsNot Nothing Then Return False
+                Dim</b> <span id="r16 rd" class="r16 r">methodSymbol</span> = <span class="r13 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e146cab6a0882a3a">GetDeclaredSymbol</a>(<span class="r15 r">method</span>)
+                <b>If</b> <span class="r16 r">methodSymbol</span> <b>Is Nothing Then Return False
+                Dim</b> <span id="r17 rd" class="r17 r">typeSymbol</span> = <span class="r16 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>
+                <b>If</b> <span class="r17 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ab9dbc4496a6195">Interfaces</a>.SelectMany(<b>Function</b>(<span id="r18 rd" class="r18 r">i</span>) <span class="r18 r">i</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>()).
+                Any(<b>Function</b>(<span id="r19 rd" class="r19 r">member</span>) <span class="r16 r">methodSymbol</span>.Equals(<span class="r17 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1ebe0554a546dcf3">FindImplementationForInterfaceMember</a>(<span class="r19 r">member</span>))) <b>Then Return False
+ 
+                If</b> <a href="#f52a85bee4625ee0">IsEventHandlerLike</a>(<span class="r15 r">method</span>, <span class="r13 r">semanticModel</span>) <b>Then Return False
+            Else
+                Dim</b> <span id="r20 rd" class="r20 r">constructor</span> = <b>TryCast</b>(<span class="r12 r">methodOrConstructor</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>)
+                <b>If</b> <span class="r20 r">constructor</span> <b>IsNot Nothing Then
+                    If</b> <a href="#2371db34dbdd6323">IsSerializationConstructor</a>(<span class="r20 r">constructor</span>, <span class="r13 r">semanticModel</span>) <b>Then Return False
+                Else
+                    Return False
+                End If
+            End If
+            Return True
+        End Function
+ 
+        Private Shared Function</b> <a id="2371db34dbdd6323" href="../R/2371db34dbdd6323.html" target="n" data-glyph="76,1">IsSerializationConstructor</a>(<span id="r21 rd" class="r21 r">constructor</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>, <span id="r22 rd" class="r22 r">model</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As Boolean
+            If</b> <span class="r21 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bf7a2989aeee1e90">SubNewStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b87bc54516eff683">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> &lt;&gt; 2 <b>Then Return False
+            Dim</b> <span id="r23 rd" class="r23 r">constructorSymbol</span> = <span class="r22 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e146cab6a0882a3a">GetDeclaredSymbol</a>(<span class="r21 r">constructor</span>)
+            <b>Dim</b> <span id="r24 rd" class="r24 r">typeSymbol</span> = <span class="r23 r">constructorSymbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>
+            <b>If If</b>(<b>Not</b> <span class="r24 r">typeSymbol</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#4ab9dbc4496a6195">Interfaces</a>.Any(<b>Function</b>(<span id="r25 rd" class="r25 r">i</span>) <span class="r25 r">i</span>.ToString() = <span class="s">&quot;System.Runtime.Serialization.ISerializable&quot;</span>), <b>True</b>) <b>Then Return False
+            If Not</b> <span class="r24 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#8622f45e65193eb8">GetAttributes</a>().Any(<b>Function</b>(<span id="r26 rd" class="r26 r">a</span>) <span class="r26 r">a</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e2ab2f3df65902de">AttributeClass</a>.ToString() = <span class="s">&quot;System.SerializableAttribute&quot;</span>) <b>Then Return False
+            Dim</b> <span id="r27 rd" class="r27 r">serializationInfoType</span> = <b>TryCast</b>(<span class="r22 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r21 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bf7a2989aeee1e90">SubNewStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b87bc54516eff683">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>(0).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ac68e02c62077deb">AsClause</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b5f37a4856f21057">Type</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)
+            <b>If</b> <span class="r27 r">serializationInfoType</span> <b>Is Nothing Then Return False
+            If Not</b> <span class="r27 r">serializationInfoType</span>.<a href="/CodeCracker.Common/A.html#2715175bc289982f">AllBaseTypesAndSelf</a>().Any(<b>Function</b>(<span id="r28 rd" class="r28 r">type</span>) <span class="r28 r">type</span>.ToString() = <span class="s">&quot;System.Runtime.Serialization.SerializationInfo&quot;</span>) <b>Then Return False
+ 
+            Dim</b> <span id="r29 rd" class="r29 r">streamContextType</span> = <b>TryCast</b>(<span class="r22 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r21 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bf7a2989aeee1e90">SubNewStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b87bc54516eff683">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>(1).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ac68e02c62077deb">AsClause</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b5f37a4856f21057">Type</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)
+            <b>If</b> <span class="r29 r">streamContextType</span> <b>Is Nothing Then Return False
+            Return</b> <span class="r29 r">streamContextType</span>.<a href="/CodeCracker.Common/A.html#2715175bc289982f">AllBaseTypesAndSelf</a>().Any(<b>Function</b>(<span id="r30 rd" class="r30 r">type</span>) <span class="r30 r">type</span>.ToString() = <span class="s">&quot;System.Runtime.Serialization.StreamingContext&quot;</span>)
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="f52a85bee4625ee0" href="../R/f52a85bee4625ee0.html" target="n" data-glyph="76,1">IsEventHandlerLike</a>(<span id="r31 rd" class="r31 r">method</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>, <span id="r32 rd" class="r32 r">model</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>) <b>As Boolean
+ 
+            If</b> <span class="r31 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#10d160a0781ecce3">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> &lt;&gt; 2 <b>OrElse</b>
+            <span class="r31 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6e7ef3fa9a11e975">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2ac049fce489d4a7">FunctionBlock</a>) <b>Then Return False
+ 
+            Dim</b> <span id="r33 rd" class="r33 r">senderType</span> = <span class="r32 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r31 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#10d160a0781ecce3">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>(0).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ac68e02c62077deb">AsClause</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b5f37a4856f21057">Type</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>
+            <b>If</b> <span class="r33 r">senderType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> &lt;&gt; <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#cab6701c9a86de18">System_Object</a> <b>Then Return False
+            Dim</b> <span id="r34 rd" class="r34 r">eventArgsType</span> = <b>TryCast</b>(<span class="r32 r">model</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2f663ccd2649c5ee">GetTypeInfo</a>(<span class="r31 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#10d160a0781ecce3">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>(1).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ac68e02c62077deb">AsClause</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b5f37a4856f21057">Type</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)
+            <b>If</b> <span class="r34 r">eventArgsType</span> <b>Is Nothing Then Return False
+            Return</b> <span class="r34 r">eventArgsType</span>.<a href="/CodeCracker.Common/A.html#2715175bc289982f">AllBaseTypesAndSelf</a>().Any(<b>Function</b>(<span id="r35 rd" class="r35 r">type</span>) <span class="r35 r">type</span>.ToString() = <span class="s">&quot;System.EventArgs&quot;</span>)
+        <b>End Function
+ 
+        Private Function</b> <a id="77ec18712ba1940e" href="../R/77ec18712ba1940e.html" target="n" data-glyph="76,1">CreateDiagnostic</a>(<span id="r36 rd" class="r36 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>, <span id="r37 rd" class="r37 r">parameter</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>) <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>
+            <b>Dim</b> <span id="r38 rd" class="r38 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#df525b156d0bef20">Rule</a>, <span class="r37 r">parameter</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="r37 r">parameter</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cc186f48b54c6387">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>)
+            <span class="r36 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r38 r">diag</span>)
+            <b>Return</b> <span class="r36 r">context</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

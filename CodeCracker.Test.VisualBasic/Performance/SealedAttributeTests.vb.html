@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html><head><title>SealedAttributeTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(122);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Performance/SealedAttributeTests.vb" target="_top">Performance\SealedAttributeTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Performance
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Performance
+    <b>Public Class</b> <a id="56adf0dd3a45c165" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="faad2cd50ed8e386">SealedAttributeTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#8d3d8bc604c10284" class="t">SealedAttributeAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#9521a77ee9394fcf" class="t">SealedAttributeCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f6c9d0665b672d47" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ApplySealedWhenClassInheritsFromSystemAttributeClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">&quot;
+Public Class MyAttribute
+    Inherits System.Attribute
+End Class&quot;</span>
+ 
+            <b>Dim</b> <span id="r1 rd" class="r1 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#8d3d8bc604c10284" class="t">SealedAttributeAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#39ad319fca794f1b">Id</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Mark &#39;MyAttribute&#39; as NotInheritable.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 2, 14)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>)
+ 
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="7749dfa1c435302a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ApplySealedWhenClassInheritsIndirectlyFromSystemAttributeClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">&quot;
+Public MustInherit Class MyAttribute
+    Inherits System.Attribute
+End Class
+ 
+Public Class OtherAttribute
+    Inherits MyAttribute
+End Class&quot;</span>
+ 
+            <b>Dim</b> <span id="r3 rd" class="r3 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+                {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#8d3d8bc604c10284" class="t">SealedAttributeAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#39ad319fca794f1b">Id</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Mark &#39;OtherAttribute&#39; as NotInheritable.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 14)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="635cb5b5235fb41e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplySealedWhenClassThatInheritsFromSystemAttributeClassIsAbstract</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;
+Public MustInherit Class MyAttribute
+    Inherits System.Attribute
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="3b306b07f087cb25" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplySealedWhenClassThatInheritsFromSystemAttributeClassIsNotInheritable</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">&quot;
+Public NotInheritable Class MyAttribute
+    Inherits System.Attribute
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="36c29aaeb3a88806" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplyNotInheritableWhenIsStruct</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">&quot;
+Public Structure MyStructure
+End Structure&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="cc86b0407c5925cd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NotApplyNotInheritableWhenIsInterface</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">&quot;
+Public Interface ITest
+End Interface&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r7 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6aa98fed9cb05e2d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenSealedModifierIsAppliedOnClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">&quot;
+Public Class MyAttribute
+    Inherits System.Attribute
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r9 rd" class="r9 r">fix</span> = <span class="s">&quot;
+Public NotInheritable Class MyAttribute
+    Inherits System.Attribute
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r8 r">test</span>, <span class="r9 r">fix</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="c1af6a959ade5201" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenSealedModifierIsAppliedOnClassFixAll</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r10 rd" class="r10 r">test1</span> = <span class="s">&quot;
+Public Class MyAttribute1
+    Inherits System.Attribute
+End Class&quot;</span>
+            <b>Const</b> <span id="r11 rd" class="r11 r">fix1</span> = <span class="s">&quot;
+Public NotInheritable Class MyAttribute1
+    Inherits System.Attribute
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r12 rd" class="r12 r">test2</span> = <span class="s">&quot;
+Public Class MyAttribute2
+    Inherits System.Attribute
+End Class&quot;</span>
+            <b>Const</b> <span id="r13 rd" class="r13 r">fix2</span> = <span class="s">&quot;
+Public NotInheritable Class MyAttribute2
+    Inherits System.Attribute
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<span class="r10 r">test1</span>, <span class="r12 r">test2</span>}, <b>New</b> <b>String</b>() {<span class="r11 r">fix1</span>, <span class="r13 r">fix2</span>})
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

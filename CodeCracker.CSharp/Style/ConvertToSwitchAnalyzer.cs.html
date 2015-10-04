@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html><head><title>ConvertToSwitchAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(97);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/ConvertToSwitchAnalyzer.cs" target="_top">Style\ConvertToSwitchAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="67ac79b7864f7222" href="../R/67ac79b7864f7222.html" target="n" data-glyph="0,0" class="t"><span id="b1a24c420070ea8b">ConvertToSwitchAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="81309aa1a0f98bf5" href="../R/81309aa1a0f98bf5.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Use &#39;switch&#39;&quot;</span>;
+        <b>internal const string</b> <a id="4f51b19d519647b1" href="../R/4f51b19d519647b1.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;You could use &#39;switch&#39; instead of &#39;if&#39;.&quot;</span>;
+        <b>internal const string</b> <a id="1f7f24251286c520" href="../R/1f7f24251286c520.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="f637d04c5dbd46b1" href="../R/f637d04c5dbd46b1.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Multiple &#39;if&#39; and &#39;else if&#39; on the same variable can be replaced with a &#39;switch&#39;&quot;</span>
+            + <span class="s">&quot;on the variable\r\n\r\n&quot;</span>
+            + <span class="s">&quot;Note: This diagnostic trigger for 3 or more &#39;case&#39; statements&quot;</span>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="a11ff0036a92c7b2" href="../R/a11ff0036a92c7b2.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#70447c1e2d3d555f">ConvertToSwitch</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#81309aa1a0f98bf5">Title</a>,
+            <a href="#4f51b19d519647b1">MessageFormat</a>,
+            <a href="#1f7f24251286c520">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#f637d04c5dbd46b1">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#70447c1e2d3d555f">ConvertToSwitch</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="86169cfabcba29cf" href="../R/86169cfabcba29cf.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#a11ff0036a92c7b2">Rule</a>);
+ 
+        <b>public override void</b> <a id="056401af7a875545" href="../R/056401af7a875545.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#9af86aadfc66b99f">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#53b60e05c35bc547">IfStatement</a>);
+ 
+        <b>private static void</b> <a id="9af86aadfc66b99f" href="../R/9af86aadfc66b99f.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r5 rd" class="r5 r">ifStatement</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+ 
+            <span class="c">// ignoring else if</span>
+            <b>if</b> (<span class="r5 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4c606c85bd0ab648" class="t">ElseClauseSyntax</a>) <b>return</b>;
+ 
+            <span class="c">// ignoring simple if statement</span>
+            <b>if</b> (<span class="r5 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#875a60d9517c4d83">Else</a> == <b>null</b>) <b>return</b>;
+ 
+            <b>var</b> <span id="r6 rd" class="r6 r">nestedIfs</span> = <a href="#6fe5a58f4d2d3052">FindNestedIfs</a>(<span class="r5 r">ifStatement</span>).ToArray();
+ 
+            <span class="c">// ignoring less than 3 nested ifs</span>
+            <b>if</b> (<span class="r6 r">nestedIfs</span>.Length &lt; 3) <b>return</b>;
+ 
+            <span class="c">// ignoring when not all conditionals are &quot;equals&quot;</span>
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a> <span id="r7 rd" class="r7 r">common</span> = <b>null</b>;
+ 
+            <b>for</b> (<b>int</b> <span id="r8 rd" class="r8 r">i</span> = 0; <span class="r8 r">i</span> &lt; <span class="r6 r">nestedIfs</span>.Length; <span class="r8 r">i</span>++)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="k">var</a> <span id="r9 rd" class="r9 r">condition</span> = <span class="r6 r">nestedIfs</span>[<span class="r8 r">i</span>].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5bdf6aeba24c785a">Condition</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>;
+ 
+                <span class="c">// all ifs should have binary expressions as conditions</span>
+                <b>if</b> (<span class="r9 r">condition</span> == <b>null</b>) <b>return</b>;
+ 
+                <span class="c">// all conditions should be &quot;equal&quot;</span>
+                <b>if</b> (!<span class="r9 r">condition</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#82f8f855fc92f4b3">EqualsExpression</a>)) <b>return</b>;
+ 
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r10 rd" class="r10 r">left</span> = <span class="r9 r">condition</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b59ef6774404c1ce">Left</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+                <span class="c">// all conditions should have an identifier in the left</span>
+                <b>if</b> (<span class="r10 r">left</span> == <b>null</b>) <b>return</b>;
+ 
+                <b>if</b> (<span class="r8 r">i</span> == 0)
+                {
+                    <span class="r7 r">common</span> = <span class="r10 r">left</span>;
+                }
+                <b>else if</b> (!<span class="r10 r">left</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e65bd344b2e6bd5a">IsEquivalentTo</a>(<span class="r7 r">common</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>))
+                {
+                    <span class="c">// all conditions should have the same identifier in the left</span>
+                    <b>return</b>;
+                }
+ 
+                <a href="@1@Microsoft.CodeAnalysis/A.html#86bbd87a0ffc79bf" class="k">var</a> <span id="r11 rd" class="r11 r">right</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r9 r">condition</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7d073ad4f6440af3">Right</a>);
+                <span class="c">// only constants in the right side</span>
+                <b>if</b> (!<span class="r11 r">right</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1d6e9fac604b3517">HasValue</a>) <b>return</b>;
+ 
+            }
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r12 rd" class="r12 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#a11ff0036a92c7b2">Rule</a>, <span class="r5 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>());
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r12 r">diagnostic</span>);
+        }
+ 
+        <b>internal static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>&gt; <a id="6fe5a58f4d2d3052" href="../R/6fe5a58f4d2d3052.html" target="n" data-glyph="74,1">FindNestedIfs</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a> <span id="r13 rd" class="r13 r">ifStatement</span>)
+        {
+            <b>do</b>
+            {
+                <b>yield return</b> <span class="r13 r">ifStatement</span>;
+                <b>if</b> (<span class="r13 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#875a60d9517c4d83">Else</a> == <b>null</b>) <b>yield break</b>;
+                <span class="r13 r">ifStatement</span> = <span class="r13 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#875a60d9517c4d83">Else</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>().FirstOrDefault() <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>;
+            } <b>while</b> (<span class="r13 r">ifStatement</span> != <b>null</b>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

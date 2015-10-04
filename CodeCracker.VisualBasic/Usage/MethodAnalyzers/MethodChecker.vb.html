@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html><head><title>MethodChecker.vb</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(80);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/MethodAnalyzers/MethodChecker.vb" target="_top">Usage\MethodAnalyzers\MethodChecker.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage.MethodAnalyzers
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Public Class</b> <a id="f2dab9cf06ad89f8" href="../../R/f2dab9cf06ad89f8.html" target="n" data-glyph="0,0" class="t">MethodChecker</a>
+ 
+    <b>Private ReadOnly</b> <a id="e0b07cdc4347d525" href="../../R/e0b07cdc4347d525.html" target="n" data-glyph="46,1">_context</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>
+    <b>Private ReadOnly</b> <a id="3a5a4249acaa13e1" href="../../R/3a5a4249acaa13e1.html" target="n" data-glyph="46,1">_diagnosticDescriptor</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>
+ 
+    <b>Public Sub</b> <a id="b05a586c27f53442" href="../../R/b05a586c27f53442.html" target="n" data-glyph="72,1" class="k">New</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>, <span id="r1 rd" class="r1 r">diagnosticDescriptor</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+        <a href="#e0b07cdc4347d525">_context</a> = <span class="r0 r">context</span>
+        <a href="#3a5a4249acaa13e1">_diagnosticDescriptor</a> = <span class="r1 r">diagnosticDescriptor</span>
+    <b>End Sub
+ 
+    Public Sub</b> <a id="7dced2f3f4a176f8" href="../../R/7dced2f3f4a176f8.html" target="n" data-glyph="72,1">AnalyzeConstructor</a>(<span id="r2 rd" class="r2 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>)
+        <b>If</b> <a href="#5f64168a35cba156">ConstructorNameNotFound</a>(<span class="r2 r">methodInformation</span>) <b>OrElse</b> <a href="#6c9731e0f820ad3b">MethodFullNameNotFound</a>(<span class="r2 r">methodInformation</span>.<a href="MethodInformation.vb.html#211083c187b7d7cf">MethodFullDefinition</a>) <b>Then Exit Sub
+        Dim</b> <span id="r3 rd" class="r3 r">argumentList</span> = <b>TryCast</b>(<a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6e22a2a0b4bad74" class="t">ObjectCreationExpressionSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#32d2c151f4152441">ArgumentList</a>
+        <b>Dim</b> <span id="r4 rd" class="r4 r">arguments</span> = <a href="#680306dabd5a9d7e">getarguments</a>(<span class="r3 r">argumentList</span>)
+        <a href="#391b42a581722cfd">execute</a>(<span class="r2 r">methodInformation</span>, <span class="r4 r">arguments</span>, <span class="r3 r">argumentList</span>)
+    <b>End Sub
+ 
+    Private Function</b> <a id="5f64168a35cba156" href="../../R/5f64168a35cba156.html" target="n" data-glyph="76,1">ConstructorNameNotFound</a>(<span id="r5 rd" class="r5 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>) <b>As Boolean
+        Return</b> <a href="#e7db7b4e5d83bd48">AbreviatedConstructorNameNotFound</a>(<span class="r5 r">methodInformation</span>) <b>AndAlso</b> <a href="#270d06a3cdd377e9">QualifiedConstructorNameNotFound</a>(<span class="r5 r">methodInformation</span>)
+    <b>End Function
+ 
+    Private Function</b> <a id="e7db7b4e5d83bd48" href="../../R/e7db7b4e5d83bd48.html" target="n" data-glyph="76,1">AbreviatedConstructorNameNotFound</a>(<span id="r6 rd" class="r6 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>) <b>As Boolean
+        Dim</b> <span id="r7 rd" class="r7 r">objectCreationExpressionSyntax</span> = <b>DirectCast</b>(<a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6e22a2a0b4bad74" class="t">ObjectCreationExpressionSyntax</a>)
+        <b>Dim</b> <span id="r8 rd" class="r8 r">identifier</span> = <b>TryCast</b>(<span class="r7 r">objectCreationExpressionSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#62139e2bc5b82c92">Type</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a5444c7de676498" class="t">IdentifierNameSyntax</a>)
+        <b>Return</b> <span class="r8 r">identifier</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d6e94d60351f98c8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> &lt;&gt; <span class="r6 r">methodInformation</span>.<a href="MethodInformation.vb.html#fac7c39f7e804501">MethodName</a>
+    <b>End Function
+ 
+    Private Function</b> <a id="270d06a3cdd377e9" href="../../R/270d06a3cdd377e9.html" target="n" data-glyph="76,1">QualifiedConstructorNameNotFound</a>(<span id="r9 rd" class="r9 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>) <b>As Boolean
+        Dim</b> <span id="r10 rd" class="r10 r">objectCreationExpressionSyntax</span> = <b>DirectCast</b>(<a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6e22a2a0b4bad74" class="t">ObjectCreationExpressionSyntax</a>)
+        <b>Dim</b> <span id="r11 rd" class="r11 r">identifier</span> = <b>TryCast</b>(<span class="r10 r">objectCreationExpressionSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#62139e2bc5b82c92">Type</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#436362f5ad146ebe" class="t">QualifiedNameSyntax</a>)
+        <b>Return</b> <span class="r11 r">identifier</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#a32b2c036e202e0f">Right</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>() &lt;&gt; <span class="r9 r">methodInformation</span>.<a href="MethodInformation.vb.html#fac7c39f7e804501">MethodName</a>
+    <b>End Function
+    Public Sub</b> <a id="4d61fd5f5a30f8a8" href="../../R/4d61fd5f5a30f8a8.html" target="n" data-glyph="72,1">AnalyzeMethod</a>(<span id="r12 rd" class="r12 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>)
+        <b>If</b> <a href="#0472da5fe1480d19">MethodNameNotFound</a>(<span class="r12 r">methodInformation</span>) <b>OrElse</b> <a href="#6c9731e0f820ad3b">MethodFullNameNotFound</a>(<span class="r12 r">methodInformation</span>.<a href="MethodInformation.vb.html#211083c187b7d7cf">MethodFullDefinition</a>) <b>Then
+            Exit Sub
+        End If
+        Dim</b> <span id="r13 rd" class="r13 r">argumentList</span> = <b>DirectCast</b>(<a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f21a8b664c3a1477">ArgumentList</a>
+        <b>Dim</b> <span id="r14 rd" class="r14 r">arguments</span> = <a href="#680306dabd5a9d7e">GetArguments</a>(<span class="r13 r">argumentList</span>)
+        <a href="#391b42a581722cfd">Execute</a>(<span class="r12 r">methodInformation</span>, <span class="r14 r">arguments</span>, <span class="r13 r">argumentList</span>)
+    <b>End Sub
+ 
+    Private Function</b> <a id="0472da5fe1480d19" href="../../R/0472da5fe1480d19.html" target="n" data-glyph="76,1">MethodNameNotFound</a>(<span id="r15 rd" class="r15 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>) <b>As Boolean
+        Dim</b> <span id="r16 rd" class="r16 r">invocationExpression</span> = <b>DirectCast</b>(<a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)
+        <b>Dim</b> <span id="r17 rd" class="r17 r">memberExpression</span> = <b>TryCast</b>(<span class="r16 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfdd49868638f90f">Expression</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e39b54af392fd89" class="t">MemberAccessExpressionSyntax</a>)
+        <b>Return</b> <span class="r17 r">memberExpression</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19e8a554d3f0fa94">name</a>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da1683dad4f150eb">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> &lt;&gt; <span class="r15 r">methodInformation</span>.<a href="MethodInformation.vb.html#fac7c39f7e804501">MethodName</a>
+    <b>End Function
+ 
+    Private Function</b> <a id="6c9731e0f820ad3b" href="../../R/6c9731e0f820ad3b.html" target="n" data-glyph="76,1">MethodFullNameNotFound</a>(<span id="r18 rd" class="r18 r">methodDefinition</span> <b>As String</b>) <b>As Boolean
+        Dim</b> <span id="r19 rd" class="r19 r">memberSymbol</span> = <a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d0ce5ad095fe519">GetSymbolInfo</a>(<a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>
+        <b>Return</b> <span class="r19 r">memberSymbol</span>?.ToString &lt;&gt; <span class="r18 r">methodDefinition</span>
+    <b>End Function
+ 
+    Private Sub</b> <a id="391b42a581722cfd" href="../../R/391b42a581722cfd.html" target="n" data-glyph="76,1">Execute</a>(<span id="r20 rd" class="r20 r">methodInformation</span> <b>As</b> <a href="MethodInformation.vb.html#fa8dc8a193a1adcc" class="t">MethodInformation</a>, <span id="r21 rd" class="r21 r">arguments</span> <b>As</b> <span class="t">List</span>(<b>Of Object</b>), <span id="r22 rd" class="r22 r">argumentList</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c25c23e5b9961734" class="t">ArgumentListSyntax</a>)
+        <b>If Not</b> <span class="r22 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a> <b>Then
+            Exit Sub
+        End If
+        Try</b>
+            <span class="r20 r">methodInformation</span>.<a href="MethodInformation.vb.html#23c2fb01eae1386e">MethodAction</a>.Invoke(<span class="r21 r">arguments</span>)
+        <b>Catch</b> <span class="r23 r">ex</span> <b>As</b> <span class="t">Exception</span>
+            <b>While</b> (<span class="r23 r">ex</span>.InnerException <b>IsNot Nothing</b>)
+                <span class="r23 r">ex</span> = <span class="r23 r">ex</span>.InnerException
+            <b>End While
+            Dim</b> <span id="r24 rd" class="r24 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#3a5a4249acaa13e1">_diagnosticDescriptor</a>, <span class="r22 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>(<span class="r20 r">methodInformation</span>.<a href="MethodInformation.vb.html#246b9259978aeb91">ArgumentIndex</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="r23 r">ex</span>.Message)
+            <a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r24 r">diag</span>)
+        <b>End Try
+    End Sub
+ 
+    Private Function</b> <a id="680306dabd5a9d7e" href="../../R/680306dabd5a9d7e.html" target="n" data-glyph="76,1">GetArguments</a>(<span id="r25 rd" class="r25 r">argumentList</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c25c23e5b9961734" class="t">ArgumentListSyntax</a>) <b>As</b> <span class="t">List</span>(<b>Of Object</b>)
+        <b>Return</b> <span class="r25 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>.
+            Select(<b>Function</b>(<span id="r26 rd" class="r26 r">a</span>) <span class="r26 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c1a390644a6e1686">GetExpression</a>()).
+            Select(<b>Function</b>(<span id="r27 rd" class="r27 r">l</span>) <b>If</b>(<span class="r27 r">l</span> <b>Is Nothing</b>, <b>Nothing</b>, <a href="#e0b07cdc4347d525">_context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r27 r">l</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a>)).
+            ToList()
+    <b>End Function
+End Class</b>
+</pre></td></tr></table></div></body></html>

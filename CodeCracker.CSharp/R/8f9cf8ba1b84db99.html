@@ -1,0 +1,13 @@
+﻿<!DOCTYPE html>
+<html><head><title>RethrowExceptionCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">4 references to RethrowExceptionCodeFixProvider</div><div class="rA">CodeCracker.CSharp (3)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Usage\RethrowExceptionCodeFixProvider.cs (3)</div>
+<a href="../Usage/RethrowExceptionCodeFixProvider.cs.html#16"><b>16</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>RethrowExceptionCodeFixProvider</i>)), Shared]</a>
+<a href="../Usage/RethrowExceptionCodeFixProvider.cs.html#27"><b>27</b>context.RegisterCodeFix(CodeAction.Create(&quot;Rethrow as inner exception&quot;, c =&gt; MakeThrowAsInnerAsync(context.Document, diagnostic, c), nameof(<i>RethrowExceptionCodeFixProvider</i>) + nameof(MakeThrowAsInnerAsync)), diagnostic);</a>
+<a href="../Usage/RethrowExceptionCodeFixProvider.cs.html#28"><b>28</b>context.RegisterCodeFix(CodeAction.Create(&quot;Throw original exception&quot;, c =&gt; MakeThrowAsync(context.Document, diagnostic, c), nameof(<i>RethrowExceptionCodeFixProvider</i>) + nameof(MakeThrowAsync)), diagnostic);</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Usage\RethrowExceptionTests.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Usage/RethrowExceptionTests.cs.html#8"><b>8</b>public class RethrowExceptionTests : CodeFixVerifier&lt;RethrowExceptionAnalyzer, <i>RethrowExceptionCodeFixProvider</i>&gt;</a>
+</div>
+</div>
+</body></html>

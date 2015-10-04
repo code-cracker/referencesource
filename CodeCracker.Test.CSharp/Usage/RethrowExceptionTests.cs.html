@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html><head><title>RethrowExceptionTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(127);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/RethrowExceptionTests.cs" target="_top">Usage\RethrowExceptionTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="ae997f93d974fea4" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="8e7b2bc76e4289f9">RethrowExceptionTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#de5dd9567fe8565f" class="t">RethrowExceptionAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#8f9cf8ba1b84db99" class="t">RethrowExceptionCodeFixProvider</a>&gt;
+    {
+        <b>private const string</b> <a id="8c81e60d50100a17" href="../R/8c81e60d50100a17.html" target="n" data-glyph="10,1">sourceWithoutUsingSystem</a> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try { }
+                catch (System.Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+    }&quot;</span>;
+        <b>private const string</b> <a id="5912b0cb2fb71810" href="../R/5912b0cb2fb71810.html" target="n" data-glyph="10,1">sourceWithUsingSystem</a> = <span class="s">&quot;\n    using System;&quot;</span> + <a href="#8c81e60d50100a17">sourceWithoutUsingSystem</a>;
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ad4f26b7a2834583" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingOriginalExceptionAnalyzerCreatesDiagnostic</a>()
+        {
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r0 rd" class="r0 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3b10b7c720bb5c9a">RethrowException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Don&#39;t throw the same exception you caught, you lose the original stack trace.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 12, 21) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<a href="#5912b0cb2fb71810">sourceWithUsingSystem</a>, <span class="r0 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="726a87590dafc393" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingOriginalExceptionAndApplyingThrowNewExceptionFix</a>()
+        {
+ 
+            <b>const string</b> <span id="r1 rd" class="r1 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try { }
+                catch (System.Exception ex)
+                {
+                    throw new Exception(&quot;&quot;some reason to rethrow&quot;&quot;, ex);
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#5912b0cb2fb71810">sourceWithUsingSystem</a>, <span class="r1 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="44097156924eed6a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingOriginalExceptionAndApplyingRethrowFix</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try { }
+                catch (System.Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#5912b0cb2fb71810">sourceWithUsingSystem</a>, <span class="r2 r">fixtest</span>, 1);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="257a745715982954" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingOriginalExceptionAndApplyingThrowNewExceptionCompleteExceptionDeclationFix</a>()
+        {
+ 
+            <b>const string</b> <span id="r3 rd" class="r3 r">fixtest</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                try { }
+                catch (System.Exception ex)
+                {
+                    throw new System.Exception(&quot;&quot;some reason to rethrow&quot;&quot;, ex);
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<a href="#8c81e60d50100a17">sourceWithoutUsingSystem</a>, <span class="r3 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="da42167bdf20703f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingExceptionOutsideAnyCatchBlock</a>()
+        {
+ 
+            <b>const string</b> <span id="r4 rd" class="r4 r">fixtest</span> = <span class="s">@&quot;
+                namespace ConsoleApplication1
+                {
+                    class TypeName
+                    {
+                        public async Task Foo()
+                        {
+                            var ex = new ArgumentException(&quot;&quot;An Exception&quot;&quot;);
+                            throw ex;
+                        }
+                    }
+                }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">fixtest</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

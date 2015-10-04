@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html><head><title>CodeFixVerifier.Helper.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(77);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.Common/Helpers/CodeFixVerifier.Helper.cs" target="_top">Helpers\CodeFixVerifier.Helper.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.Common" target="_top">test\Common\CodeCracker.Test.Common\CodeCracker.Test.Common.csproj</a> (CodeCracker.Test.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.Test
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Diagnostic Producer class with extra methods dealing with applying codefixes</span>
+    <span class="c">///</span><span class="c"> All methods are static</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract</b> <a href="../P/ad23ba6f9e894f13.html" target="s" class="k">partial</a> <b>class</b> <a id="ad23ba6f9e894f13" href="../R/ad23ba6f9e894f13.html" target="n" data-glyph="0,0" class="t"><span id="89c684152f6d5cb3">CodeFixVerifier</span></a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Apply the inputted CodeAction to the inputted document.</span>
+        <span class="c">///</span><span class="c"> Meant to be used to apply codefixes.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">document</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Document to apply the fix on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r">codeAction</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A CodeAction that will be applied to the Document.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A Document with the changes from the CodeAction</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static async</b> <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="9f56aba5b295d319" href="../R/9f56aba5b295d319.html" target="n" data-glyph="76,1">ApplyFixAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r0 rd" class="r0 r">document</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a> <span id="r1 rd" class="r1 r">codeAction</span>)
+        {
+            <b>var</b> <span id="r2 rd" class="r2 r">operations</span> = <b>await</b> <span class="r1 r">codeAction</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6fe779fa9fe7e46f">GetOperationsAsync</a>(<a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>.<a href="@0@mscorlib/A.html#ec32c41597007382">None</a>).<a href="@0@mscorlib/A.html#07ef75a8fa372c94">ConfigureAwait</a>(<b>true</b>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r3 rd" class="r3 r">solution</span> = <span class="r2 r">operations</span>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#262500015d7987a2" class="t">ApplyChangesOperation</a>&gt;().<a href="@0@System.Core/A.html#35e2ff5965cb4b7e">Single</a>().<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9bb30223c5dfd6a6">ChangedSolution</a>;
+            <b>return</b> <span class="r3 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1591a5afc75910ad">GetDocument</a>(<span class="r0 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>);
+        }
+ 
+        <b>private static async</b> <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a>&gt; <a id="43b3be0f6f91e90c" href="../R/43b3be0f6f91e90c.html" target="n" data-glyph="76,1">ApplyFixAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a> <span id="r4 rd" class="r4 r">project</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a> <span id="r5 rd" class="r5 r">codeAction</span>)
+        {
+            <b>var</b> <span id="r6 rd" class="r6 r">operations</span> = <b>await</b> <span class="r5 r">codeAction</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6fe779fa9fe7e46f">GetOperationsAsync</a>(<a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>.<a href="@0@mscorlib/A.html#ec32c41597007382">None</a>).<a href="@0@mscorlib/A.html#07ef75a8fa372c94">ConfigureAwait</a>(<b>true</b>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r7 rd" class="r7 r">solution</span> = <span class="r6 r">operations</span>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#262500015d7987a2" class="t">ApplyChangesOperation</a>&gt;().<a href="@0@System.Core/A.html#35e2ff5965cb4b7e">Single</a>().<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9bb30223c5dfd6a6">ChangedSolution</a>;
+            <b>return</b> <span class="r7 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c554b9964ab32f06">GetProject</a>(<span class="r4 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a4585a4433733ddd">Id</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Compare two collections of Diagnostics,and return a list of any new diagnostics that appear only in the second collection.</span>
+        <span class="c">///</span><span class="c"> Note: Considers Diagnostics to be the same if they have the same Ids.  In teh case of mulitple diagnostics with the smae Id in a row,</span>
+        <span class="c">///</span><span class="c"> this method may not necessarily return the new one.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r8 r">diagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Diagnostics that existed in the code before the CodeFix was applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r9 r">newDiagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Diagnostics that exist in the code after the CodeFix was applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A list of Diagnostics that only surfaced in the code after the CodeFix was applied</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt; <a id="66ec0d03ce31ff03" href="../R/66ec0d03ce31ff03.html" target="n" data-glyph="76,1">GetNewDiagnostics</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt; <span id="r8 rd" class="r8 r">diagnostics</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt; <span id="r9 rd" class="r9 r">newDiagnostics</span>)
+        {
+            <b>var</b> <span id="r10 rd" class="r10 r">oldArray</span> = <span class="r8 r">diagnostics</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52">OrderBy</a>(<span id="r11 rd" class="r11 r">d</span> =&gt; <span class="r11 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@0@System.Core/A.html#783a052330e7d48d">ToArray</a>();
+            <b>var</b> <span id="r12 rd" class="r12 r">newArray</span> = <span class="r9 r">newDiagnostics</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52">OrderBy</a>(<span id="r13 rd" class="r13 r">d</span> =&gt; <span class="r13 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@0@System.Core/A.html#783a052330e7d48d">ToArray</a>();
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r14 rd" class="r14 r">oldIndex</span> = 0;
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r15 rd" class="r15 r">newIndex</span> = 0;
+ 
+            <b>while</b> (<span class="r15 r">newIndex</span> &lt; <span class="r12 r">newArray</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94">Length</a>)
+            {
+                <b>if</b> (<span class="r14 r">oldIndex</span> &lt; <span class="r10 r">oldArray</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94">Length</a> &amp;&amp; <span class="r10 r">oldArray</span>[<span class="r14 r">oldIndex</span>].<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a> == <span class="r12 r">newArray</span>[<span class="r15 r">newIndex</span>].<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a>)
+                {
+                    ++<span class="r14 r">oldIndex</span>;
+                    ++<span class="r15 r">newIndex</span>;
+                }
+                <b>else</b>
+                {
+                    <b>yield return</b> <span class="r12 r">newArray</span>[<span class="r15 r">newIndex</span>++];
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Get the existing compiler diagnostics on the inputted document.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r16 r">document</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Document to run the compiler diagnostic analyzers on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The compiler diagnostics that were found in the code</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static async</b> <a href="@0@mscorlib/A.html#5ca7b77f3df89fc6" class="t">Task</a>&lt;<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t">IEnumerable</a>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>&gt;&gt; <a id="d2083890a31c9da3" href="../R/d2083890a31c9da3.html" target="n" data-glyph="76,1">GetCompilerDiagnosticsAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r16 rd" class="r16 r">document</span>)
+        {
+            <b>return</b> (<b>await</b> <span class="r16 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>().<a href="@0@mscorlib/A.html#07ef75a8fa372c94">ConfigureAwait</a>(<b>true</b>)).<a href="@1@Microsoft.CodeAnalysis/A.html#44ba6f49eb9b989a">GetDiagnostics</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

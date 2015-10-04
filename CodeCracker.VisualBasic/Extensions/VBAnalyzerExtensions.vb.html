@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html><head><title>VBAnalyzerExtensions.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(122);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb" target="_top">Extensions\VBAnalyzerExtensions.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Public Module</b> <a id="2fef66b82809b915" href="../R/../../0000000000.html" target="n" data-glyph="84,0" class="t">VBAnalyzerExtensions</a>
+    &lt;<span class="t">Extension</span>&gt; <b>Public Sub</b> <a id="72080da7fbd50e23" href="../R/72080da7fbd50e23.html" target="n" data-glyph="220,1">RegisterSyntaxNodeAction</a>(<b>Of</b> <span id="r0 rd t" class="r0 r t">TLanguageKindEnum</span> <b>As Structure</b>)(<span id="r1 rd" class="r1 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>, <span id="r2 rd" class="r2 r">languageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>, <span id="r3 rd" class="r3 r">action</span> <b>As</b> <span class="t">Action</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>), <b>ParamArray</b> <span id="r4 rd" class="r4 r">syntaxKinds</span> <b>As</b> <span class="r0 r t">TLanguageKindEnum</span>())
+        <span class="r1 r">context</span>.<a href="#6c01e2353a0d52b4">RegisterCompilationStartAction</a>(<span class="r2 r">languageVersion</span>, <b>Sub</b>(<span id="r5 rd" class="r5 r">compilationContext</span>) <span class="r5 r">compilationContext</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5bcffd3f9d32603">RegisterSyntaxNodeAction</a>(<span class="r3 r">action</span>, <span class="r4 r">syntaxKinds</span>))
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Sub</b> <a id="6c01e2353a0d52b4" href="../R/6c01e2353a0d52b4.html" target="n" data-glyph="220,1">RegisterCompilationStartAction</a>(<span id="r6 rd" class="r6 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>, <span id="r7 rd" class="r7 r">languageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>, <span id="r8 rd" class="r8 r">registrationAction</span> <b>As</b> <span class="t">Action</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#666ceb1d5b7dd2cc" class="t">CompilationStartAnalysisContext</a>))
+        <span class="r6 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8384470b7136049">RegisterCompilationStartAction</a>(<b>Sub</b>(<span id="r9 rd" class="r9 r">compilationContext</span>) <span class="r9 r">compilationContext</span>.<a href="#9c09bfe35a4dd71e">RunIfVBVersionOrGreater</a>(<span class="r7 r">languageVersion</span>, <b>Sub</b>() <span class="r8 r">registrationAction</span>?.Invoke(<span class="r9 r">compilationContext</span>)))
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Private Sub</b> <a id="9c09bfe35a4dd71e" href="../R/9c09bfe35a4dd71e.html" target="n" data-glyph="224,1">RunIfVBVersionOrGreater</a>(<span id="r10 rd" class="r10 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#666ceb1d5b7dd2cc" class="t">CompilationStartAnalysisContext</a>, <span id="r11 rd" class="r11 r">languageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>, <span id="r12 rd" class="r12 r">action</span> <b>As</b> <span class="t">Action</span>)
+        <span class="r10 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#79b42ca7b4cdf0b2">Compilation</a>.<a href="#540a6f4a20cdae48">RunIfVBVersionOrGreater</a>(<span class="r12 r">action</span>, <span class="r11 r">languageVersion</span>)
+        <b>If False Then</b> <span class="r10 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#3a50f1656e6862b9">RegisterCodeBlockAction</a>(<b>Nothing</b>) <span class="c">&#39;to go around RS1012</span>
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Private Sub</b> <a id="9a356787d5f63dcc" href="../R/../../0000000000.html" target="n" data-glyph="224,1">RunIfVB14OrGreater</a>(<span id="r13 rd" class="r13 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#666ceb1d5b7dd2cc" class="t">CompilationStartAnalysisContext</a>, <span id="r14 rd" class="r14 r">action</span> <b>As</b> <span class="t">Action</span>)
+        <span class="r13 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#79b42ca7b4cdf0b2">Compilation</a>.<a href="#037999e3d7b85f43">RunIfVB14OrGreater</a>(<span class="r14 r">action</span>)
+        <b>If False Then</b> <span class="r13 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#3a50f1656e6862b9">RegisterCodeBlockAction</a>(<b>Nothing</b>) <span class="c">&#39;to go around RS1012</span>
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Private Sub</b> <a id="037999e3d7b85f43" href="../R/037999e3d7b85f43.html" target="n" data-glyph="224,1">RunIfVB14OrGreater</a>(<span id="r15 rd" class="r15 r">compilation</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#ec43f5a2c70b26f1" class="t">Compilation</a>, <span id="r16 rd" class="r16 r">action</span> <b>As</b> <span class="t">Action</span>)
+        <span class="r15 r">compilation</span>.<a href="#540a6f4a20cdae48">RunIfVBVersionOrGreater</a>(<span class="r16 r">action</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bc5663c61b5a0033">VisualBasic14</a>)
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Private Sub</b> <a id="540a6f4a20cdae48" href="../R/540a6f4a20cdae48.html" target="n" data-glyph="224,1">RunIfVBVersionOrGreater</a>(<span id="r17 rd" class="r17 r">compilation</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#ec43f5a2c70b26f1" class="t">Compilation</a>, <span id="r18 rd" class="r18 r">action</span> <b>As</b> <span class="t">Action</span>, <span id="r19 rd" class="r19 r">languageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>)
+        <b>Dim</b> <span id="r20 rd" class="r20 r">vbCompilation</span> = <b>TryCast</b>(<span class="r17 r">compilation</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#afe7f5e5e398cb25" class="t">VisualBasicCompilation</a>)
+        <b>If</b> <span class="r20 r">vbCompilation</span> <b>Is Nothing Then
+            Return
+        End If</b>
+        <span class="r20 r">vbCompilation</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6ce2b00c026083eb">LanguageVersion</a>.<a href="#c27b786499635bd2">RunWithVBVersionOrGreater</a>(<span class="r18 r">action</span>, <span class="r19 r">languageVersion</span>)
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Sub</b> <a id="cb99f2a99220c9af" href="../R/../../0000000000.html" target="n" data-glyph="220,1">RunWithVB14OrGreater</a>(<span id="r21 rd" class="r21 r">languageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>, <span id="r22 rd" class="r22 r">action</span> <b>As</b> <span class="t">Action</span>)
+        <span class="r21 r">languageVersion</span>.<a href="#c27b786499635bd2">RunWithVBVersionOrGreater</a>(<span class="r22 r">action</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">languageVersion</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bc5663c61b5a0033">VisualBasic14</a>)
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Sub</b> <a id="c27b786499635bd2" href="../R/c27b786499635bd2.html" target="n" data-glyph="220,1">RunWithVBVersionOrGreater</a>(<span id="r23 rd" class="r23 r">languageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>, <span id="r24 rd" class="r24 r">action</span> <b>As</b> <span class="t">Action</span>, <span id="r25 rd" class="r25 r">greaterOrEqualThanLanguageVersion</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6728e3b3b9274e89" class="t">LanguageVersion</a>)
+        <b>If</b> <span class="r23 r">languageVersion</span> &gt;= <span class="r25 r">greaterOrEqualThanLanguageVersion</span> <b>Then</b> <span class="r24 r">action</span>?.Invoke()
+    <b>End Sub</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="c422c52322024c4d" href="../R/../../0000000000.html" target="n" data-glyph="220,1">HasAttributeOnAncestorOrSelf</a>(<span id="r26 rd" class="r26 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>, <span id="r27 rd" class="r27 r">attributeName</span> <b>As String</b>) <b>As Boolean
+        Dim</b> <span id="r28 rd" class="r28 r">vbNode</span> = <b>TryCast</b>(<span class="r26 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7fa0d33ebdfe9079" class="t">VisualBasicSyntaxNode</a>)
+        <b>If</b> (<span class="r28 r">vbNode</span> <b>Is Nothing</b>) <b>Then Throw</b> <b>New</b> System.<span class="t">Exception</span>(<span class="s">&quot;Node is not a VB node.&quot;</span>)
+        <b>Return</b> <span class="r28 r">vbNode</span>.<a href="#a5c8488732f1f19b">HasAttributeOnAncestorOrSelf</a>(<span class="r27 r">attributeName</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="6220ea29623508dd" href="../R/6220ea29623508dd.html" target="n" data-glyph="220,1">HasAttributeOnAncestorOrSelf</a>(<span id="r29 rd" class="r29 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>, <b>ParamArray</b> <span id="r30 rd" class="r30 r">attributeNames</span> <b>As String</b>()) <b>As Boolean
+        Dim</b> <span id="r31 rd" class="r31 r">vbNode</span> = <b>TryCast</b>(<span class="r29 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7fa0d33ebdfe9079" class="t">VisualBasicSyntaxNode</a>)
+        <b>If</b> (<span class="r31 r">vbNode</span> <b>Is Nothing</b>) <b>Then Throw</b> <b>New</b> System.<span class="t">Exception</span>(<span class="s">&quot;Node is not a VB node.&quot;</span>)
+        <b>For Each</b> <span class="r32 r">attributeName</span> <b>In</b> <span class="r30 r">attributeNames</span>
+            <b>If</b> (<span class="r31 r">vbNode</span>.<a href="#a5c8488732f1f19b">HasAttributeOnAncestorOrSelf</a>(<span class="r32 r">attributeName</span>)) <b>Then Return True
+        Next
+        Return False
+    End Function</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="a5c8488732f1f19b" href="../R/a5c8488732f1f19b.html" target="n" data-glyph="220,1">HasAttributeOnAncestorOrSelf</a>(<span id="r33 rd" class="r33 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7fa0d33ebdfe9079" class="t">VisualBasicSyntaxNode</a>, <span id="r34 rd" class="r34 r">attributeName</span> <b>As String</b>) <b>As Boolean
+        Dim</b> <span id="r35 rd" class="r35 r">parentMethod</span> = <b>DirectCast</b>(<span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#3a00f9f90b7f23db">FirstAncestorOrSelfOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>)), <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b675ae543da8cfa8" class="t">MethodBlockBaseSyntax</a>)
+        <b>If If</b>(<span class="r35 r">parentMethod</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7a79812919fe71ec">BlockStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1923fa4433a1c79d">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r36 rd" class="r36 r">type</span> = <b>DirectCast</b>(<span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#3a00f9f90b7f23db">FirstAncestorOrSelfOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a>)), <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>)
+        <b>While</b> (<span class="r36 r">type</span> <b>IsNot Nothing</b>)
+            <b>If</b> <span class="r36 r">type</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5d463659507a844c">BlockStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5701256770a0f9d9">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>) <b>Then Return True</b>
+            <span class="r36 r">type</span> = <b>DirectCast</b>(<span class="r36 r">type</span>.<a href="/CodeCracker.Common/A.html#febbf40e5a890c7f">FirstAncestorOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a>)), <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>)
+        <b>End While
+        Dim</b> <span id="r37 rd" class="r37 r">propertyBlock</span> = <span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#add81dfcbd016654" class="t">PropertyBlockSyntax</a>)()
+        <b>If If</b>(<span class="r37 r">propertyBlock</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#065a343d449b8d0e">PropertyStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fd3353be12b7b3fa">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r38 rd" class="r38 r">accessor</span> = <span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)()
+        <b>If If</b>(<span class="r38 r">accessor</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#987af335bd81e897">AccessorStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#75cb500ca100436f">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r39 rd" class="r39 r">anInterface</span> = <span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df7d91f3de7b93bf" class="t">InterfaceBlockSyntax</a>)()
+        <b>If If</b>(<span class="r39 r">anInterface</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e4a130213c01c6a0">InterfaceStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#963d0f4c5e9af3df">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r40 rd" class="r40 r">anEnum</span> = <span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#774386974bc063e9" class="t">EnumBlockSyntax</a>)()
+        <b>If If</b>(<span class="r40 r">anEnum</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c3e9821912e0d4f7">EnumStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#be46fc70cbcabd34">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r41 rd" class="r41 r">theModule</span> = <span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b29cc29f13816bd0" class="t">ModuleBlockSyntax</a>)()
+        <b>If If</b>(<span class="r41 r">theModule</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9a6fe038b4a3af31">ModuleStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c0c613a07dad32a6">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r42 rd" class="r42 r">eventBlock</span> = <span class="r33 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39bd871e87e66650" class="t">EventBlockSyntax</a>)()
+        <b>If If</b>(<span class="r42 r">eventBlock</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df62a038712b8fbf">EventStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6fbf30670be2924b">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r43 rd" class="r43 r">theEvent</span> = <b>TryCast</b>(<span class="r33 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ccc91f57a91d3b03" class="t">EventStatementSyntax</a>)
+        <b>If If</b>(<span class="r43 r">theEvent</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6fbf30670be2924b">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r44 rd" class="r44 r">theProperty</span> = <b>TryCast</b>(<span class="r33 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a>)
+        <b>If If</b>(<span class="r44 r">theProperty</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fd3353be12b7b3fa">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r45 rd" class="r45 r">field</span> = <b>TryCast</b>(<span class="r33 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a>)
+        <b>If If</b>(<span class="r45 r">field</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1706204ff0240e47">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r46 rd" class="r46 r">parameter</span> = <b>TryCast</b>(<span class="r33 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>)
+        <b>If If</b>(<span class="r46 r">parameter</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bb6ba9928c8702c9">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Dim</b> <span id="r47 rd" class="r47 r">aDelegate</span> = <b>TryCast</b>(<span class="r33 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a>)
+        <b>If If</b>(<span class="r47 r">aDelegate</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#af395d7795736841">AttributeLists</a>.<a href="#bd47f0880dbac51a">HasAttribute</a>(<span class="r34 r">attributeName</span>), <b>False</b>) <b>Then
+            Return True
+        End If
+        Return False
+    End Function</b>
+ 
+    &lt;<span class="t">Extension</span>&gt; <b>Public Function</b> <a id="bd47f0880dbac51a" href="../R/bd47f0880dbac51a.html" target="n" data-glyph="220,1">HasAttribute</a>(<span id="r48 rd" class="r48 r">attributeLists</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#9959da6763eb713c" class="t">SyntaxList</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#20980c918f870a95" class="t">AttributeListSyntax</a>), <span id="r49 rd" class="r49 r">attributeName</span> <b>As String</b>) <b>As Boolean
+        Return</b> <span class="r48 r">attributeLists</span>.SelectMany(<b>Function</b>(<span id="r50 rd" class="r50 r">a</span>) <span class="r50 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8b94498cc3a3b62b">Attributes</a>).Any(<b>Function</b>(<span id="r51 rd" class="r51 r">a</span>) <span class="r51 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9d8a93c395bfee6e">Name</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>().EndsWith(<span class="r49 r">attributeName</span>, <span class="t">StringComparison</span>.OrdinalIgnoreCase))
+    <b>End Function
+ 
+End Module</b></pre></td></tr></table></div></body></html>

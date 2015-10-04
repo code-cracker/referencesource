@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html><head><title>FirstAncestorOrSelfOfType</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">17 references to FirstAncestorOrSelfOfType</div><div class="rA">CodeCracker.CSharp (10)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\MakeMethodStaticCodeFixProvider.cs (2)</div>
+<a href="../../CodeCracker.CSharp/Design/MakeMethodStaticCodeFixProvider.cs.html#66"><b>66</b>var invocationExpression = newRoot.GetCurrentNode(diagnosticNode).<i>FirstAncestorOrSelfOfType</i>&lt;InvocationExpressionSyntax&gt;()?.Expression;</a>
+<a href="../../CodeCracker.CSharp/Design/MakeMethodStaticCodeFixProvider.cs.html#91"><b>91</b>var memberAccess = (MemberAccessExpressionSyntax)newReferencingRoot.GetCurrentNode(diagnosticNode).<i>FirstAncestorOrSelfOfType</i>&lt;InvocationExpressionSyntax&gt;().Expression;</a>
+</div>
+<div class="rF"><div class="rN">Extensions\CSharpAnalyzerExtensions.cs (7)</div>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#201"><b>201</b>var property = node.<i>FirstAncestorOrSelfOfType</i>&lt;PropertyDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#204"><b>204</b>var accessor = node.<i>FirstAncestorOrSelfOfType</i>&lt;AccessorDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#207"><b>207</b>var anInterface = node.<i>FirstAncestorOrSelfOfType</i>&lt;InterfaceDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#210"><b>210</b>var anEvent = node.<i>FirstAncestorOrSelfOfType</i>&lt;EventDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#213"><b>213</b>var anEnum = node.<i>FirstAncestorOrSelfOfType</i>&lt;EnumDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#216"><b>216</b>var field = node.<i>FirstAncestorOrSelfOfType</i>&lt;FieldDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#219"><b>219</b>var eventField = node.<i>FirstAncestorOrSelfOfType</i>&lt;EventFieldDeclarationSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\MakeMethodNonAsyncCodeFixProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Refactoring/MakeMethodNonAsyncCodeFixProvider.cs.html#39"><b>39</b>var methodDeclaration = node.<i>FirstAncestorOrSelfOfType</i>&lt;MethodDeclarationSyntax&gt;();</a>
+</div>
+</div>
+<div class="rA">CodeCracker.VisualBasic (7)</div><div class="rG" id="CodeCracker.VisualBasic"><div class="rF"><div class="rN">Extensions\VBAnalyzerExtensions.vb (6)</div>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#71"><b>71</b>Dim propertyBlock = node.<i>FirstAncestorOrSelfOfType</i>(Of PropertyBlockSyntax)()</a>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#75"><b>75</b>Dim accessor = node.<i>FirstAncestorOrSelfOfType</i>(Of AccessorBlockSyntax)()</a>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#79"><b>79</b>Dim anInterface = node.<i>FirstAncestorOrSelfOfType</i>(Of InterfaceBlockSyntax)()</a>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#83"><b>83</b>Dim anEnum = node.<i>FirstAncestorOrSelfOfType</i>(Of EnumBlockSyntax)()</a>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#87"><b>87</b>Dim theModule = node.<i>FirstAncestorOrSelfOfType</i>(Of ModuleBlockSyntax)()</a>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#91"><b>91</b>Dim eventBlock = node.<i>FirstAncestorOrSelfOfType</i>(Of EventBlockSyntax)()</a>
+</div>
+<div class="rF"><div class="rN">Style\TernaryOperatorCodeFixProviders.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Style/TernaryOperatorCodeFixProviders.vb.html#32"><b>32</b>Dim ifBlock = root.FindToken(span.Start).Parent.<i>FirstAncestorOrSelfOfType</i>(Of MultiLineIfBlockSyntax)</a>
+</div>
+</div>
+</body></html>

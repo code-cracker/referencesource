@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeLocalVariablesConstWhenItIsPossibleTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(120);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Performance/MakeLocalVariablesConstWhenItIsPossibleTests.vb" target="_top">Performance\MakeLocalVariablesConstWhenItIsPossibleTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Performance
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Performance
+    <b>Public Class</b> <a id="c3a308be6d2ff5ae" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="5829bdf1a9675637">MakeLocalVariablesConstWhenItIsPossibleTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#39cbdfa04787535a" class="t">MakeLocalVariableConstWhenPossibleAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#cef39c5afa7b2147" class="t">MakeLocalVariableConstWhenPossibleCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="870052c8a8b18f44" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresConstantDeclarations</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">&quot;const a as Integer = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="69b49aadd0d6ae74" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDeclarationsWithNoInitializers</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">&quot;dim a as Integer&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d702eea52561248a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDeclarationsWithNonConstants</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">&quot;Dim a as Integer = GetValue()&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="1eb531c123b037ce" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDeclarationsWithReferenceTypes</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">&quot;Dim a as New Foo()&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="15ef3aaae6df8b64" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresVariablesThatChangesValueOutsideDeclarations</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;Dim a as Integer = 10 : a = 20&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e8e9042a927f84fc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticsWhenAssigningAPotentialConstant</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">&quot;Dim a As Integer = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r6 rd" class="r6 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+        {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#39cbdfa04787535a" class="t">MakeLocalVariableConstWhenPossibleAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#d68f63472a6952ba">Id</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;This variable can be made const.&quot;</span>,
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 13)}
+        }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="306375324aebfc86" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticsWhenAssigningAPotentialConstantUsingTypeInference</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">&quot;Dim a = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r8 rd" class="r8 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+        {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#39cbdfa04787535a" class="t">MakeLocalVariableConstWhenPossibleAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#d68f63472a6952ba">Id</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;This variable can be made const.&quot;</span>,
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 13)}
+        }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r7 r">test</span>, <span class="r8 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="10a8691dd4442b6d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticsWhenAssigningNothingToAReferenceType</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">&quot;Dim a As Foo = Nothing&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r10 rd" class="r10 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+        {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#39cbdfa04787535a" class="t">MakeLocalVariableConstWhenPossibleAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#d68f63472a6952ba">Id</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;This variable can be made const.&quot;</span>,
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, 13)}
+        }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="51e06c83af0666a3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresNullableVariables</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r11 rd" class="r11 r">test</span> = <span class="s">&quot;Dim a As Integer? = 1&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="96c5ba4ff7753f5e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMakesAVariableConstWhenDeclarationSpecifiesTypeName</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r12 rd" class="r12 r">test</span> = <span class="s">&quot;Dim a As Integer = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r13 rd" class="r13 r">expected</span> = <span class="s">&quot;Const a As Integer = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r12 r">test</span>, <span class="r13 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="8e58f29f9752e67f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMakesAVariableConstWhenDeclarationInfersType</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r14 rd" class="r14 r">test</span> = <span class="s">&quot;Dim a = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r15 rd" class="r15 r">expected</span> = <span class="s">&quot;Const a = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r14 r">test</span>, <span class="r15 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="3bb47dd316d42f56" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMakesAVariableConstWhenDeclarationInfersString</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r16 rd" class="r16 r">test</span> = <span class="s">&quot;Dim a = &quot;&quot;&quot;&quot;&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r17 rd" class="r17 r">expected</span> = <span class="s">&quot;Const a = &quot;&quot;&quot;&quot;&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r16 r">test</span>, <span class="r17 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="520be1b79322c039" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMakesAVariableConstWhenSettingNullToAReferenceType</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r18 rd" class="r18 r">test</span> = <span class="s">&quot;Dim a As Foo = Nothing&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r19 rd" class="r19 r">expected</span> = <span class="s">&quot;Const a As Foo = Nothing&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r18 r">test</span>, <span class="r19 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f931decf83951107" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMakesAVariableConstWhenInferingType</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r20 rd" class="r20 r">test</span> = <span class="s">&quot;Dim a = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Dim</b> <span id="r21 rd" class="r21 r">expected</span> = <span class="s">&quot;Const a = 10&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>()
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r20 r">test</span>, <span class="r21 r">expected</span>)
+        <b>End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

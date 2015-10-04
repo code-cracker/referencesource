@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveWhereWhenItIsPossibleAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(85);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Performance/RemoveWhereWhenItIsPossibleAnalyzer.cs" target="_top">Performance\RemoveWhereWhenItIsPossibleAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Performance
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="73619bc76df43ea4" href="../R/73619bc76df43ea4.html" target="n" data-glyph="0,0" class="t"><span id="71e5c6f24cc81284">RemoveWhereWhenItIsPossibleAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="0ab4884cd0a32533" href="../R/0ab4884cd0a32533.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;You should remove the &#39;Where&#39; invocation when it is possible.&quot;</span>;
+        <b>internal const string</b> <a id="efb810bd5ac2e270" href="../R/efb810bd5ac2e270.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;You can remove &#39;Where&#39; moving the predicate to &#39;{0}&#39;.&quot;</span>;
+        <b>internal const string</b> <a id="8c40a1ff5fbec4e5" href="../R/8c40a1ff5fbec4e5.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>;
+        <b>const string</b> <a id="c166d02b6fa630cb" href="../R/c166d02b6fa630cb.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;When a linq operator support a predicate parameter it should be used instead of &quot;</span>
+            + <span class="s">&quot;using &#39;Where&#39; followed by the operator&quot;</span>;
+ 
+        <b>static readonly string</b>[] <a id="7000e60e8752096c" href="../R/7000e60e8752096c.html" target="n" data-glyph="46,1">supportedMethods</a> = <b>new</b>[] {
+            <span class="s">&quot;First&quot;</span>,
+            <span class="s">&quot;FirstOrDefault&quot;</span>,
+            <span class="s">&quot;Last&quot;</span>,
+            <span class="s">&quot;LastOrDefault&quot;</span>,
+            <span class="s">&quot;Any&quot;</span>,
+            <span class="s">&quot;Single&quot;</span>,
+            <span class="s">&quot;SingleOrDefault&quot;</span>,
+            <span class="s">&quot;Count&quot;</span>
+        };
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="67a7d6abe0b97ef3" href="../R/67a7d6abe0b97ef3.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#423a225a78c9d47c">RemoveWhereWhenItIsPossible</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#0ab4884cd0a32533">Title</a>,
+            <a href="#efb810bd5ac2e270">MessageFormat</a>,
+            <a href="#8c40a1ff5fbec4e5">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#c166d02b6fa630cb">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#423a225a78c9d47c">RemoveWhereWhenItIsPossible</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="8efe5d1d28e0aed9" href="../R/8efe5d1d28e0aed9.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#67a7d6abe0b97ef3">Rule</a>);
+ 
+        <b>public override void</b> <a id="6999f5c49631ebed" href="../R/6999f5c49631ebed.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#302f6df85ff7360e">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+ 
+        <b>private static void</b> <a id="302f6df85ff7360e" href="../R/302f6df85ff7360e.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r5 rd" class="r5 r">whereInvoke</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (<a href="#7086067ead4272a5">GetNameOfTheInvokedMethod</a>(<span class="r5 r">whereInvoke</span>) != <span class="s">&quot;Where&quot;</span>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r6 rd" class="r6 r">nextMethodInvoke</span> = <span class="r5 r">whereInvoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.
+                <a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>&gt;();
+ 
+            <b>var</b> <span id="r7 rd" class="r7 r">candidate</span> = <a href="#7086067ead4272a5">GetNameOfTheInvokedMethod</a>(<span class="r6 r">nextMethodInvoke</span>);
+            <b>if</b> (!<a href="#7000e60e8752096c">supportedMethods</a>.Contains(<span class="r7 r">candidate</span>)) <b>return</b>;
+ 
+            <b>if</b> (<span class="r6 r">nextMethodInvoke</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a>()) <b>return</b>;
+            <b>var</b> <span id="r8 rd" class="r8 r">properties</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt; { { <span class="s">&quot;methodName&quot;</span>, <span class="r7 r">candidate</span> } }.ToImmutableDictionary();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r9 rd" class="r9 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#67a7d6abe0b97ef3">Rule</a>, <a href="#68d1517832526185">GetNameExpressionOfTheInvokedMethod</a>(<span class="r5 r">whereInvoke</span>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r8 r">properties</span>, <span class="r7 r">candidate</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r9 r">diagnostic</span>);
+        }
+ 
+        <b>internal static string</b> <a id="7086067ead4272a5" href="../R/7086067ead4272a5.html" target="n" data-glyph="74,1">GetNameOfTheInvokedMethod</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a> <span id="r10 rd" class="r10 r">invoke</span>)
+        {
+            <b>if</b> (<span class="r10 r">invoke</span> == <b>null</b>) <b>return null</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r11 rd" class="r11 r">memberAccess</span> = <span class="r10 r">invoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>()
+                .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>&gt;()
+                .FirstOrDefault();
+ 
+            <b>return</b> <a href="#68d1517832526185">GetNameExpressionOfTheInvokedMethod</a>(<span class="r10 r">invoke</span>)?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>();
+        }
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6855c653dc81553a" class="t">SimpleNameSyntax</a> <a id="68d1517832526185" href="../R/68d1517832526185.html" target="n" data-glyph="74,1">GetNameExpressionOfTheInvokedMethod</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a> <span id="r12 rd" class="r12 r">invoke</span>)
+        {
+            <b>if</b> (<span class="r12 r">invoke</span> == <b>null</b>) <b>return null</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r13 rd" class="r13 r">memberAccess</span> = <span class="r12 r">invoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>()
+                .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>&gt;()
+                .FirstOrDefault();
+ 
+            <b>return</b> <span class="r13 r">memberAccess</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

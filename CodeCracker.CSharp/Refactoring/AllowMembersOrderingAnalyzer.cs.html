@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(40);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/AllowMembersOrderingAnalyzer.cs" target="_top">Refactoring\AllowMembersOrderingAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="88f25c5e31db93f8" href="../R/88f25c5e31db93f8.html" target="n" data-glyph="0,0" class="t"><span id="3c5c55883918b909">AllowMembersOrderingAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="f417d780f0bb6bf1" href="../R/f417d780f0bb6bf1.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Ordering member inside this type.&quot;</span>;
+        <b>internal const string</b> <a id="7f2c32991263d66c" href="../R/7f2c32991263d66c.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Ordering member inside this type.&quot;</span>;
+        <b>internal const string</b> <a id="533eea3820bb9fee" href="../R/533eea3820bb9fee.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="2e1ff949287b28ad" href="../R/2e1ff949287b28ad.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b4e1a1d2add10d97">AllowMembersOrdering</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#f417d780f0bb6bf1">Title</a>,
+            <a href="#7f2c32991263d66c">MessageFormat</a>,
+            <a href="#533eea3820bb9fee">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b4e1a1d2add10d97">AllowMembersOrdering</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="390ad5a1fd38c46b" href="../R/390ad5a1fd38c46b.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#2e1ff949287b28ad">Rule</a>);
+ 
+        <b>public override void</b> <a id="badb7ca7422393eb" href="../R/badb7ca7422393eb.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt;
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#c86cff8b4c8384af">Analyze</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#355c0c4b8e3c18ce">ClassDeclaration</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#49f2e628b56c8599">StructDeclaration</a>);
+ 
+        <b>private static void</b> <a id="c86cff8b4c8384af" href="../R/c86cff8b4c8384af.html" target="n" data-glyph="76,1">Analyze</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="k">var</a> <span id="r4 rd" class="r4 r">typeDeclarationSyntax</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a>;
+            <b>if</b> (!<a href="#75e3a1e79f788bc7">CanOrder</a>(<span class="r4 r">typeDeclarationSyntax</span>)) <b>return</b>;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#2e1ff949287b28ad">Rule</a>, <span class="r4 r">typeDeclarationSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f24e720d95831112">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#20b085a124dddfb0">GetLocation</a>()));
+        }
+ 
+        <b>private static bool</b> <a id="75e3a1e79f788bc7" href="../R/75e3a1e79f788bc7.html" target="n" data-glyph="76,1">CanOrder</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a> <span id="r5 rd" class="r5 r">typeDeclarationSyntax</span>) =&gt; <span class="r5 r">typeDeclarationSyntax</span> != <b>null</b> &amp;&amp; <span class="r5 r">typeDeclarationSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#eed581e2c3deee1e">Members</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#83189d65513d4ea2">Count</a> &gt; 1;
+    }
+}</pre></td></tr></table></div></body></html>

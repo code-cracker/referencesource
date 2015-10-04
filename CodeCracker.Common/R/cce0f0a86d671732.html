@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html><head><title>FirstAncestorOfType</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">19 references to FirstAncestorOfType</div><div class="rA">CodeCracker.CSharp (13)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\NameOfAnalyzer.cs (3)</div>
+<a href="../../CodeCracker.CSharp/Design/NameOfAnalyzer.cs.html#51"><b>51</b>var variableDeclaration = stringLiteral.<i>FirstAncestorOfType</i>&lt;VariableDeclaratorSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Design/NameOfAnalyzer.cs.html#57"><b>57</b>var propertyDeclaration = stringLiteral.<i>FirstAncestorOfType</i>&lt;PropertyDeclarationSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Design/NameOfAnalyzer.cs.html#58"><b>58</b>var outSideOfAccessors = null == stringLiteral.<i>FirstAncestorOfType</i>&lt;AccessorListSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\ChangeAnyToAllCodeFixProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#35"><b>35</b>var invocation = root.FindNode(diagnosticLocation.SourceSpan).<i>FirstAncestorOfType</i>&lt;InvocationExpressionSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfCodeFixProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Refactoring/SplitIntoNestedIfCodeFixProvider.cs.html#44"><b>44</b>var ifStatement = condition.<i>FirstAncestorOfType</i>&lt;IfStatementSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfFixAllProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Refactoring/SplitIntoNestedIfFixAllProvider.cs.html#61"><b>61</b>var ifStatement = condition.<i>FirstAncestorOfType</i>&lt;IfStatementSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Style\SwitchToAutoPropCodeFixProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Style/SwitchToAutoPropCodeFixProvider.cs.html#45"><b>45</b>var fieldDeclaration = variableDeclarator.<i>FirstAncestorOfType</i>&lt;FieldDeclarationSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Usage\DisposableVariableNotDisposedCodeFixProvider.cs (3)</div>
+<a href="../../CodeCracker.CSharp/Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#77"><b>77</b>StatementSyntax statement = objectCreation.<i>FirstAncestorOfType</i>&lt;ExpressionStatementSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#194"><b>194</b>var currentBlock = node.<i>FirstAncestorOfType</i>&lt;BlockSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#203"><b>203</b>currentBlock = currentBlock.<i>FirstAncestorOfType</i>&lt;BlockSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Usage\RemoveUnreachableCodeCodeFixProvider.cs (2)</div>
+<a href="../../CodeCracker.CSharp/Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#47"><b>47</b>var localDeclaration = node.<i>FirstAncestorOfType</i>&lt;LocalDeclarationStatementSyntax&gt;();</a>
+<a href="../../CodeCracker.CSharp/Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#53"><b>53</b>var expressionStatement = expression.<i>FirstAncestorOfType</i>&lt;ExpressionStatementSyntax&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Usage\UnusedParametersCodeFixProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Usage/UnusedParametersCodeFixProvider.cs.html#71"><b>71</b>: methodIdentifier.<i>FirstAncestorOfType</i>&lt;InvocationExpressionSyntax&gt;().ArgumentList;</a>
+</div>
+</div>
+<div class="rA">CodeCracker.VisualBasic (6)</div><div class="rG" id="CodeCracker.VisualBasic"><div class="rF"><div class="rN">Refactoring\ChangeAnyToAllCodeFixProvider.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Refactoring/ChangeAnyToAllCodeFixProvider.vb.html#36"><b>36</b>Dim invocation = root.FindNode(diagnosticLocation.SourceSpan).<i>FirstAncestorOfType</i>(Of InvocationExpressionSyntax)</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\ParameterRefactoryCodeFixProvider.vb (3)</div>
+<a href="../../CodeCracker.VisualBasic/Refactoring/ParameterRefactoryCodeFixProvider.vb.html#20"><b>20</b>Dim declarationClass = root.FindToken(diagnosticSpan.Start).Parent.<i>FirstAncestorOfType</i>(Of ClassBlockSyntax)</a>
+<a href="../../CodeCracker.VisualBasic/Refactoring/ParameterRefactoryCodeFixProvider.vb.html#21"><b>21</b>Dim declarationNamespace = root.FindToken(diagnosticSpan.Start).Parent.<i>FirstAncestorOfType</i>(Of NamespaceBlockSyntax)</a>
+<a href="../../CodeCracker.VisualBasic/Refactoring/ParameterRefactoryCodeFixProvider.vb.html#22"><b>22</b>Dim declarationMethod = root.FindToken(diagnosticSpan.Start).Parent.<i>FirstAncestorOfType</i>(Of MethodBlockSyntax)</a>
+</div>
+<div class="rF"><div class="rN">Usage\MustInheritClassShouldNotHavePublicConstructorsAnalyzer.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Usage/MustInheritClassShouldNotHavePublicConstructorsAnalyzer.vb.html#38"><b>38</b>Dim classDeclaration = constructor.<i>FirstAncestorOfType</i>(Of ClassBlockSyntax)</a>
+</div>
+<div class="rF"><div class="rN">Usage\UnusedParametersCodeFixProvider.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Usage/UnusedParametersCodeFixProvider.vb.html#59"><b>59</b>methodIdentifier.<i>FirstAncestorOfType</i>(Of InvocationExpressionSyntax).ArgumentList)</a>
+</div>
+</div>
+</body></html>

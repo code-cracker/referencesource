@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html><head><title>SealedAttributeCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(36);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Performance/SealedAttributeCodeFixProvider.vb" target="_top">Performance\SealedAttributeCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Performance
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#9521a77ee9394fcf" class="t">SealedAttributeCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="9521a77ee9394fcf" href="../R/9521a77ee9394fcf.html" target="n" data-glyph="0,0" class="t"><span id="ce77fbe20eba14ab">SealedAttributeCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public Overrides NotOverridable ReadOnly Property</b> <a id="74b793171ce4b3fd" href="../R/74b793171ce4b3fd.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="SealedAttributeAnalyzer.vb.html#8d3d8bc604c10284" class="t">SealedAttributeAnalyzer</a>.<a href="SealedAttributeAnalyzer.vb.html#39ad319fca794f1b">Id</a>)
+ 
+        <b>Public Overrides Function</b> <a id="64512f279ab521f3" href="../R/64512f279ab521f3.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public Overrides Async Function</b> <a id="8704af8712e8a0c4" href="../R/8704af8712e8a0c4.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r2 rd" class="r2 r">diag</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First()
+            <b>Dim</b> <span id="r3 rd" class="r3 r">sourceSpan</span> = <span class="r2 r">diag</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">type</span> = <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">sourceSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType(<b>Of</b> Microsoft.CodeAnalysis.VisualBasic.Syntax.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f4edd441486c2d64" class="t">ClassStatementSyntax</a>)().First()
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="s">&quot;Mark as NotInheritable&quot;</span>, <b>Function</b>(<span id="r5 rd" class="r5 r">ct</span>) <a href="#acd38e74bcd8a644">MarkClassAsSealed</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">type</span>, <span class="r5 r">ct</span>), <b>NameOf</b>(<a href="#9521a77ee9394fcf" class="t">SealedAttributeCodeFixProvider</a>)), <span class="r2 r">diag</span>)
+        <b>End Function
+ 
+        Private Async Function</b> <a id="acd38e74bcd8a644" href="../R/acd38e74bcd8a644.html" target="n" data-glyph="76,1">MarkClassAsSealed</a>(<span id="r6 rd" class="r6 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r7 rd" class="r7 r">type</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f4edd441486c2d64" class="t">ClassStatementSyntax</a>, <span id="r8 rd" class="r8 r">cancellationToken</span> <b>As</b> Threading.<span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>)
+            <b>Return</b> <span class="r6 r">document</span>.
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>((<b>Await</b> <span class="r6 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r8 r">cancellationToken</span>)).
+            <a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r7 r">type</span>,
+                        <span class="r7 r">type</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3f8f537e5dc358f0">WithModifiers</a>(<span class="r7 r">type</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19cb7abb40b83a0d">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#29ecd37715a3664d">Add</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#981434cd44f87f3e">Token</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#56b948f476f5b8b4">NotInheritableKeyword</a>))).
+                        <a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(Formatting.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>)))
+ 
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

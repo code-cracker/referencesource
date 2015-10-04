@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html><head><title>RethrowExceptionAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(51);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/RethrowExceptionAnalyzer.cs" target="_top">Usage\RethrowExceptionAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="de5dd9567fe8565f" href="../R/de5dd9567fe8565f.html" target="n" data-glyph="0,0" class="t"><span id="0490679aeff9d1fe">RethrowExceptionAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="c0e7ed0296cf898b" href="../R/c0e7ed0296cf898b.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Your throw does nothing&quot;</span>;
+        <b>internal const string</b> <a id="d488a27f4e764ff2" href="../R/d488a27f4e764ff2.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="cd9ac918c403e609" href="../R/cd9ac918c403e609.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#2f6994e63821aee7">Naming</a>;
+        <b>const string</b> <a id="791fbb2eaad03d24" href="../R/791fbb2eaad03d24.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Throwing the same exception as passed to the &#39;catch&#39; block lose the original &quot;</span>
+            + <span class="s">&quot;stack trace and will make debugging this exception a lot more difficult.\r\n&quot;</span>
+            + <span class="s">&quot;The correct way to rethrow an exception without changing it is by using &#39;throw&#39; without any parameter.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="04da5269a00c24bc" href="../R/04da5269a00c24bc.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3b10b7c720bb5c9a">RethrowException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#c0e7ed0296cf898b">Title</a>,
+            <a href="#d488a27f4e764ff2">MessageFormat</a>,
+            <a href="#cd9ac918c403e609">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#791fbb2eaad03d24">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3b10b7c720bb5c9a">RethrowException</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="6fce388acbe9d3bc" href="../R/6fce388acbe9d3bc.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#04da5269a00c24bc">Rule</a>);
+ 
+        <b>public override void</b> <a id="c2d11136bcb56a35" href="../R/c2d11136bcb56a35.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#5bbff95353415b3d">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#10f0a1ac8e1cc065">ThrowStatement</a>);
+ 
+        <b>private static void</b> <a id="5bbff95353415b3d" href="../R/5bbff95353415b3d.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a3e13a445055a119" class="k">var</a> <span id="r5 rd" class="r5 r">throwStatement</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a3e13a445055a119" class="t">ThrowStatementSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r6 rd" class="r6 r">ident</span> = <span class="r5 r">throwStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#902995102f45bdb3">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+            <b>if</b> (<span class="r6 r">ident</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="k">var</a> <span id="r7 rd" class="r7 r">exSymbol</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r6 r">ident</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a>;
+            <b>if</b> (<span class="r7 r">exSymbol</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8df4eebb38b3deda" class="k">var</a> <span id="r8 rd" class="r8 r">catchClause</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8df4eebb38b3deda" class="t">CatchClauseSyntax</a>&gt;().FirstOrDefault();
+            <b>if</b> (<span class="r8 r">catchClause</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="k">var</a> <span id="r9 rd" class="r9 r">catchExSymbol</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e07bdc198e03e603">GetDeclaredSymbol</a>(<span class="r8 r">catchClause</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5b5033fa2617dbb">Declaration</a>);
+            <b>if</b> (!<span class="r9 r">catchExSymbol</span>.Equals(<span class="r7 r">exSymbol</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r10 rd" class="r10 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#04da5269a00c24bc">Rule</a>, <span class="r5 r">throwStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="s">&quot;Don&#39;t throw the same exception you caught, you lose the original stack trace.&quot;</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r10 r">diagnostic</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

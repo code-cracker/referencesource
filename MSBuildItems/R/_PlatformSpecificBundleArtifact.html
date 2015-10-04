@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html><head><title>_PlatformSpecificBundleArtifact</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">5 assignments to MSBuild item _PlatformSpecificBundleArtifact</div><div class="rA">MSBuildFiles (5)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\AppxPackage\Microsoft.AppXPackage.Targets (5)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3381"><b>3381</b>&lt;<i>_PlatformSpecificBundleArtifact</i> Include=&quot;MainPackage=$([System.IO.Path]::GetFullPath(&#39;$(AppxMainPackageOutput)&#39;))&quot;     Condition=&quot;Exists($(AppxMainPackageOutput))&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3382"><b>3382</b>&lt;<i>_PlatformSpecificBundleArtifact</i> Include=&quot;SymbolPackage=$([System.IO.Path]::GetFullPath(&#39;$(AppxSymbolPackageOutput)&#39;))&quot; Condition=&quot;Exists($(AppxSymbolPackageOutput))&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3383"><b>3383</b>&lt;<i>_PlatformSpecificBundleArtifact</i> Include=&quot;ResourcePack=%(_AppxBundleResourcePack.FullPath)&quot;                             Condition=&quot;&#39;@(_AppxBundleResourcePack)&#39; != &#39;&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3569"><b>3569</b>&lt;<i>_PlatformSpecificBundleArtifact</i> Remove=&quot;@(_PlatformSpecificBundleArtifact)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3577"><b>3577</b>&lt;Output TaskParameter=&quot;Artifacts&quot; ItemName=&quot;<i>_PlatformSpecificBundleArtifact</i>&quot; /&gt;</a>
+</div>
+</div>
+<div class="rH">5 usages of MSBuild item _PlatformSpecificBundleArtifact</div><div class="rA">MSBuildFiles (5)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\AppxPackage\Microsoft.AppXPackage.Targets (5)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3389"><b>3389</b>Lines=&quot;@(<i>_PlatformSpecificBundleArtifact</i>)&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3569"><b>3569</b>&lt;_PlatformSpecificBundleArtifact Remove=&quot;@(<i>_PlatformSpecificBundleArtifact</i>)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3586"><b>3586</b>&lt;_MainPackageToBundle   Include=&quot;@(<i>_PlatformSpecificBundleArtifact</i>)&quot; Condition=&quot;&#39;%(Name)&#39; == &#39;MainPackage&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3587"><b>3587</b>&lt;_SymbolPackageToBundle Include=&quot;@(<i>_PlatformSpecificBundleArtifact</i>)&quot; Condition=&quot;&#39;%(Name)&#39; == &#39;SymbolPackage&#39;&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/AppxPackage/Microsoft.AppXPackage.Targets.html#3588"><b>3588</b>&lt;_ResourcePackToBundle  Include=&quot;@(<i>_PlatformSpecificBundleArtifact</i>)&quot; Condition=&quot;&#39;%(Name)&#39; == &#39;ResourcePack&#39;&quot; /&gt;</a>
+</div>
+</div>
+</body></html>

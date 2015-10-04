@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html><head><title>NumericLiteralTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(91);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/NumericLiteralTests.cs" target="_top">Refactoring\NumericLiteralTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="c93121565e419347" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="6a514331a2bc425a">NumericLiteralTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#9a37b0314ba366ff" class="t">NumericLiteralAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#04d726cd09343463" class="t">NumericLiteralCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;\&quot;&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1.1&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1F&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1f&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1D&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1d&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1M&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1m&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1e2&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="adad053fc0cd1f7d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfNotAIntegerNumericLiteralDoesNotCreateDiagnostic</a>(<b>string</b> <span id="r0 rd" class="r0 r">literal</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">source</span> = <span class="s">$&quot;</span><span class="s">var a = </span>{<span class="r0 r">literal</span>}<span class="s">;</span><span class="s">&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1&quot;</span>, <b>true</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;0x1&quot;</span>, <b>false</b>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;0x1F&quot;</span>, <b>false</b>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ade6528e29c65e4e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IntegerLiteralCreatesDiagnostic</a>(<b>string</b> <span id="r2 rd" class="r2 r">literal</span>, <b>bool</b> <span id="r3 rd" class="r3 r">isDecimal</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">source</span> = <span class="s">$&quot;</span><span class="s">var a = </span>{<span class="r2 r">literal</span>}<span class="s">;</span><span class="s">&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">source</span>, <a href="#7f3133821800078c">CreateDiagnosticResult</a>(<span class="r2 r">literal</span>, <span class="r3 r">isDecimal</span>));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e8d73ff40bf699f3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixLiteralAsArgument</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;string.Format(&quot;&quot;&quot;&quot;, 1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">fixtest</span> = <span class="s">@&quot;string.Format(&quot;&quot;&quot;&quot;, 0x1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r5 r">source</span>, <span class="r6 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;1&quot;</span>, <span class="s">&quot;0x1&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;0x1&quot;</span>, <span class="s">&quot;1&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;12345678&quot;</span>, <span class="s">&quot;0xBC614E&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;-12345678&quot;</span>, <span class="s">&quot;0xFF439EB2&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;0xBC614E&quot;</span>, <span class="s">&quot;12345678&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7fb09a2625be21d8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixReplacesLiteral</a>(<b>string</b> <span id="r7 rd" class="r7 r">literal</span>, <b>string</b> <span id="r8 rd" class="r8 r">fixedLiteral</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">source</span> = <span class="s">$&quot;</span><span class="s">var a = </span>{<span class="r7 r">literal</span>}<span class="s">;</span><span class="s">&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">fixtest</span> = <span class="s">$&quot;</span><span class="s">var a = </span>{<span class="r8 r">fixedLiteral</span>}<span class="s">;</span><span class="s">&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">source</span>, <span class="r10 r">fixtest</span>);
+        }
+ 
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="30150ab9a5f4d20c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixOnMethodCallReplacesLiteral</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        void Foo()
+        {
+            Bar(12345678);
+        }
+        int Bar(int i) =&gt; i;
+    }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">fixtest</span> = <span class="s">@&quot;
+    class TypeName
+    {
+        void Foo()
+        {
+            Bar(0xBC614E);
+        }
+        int Bar(int i) =&gt; i;
+    }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">source</span>, <span class="r12 r">fixtest</span>);
+        }
+ 
+        <b>private static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="7f3133821800078c" href="../R/7f3133821800078c.html" target="n" data-glyph="76,1">CreateDiagnosticResult</a>(<b>string</b> <span id="r13 rd" class="r13 r">literal</span>, <b>bool</b> <span id="r14 rd" class="r14 r">isDecimal</span>, <b>int</b> <span id="r15 rd" class="r15 r">row</span> = 10, <b>int</b> <span id="r16 rd" class="r16 r">col</span> = 25) =&gt;
+            <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#311245ed96e98551">NumericLiteral</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc">Format</a>(<a href="/CodeCracker.CSharp/A.html#9a37b0314ba366ff" class="t">NumericLiteralAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#48c0769897aa636c">Message</a>, <span class="r13 r">literal</span>, <span class="r14 r">isDecimal</span> ? <span class="s">&quot;hexadecimal&quot;</span> : <span class="s">&quot;decimal&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] {<b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r15 r">row</span>, <span class="r16 r">col</span>)}
+            };
+    }
+}</pre></td></tr></table></div></body></html>

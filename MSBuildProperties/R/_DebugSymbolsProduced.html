@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html><head><title>_DebugSymbolsProduced</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">6 assignments to MSBuild property _DebugSymbolsProduced</div><div class="rA">MSBuildFiles (6)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Common.CurrentVersion.targets (6)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#144"><b>144</b>&lt;<i>_DebugSymbolsProduced</i>&gt;false&lt;/_DebugSymbolsProduced&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#145"><b>145</b>&lt;<i>_DebugSymbolsProduced</i> Condition=&quot;&#39;$(DebugSymbols)&#39;==&#39;true&#39;&quot;&gt;true&lt;/_DebugSymbolsProduced&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#146"><b>146</b>&lt;<i>_DebugSymbolsProduced</i> Condition=&quot;&#39;$(DebugType)&#39;==&#39;none&#39;&quot;&gt;false&lt;/_DebugSymbolsProduced&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#147"><b>147</b>&lt;<i>_DebugSymbolsProduced</i> Condition=&quot;&#39;$(DebugType)&#39;==&#39;pdbonly&#39;&quot;&gt;true&lt;/_DebugSymbolsProduced&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#148"><b>148</b>&lt;<i>_DebugSymbolsProduced</i> Condition=&quot;&#39;$(DebugType)&#39;==&#39;full&#39;&quot;&gt;true&lt;/_DebugSymbolsProduced&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#4258"><b>4258</b>&lt;<i>_DebugSymbolsProduced</i> Condition=&quot;!Exists(&#39;@(_DebugSymbolsIntermediatePath)&#39;)&quot;&gt;false&lt;/_DebugSymbolsProduced&gt;</a>
+</div>
+</div>
+<div class="rH">10 usages of MSBuild property _DebugSymbolsProduced</div><div class="rA">MSBuildFiles (10)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Common.CurrentVersion.targets (6)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#349"><b>349</b>&lt;ItemGroup Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39; == &#39;true&#39;&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#355"><b>355</b>&lt;PropertyGroup Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39; == &#39;true&#39; and &#39;$(OutputType)&#39; == &#39;winmdobj&#39;&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#3870"><b>3870</b>Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39;==&#39;true&#39; and &#39;$(SkipCopyingSymbolsToOutputDirectory)&#39; != &#39;true&#39; and &#39;$(CopyOutputSymbolsToOutputDirectory)&#39;==&#39;true&#39;&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#4262"><b>4262</b>&lt;FileWrites Include=&quot;@(_DebugSymbolsIntermediatePath)&quot; Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39;==&#39;true&#39;&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5118"><b>5118</b>&lt;ItemGroup Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39; != &#39;false&#39; and &#39;$(OutputType)&#39; != &#39;winmdobj&#39;&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5124"><b>5124</b>&lt;ItemGroup Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39; != &#39;false&#39; and &#39;$(OutputType)&#39; == &#39;winmdobj&#39;&quot;&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.Core.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.Core.targets.html#49"><b>49</b>&lt;PdbFile Condition=&quot;&#39;$(PdbFile)&#39; == &#39;&#39; and &#39;$(OutputType)&#39; == &#39;winmdobj&#39; and &#39;$(<i>_DebugSymbolsProduced</i>)&#39; == &#39;true&#39;&quot;&gt;$(IntermediateOutputPath)$(TargetName).compile.pdb&lt;/PdbFile&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.CurrentVersion.targets (2)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.CurrentVersion.targets.html#158"><b>158</b>&lt;ItemGroup Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39; == &#39;true&#39; and &#39;$(PdbFile)&#39; != &#39;&#39;&quot;&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.CurrentVersion.targets.html#225"><b>225</b>&lt;PdbFile Condition=&quot;&#39;$(PdbFile)&#39; == &#39;&#39; and &#39;$(OutputType)&#39; == &#39;winmdobj&#39; and &#39;$(<i>_DebugSymbolsProduced</i>)&#39; == &#39;true&#39;&quot;&gt;$(IntermediateOutputPath)$(TargetName).compile.pdb&lt;/PdbFile&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.VisualBasic.CurrentVersion.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.CurrentVersion.targets.html#161"><b>161</b>&lt;ItemGroup Condition=&quot;&#39;$(<i>_DebugSymbolsProduced</i>)&#39; == &#39;true&#39; and &#39;$(PdbFile)&#39; != &#39;&#39;&quot;&gt;</a>
+</div>
+</div>
+</body></html>

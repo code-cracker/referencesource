@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProviderTests.Base.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(145);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/AllowMembersOrderingCodeFixProviderTests.Base.cs" target="_top">Refactoring\AllowMembersOrderingCodeFixProviderTests.Base.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="1ec8b7cba2b90295" href="../R/1ec8b7cba2b90295.html" target="n" data-glyph="0,0" class="t"><span id="4e1509b9fcbc1c7f">BaseAllowMembersOrderingCodeFixProviderTests</span></a> :
+        <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#88f25c5e31db93f8" class="t">AllowMembersOrderingAnalyzer</a>, <a href="#1ec8b7cba2b90295" class="t">BaseAllowMembersOrderingCodeFixProviderTests</a>.<a href="#c2074a7cbe9bbe16" class="t">MockCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>, <span class="s">&quot;void B() { };&quot;</span>, <span class="s">&quot;void A() { };&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>, <span class="s">&quot;int c = 3, d = 4;&quot;</span>, <span class="s">&quot;int a = 1, b = 2;&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="eb466599aa6107c1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">BaseAllowMembersOrderingShouldCallIComparerToOrder</a>(<b>string</b> <span id="r0 rd" class="r0 r">typeDeclaration</span>, <b>string</b> <span id="r1 rd" class="r1 r">memberA</span>, <b>string</b> <span id="r2 rd" class="r2 r">memberB</span>)
+        {
+            <a href="#c2074a7cbe9bbe16" class="k">var</a> <span id="r3 rd" class="r3 r">codeFixProvider</span> = <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="k">base</a>.<a href="/CodeCracker.Test.Common/A.html#2c8089079f5b7396">GetCodeFixProvider</a>() <b>as</b> <a href="#c2074a7cbe9bbe16" class="t">MockCodeFixProvider</a>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+            public &quot;</span> + <span class="r0 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+            {
+                &quot;</span> + <span class="r1 r">memberA</span> + <span class="s">@&quot;
+                &quot;</span> + <span class="r2 r">memberB</span> + <span class="s">@&quot;
+            }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <span class="s">@&quot;
+            public &quot;</span> + <span class="r0 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+            {
+                &quot;</span> + <span class="r2 r">memberB</span> + <span class="s">@&quot;
+                &quot;</span> + <span class="r1 r">memberA</span> + <span class="s">@&quot;
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">expected</span>, <span class="r6 r">codeFixProvider</span>: <span class="r3 r">codeFixProvider</span>);
+            <span class="t">Assert</span>.True(<span class="r3 r">codeFixProvider</span>.<a href="#6c7413f6765b8dae">HasIComparerBeenCalled</a>, <span class="s">&quot;The IComparer must be used to sort the members of that type&quot;</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6723c75cc10ef190" href="../R/../../0000000000.html" target="n" data-glyph="72,1">BaseAllowMembersOrderingShouldNotRegisterFixIfIsAlreadySorted</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+            public class Foo
+            {
+                int a;
+                void B() { }
+            }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#e58c11f9b1222c4b">VerifyCSharpHasNoFixAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;class&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;struct&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="165a95ba477caac8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">BaseAllowMembersOrderingShouldSupportWriteMembers</a>(<b>string</b> <span id="r8 rd" class="r8 r">typeDeclaration</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+            using System;
+ 
+            namespace ConsoleApplication1
+            {
+                &quot;</span> + <span class="r8 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+                {
+                    public class Foo2 { }
+                    public struct Struct { }
+                    public static Foo operator +(Foo f1, Foo f2) { return new Foo(); }
+                    void Method(string a) { }
+                    public string this[int i] { set { } }
+                    public string Property { get; set; }
+                    private interface Interface { }
+                    public enum Enum { Enum1, Enum2 = 1 }
+                    public event Action Event
+                    {
+                        add { EventField += value; }
+                        remove { EventField -= value; }
+                    }
+                    public delegate double Delegate(double num);
+                    public Foo()
+                    {
+                        Property = Field1 = Field = &quot;&quot;;
+                        EventField = EventField1 = () =&gt; { };
+                    }
+                    public event Action EventField1;
+                    public string Field;
+                }
+            }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">expected</span> = <span class="s">@&quot;
+            using System;
+ 
+            namespace ConsoleApplication1
+            {
+                &quot;</span> + <span class="r8 r">typeDeclaration</span> + <span class="s">@&quot; Foo
+                {
+                    private interface Interface { }
+                    public class Foo2 { }
+                    public delegate double Delegate(double num);
+                    public enum Enum { Enum1, Enum2 = 1 }
+                    public event Action Event
+                    {
+                        add { EventField += value; }
+                        remove { EventField -= value; }
+                    }
+                    public event Action EventField1;
+                    public Foo()
+                    {
+                        Property = Field1 = Field = &quot;&quot;;
+                        EventField = EventField1 = () =&gt; { };
+                    }
+                    public static Foo operator +(Foo f1, Foo f2) { return new Foo(); }
+                    public string Field;
+                    public string Property { get; set; }
+                    public string this[int i] { set { } }
+                    public struct Struct { }
+                    void Method(string a) { }
+                }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">source</span>, <span class="r10 r">expected</span>);
+        }
+ 
+        <b>public class</b> <a id="c2074a7cbe9bbe16" href="../R/c2074a7cbe9bbe16.html" target="n" data-glyph="0,1" class="t">MockCodeFixProvider</a> : <a href="/CodeCracker.CSharp/A.html#b26b9ea4b8ff21dc" class="t">BaseAllowMembersOrderingCodeFixProvider</a>
+        {
+            <b>public</b> <a id="0e2866153e07fe03" href="../R/../../0000000000.html" target="n" data-glyph="72,2">MockCodeFixProvider</a>() : <a href="/CodeCracker.CSharp/A.html#aa89b01ffe3cd11a" class="k">base</a>(<span class="s">&quot;Fake codefix&quot;</span>) { }
+ 
+            <b>public bool</b> <a id="6c7413f6765b8dae" href="../R/6c7413f6765b8dae.html" target="n" data-glyph="102,2">HasIComparerBeenCalled</a> { <b>get</b>; <b>private set</b>; }
+ 
+            <b>protected override</b> <a href="@0@mscorlib/A.html#6bf8828f51320498" class="t">IComparer</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt; <a id="2069a77dae8c9620" href="../R/2069a77dae8c9620.html" target="n" data-glyph="75,2">GetMemberDeclarationComparer</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r11 rd" class="r11 r">document</span>, <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a> <span id="r12 rd" class="r12 r">cancellationToken</span>)
+                =&gt; <b>new</b> <a href="#dce4a4bd202a43c2" class="t">AlphabeticalMemberOrderingComparer</a>(<a href="#c2074a7cbe9bbe16" class="k">this</a>);
+ 
+            <b>internal class</b> <a id="535c37021c6b7961" href="../R/535c37021c6b7961.html" target="n" data-glyph="2,2" class="t">AlphabeticalMemberOrderingComparer</a> : <a href="@0@mscorlib/A.html#6bf8828f51320498" class="t">IComparer</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt;
+            {
+                <b>readonly</b> <a href="#c2074a7cbe9bbe16" class="t">MockCodeFixProvider</a> <a id="c762c34926290948" href="../R/c762c34926290948.html" target="n" data-glyph="46,3">parent</a>;
+ 
+                <b>public</b> <a id="dce4a4bd202a43c2" href="../R/dce4a4bd202a43c2.html" target="n" data-glyph="72,3">AlphabeticalMemberOrderingComparer</a>(<a href="#c2074a7cbe9bbe16" class="t">MockCodeFixProvider</a> <span id="r13 rd" class="r13 r">parent</span>) { <a href="#535c37021c6b7961" class="k">this</a>.<a href="#c762c34926290948">parent</a> = <span class="r13 r">parent</span>; }
+ 
+                <b>public int</b> <a id="ecbb7c5ae11579a7" href="../R/ecbb7c5ae11579a7.html" target="n" data-glyph="72,3">Compare</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r14 rd" class="r14 r">x</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r15 rd" class="r15 r">y</span>)
+                {
+                    <a href="#c762c34926290948">parent</a>.<a href="#6c7413f6765b8dae">HasIComparerBeenCalled</a> = <b>true</b>;
+                    <b>return string</b>.<a href="@0@mscorlib/A.html#0be9474bc8e160b6">Compare</a>(<span class="r14 r">x</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9e4567caf8d70d38">ToFullString</a>(), <span class="r15 r">y</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9e4567caf8d70d38">ToFullString</a>(), System.<a href="@0@mscorlib/A.html#702797def97ecb7c" class="t">StringComparison</a>.<a href="@0@mscorlib/A.html#eb6ce9ac0dbf4269">InvariantCulture</a>);
+                }
+            }
+        }
+ 
+    }
+}</pre></td></tr></table></div></body></html>

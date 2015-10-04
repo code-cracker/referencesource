@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringFormatAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(66);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/StringFormatAnalyzer.cs" target="_top">Style\StringFormatAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.Properties;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="2f4de393ffff16c4" href="../R/2f4de393ffff16c4.html" target="n" data-glyph="0,0" class="t"><span id="eaab172c23fd2d4b">StringFormatAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="ac669eca7bd8631f" href="../R/ac669eca7bd8631f.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="b47ea6fea5a8a16a" href="../R/b47ea6fea5a8a16a.html" target="n" data-glyph="44,1">Title</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#22eb901e0147badc">StringFormatAnalyzer_Title</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="490628dffef0fc00" href="../R/490628dffef0fc00.html" target="n" data-glyph="44,1">MessageFormat</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#1abbb85c29fc8866">StringFormatAnalyzer_MessageFormat</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="2d4df8623b52f427" href="../R/2d4df8623b52f427.html" target="n" data-glyph="44,1">Description</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#087a21b0a5b12fd9">StringFormatAnalyzer_Description</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="9f6ee72ce0d8dd8e" href="../R/9f6ee72ce0d8dd8e.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#fb352e176a89c98b" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1c05ff42cd39d5d2">StringFormat</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#b47ea6fea5a8a16a">Title</a>,
+            <a href="#490628dffef0fc00">MessageFormat</a>,
+            <a href="#ac669eca7bd8631f">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#2d4df8623b52f427">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1c05ff42cd39d5d2">StringFormat</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="caab5674e82da6e9" href="../R/caab5674e82da6e9.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#9f6ee72ce0d8dd8e">Rule</a>);
+ 
+        <b>public override void</b> <a id="e314e4ea57dcd9ac" href="../R/e314e4ea57dcd9ac.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#6fe0839da54a6c0f">AnalyzeFormatInvocation</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+ 
+        <b>private static void</b> <a id="6fe0839da54a6c0f" href="../R/6fe0839da54a6c0f.html" target="n" data-glyph="76,1">AnalyzeFormatInvocation</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>) =&gt;
+            <a href="#6c0cc242b72926a9">AnalyzeFormatInvocation</a>(<span class="r4 r">context</span>, <span class="s">&quot;Format&quot;</span>, <span class="s">&quot;string.Format(string, &quot;</span>, <span class="s">&quot;string.Format(string, params object[])&quot;</span>, <a href="#9f6ee72ce0d8dd8e">Rule</a>);
+ 
+        <b>public static void</b> <a id="6c0cc242b72926a9" href="../R/6c0cc242b72926a9.html" target="n" data-glyph="72,1">AnalyzeFormatInvocation</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r5 rd" class="r5 r">context</span>, <b>string</b> <span id="r6 rd" class="r6 r">methodName</span>, <b>string</b> <span id="r7 rd" class="r7 r">methodOverloadSignature</span>, <b>string</b> <span id="r8 rd" class="r8 r">methodWithArraySignature</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <span id="r9 rd" class="r9 r">rule</span>)
+        {
+            <b>if</b> (<span class="r5 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r10 rd" class="r10 r">invocationExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r11 rd" class="r11 r">memberExpresion</span> = <span class="r10 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+            <b>if</b> (<span class="r11 r">memberExpresion</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>() != <span class="r6 r">methodName</span>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r12 rd" class="r12 r">memberSymbol</span> = <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r11 r">memberExpresion</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <b>if</b> (<span class="r12 r">memberSymbol</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (!<span class="r12 r">memberSymbol</span>.ToString().StartsWith(<span class="r7 r">methodOverloadSignature</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="k">var</a> <span id="r13 rd" class="r13 r">argumentList</span> = <span class="r10 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a>;
+            <b>if</b> (<span class="r13 r">argumentList</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> &lt; 2) <b>return</b>;
+            <b>if</b> (!<span class="r13 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>[0]?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>?.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1fe7c08d8ff2a9e9">StringLiteralExpression</a>) ?? <b>false</b>) <b>return</b>;
+            <b>if</b> (<span class="r12 r">memberSymbol</span>.ToString() == <span class="r8 r">methodWithArraySignature</span> &amp;&amp; <span class="r13 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.Skip(1).Any(<span id="r14 rd" class="r14 r">a</span> =&gt; <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#937bca6b4366cf65">GetTypeInfo</a>(<span class="r14 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#77bfd0dd7cc5f90a">Type</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#93c6a35597c4a10f">Array</a>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r15 rd" class="r15 r">formatLiteral</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>)<span class="r13 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>[0].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>;
+            <b>var</b> <span id="r16 rd" class="r16 r">format</span> = (<b>string</b>)<span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r15 r">formatLiteral</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a>;
+            <b>var</b> <span id="r17 rd" class="r17 r">formatArgs</span> = <span class="t">Enumerable</span>.Range(1, <span class="r13 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> - 1).Select(<span id="r18 rd" class="r18 r">i</span> =&gt; <b>new</b> <b>object</b>()).ToArray();
+            <b>try</b>
+            {
+                <b>string</b>.Format(<span class="r16 r">format</span>, <span class="r17 r">formatArgs</span>);
+            }
+            <b>catch</b> (<span class="t">FormatException</span>)
+            {
+                <b>return</b>;
+            }
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r19 rd" class="r19 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<span class="r9 r">rule</span>, <span class="r10 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>());
+            <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r19 r">diag</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

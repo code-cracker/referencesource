@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveCommentedCodeTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(126);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/RemoveCommentedCodeTests.cs" target="_top">Style\RemoveCommentedCodeTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="f405231d740fcf6f" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="a141d7625ef96e3d">RemoveCommentedCodeTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#58c5308d1e3d8d5d" class="t">RemoveCommentedCodeAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#f3f3094373054740" class="t">RemoveCommentedCodeCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="656cf8fcbac5b4af" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresSingleWordComment</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;//comment&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a9a08e2a7be82588" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresRegularComments</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;// this is a regular comment&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>(Skip =<span class="s">&quot;Skipped until SourceCodeKind.Interactive can be set on CSharpParseOptions on the analyzer.&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="13b9209d46e3baa6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticForSingleLineCommentedCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;// a = 10;&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#008f2537f4688a57">RemoveCommentedCode</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#58c5308d1e3d8d5d" class="t">RemoveCommentedCodeAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#3d0f79d56408e395">MessageFormat</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 17) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f406a8ae556f27ae" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemovesCommentedCodePreservingRegularComments</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            // var a = &quot;&quot;this comment will be removed&quot;&quot;;
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">fixtest</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">test</span>, <span class="r5 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>(Skip =<span class="s">&quot;Skipped until SourceCodeKind.Interactive can be set on CSharpParseOptions on the analyzer.&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="068a3cad2d9b4c23" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticForMultipleLinesCommentedCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+            // if (something)
+            // {
+            //   DoStuff();
+            // }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r7 rd" class="r7 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#008f2537f4688a57">RemoveCommentedCode</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#58c5308d1e3d8d5d" class="t">RemoveCommentedCodeAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#3d0f79d56408e395">MessageFormat</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 13) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">test</span>, <span class="r7 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>(Skip =<span class="s">&quot;Skipped until SourceCodeKind.Interactive can be set on CSharpParseOptions on the analyzer.&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2f1b8daff7e646c5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemovesCommentedMultilineCodePreservingRegularComments</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">test</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            // if (something)
+            // {
+            //   DoStuff();
+            // }
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">fixtest</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">test</span>, <span class="r9 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f62650fdada4c465" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemovesNonPerfectClassCommentedCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">test</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            // class Fee
+            class Foo
+            {
+            }
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">fixtest</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            class Foo
+            {
+            }
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r10 r">test</span>, <span class="r11 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>(Skip =<span class="s">&quot;Skipped until SourceCodeKind.Interactive can be set on CSharpParseOptions on the analyzer.&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="69f8b42e17b80e26" href="../R/../../0000000000.html" target="n" data-glyph="72,1">RemovesNonPerfectIfCommentedCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">test</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            // if (a &gt; 2)
+            if (a &gt; 3)
+            {
+            }
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">fixtest</span> = <span class="s">@&quot;
+            // this comment will be preserved
+            if (a &gt; 3)
+            {
+            }
+            &quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r12 r">test</span>, <span class="r13 r">fixtest</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

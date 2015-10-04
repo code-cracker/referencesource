@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReadonlyFieldCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(66);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/ReadonlyFieldCodeFixProvider.cs" target="_top">Usage\ReadonlyFieldCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Formatting;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#69b38b1ca7ba6a54" class="t">ReadonlyFieldCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="69b38b1ca7ba6a54" href="../R/69b38b1ca7ba6a54.html" target="n" data-glyph="0,0" class="t"><span id="2e1c3791f1eb3b19">ReadonlyFieldCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="61328172585c068f" href="../R/61328172585c068f.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#93d14f8741c53c23">ReadonlyField</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="caa87ce157080355" href="../R/caa87ce157080355.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="5fa05585dbb2c23f" href="../R/5fa05585dbb2c23f.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(
+                <span class="s">$&quot;</span><span class="s">Make readonly: &#39;</span>{<span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ba4b6448b981d28">Properties</a>[<span class="s">&quot;identifier&quot;</span>]}<span class="s">&#39;</span><span class="s">&quot;</span>, <span id="r2 rd" class="r2 r">c</span> =&gt; <a href="#b50cdae1b0a1b8f9">MakeFieldReadonlyAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r2 r">c</span>), <b>nameof</b>(<a href="#69b38b1ca7ba6a54" class="t">ReadonlyFieldCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="b50cdae1b0a1b8f9" href="../R/b50cdae1b0a1b8f9.html" target="n" data-glyph="76,1">MakeFieldReadonlyAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r4 rd" class="r4 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="k">var</a> <span id="r7 rd" class="r7 r">diagnosticSpan</span> = <span class="r4 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="k">var</a> <span id="r8 rd" class="r8 r">variable</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r7 r">diagnosticSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a>&gt;().FirstOrDefault();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="k">var</a> <span id="r9 rd" class="r9 r">fieldDeclaration</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a>)<span class="r8 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r10 rd" class="r10 r">newRoot</span> = <span class="r9 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c49a28b1ba615695">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> == 1
+                ? <a href="#76706cfd50c99e43">MakeSingleFieldReadonly</a>(<span class="r6 r">root</span>, <span class="r9 r">fieldDeclaration</span>)
+                : <a href="#cd95c21a5e3f07b5">MakeMultipleFieldsReadonly</a>(<span class="r6 r">root</span>, <span class="r9 r">fieldDeclaration</span>, <span class="r8 r">variable</span>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r11 rd" class="r11 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r10 r">newRoot</span>);
+            <b>return</b> <span class="r11 r">newDocument</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="76706cfd50c99e43" href="../R/76706cfd50c99e43.html" target="n" data-glyph="76,1">MakeSingleFieldReadonly</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r12 rd" class="r12 r">root</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a> <span id="r13 rd" class="r13 r">fieldDeclaration</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="k">var</a> <span id="r14 rd" class="r14 r">newFieldDeclaration</span> = <span class="r13 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1e687f18aaff9808">AddModifiers</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#41cb4107038734c7">Token</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e8f46cc0b1bdbe4d">ReadOnlyKeyword</a>))
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r13 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2578281909aee103">GetTrailingTrivia</a>())
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r13 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>())
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r15 rd" class="r15 r">newRoot</span> = <span class="r12 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r13 r">fieldDeclaration</span>, <span class="r14 r">newFieldDeclaration</span>);
+            <b>return</b> <span class="r15 r">newRoot</span>;
+        }
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="cd95c21a5e3f07b5" href="../R/cd95c21a5e3f07b5.html" target="n" data-glyph="76,1">MakeMultipleFieldsReadonly</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r16 rd" class="r16 r">root</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="t">FieldDeclarationSyntax</a> <span id="r17 rd" class="r17 r">fieldDeclaration</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a> <span id="r18 rd" class="r18 r">variableToMakeReadonly</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#19e857e7634f6af2" class="k">var</a> <span id="r19 rd" class="r19 r">newDeclaration</span> = <span class="r17 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c49a28b1ba615695">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#03fbd5239cc1fb6f">RemoveNode</a>(<span class="r18 r">variableToMakeReadonly</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#55d4a245cfef7ac7" class="t">SyntaxRemoveOptions</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e71571c54ad55390">KeepEndOfLine</a>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="k">var</a> <span id="r20 rd" class="r20 r">newFieldDeclaration</span> = <span class="r17 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f847a3702a8f7cd4">WithDeclaration</a>(<span class="r19 r">newDeclaration</span>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f59a0a85d45d103a" class="k">var</a> <span id="r21 rd" class="r21 r">newReadonlyFieldDeclaration</span> = <span class="r17 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f847a3702a8f7cd4">WithDeclaration</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#559aa438628a38e4">VariableDeclaration</a>(<span class="r17 r">fieldDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c49a28b1ba615695">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#aee67d0d4a44663f">Type</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7fdc09ab8550b916">SeparatedList</a>(<b>new</b>[] { <span class="r18 r">variableToMakeReadonly</span> })))
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#3a85ff69eb8e796d">WithoutLeadingTrivia</a>()
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b8337b06189586cc">ParseTrailingTrivia</a>(<span class="s">&quot;\n&quot;</span>))
+                .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1e687f18aaff9808">AddModifiers</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#41cb4107038734c7">Token</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e8f46cc0b1bdbe4d">ReadOnlyKeyword</a>))
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r22 rd" class="r22 r">newRoot</span> = <span class="r16 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f26121c847155f18">ReplaceNode</a>(<span class="r17 r">fieldDeclaration</span>, <b>new</b>[] { <span class="r20 r">newFieldDeclaration</span>, <span class="r21 r">newReadonlyFieldDeclaration</span> });
+            <b>return</b> <span class="r22 r">newRoot</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

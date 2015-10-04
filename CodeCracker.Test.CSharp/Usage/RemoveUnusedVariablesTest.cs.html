@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveUnusedVariablesTest.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(142);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/RemoveUnusedVariablesTest.cs" target="_top">Usage\RemoveUnusedVariablesTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="584cd4b715036702" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="ace0c5b6e36a1d9e">RemoveUnusedVariablesTest</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a> <a id="06c64e70ec4812ce" href="../R/06c64e70ec4812ce.html" target="n" data-glyph="75,1">GetCodeFixProvider</a>() =&gt; <b>new</b> <a href="/CodeCracker.CSharp/A.html#d78f11d121b4145e" class="t">RemoveUnusedVariablesCodeFixProvider</a>();
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="72fab3c355d5145f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsAssignedButItsValueIsNeverUsedShouldCreateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+        class TypeName
+        {
+            public void Foo()
+            {
+                int a = 10;
+                return;
+            }
+        }&quot;</span>;
+            <b>const string</b> <span id="r1 rd" class="r1 r">fixtest</span> = <span class="s">@&quot;
+        class TypeName
+        {
+            public void Foo()
+            {
+                return;
+            }
+        }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r0 r">source</span>, <span class="r1 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4361caadf887e825" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsCreatedButNeverUsedShouldCreateDiagnostics</a>()
+        {
+ 
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+        class TypeName
+        {
+            public void Foo()
+            {
+                int a;
+                return;
+            }
+        }&quot;</span>;
+            <b>const string</b> <span id="r3 rd" class="r3 r">fixtest</span> = <span class="s">@&quot;
+        class TypeName
+        {
+            public void Foo()
+            {
+                return;
+            }
+        }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r2 r">source</span>, <span class="r3 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f58896296e6bcb42" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableWithinOfMethodDoesNotUsedShouldCreateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+        class Name
+        {
+            public void NewFoo()
+            {
+                int number = 2;
+            }
+        }&quot;</span>;
+            <b>const string</b> <span id="r5 rd" class="r5 r">fixtest</span> = <span class="s">@&quot;
+        class Name
+        {
+            public void NewFoo()
+            {
+            }
+        }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b53911f5df1776a6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableInCatchDeclarationShouldCreateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+        class Name
+        {
+            public void NewFoo()
+            {
+                try
+                {
+                }
+                catch(Exception ex)
+                {
+                    throw;
+                }
+            }
+        }&quot;</span>;
+            <b>const string</b> <span id="r7 rd" class="r7 r">fixtest</span> = <span class="s">@&quot;
+        class Name
+        {
+            public void NewFoo()
+            {
+                try
+                {
+                }
+                catch(Exception)
+                {
+                    throw;
+                }
+            }
+        }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r6 r">source</span>, <span class="r7 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ca9a678bb5a706a5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableWithinOfConstructorDoesNotUsedShouldCreateDiagnostics</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+        class Name
+        {
+            public Name()
+            {
+                var foo = 2;
+            }
+        }&quot;</span>;
+            <b>const string</b> <span id="r9 rd" class="r9 r">fixtest</span> = <span class="s">@&quot;
+        class Name
+        {
+            public Name()
+            {
+            }
+        }&quot;</span>;
+ 
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">source</span>, <span class="r9 r">fixtest</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,622 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringFormatTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(613);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/StringFormatTests.cs" target="_top">Style\StringFormatTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="b3b4e0cee37d3030" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="7e804ee44baef927">StringFormatTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#2f4de393ffff16c4" class="t">StringFormatAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#681116a4b74f6ac7" class="t">StringFormatCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="43d77fd0d2155e6f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresRegularStrings</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var string a = &quot;&quot;a&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="783136d0861790d7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresStringMethodsThatAreNotStringFormat</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var result = string.Compare(&quot;&quot;a&quot;&quot;, &quot;&quot;b&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9d9f6eae8694c5f6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresMethodsCalledFormatThatAreNotStringFormat</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class OtherString { public static string Format(string a, string b) { throw new NotImplementedException(); } }
+        class TypeName
+        {
+            void Foo()
+            {
+                var result = OtherString.Format(&quot;&quot;a&quot;&quot;, &quot;&quot;b&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="718d5cfda21f5934" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresStringFormatWithArrayArgWith1Object</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var args = new object[] { noun };
+                var s = string.Format(&quot;&quot;This {0} is nice.&quot;&quot;, args);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="de3f2d84c3b01013" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresStringFormatWithArrayArgWith2Objects</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var args = new object[] { noun, adjective };
+                var s = string.Format(&quot;&quot;This {0} is {1}&quot;&quot;, args);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2b2995db358470f6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresMethodsWithOnlyOneParameter</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var result = string.Format(&quot;&quot;a&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="764adc8bbfdb1a34" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresMethodsCalledWithIncorrectParameterTypes</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var result = string.Format(1, &quot;&quot;b&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b97de0a259e6ae25" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresMethodsWithIncorrectNumberOfParameters</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var result = string.Format(&quot;&quot;one {0} two {1}&quot;&quot;, &quot;&quot;a&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5ab5bed3db2deda5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatWithMoreThan2ArgsProducesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(&quot;&quot;This {0} is {1}&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r9 rd" class="r9 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1c05ff42cd39d5d2">StringFormat</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#2f4de393ffff16c4" class="t">StringFormatAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#490628dffef0fc00">MessageFormat</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#aee4b463ed562218">ToString</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 25) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r8 r">source</span>, <span class="r9 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="62bb4804912cd754" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatWithFullStringNameProducesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = System.String.Format(&quot;&quot;This {0} is {1}&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r11 rd" class="r11 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1c05ff42cd39d5d2">StringFormat</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#2f4de393ffff16c4" class="t">StringFormatAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#490628dffef0fc00">MessageFormat</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#aee4b463ed562218">ToString</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 25) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r10 r">source</span>, <span class="r11 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="178eb2dc763b85ae" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatChangesToStringInterpolation</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                //comment before
+                var s = string.Format(&quot;&quot;This {0} is {1}&quot;&quot;, noun, adjective);//comment right after
+                //comment after
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r13 rd" class="r13 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                //comment before
+                var s = $&quot;&quot;This {noun} is {adjective}&quot;&quot;;//comment right after
+                //comment after
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r12 r">source</span>, <span class="r13 r">expected</span>, <span class="r14 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ab642f1e5ddb5e55" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenStringFormatHasMoreArgumentsThanNecessaryChangesToStringInterpolationAndIgnoresExtraArgument</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var otherAdjective = &quot;&quot;loves c#&quot;&quot;;
+                var s = string.Format(&quot;&quot;This {0} is {1}&quot;&quot;, noun, adjective, otherAdjective);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r16 rd" class="r16 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var otherAdjective = &quot;&quot;loves c#&quot;&quot;;
+                var s = $&quot;&quot;This {noun} is {adjective}&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r15 r">source</span>, <span class="r16 r">expected</span>, <span class="r17 r">allowNewCompilerDiagnostics</span>: <b>true</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7ce57b3b22d2e776" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenStringFormatHasEscapingItChangesToStringInterpolationAndRemovesEscapingSequence</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(&quot;&quot;This {{0}} {0} is {1}&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r19 rd" class="r19 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = $&quot;&quot;This {{0}} {noun} is {adjective}&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="86576bc9d26d7423" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenFormatStringHasLineBreaksTheCodeFixKeepsThat</a>()
+        {
+            <b>const string</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(&quot;&quot;This {0} is\n \r\f \f \r {1}&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r21 rd" class="r21 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = $&quot;&quot;This {noun} is\n \r\f \f \r {adjective}&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e6ef48c654202fc1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenFormatStringHasQuotesTheCodeFixKeepsThat</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(&quot;&quot;This {0} is \&quot;&quot;{1}\&quot;&quot;&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r23 rd" class="r23 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = $&quot;&quot;This {noun} is \&quot;&quot;{adjective}\&quot;&quot;&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r22 r">source</span>, <span class="r23 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="92a9b14b7ba7a7fa" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VerbatimStringWithStringFormatCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(@&quot;&quot;This {0} is
+&quot;&quot;&quot;&quot;{1}&quot;&quot;&quot;&quot;.&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r25 rd" class="r25 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#1c05ff42cd39d5d2">StringFormat</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#2f4de393ffff16c4" class="t">StringFormatAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#490628dffef0fc00">MessageFormat</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#aee4b463ed562218">ToString</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 25) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r24 r">source</span>, <span class="r25 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b7c78d98befa003f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VerbatimStringBecomesInterpolatedVerbatimString</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(@&quot;&quot;This {0} is
+&quot;&quot;&quot;&quot;{1}&quot;&quot;&quot;&quot;.&quot;&quot;, noun, adjective);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r27 rd" class="r27 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = $@&quot;&quot;This {noun} is
+&quot;&quot;&quot;&quot;{adjective}&quot;&quot;&quot;&quot;.&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r26 r">source</span>, <span class="r27 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="feb881e8cdde6154" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FormatStringMaintainsFormat</a>()
+        {
+            <b>const string</b> <span id="r28 rd" class="r28 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var s = string.Format(&quot;&quot; |{0, -15 :N5}| &quot;&quot;, System.Math.PI);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r29 rd" class="r29 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var s = $&quot;&quot; |{System.Math.PI, -15 :N5}| &quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r28 r">source</span>, <span class="r29 r">expected</span>, <span class="r14 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c18f65e8aeb8289d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatChangesToStringInterpolationWithInvertedIndexes</a>()
+        {
+            <b>const string</b> <span id="r30 rd" class="r30 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                //comment before
+                var s = string.Format(&quot;&quot;This {1} is {0}&quot;&quot;, noun, adjective);//comment right after
+                //comment after
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r31 rd" class="r31 r">expected</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                //comment before
+                var s = $&quot;&quot;This {adjective} is {noun}&quot;&quot;;//comment right after
+                //comment after
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r30 r">source</span>, <span class="r31 r">expected</span>, <span class="r14 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f9c3a56fe15a17b5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatWithTernaryOperatorFixesWithParenthesis</a>()
+        {
+            <b>const string</b> <span id="r32 rd" class="r32 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = string.Format(&quot;&quot;This {0} is {1}&quot;&quot;, noun, true ? adjective : noun);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r33 rd" class="r33 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var noun = &quot;&quot;Giovanni&quot;&quot;;
+                var adjective = &quot;&quot;smart&quot;&quot;;
+                var s = $&quot;&quot;This {noun} is {(true ? adjective : noun)}&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r32 r">source</span>, <span class="r33 r">expected</span>, <span class="r14 r">formatBeforeCompare</span>: <b>false</b>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="dd0fa3a81a720779" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatWithLineBreak</a>()
+        {
+            <b>const string</b> <span id="r34 rd" class="r34 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var myString = string.Format(&quot;&quot;{0}, {1}, {2}, {3}&quot;&quot;, 0, 1,
+                             2,
+                             3);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r35 rd" class="r35 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var myString = $&quot;&quot;{0}, {1}, {2}, {3}&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r34 r">source</span>, <span class="r35 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cdf03c5b89e5e777" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StringFormatWithLineBreakAndComments</a>()
+        {
+            <b>const string</b> <span id="r36 rd" class="r36 r">source</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var myString = string.Format(&quot;&quot;{0}, {1}, {2}, {3}&quot;&quot;, 0, /* Just a simple Comment */1,
+                            /* Important Comment */ 2, // Another Comment
+                            3 /* Yet Another important Comment */);
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r37 rd" class="r37 r">expected</span> = <span class="s">@&quot;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Foo()
+            {
+                var myString = $&quot;&quot;{0}, {1}, {2}, {3}&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r36 r">source</span>, <span class="r37 r">expected</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

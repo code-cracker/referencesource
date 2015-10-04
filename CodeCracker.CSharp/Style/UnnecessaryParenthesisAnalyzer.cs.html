@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnnecessaryParenthesisAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(45);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/UnnecessaryParenthesisAnalyzer.cs" target="_top">Style\UnnecessaryParenthesisAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="4e30014fa2ae3db8" href="../R/4e30014fa2ae3db8.html" target="n" data-glyph="0,0" class="t"><span id="50ca82b90f25c274">UnnecessaryParenthesisAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="11dae2ba23a6e63f" href="../R/11dae2ba23a6e63f.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Unnecessary Parenthesis&quot;</span>;
+        <b>internal const string</b> <a id="b88e4d3c8772ad83" href="../R/b88e4d3c8772ad83.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="97833a106d185e92" href="../R/97833a106d185e92.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="3f5a113dc056cac5" href="../R/3f5a113dc056cac5.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;There is no need to specify that the no-parameter constructor is used with &quot;</span>
+            + <span class="s">&quot; an initializer as it is implicit&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="c27c730d8be2e3ab" href="../R/c27c730d8be2e3ab.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#430eb23baf9a243c">UnnecessaryParenthesis</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#11dae2ba23a6e63f">Title</a>,
+            <a href="#b88e4d3c8772ad83">MessageFormat</a>,
+            <a href="#97833a106d185e92">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">customTags</span>: <a href="@1@Microsoft.CodeAnalysis/A.html#03ef56ba68ffca36" class="t">WellKnownDiagnosticTags</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#4312437e59bf4b2d">Unnecessary</a>,
+            <span class="r1 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r2 r">description</span>: <a href="#3f5a113dc056cac5">Description</a>,
+            <span class="r3 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#430eb23baf9a243c">UnnecessaryParenthesis</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="baa64fe66c7de18d" href="../R/baa64fe66c7de18d.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#c27c730d8be2e3ab">Rule</a>);
+ 
+        <b>public override void</b> <a id="ab3e8c61a3924477" href="../R/ab3e8c61a3924477.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>) =&gt;
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#b4c4bd4120782ea7">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#37b4e064594ee806">ObjectCreationExpression</a>);
+ 
+        <b>private static void</b> <a id="b4c4bd4120782ea7" href="../R/b4c4bd4120782ea7.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r5 rd" class="r5 r">context</span>)
+        {
+            <b>if</b> (<span class="r5 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="k">var</a> <span id="r6 rd" class="r6 r">objectCreation</span> = <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>;
+            <b>if</b> (<span class="r6 r">objectCreation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8d412421636098aa">Initializer</a> != <b>null</b> &amp;&amp; <span class="r6 r">objectCreation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4a2311de9b94b3f">ArgumentList</a> != <b>null</b> &amp;&amp; !<span class="r6 r">objectCreation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4a2311de9b94b3f">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a>())
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r7 rd" class="r7 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#c27c730d8be2e3ab">Rule</a>, <span class="r6 r">objectCreation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4a2311de9b94b3f">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#03cdceed1a096648">OpenParenToken</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#20b085a124dddfb0">GetLocation</a>(), <span class="s">&quot;Remove unnecessary parenthesis.&quot;</span>);
+                <span class="r5 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diagnostic</span>);
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

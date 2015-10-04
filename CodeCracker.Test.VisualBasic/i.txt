@@ -1,0 +1,7 @@
+ProjectSourcePath=test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj
+DocumentCount=32
+LinesOfCode=6193
+BytesOfCode=203975
+DeclaredSymbols=343
+DeclaredTypes=34
+PublicTypes=30

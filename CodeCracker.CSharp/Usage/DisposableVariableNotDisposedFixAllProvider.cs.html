@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposableVariableNotDisposedFixAllProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(70);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/DisposableVariableNotDisposedFixAllProvider.cs" target="_top">Usage\DisposableVariableNotDisposedFixAllProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    <b>public sealed class</b> <a id="993358dec6151e6b" href="../R/993358dec6151e6b.html" target="n" data-glyph="0,0" class="t">DisposableVariableNotDisposedFixAllProvider</a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+    {
+        <b>private static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5df4388ff3239a2c" class="t">SyntaxAnnotation</a> <a id="5980db37a8be1fe9" href="../R/5980db37a8be1fe9.html" target="n" data-glyph="46,1">disposeAnnotation</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#a029520aa34217c5" class="t">SyntaxAnnotation</a>(<b>nameof</b>(<a href="#993358dec6151e6b" class="t">DisposableVariableNotDisposedFixAllProvider</a>));
+        <b>private</b> <a id="c0dac5403c447891" href="../R/c0dac5403c447891.html" target="n" data-glyph="76,1">DisposableVariableNotDisposedFixAllProvider</a>() { }
+        <b>public static</b> <a href="#993358dec6151e6b" class="t">DisposableVariableNotDisposedFixAllProvider</a> <a id="94c7fac2513a1a0b" href="../R/94c7fac2513a1a0b.html" target="n" data-glyph="42,1">Instance</a> = <b>new</b> <a href="#c0dac5403c447891" class="t">DisposableVariableNotDisposedFixAllProvider</a>();
+        <b>public override</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>&gt; <a id="de39e3e198db2861" href="../R/de39e3e198db2861.html" target="n" data-glyph="72,1">GetFixAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r0 rd" class="r0 r">fixAllContext</span>)
+        {
+            <b>switch</b> (<span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b9bff38165d5d1e8">Scope</a>)
+            {
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#97fa69e6457fca10">Document</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#b3ddd0a55e8bf94b" class="t">DisposableVariableNotDisposedCodeFixProvider</a>.<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#ba38f97a936e6eb3">MessageFormat</a>,
+                        <b>async</b> <span id="r1 rd" class="r1 r">ct</span> =&gt; <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<b>await</b> <a href="#79269db66268f622">GetFixedDocumentAsync</a>(<span class="r0 r">fixAllContext</span>, <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d653623ec86332b9">Document</a>).ConfigureAwait(<b>false</b>))));
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6ea2f449b2d95b0d">Project</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#b3ddd0a55e8bf94b" class="t">DisposableVariableNotDisposedCodeFixProvider</a>.<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#ba38f97a936e6eb3">MessageFormat</a>,
+                        <span id="r2 rd" class="r2 r">ct</span> =&gt; <a href="#fedf302170f5b64c">GetFixedProjectAsync</a>(<span class="r0 r">fixAllContext</span>, <span class="r0 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#2ac5d9c985a8d9bf">Project</a>)));
+                <b>case</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#07f10793fddb1aae" class="t">FixAllScope</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9c02b956ab631d88">Solution</a>:
+                    <b>return</b> <span class="t">Task</span>.FromResult(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#b3ddd0a55e8bf94b" class="t">DisposableVariableNotDisposedCodeFixProvider</a>.<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#ba38f97a936e6eb3">MessageFormat</a>,
+                        <span id="r3 rd" class="r3 r">ct</span> =&gt; <a href="#2782c3e321c0148f">GetFixedSolutionAsync</a>(<span class="r0 r">fixAllContext</span>)));
+            }
+            <b>return null</b>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="2782c3e321c0148f" href="../R/2782c3e321c0148f.html" target="n" data-glyph="76,1">GetFixedSolutionAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r4 rd" class="r4 r">fixAllContext</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r5 rd" class="r5 r">newSolution</span> = <span class="r4 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#814dea7e1160077e">Solution</a>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d57a45799bc4a52e" class="k">var</a> <span id="r6 rd" class="r6 r">projectId</span> <b>in</b> <span class="r5 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#2800abcd032f3c15">ProjectIds</a>)
+                <span class="r5 r">newSolution</span> = <b>await</b> <a href="#fedf302170f5b64c">GetFixedProjectAsync</a>(<span class="r4 r">fixAllContext</span>, <span class="r5 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c554b9964ab32f06">GetProject</a>(<span class="r6 r">projectId</span>)).ConfigureAwait(<b>false</b>);
+            <b>return</b> <span class="r5 r">newSolution</span>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="fedf302170f5b64c" href="../R/fedf302170f5b64c.html" target="n" data-glyph="76,1">GetFixedProjectAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r7 rd" class="r7 r">fixAllContext</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d40daa52fa32a6c4" class="t">Project</a> <span id="r8 rd" class="r8 r">project</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r9 rd" class="r9 r">solution</span> = <span class="r8 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4c4d2a069da85c41">Solution</a>;
+            <b>var</b> <span id="r10 rd" class="r10 r">newDocuments</span> = <span class="r8 r">project</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9e72271524e0d9b3">Documents</a>.ToDictionary(<span id="r11 rd" class="r11 r">d</span> =&gt; <span class="r11 r">d</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>, <span id="r12 rd" class="r12 r">d</span> =&gt; <a href="#79269db66268f622">GetFixedDocumentAsync</a>(<span class="r7 r">fixAllContext</span>, <span class="r12 r">d</span>));
+            <b>await</b> <span class="t">Task</span>.WhenAll(<span class="r10 r">newDocuments</span>.Values).ConfigureAwait(<b>false</b>);
+            <b>foreach</b> (<b>var</b> <span id="r13 rd" class="r13 r">newDoc</span> <b>in</b> <span class="r10 r">newDocuments</span>)
+                <span class="r9 r">solution</span> = <span class="r9 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d63e3a736f35fb26">WithDocumentSyntaxRoot</a>(<span class="r13 r">newDoc</span>.Key, <span class="r13 r">newDoc</span>.Value.Result);
+            <b>return</b> <span class="r9 r">solution</span>;
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>&gt; <a id="79269db66268f622" href="../R/79269db66268f622.html" target="n" data-glyph="76,1">GetFixedDocumentAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f869ec2956b7d9eb" class="t">FixAllContext</a> <span id="r14 rd" class="r14 r">fixAllContext</span>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r15 rd" class="r15 r">document</span>)
+        {
+            <b>var</b> <span id="r16 rd" class="r16 r">diagnostics</span> = <b>await</b> <span class="r14 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#095faaf998f0da13">GetDocumentDiagnosticsAsync</a>(<span class="r15 r">document</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r17 rd" class="r17 r">root</span> = <b>await</b> <span class="r15 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r14 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#46f6905548a61514">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+            <b>var</b> <span id="r18 rd" class="r18 r">nodes</span> = <span class="r16 r">diagnostics</span>.Select(<span id="r19 rd" class="r19 r">d</span> =&gt; <span class="r17 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r19 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>)).Where(<span id="r20 rd" class="r20 r">n</span> =&gt; !<span class="r20 r">n</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#295e4dfa32129e54">IsMissing</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r21 rd" class="r21 r">newRoot</span> = <span class="r17 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(<span class="r18 r">nodes</span>, (<span id="r22 rd" class="r22 r">original</span>, <span id="r23 rd" class="r23 r">rewritten</span>) =&gt; <span class="r22 r">original</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="#5980db37a8be1fe9">disposeAnnotation</a>));
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r24 rd" class="r24 r">semanticModel</span> = <b>await</b> <span class="r15 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>(<span class="r14 r">fixAllContext</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#46f6905548a61514">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+            <b>while</b> (<b>true</b>)
+            {
+                <b>var</b> <span id="r25 rd" class="r25 r">annotatedNodes</span> = <span class="r21 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5dbd5590ba4a012b">GetAnnotatedNodes</a>(<a href="#5980db37a8be1fe9">disposeAnnotation</a>);
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r26 rd" class="r26 r">node</span> = <span class="r25 r">annotatedNodes</span>.FirstOrDefault();
+                <b>if</b> (<span class="r26 r">node</span> == <b>null</b>) <b>break</b>;
+                <span class="r21 r">newRoot</span> = <a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#b3ddd0a55e8bf94b" class="t">DisposableVariableNotDisposedCodeFixProvider</a>.<a href="DisposableVariableNotDisposedCodeFixProvider.cs.html#2ee3151f7b401ef2">CreateUsing</a>(<span class="r21 r">newRoot</span>, (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>)<span class="r26 r">node</span>, <span class="r24 r">semanticModel</span>);
+                <span class="r26 r">node</span> = <span class="r21 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5dbd5590ba4a012b">GetAnnotatedNodes</a>(<a href="#5980db37a8be1fe9">disposeAnnotation</a>).First();
+                <span class="r21 r">newRoot</span> = <span class="r21 r">newRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r26 r">node</span>, <span class="r26 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#19c4dc626ca51a2a">WithoutAnnotations</a>(<a href="#5980db37a8be1fe9">disposeAnnotation</a>));
+            }
+            <b>return</b> <span class="r21 r">newRoot</span>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

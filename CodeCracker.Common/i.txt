@@ -1,0 +1,7 @@
+ProjectSourcePath=src\Common\CodeCracker.Common\CodeCracker.Common.csproj
+DocumentCount=9
+LinesOfCode=587
+BytesOfCode=24455
+DeclaredSymbols=143
+DeclaredTypes=7
+PublicTypes=7

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityInIndexerReturnType.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(33);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/InconsistentAccessibility/InconsistentAccessibilityInIndexerReturnType.cs" target="_top">Design\InconsistentAccessibility\InconsistentAccessibilityInIndexerReturnType.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Linq;
+<b>using</b> System.Text;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.Properties;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design.InconsistentAccessibility
+{
+    <b>public sealed class</b> <a id="bceb2c65378e20c1" href="../../R/bceb2c65378e20c1.html" target="n" data-glyph="0,0" class="t"><span id="2ba5734e20b28fdf">InconsistentAccessibilityInIndexerReturnType</span></a> : <a href="InconsistentAccessibilityInfoProvider.cs.html#e4058d9b302c2e34" class="t">InconsistentAccessibilityInfoProvider</a>
+    {
+        <b>private static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="6415f9a2891c8daa" href="../../R/6415f9a2891c8daa.html" target="n" data-glyph="46,1">CodeActionMessage</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3263cf26058d2045" class="t">LocalizableResourceString</a>(<b>nameof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#840fb9000a5cc9fb">InconsistentAccessibilityInIndexerReturnType_Title</a>), <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#01d2e5af0fc437ad">ResourceManager</a>, <b>typeof</b>(<a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>));
+ 
+        <b>public async</b> <span class="t">Task</span>&lt;<a href="InconsistentAccessibilityInfo.cs.html#c3a636994e7617fd" class="t">InconsistentAccessibilityInfo</a>&gt; <a id="495555f9da2db556" href="../../R/495555f9da2db556.html" target="n" data-glyph="72,1">GetInconsistentAccessibilityInfoAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r0 rd" class="r0 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r1 rd" class="r1 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r2 rd" class="r2 r">cancellationToken</span>)
+        {
+            <a href="InconsistentAccessibilityInfo.cs.html#c3a636994e7617fd" class="k">var</a> <span id="r3 rd" class="r3 r">result</span> = <b>new</b> <a href="InconsistentAccessibilityInfo.cs.html#c3a636994e7617fd" class="t">InconsistentAccessibilityInfo</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r4 rd" class="r4 r">syntaxRoot</span> = <b>await</b> <span class="r0 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r2 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="k">var</a> <span id="r5 rd" class="r5 r">indexerThatRaisedError</span> = <span class="r4 r">syntaxRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="t">IndexerDeclarationSyntax</a>&gt;().FirstOrDefault();
+            <b>if</b> (<span class="r5 r">indexerThatRaisedError</span> != <b>null</b>)
+            {
+                <span class="r3 r">result</span>.<a href="InconsistentAccessibilityInfo.cs.html#f4b95516972fae93">TypeToChangeAccessibility</a> = <span class="r5 r">indexerThatRaisedError</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#dbd86f947a73f76d">Type</a>;
+                <span class="r3 r">result</span>.<a href="InconsistentAccessibilityInfo.cs.html#11c7b496002fdf66">CodeActionMessage</a> = <b>string</b>.Format(<a href="#6415f9a2891c8daa">CodeActionMessage</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#aee4b463ed562218">ToString</a>(), <span class="r3 r">result</span>.<a href="InconsistentAccessibilityInfo.cs.html#f4b95516972fae93">TypeToChangeAccessibility</a>, <span class="r5 r">indexerThatRaisedError</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bcc1aa95a20fb37e">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4bb964a3b8ba7cc5">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2802ea5a5c88cf12">ToString</a>());
+                <span class="r3 r">result</span>.<a href="InconsistentAccessibilityInfo.cs.html#ff2a5ab993a79b76">NewAccessibilityModifiers</a> = <span class="r5 r">indexerThatRaisedError</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#804f1eb3f42344ff">Modifiers</a>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#036274ce8afbec51">CloneAccessibilityModifiers</a>();
+            }
+ 
+            <b>return</b> <span class="r3 r">result</span>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

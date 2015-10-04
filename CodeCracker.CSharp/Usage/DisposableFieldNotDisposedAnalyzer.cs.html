@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposableFieldNotDisposedAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(95);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/DisposableFieldNotDisposedAnalyzer.cs" target="_top">Usage\DisposableFieldNotDisposedAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="8b92933b1c366ce3" href="../R/8b92933b1c366ce3.html" target="n" data-glyph="0,0" class="t"><span id="5e168435eaa71386">DisposableFieldNotDisposedAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="cdea5044408586c1" href="../R/cdea5044408586c1.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Dispose Fields Properly&quot;</span>;
+        <b>internal const string</b> <a id="0aded30918e25a80" href="../R/0aded30918e25a80.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Field {0} should be disposed.&quot;</span>;
+        <b>internal const string</b> <a id="4646db6fe47eed57" href="../R/4646db6fe47eed57.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="b90de09add795d0e" href="../R/b90de09add795d0e.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;This class has a disposable field and is not disposing it.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="525d3806ef72a36d" href="../R/525d3806ef72a36d.html" target="n" data-glyph="44,1">RuleForReturned</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#cdea5044408586c1">Title</a>,
+            <a href="#0aded30918e25a80">MessageFormat</a>,
+            <a href="#4646db6fe47eed57">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#b90de09add795d0e">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0f0410793c3211c5">DisposableFieldNotDisposed_Returned</a>));
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="9e112b4381ae4435" href="../R/9e112b4381ae4435.html" target="n" data-glyph="44,1">RuleForCreated</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#cdea5044408586c1">Title</a>,
+            <a href="#0aded30918e25a80">MessageFormat</a>,
+            <a href="#4646db6fe47eed57">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#b90de09add795d0e">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#40248057633d59f2">DisposableFieldNotDisposed_Created</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="06efea431a84706c" href="../R/06efea431a84706c.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#9e112b4381ae4435">RuleForCreated</a>, <a href="#525d3806ef72a36d">RuleForReturned</a>);
+ 
+        <b>public override void</b> <a id="e7127d6181070756" href="../R/e7127d6181070756.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#814f11e23a09e6f3">RegisterSymbolAction</a>(<a href="#1a77e9ad28d3658e">AnalyzeField</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5a9c4e3fffa6cb3">Field</a>);
+ 
+        <b>private static void</b> <a id="1a77e9ad28d3658e" href="../R/1a77e9ad28d3658e.html" target="n" data-glyph="76,1">AnalyzeField</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#2fdf5467e5e35082">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="k">var</a> <span id="r5 rd" class="r5 r">fieldSymbol</span> = (<a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a>;
+            <b>if</b> (!<span class="r5 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#823c491f63842556">Type</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#14726631ee5c2e02">AllInterfaces</a>.Any(<span id="r6 rd" class="r6 r">i</span> =&gt; <span class="r6 r">i</span>.ToString() == <span class="s">&quot;System.IDisposable&quot;</span>) &amp;&amp; <span class="r5 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#823c491f63842556">Type</a>.ToString() != <span class="s">&quot;System.IDisposable&quot;</span>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#582def1fcb55b1ba" class="k">var</a> <span id="r7 rd" class="r7 r">fieldSyntaxRef</span> = <span class="r5 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>.FirstOrDefault();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="k">var</a> <span id="r8 rd" class="r8 r">variableDeclarator</span> = <span class="r7 r">fieldSyntaxRef</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4bca9697879fc0f6">GetSyntax</a>() <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="t">VariableDeclaratorSyntax</a>;
+            <b>if</b> (<span class="r8 r">variableDeclarator</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<a href="#7968b3f27f84a661">ContainingTypeImplementsIDisposableAndCallsItOnTheField</a>(<span class="r4 r">context</span>, <span class="r5 r">fieldSymbol</span>, <span class="r5 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>)) <b>return</b>;
+            <b>var</b> <span id="r9 rd" class="r9 r">props</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt; { { <span class="s">&quot;variableIdentifier&quot;</span>, <span class="r8 r">variableDeclarator</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> } }.ToImmutableDictionary();
+            <b>if</b> (<span class="r8 r">variableDeclarator</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b04c1b4614c7fc95">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#525d3806ef72a36d">RuleForReturned</a>, <span class="r8 r">variableDeclarator</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r9 r">props</span>, <span class="r5 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>));
+            <b>else if</b> (<span class="r8 r">variableDeclarator</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>)
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b04c1b4614c7fc95">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#9e112b4381ae4435">RuleForCreated</a>, <span class="r8 r">variableDeclarator</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r9 r">props</span>, <span class="r5 r">fieldSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>));
+        }
+ 
+        <b>private static bool</b> <a id="7968b3f27f84a661" href="../R/7968b3f27f84a661.html" target="n" data-glyph="76,1">ContainingTypeImplementsIDisposableAndCallsItOnTheField</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a> <span id="r10 rd" class="r10 r">context</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a> <span id="r11 rd" class="r11 r">fieldSymbol</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r12 rd" class="r12 r">typeSymbol</span>)
+        {
+            <b>if</b> (<span class="r12 r">typeSymbol</span> == <b>null</b>) <b>return false</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r13 rd" class="r13 r">iDisposableInterface</span> = <span class="r12 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#14726631ee5c2e02">AllInterfaces</a>.FirstOrDefault(<span id="r14 rd" class="r14 r">i</span> =&gt; <span class="r14 r">i</span>.ToString() == <span class="s">&quot;System.IDisposable&quot;</span>);
+            <b>if</b> (<span class="r13 r">iDisposableInterface</span> != <b>null</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="k">var</a> <span id="r15 rd" class="r15 r">disposableMethod</span> = <span class="r13 r">iDisposableInterface</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fe6409ce749ade4e">GetMembers</a>(<span class="s">&quot;Dispose&quot;</span>).OfType&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>&gt;().First(<span id="r16 rd" class="r16 r">d</span> =&gt; <span class="r16 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fdb19d020beda54e">Arity</a> == 0);
+                <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="k">var</a> <span id="r17 rd" class="r17 r">disposeMethodSymbol</span> = <span class="r12 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1ebe0554a546dcf3">FindImplementationForInterfaceMember</a>(<span class="r15 r">disposableMethod</span>) <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>;
+                <b>if</b> (<span class="r17 r">disposeMethodSymbol</span> != <b>null</b>)
+                {
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r18 rd" class="r18 r">disposeMethod</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>)<span class="r17 r">disposeMethodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>.FirstOrDefault()?.<a href="@1@Microsoft.CodeAnalysis/A.html#4bca9697879fc0f6">GetSyntax</a>();
+                    <b>if</b> (<span class="r18 r">disposeMethod</span> == <b>null</b>) <b>return false</b>;
+                    <b>if</b> (<span class="r18 r">disposeMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21f487672c2ad64b">Any</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9d0b9f54bb707a75">AbstractKeyword</a>)) <b>return true</b>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="k">var</a> <span id="r19 rd" class="r19 r">typeDeclaration</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#726b9d80aa76a768" class="t">TypeDeclarationSyntax</a>)<span class="r12 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>.FirstOrDefault().<a href="@1@Microsoft.CodeAnalysis/A.html#4bca9697879fc0f6">GetSyntax</a>();
+                    <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r20 rd" class="r20 r">semanticModel</span> = <span class="r10 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#034dbcf1cf0735ea">Compilation</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#53e11cf29c3c4036">GetSemanticModel</a>(<span class="r19 r">typeDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b30be67e513158eb">SyntaxTree</a>);
+                    <b>if</b> (<a href="#15938fdf03062fb2">CallsDisposeOnField</a>(<span class="r11 r">fieldSymbol</span>, <span class="r18 r">disposeMethod</span>, <span class="r20 r">semanticModel</span>)) <b>return true</b>;
+                }
+            }
+            <b>return false</b>;
+        }
+ 
+        <b>private static bool</b> <a id="15938fdf03062fb2" href="../R/15938fdf03062fb2.html" target="n" data-glyph="76,1">CallsDisposeOnField</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a> <span id="r21 rd" class="r21 r">fieldSymbol</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r22 rd" class="r22 r">disposeMethod</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r23 rd" class="r23 r">semanticModel</span>)
+        {
+            <b>var</b> <span id="r24 rd" class="r24 r">hasDisposeCall</span> = <span class="r22 r">disposeMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bc3b9b57b05e7d0">Statements</a>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#cc5ca0d98e6c43b4" class="t">ExpressionStatementSyntax</a>&gt;()
+                .Any(<span id="r25 rd" class="r25 r">exp</span> =&gt;
+                {
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r26 rd" class="r26 r">invocation</span> = <span class="r25 r">exp</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1b8e9fd67912d209">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>;
+                    <b>if</b> (!<span class="r26 r">invocation</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a>?.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff818812b7a56bce">SimpleMemberAccessExpression</a>) ?? <b>true</b>) <b>return false</b>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r27 rd" class="r27 r">memberAccess</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>)<span class="r26 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a>;
+                    <b>if</b> (<span class="r27 r">memberAccess</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8dd001af6537653d">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>() != <span class="s">&quot;Dispose&quot;</span> || <span class="r27 r">memberAccess</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b71fcdd5ebea8e85">Arity</a> != 0) <b>return false</b>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r28 rd" class="r28 r">memberAccessIdentificer</span> = <span class="r27 r">memberAccess</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#89a6a33327342122">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+                    <b>if</b> (<span class="r28 r">memberAccessIdentificer</span> == <b>null</b>) <b>return false</b>;
+                    <b>return</b> <span class="r21 r">fieldSymbol</span>.Equals(<span class="r23 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r28 r">memberAccessIdentificer</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>);
+                });
+            <b>return</b> <span class="r24 r">hasDisposeCall</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

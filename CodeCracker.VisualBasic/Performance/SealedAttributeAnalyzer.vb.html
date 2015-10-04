@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html><head><title>SealedAttributeAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(52);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Performance/SealedAttributeAnalyzer.vb" target="_top">Performance\SealedAttributeAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> System.Collections.Immutable
+ 
+<b>Namespace</b> Performance
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="8d3d8bc604c10284" href="../R/8d3d8bc604c10284.html" target="n" data-glyph="0,0" class="t"><span id="01f2cda00c97cc00">SealedAttributeAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="39ad319fca794f1b" href="../R/39ad319fca794f1b.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d6e29a9282628302">SealedAttribute</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="8c51f9afe416c294" href="../R/8c51f9afe416c294.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;Unsealed Attribute&quot;</span>
+        <b>Public Const</b> <a id="8ff079ac6921f10a" href="../R/8ff079ac6921f10a.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;Mark &#39;{0}&#39; as NotInheritable.&quot;</span>
+        <b>Public Const</b> <a id="bf832d889d5f91a7" href="../R/bf832d889d5f91a7.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>
+        <b>Public Const</b> <a id="4198dee102a938ad" href="../R/4198dee102a938ad.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;Framework methods that retrieve attributes by default search the entire inheritence hierarchy of the attribute class. Marking the type as NotInheritable eliminates this search and can improve performance.&quot;</span>
+        <b>Protected Shared</b> <a id="d4056b3854fe818c" href="../R/d4056b3854fe818c.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#39ad319fca794f1b">Id</a>,
+            <a href="#8c51f9afe416c294">Title</a>,
+            <a href="#8ff079ac6921f10a">MessageFormat</a>,
+            <a href="#bf832d889d5f91a7">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#4198dee102a938ad">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d6e29a9282628302">SealedAttribute</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="32229de8bcf27ccb" href="../R/32229de8bcf27ccb.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#d4056b3854fe818c">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="f302e3bdad5cbd6d" href="../R/f302e3bdad5cbd6d.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#814f11e23a09e6f3">RegisterSymbolAction</a>(<b>AddressOf</b> <a href="#e74887737c786bd7">Analyze</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#948cc1dd75de6895">NamedType</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="e74887737c786bd7" href="../R/e74887737c786bd7.html" target="n" data-glyph="76,1">Analyze</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#24b89e371c62f308">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">type</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)
+            <b>If</b> <span class="r5 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> &lt;&gt; <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e11035df95f7fe47">Class</a> <b>Then Exit Sub
+ 
+            If Not</b> <a href="#4fc64cfa0c342f55">IsAttribute</a>(<span class="r5 r">type</span>) <b>Then Exit Sub
+            If</b> (<span class="r5 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#3f02a16f43bd286d">IsAbstract</a> <b>OrElse</b> <span class="r5 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92631bc5d794919">IsSealed</a>) <b>Then Exit Sub</b>
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b04c1b4614c7fc95">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#d4056b3854fe818c">Rule</a>, <span class="r5 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6fdf20baf08270e2">Locations</a>(0), <span class="r5 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>))
+        <b>End Sub
+ 
+        Public Shared Function</b> <a id="4fc64cfa0c342f55" href="../R/4fc64cfa0c342f55.html" target="n" data-glyph="72,1">IsAttribute</a>(<span id="r6 rd" class="r6 r">symbol</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="t">ITypeSymbol</a>) <b>As Boolean
+            Dim</b> <span id="r7 rd" class="r7 r">base</span> = <span class="r6 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a>
+            <b>Dim</b> <span id="r8 rd" class="r8 r">attributeName</span> = <b>GetType</b>(<span class="t">Attribute</span>).Name
+            <b>While</b> <span class="r7 r">base</span> <b>IsNot Nothing
+                If</b> <span class="r7 r">base</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> = <span class="r8 r">attributeName</span> <b>Then Return True</b>
+                <span class="r7 r">base</span> = <span class="r7 r">base</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a>
+            <b>End While
+            Return False
+        End Function
+ 
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

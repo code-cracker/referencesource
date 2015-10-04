@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyCatchBlockAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(44);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Design/EmptyCatchBlockAnalyzer.vb" target="_top">Design\EmptyCatchBlockAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Design
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="503c9021e7e5586f" href="../R/503c9021e7e5586f.html" target="n" data-glyph="0,0" class="t"><span id="95c5d5d371ea2b91">EmptyCatchBlockAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="706bca9a0672ab90" href="../R/706bca9a0672ab90.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#875dd9780f6cb85c">EmptyCatchBlock</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="8164e187d967f676" href="../R/8164e187d967f676.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;Catch block cannot be empty&quot;</span>
+        <b>Public Const</b> <a id="30b52a49da738459" href="../R/30b52a49da738459.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;{0}&quot;</span>
+        <b>Public Const</b> <a id="7ed33674dd16187a" href="../R/7ed33674dd16187a.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>
+        <b>Public Const</b> <a id="0642a48f6cdbbd27" href="../R/0642a48f6cdbbd27.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;An empty catch block suppresses all errors and shouldn&#39;t be used.
+If the error is expected, consider logging it or changing the control flow such that it is explicit.&quot;</span>
+        <b>Protected Shared</b> <a id="f9644eab61f75bd8" href="../R/f9644eab61f75bd8.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#706bca9a0672ab90">Id</a>,
+            <a href="#8164e187d967f676">Title</a>,
+            <a href="#30b52a49da738459">MessageFormat</a>,
+            <a href="#7ed33674dd16187a">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#0642a48f6cdbbd27">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#875dd9780f6cb85c">EmptyCatchBlock</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="46049977ebf01f9b" href="../R/46049977ebf01f9b.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#f9644eab61f75bd8">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="d2839d2cf8cc1218" href="../R/d2839d2cf8cc1218.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#3251326638a93d6a">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#53128f0ffef125a4">CatchBlock</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="3251326638a93d6a" href="../R/3251326638a93d6a.html" target="n" data-glyph="76,1">Analyzer</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">catchBlock</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fce85eedb588219e" class="t">CatchBlockSyntax</a>)
+            <b>If</b> (<span class="r5 r">catchBlock</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#a21e6218b31450cf">Statements</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#83189d65513d4ea2">Count</a> &lt;&gt; 0) <b>Then Exit Sub
+            Dim</b> <span id="r6 rd" class="r6 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f9644eab61f75bd8">Rule</a>, <span class="r5 r">catchBlock</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="s">&quot;Empty Catch Block.&quot;</span>)
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r6 r">diag</span>)
+        <b>End Sub
+ 
+    End Class
+End Namespace</b>
+</pre></td></tr></table></div></body></html>

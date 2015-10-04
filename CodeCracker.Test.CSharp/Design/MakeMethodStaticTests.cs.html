@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeMethodStaticTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(544);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Design/MakeMethodStaticTests.cs" target="_top">Design\MakeMethodStaticTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Design;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+<b>using</b> System;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Design
+{
+    <b>public class</b> <a id="a0da025e85f54317" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="cf61fc03f58b1da4">MakeMethodStaticTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#ca3ad11b30b3eb88" class="t">MakeMethodStaticAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#bea04657a317f627" class="t">MakeMethodStaticCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;static void Foo() { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;public virtual void Foo() { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;string i; void Foo() { Console.WriteLine(i); }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;string i; void Foo() { i = &quot;&quot;&quot;&quot;; }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;string i; string Foo() { return i; }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;string i;
+void Foo()
+{
+    if (System.DateTime.Now.Seconds &gt; 5)
+    {
+        Console.WriteLine(i);
+    }
+}&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a9003963c5baae30" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnostic</a>(<b>string</b> <span id="r0 rd" class="r0 r">code</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">source</span> = <span class="r0 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="45d447d68d03e8f0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnNew</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+        class B
+        {
+            private int i = 1;
+            public int Foo() =&gt; i;
+        }
+        class C : B
+        {
+            public new int Foo() =&gt; 1;
+        }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="63717449806123b8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnOverrideAndAbstract</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+        abstract class B
+        {
+            public abstract void Foo();
+        }
+        class C : B
+        {
+            public override void Foo() { }
+        }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="531152309f3d8320" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnPartial</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+        partial class C
+        {
+            partial void Foo() { }
+            partial void Foo();
+        }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6732afcf8a7eb775" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnExplicitInterfaceImplementation</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+        interface I
+        {
+            int Foo();
+        }
+        class C : I
+        {
+            int I.Foo() =&gt; 42;
+        }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">source</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;void Foo() { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;void Foo()
+{
+    Console.WriteLine(1);
+}&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;void Foo()
+{
+    Console.WriteLine(i);
+}
+static string i;&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;void Foo() =&gt; Console.WriteLine(1);&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f36868a54165ba3e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WithDiagnostic</a>(<b>string</b> <span id="r6 rd" class="r6 r">code</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">source</span> = <span class="r6 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r8 rd" class="r8 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#9e5436c35093b60e">MakeMethodStatic</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#ca3ad11b30b3eb88" class="t">MakeMethodStaticAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#9f0f17698e8c20cd">MessageFormat</a>, <span class="s">&quot;Foo&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 8, 18) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r7 r">source</span>, <span class="r8 r">expected</span>);
+        }
+ 
+        [<span class="t">Theory</span>]
+        [<span class="t">InlineData</span>(<span class="s">&quot;void Foo() { }&quot;</span>, <span class="s">&quot;static void Foo() { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">&quot;int Foo() =&gt; 1;&quot;</span>, <span class="s">&quot;static int Foo() =&gt; 1;&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+#region
+    void Foo() { }
+#endregion&quot;</span>, <span class="s">@&quot;
+#region
+    static void Foo() { }
+#endregion&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+///&lt;summary&gt;Method summary&lt;/summary&gt;
+void Foo() { }&quot;</span>, 
+            <span class="s">@&quot;
+///&lt;summary&gt;Method summary&lt;/summary&gt;
+static void Foo() { }&quot;</span>)]
+        [<span class="t">InlineData</span>(<span class="s">@&quot;
+///&lt;summary&gt;Method summary&lt;/summary&gt;
+public void Foo() { }&quot;</span>,
+            <span class="s">@&quot;
+///&lt;summary&gt;Method summary&lt;/summary&gt;
+public static void Foo() { }&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8e2cf2a3d88b832f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixMakeMethodStaticWithoutReference</a>(<b>string</b> <span id="r9 rd" class="r9 r">code</span>, <b>string</b> <span id="r10 rd" class="r10 r">fix</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">source</span> = <span class="r9 r">code</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">fixtest</span> = <span class="r10 r">fix</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">source</span>, <span class="r12 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="70ca1e6ff9854d03" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWithReference</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;void Foo() { }
+void Bar()
+{
+    Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r14 rd" class="r14 r">fixtest</span> = <span class="s">@&quot;static void Foo() { }
+void Bar()
+{
+    Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">source</span>, <span class="r14 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7b0d42fdc3aa8f8c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWithReferenceWithThis</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;void Foo() { }
+void Bar()
+{
+    this.Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r16 rd" class="r16 r">fixtest</span> = <span class="s">@&quot;static void Foo() { }
+void Bar()
+{
+    Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r15 r">source</span>, <span class="r16 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2069f8b33be37b62" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWithReferenceAndLongNames</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r17 rd" class="r17 r">source</span> = <span class="s">@&quot;int Foo() =&gt; 1;
+void Bar()
+{
+    var result = this.Foo() + this.Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r18 rd" class="r18 r">fixtest</span> = <span class="s">@&quot;static int Foo() =&gt; 1;
+void Bar()
+{
+    var result = Foo() + Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r17 r">source</span>, <span class="r18 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1795dc7cdb6e3763" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWithReferenceInDifferentDocs</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r19 rd" class="r19 r">source1</span> = <span class="s">@&quot;private int i;
+void Bar()
+{
+    i = 1;
+    var t = new Type2();
+    t.Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;Type1&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r20 rd" class="r20 r">source2</span> = <span class="s">@&quot;public void Foo() { }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;Type2&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r21 rd" class="r21 r">fixtest1</span> = <span class="s">@&quot;private int i;
+void Bar()
+{
+    i = 1;
+    var t = new Type2();
+    Type2.Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;Type1&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r22 rd" class="r22 r">fixtest2</span> = <span class="s">@&quot;public static void Foo() { }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;Type2&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b>[] { <span class="r19 r">source1</span>, <span class="r20 r">source2</span> }, <b>new</b>[] { <span class="r21 r">fixtest1</span>, <span class="r22 r">fixtest2</span> });
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="25af53c875624897" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWithReferenceInDifferentDocsWithCallsOnTheSameLine</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r23 rd" class="r23 r">source1</span> = <span class="s">@&quot;private int i;
+void Bar()
+{
+    i = 1;
+    var t = new LargeTypeName();
+    var result = t.Foo() + t.Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;Type1&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r24 rd" class="r24 r">source2</span> = <span class="s">@&quot;public int Foo() { return 1; }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;LargeTypeName&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r25 rd" class="r25 r">fixtest1</span> = <span class="s">@&quot;private int i;
+void Bar()
+{
+    i = 1;
+    var t = new LargeTypeName();
+    var result = LargeTypeName.Foo() + LargeTypeName.Foo();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;Type1&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r26 rd" class="r26 r">fixtest2</span> = <span class="s">@&quot;public static int Foo() { return 1; }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;LargeTypeName&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b>[] { <span class="r23 r">source1</span>, <span class="r24 r">source2</span> }, <b>new</b>[] { <span class="r25 r">fixtest1</span>, <span class="r26 r">fixtest2</span> });
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d071ea1ad9cbf1db" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWhenReferencingAsAMethodGroup</a>()
+        {
+            <b>const string</b> <span id="r27 rd" class="r27 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public virtual void Foo()
+            {
+                Func&lt;int&gt; i = Bar;
+            }
+            public int Bar() =&gt; 1;
+        }
+        class Context
+        {
+            private int i;
+            public void Register(Func&lt;int&gt; f) { i++; }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r28 rd" class="r28 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public virtual void Foo()
+            {
+                Func&lt;int&gt; i = Bar;
+            }
+            public static int Bar() =&gt; 1;
+        }
+        class Context
+        {
+            private int i;
+            public void Register(Func&lt;int&gt; f) { i++; }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r27 r">source</span>, <span class="r28 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7e72b51bd8d749ec" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodWithLeadingTriviaStaticWhenReferencingAsAMethodGroup</a>()
+        {
+            <b>const string</b> <span id="r29 rd" class="r29 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public virtual void Foo()
+            {
+                Func&lt;int&gt; i = Bar;
+            }
+ 
+            /// &lt;summary&gt;Bar method&lt;/summary&gt;
+            int Bar() =&gt; 1;
+        }
+        class Context
+        {
+            private int i;
+            public void Register(Func&lt;int&gt; f) { i++; }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r30 rd" class="r30 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public virtual void Foo()
+            {
+                Func&lt;int&gt; i = Bar;
+            }
+ 
+            /// &lt;summary&gt;Bar method&lt;/summary&gt;
+            static int Bar() =&gt; 1;
+        }
+        class Context
+        {
+            private int i;
+            public void Register(Func&lt;int&gt; f) { i++; }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r29 r">source</span>, <span class="r30 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="038616a0d1398df4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">MakeMethodStaticWhenReferencingAsAMethodGroupPassedToAFunction</a>()
+        {
+            <b>const string</b> <span id="r31 rd" class="r31 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public virtual void Foo(Context c) =&gt; c.Register(Bar);
+            public int Bar() =&gt; 1;
+        }
+        class Context
+        {
+            private int i;
+            public void Register(Func&lt;int&gt; f) { i++; }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r32 rd" class="r32 r">fixtest</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public virtual void Foo(Context c) =&gt; c.Register(Bar);
+            public static int Bar() =&gt; 1;
+        }
+        class Context
+        {
+            private int i;
+            public void Register(Func&lt;int&gt; f) { i++; }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r31 r">source</span>, <span class="r32 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6766039b7ca2f9f9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticWhenImplementingInterface</a>()
+        {
+            <b>const string</b> <span id="r33 rd" class="r33 r">source</span> = <span class="s">@&quot;
+    using System;
+    namespace ConsoleApplication1
+    {
+        interface ITypeName
+        {
+            int Bar();
+        }
+        class TypeName : ITypeName
+        {
+            public int Bar() =&gt; 1;
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r33 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7a61fda33ddb9e73" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnXUnitTestMethods</a>()
+        {
+            <b>const string</b> <span id="r34 rd" class="r34 r">source</span> = <span class="s">@&quot;
+        using Xunit;
+        namespace ConsoleApplication1
+        {
+            class XUnitTests
+            {
+                [Fact]
+                void FactMethod() { }
+ 
+                [Theory]
+                void TheoryMethod() { }
+ 
+                [TheoryAttribute]
+                void TheoryMethod2() { }
+            }
+        }&quot;</span>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f81ae916be841cef" class="k">var</a> <span id="r35 rd" class="r35 r">xunitReference</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#2ec3b0a924c06d3f" class="t">MetadataReference</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#ed274aef5ec6fd03">CreateFromFile</a>(<b>typeof</b>(<span class="t">FactAttribute</span>).<a href="@0@mscorlib/A.html#e87d536bd07fab01">Assembly</a>.<a href="@0@mscorlib/A.html#3faa3e0e41d8868b">Location</a>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r34 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f603a4fd49580174" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnMicrosoftTestMethods</a>()
+        {
+            <b>const string</b> <span id="r36 rd" class="r36 r">source</span> = <span class="s">@&quot;
+        using Microsoft.VisualStudio.TestTools.UnitTesting;
+        namespace ConsoleApplication1
+        {
+            class MsTestTests
+            {
+                [TestMethod]
+                void TestMethod() { }
+ 
+                [AssemblyInitialize]
+                void AssemblyInitializeMethod() { }
+ 
+                [AssemblyCleanup]
+                AssemblyCleanup() { }
+ 
+                [ClassInitialize]
+                void ClassInitializeMethod() { }
+ 
+                [ClassCleanup]
+                void ClassCleanupMethod() { }
+ 
+                [TestInitialize]
+                void TestInitializeMethod() { }
+ 
+                [TestCleanup]
+                void TestCleanupMethod() { }
+            }
+        }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r36 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7a0949b0a0d919b7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoDiagnosticOnNUnitTestMethods</a>()
+        {
+            <b>const string</b> <span id="r37 rd" class="r37 r">nunitNonTestFixtureWithAttributesSource</span> = <span class="s">@&quot;
+        using NUnit.Framework;
+        namespace ConsoleApplication1
+        {
+            class nunitNonTestFixtureWithAttributesSource
+            {
+                [Test]
+                void TestMethod() { }
+ 
+                [TestCase]
+                void TestCaseMethod() { }
+ 
+                [TestCaseSource]
+                void TestCaseSourceMethod() { }
+ 
+                [TestFixtureSetup]
+                void TestFixtureSetupMethod() { }
+ 
+                [TestFixtureTeardown]
+                void TestFixtureTeardownMethod() { }
+ 
+                [SetUp]
+                void SetUpMethod() { }
+ 
+                [TearDown]
+                void TearDownMethod() { }
+ 
+                [OneTimeSetUp]
+                void OneTimeSetUpMethod() { }
+ 
+                [OneTimeTearDown]
+                void OneTimeTearDownMethod() { }
+            }
+        }&quot;</span>;
+ 
+            <b>const string</b> <span id="r38 rd" class="r38 r">nunitTestFixtureWithoutAttributesSource</span> = <span class="s">@&quot;
+        using NUnit.Framework;
+ 
+        namespace NUnit.Framework
+        {
+            public class TestFixtureAttribute : System.Attribute
+            {
+            }
+        }
+ 
+        namespace ConsoleApplication2
+        {
+            [TestFixture]
+            class NUnitTestFixtureWithoutAttributes
+            {
+                void TestMethod() { }
+ 
+                void MethodUnderTest() { }
+ 
+                void MethodTestShouldPass() { }
+            }
+        }&quot;</span>;
+ 
+            <b>const string</b> <span id="r39 rd" class="r39 r">nunitWithoutTestFixtureWithTestAttributeAndOtherNonAttributedMethodsSource</span> = <span class="s">@&quot;
+        using NUnit.Framework;
+        namespace ConsoleApplication3
+        {
+            class NUnitWithoutTestFixtureWithTestAttributeAndOtherNonAttributedMethods
+            {
+                [Test]
+                void TestMethod() { }
+ 
+                void MethodUnderTest() { }
+            }
+        }&quot;</span>;
+ 
+            <b>const string</b> <span id="r40 rd" class="r40 r">nunitWithoutTestFixtureWithTestCaseAttributeAndOtherNonAttributedMethodsSource</span> = <span class="s">@&quot;
+        using NUnit.Framework;
+        namespace ConsoleApplication4
+        {
+            class NUnitWithoutTestFixtureWithTestCaseAttributeAndOtherNonAttributedMethods
+            {
+                [TestCase]
+                void TestMethod() { }
+ 
+                void MethodUnderTest() { }
+            }
+        }&quot;</span>;
+ 
+            <b>const string</b> <span id="r41 rd" class="r41 r">nunitWithoutTestFixtureWithTestCaseSourceAttributeAndOtherNonAttributedMethodsSource</span> = <span class="s">@&quot;
+        using NUnit.Framework;
+        namespace ConsoleApplication5
+        {
+            class NUnitWithoutTestFixtureWithTestCaseSourceAttributeAndOtherNonAttributedMethods
+            {
+                [TestCaseSource]
+                void TestMethod() { }
+ 
+                void MethodUnderTest() { }
+            }
+        }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#9a10f8706f7768b8">VerifyCSharpHasNoDiagnosticsAsync</a>(<b>new</b> <b>string</b>[] {
+                <span class="r37 r">nunitNonTestFixtureWithAttributesSource</span>,
+                <span class="r38 r">nunitTestFixtureWithoutAttributesSource</span>,
+                <span class="r39 r">nunitWithoutTestFixtureWithTestAttributeAndOtherNonAttributedMethodsSource</span>,
+                <span class="r40 r">nunitWithoutTestFixtureWithTestCaseAttributeAndOtherNonAttributedMethodsSource</span>,
+                <span class="r41 r">nunitWithoutTestFixtureWithTestCaseSourceAttributeAndOtherNonAttributedMethodsSource</span>
+            });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

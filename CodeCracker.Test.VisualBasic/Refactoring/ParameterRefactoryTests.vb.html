@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html><head><title>ParameterRefactoryTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(185);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Refactoring/ParameterRefactoryTests.vb" target="_top">Refactoring\ParameterRefactoryTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Refactoring
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Refactoring
+    <b>Public Class</b> <a id="80c9f57302f8c930" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="d7409cd86ddb0f3e">ParameterRefactoryTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#909b1eaa4124695a" class="t">ParameterRefactoryAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#547250a4e5d27e16" class="t">ParameterRefactoryCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="1c0e244960d50311" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodDoesNotThreeParametersNotSuggestNewClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(name As String, age As String, day As String)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="761ce63f9c076833" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasElementBodyAndHasMoreThanThreeParametersShouldNotSuggestNewClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(name As String, age As String, day As Integer, year As Integer)
+            If True Then
+                day = 10
+            End If
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="ae04a910a00e8bbd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasByRefParameterShouldNotSuggestNewClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(a As String, b As String, year As Integer, ByRef d As String)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f8e331f3177175bb" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenExtensionMethodShouldNotSuggestNewClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Module TypeName
+        &lt;System.Runtime.CompilerServices.Extension&gt;
+        Public Sub Foo(name As String, age As String, day As String, d As String)
+        End Sub
+    End Module
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e18722707dadc2b6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasParamArayShouldNotSuggestNewClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(name As String, age As String, ParamArray day() As String)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="6c9a73ecb76a620f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldUpdateParameterToClass</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(a As String, b As String, year As Integer, d As String)
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r6 rd" class="r6 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(newClassFoo As NewClassFoo)
+        End Sub
+    End Class
+ 
+    Public Class NewClassFoo
+        Public Property A  As String
+        Public Property B  As String
+        Public Property Year  As Integer
+        Public Property D  As String
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">fix</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="1ab4e72da631387f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenHasNotNamespaceShouldGenerateClassParameter</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">&quot;
+Imports System
+Class TypeName
+    Public Sub Foo(a As String, b As String, year As Integer, d As String)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r8 rd" class="r8 r">fix</span> = <span class="s">&quot;
+Imports System
+Class TypeName
+    Public Sub Foo(newClassFoo As NewClassFoo)
+    End Sub
+End Class
+ 
+Public Class NewClassFoo
+    Public Property A  As String
+    Public Property B  As String
+    Public Property Year  As Integer
+    Public Property D  As String
+End Class
+&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r7 r">test</span>, <span class="r8 r">fix</span>, 0)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="0c2c0363de42abaa" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldGenerateNewClassFoo2</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(newClassFoo As NewClassFoo)
+        End Sub
+        Public Sub Foo2(a As String, b As String, year As Integer, d As String)
+        End Sub
+    End Class
+    Public Class NewClassFoo
+        Public Property A As String
+        Public Property B As String
+        Public Property Year As Integer
+        Public Property D As String
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Const</b> <span id="r10 rd" class="r10 r">fix</span> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+    Class TypeName
+        Public Sub Foo(newClassFoo As NewClassFoo)
+        End Sub
+        Public Sub Foo2(newClassFoo2 As NewClassFoo2)
+        End Sub
+    End Class
+    Public Class NewClassFoo
+        Public Property A As String
+        Public Property B As String
+        Public Property Year As Integer
+        Public Property D As String
+    End Class
+ 
+    Public Class NewClassFoo2
+        Public Property A  As String
+        Public Property B  As String
+        Public Property Year  As Integer
+        Public Property D  As String
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">fix</span>, 0)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

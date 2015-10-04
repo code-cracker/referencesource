@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeLocalVariableConstWhenItIsPossibleAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(85);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Performance/MakeLocalVariableConstWhenItIsPossibleAnalyzer.cs" target="_top">Performance\MakeLocalVariableConstWhenItIsPossibleAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Performance
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="a0e2a25871c3c1b5" href="../R/a0e2a25871c3c1b5.html" target="n" data-glyph="0,0" class="t"><span id="17cd634b458d890c">MakeLocalVariableConstWhenItIsPossibleAnalyzer</span></a> :
+        <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="8a983b38dc4c3f1d" href="../R/8a983b38dc4c3f1d.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Make Local Variable Constant.&quot;</span>;
+        <b>internal const string</b> <a id="421b337af52a910c" href="../R/421b337af52a910c.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;This variables can be made const.&quot;</span>;
+        <b>internal const string</b> <a id="c86d4af5255720c4" href="../R/c86d4af5255720c4.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>;
+        <b>const string</b> <a id="1297e16e37710655" href="../R/1297e16e37710655.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;This variable is assigned a constant value and never changed it can be made &#39;const&#39;&quot;</span>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="e674a1cc58c19dd1" href="../R/e674a1cc58c19dd1.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#640c4f61208ae5ab">MakeLocalVariableConstWhenItIsPossible</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#8a983b38dc4c3f1d">Title</a>,
+            <a href="#421b337af52a910c">MessageFormat</a>,
+            <a href="#c86d4af5255720c4">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#1297e16e37710655">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#640c4f61208ae5ab">MakeLocalVariableConstWhenItIsPossible</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="c8a9c7b5fbecbdaa" href="../R/c8a9c7b5fbecbdaa.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#e674a1cc58c19dd1">Rule</a>);
+ 
+        <b>public override void</b> <a id="6a76e0c1eff4185f" href="../R/6a76e0c1eff4185f.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#45158b803420e7f9">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c904569d1143fd32">LocalDeclarationStatement</a>);
+ 
+        <b>private static void</b> <a id="45158b803420e7f9" href="../R/45158b803420e7f9.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6d3fe3a387240c9e" class="k">var</a> <span id="r5 rd" class="r5 r">localDeclaration</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6d3fe3a387240c9e" class="t">LocalDeclarationStatementSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r6 rd" class="r6 r">semanticModel</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>;
+ 
+            <b>if</b> (!<span class="r5 r">localDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#20f50e3e5ee0afd9">IsConst</a>
+                &amp;&amp; <a href="#0abb9882b95e9d7e">IsDeclarationConstFriendly</a>(<span class="r5 r">localDeclaration</span>, <span class="r6 r">semanticModel</span>)
+                &amp;&amp; <a href="#28cf2ff482fcad11">AreVariablesOnlyWrittenInsideDeclaration</a>(<span class="r5 r">localDeclaration</span>, <span class="r6 r">semanticModel</span>) )
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r7 rd" class="r7 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#e674a1cc58c19dd1">Rule</a>, <span class="r5 r">localDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>());
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diagnostic</span>);
+            }
+        }
+ 
+        <b>static bool</b> <a id="0abb9882b95e9d7e" href="../R/0abb9882b95e9d7e.html" target="n" data-glyph="76,1">IsDeclarationConstFriendly</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6d3fe3a387240c9e" class="t">LocalDeclarationStatementSyntax</a> <span id="r8 rd" class="r8 r">declaration</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r9 rd" class="r9 r">semanticModel</span>)
+        {
+            <span class="c">// all variables could be const?</span>
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="k">var</a> <span id="r10 rd" class="r10 r">variable</span> <b>in</b> <span class="r8 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29fe842192116181">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>)
+            {
+                <b>if</b> (<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a> == <b>null</b>) <b>return false</b>;
+                <b>if</b> (<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8a3b0b47e0619d1" class="t">InterpolatedStringExpressionSyntax</a>) <b>return false</b>;
+ 
+                <span class="c">// is constant</span>
+                <a href="@1@Microsoft.CodeAnalysis/A.html#86bbd87a0ffc79bf" class="k">var</a> <span id="r11 rd" class="r11 r">constantValue</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a>);
+                <b>var</b> <span id="r12 rd" class="r12 r">valueIsConstant</span> = <span class="r11 r">constantValue</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1d6e9fac604b3517">HasValue</a>;
+                <b>if</b> (!<span class="r12 r">valueIsConstant</span>) <b>return false</b>;
+ 
+                <span class="c">// if reference type, value is null?</span>
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29171ac4ad60a546" class="k">var</a> <span id="r13 rd" class="r13 r">variableTypeName</span> = <span class="r8 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29fe842192116181">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#aee67d0d4a44663f">Type</a>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="k">var</a> <span id="r14 rd" class="r14 r">variableType</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#937bca6b4366cf65">GetTypeInfo</a>(<span class="r13 r">variableTypeName</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#7f848b8b3703eab5">ConvertedType</a>;
+                <b>if</b> (<span class="r14 r">variableType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#ceee05362776c494">IsReferenceType</a> &amp;&amp; <span class="r14 r">variableType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#236fc9e187f143b5">System_String</a> &amp;&amp; <span class="r11 r">constantValue</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a> != <b>null</b>) <b>return false</b>;
+ 
+                <span class="c">// nullable?</span>
+                <b>if</b> (<span class="r14 r">variableType</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#001dbe54ab60ea5f">OriginalDefinition</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5c2777fb1e34001a">System_Nullable_T</a>) <b>return false</b>;
+ 
+                <span class="c">// value can be converted to variable type?</span>
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#71a8583b25575550" class="k">var</a> <span id="r15 rd" class="r15 r">conversion</span> = <span class="r9 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#32df2265a9af226d">ClassifyConversion</a>(<span class="r10 r">variable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a>, <span class="r14 r">variableType</span>);
+                <b>if</b> (!<span class="r15 r">conversion</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2f20f438cb763b67">Exists</a> || <span class="r15 r">conversion</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e069f70e82259cb2">IsUserDefined</a>) <b>return false</b>;
+            }
+            <b>return true</b>;
+        }
+ 
+        <b>static bool</b> <a id="28cf2ff482fcad11" href="../R/28cf2ff482fcad11.html" target="n" data-glyph="76,1">AreVariablesOnlyWrittenInsideDeclaration</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6d3fe3a387240c9e" class="t">LocalDeclarationStatementSyntax</a> <span id="r16 rd" class="r16 r">declaration</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r17 rd" class="r17 r">semanticModel</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#bfbcd96bb21963de" class="k">var</a> <span id="r18 rd" class="r18 r">dfa</span> = <span class="r17 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#54557b485747d6a7">AnalyzeDataFlow</a>(<span class="r16 r">declaration</span>);
+            <b>var</b> <span id="r19 rd" class="r19 r">symbols</span> = <b>from</b> variable <b>in</b> <span class="r16 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29fe842192116181">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>
+                          <b>select</b> <span class="r17 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#01b404a339e77444">GetDeclaredSymbol</a>(variable);
+            <b>var</b> <span id="r20 rd" class="r20 r">result</span> = !<span class="r19 r">symbols</span>.Any(<span id="r21 rd" class="r21 r">s</span> =&gt; <span class="r18 r">dfa</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#25bfcd14ba2991f2">WrittenOutside</a>.Contains(<span class="r21 r">s</span>));
+            <b>return</b> <span class="r20 r">result</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

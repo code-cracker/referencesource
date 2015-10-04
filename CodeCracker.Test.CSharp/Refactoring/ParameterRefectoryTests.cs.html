@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html><head><title>ParameterRefectoryTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(304);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/ParameterRefectoryTests.cs" target="_top">Refactoring\ParameterRefectoryTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="d5b0952520546f84" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="7dc31f7217ec462a">ParameterRefectoryTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#988df4d8d97895bf" class="t">ParameterRefactoryAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#3a1407fc7f9c5ca1" class="t">ParameterRefactoryCodeFixProvider</a>&gt;
+    {
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="13db957c8a56b57e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodDoesNotThreeParametersNotSuggestionANewClass</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo(string name,string age,string day)
+            {
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3d45bd35fc308b54" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasElementBodyAndHasMoreThreeParametersShouldNotSuggestionANewClass</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo(string name,string age,int day,int year)
+            {
+                if(true)
+                {
+                   day = 10;
+                }
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1de6365d3d4dba56" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasARefParameterShouldNotSuggestANewClass</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(string a, string b, int year, ref string d)
+        {
+ 
+        }
+    }
+ 
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7e7c0f7462732263" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasAnOutParameterShouldNotSuggestANewClass</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(string a, string b, int year, out string d)
+        {
+ 
+        }
+    }
+ 
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7955f98f7ba56022" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasAThisParameterShouldNotSuggestANewClass</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(this string a, string b, int year, string d)
+        {
+ 
+        }
+    }
+ 
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="370e63341552b6c4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodHasAParamsParameterShouldNotSuggestANewClass</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(string a, string b, int year, params string[] d)
+        {
+ 
+        }
+    }
+ 
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="509f3a7ae274c160" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenMethodIsMarkedAsExternShouldNotSuggestANewClass</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        [System.Runtime.InteropServices.DllImport(&quot;&quot;dllName&quot;&quot;)]
+        public extern void Foo(string a, string b, int year, string d);
+    }
+ 
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7e8f65885927ff6f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldUpdateParameterToClass</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">oldTest</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(string a, string b, int year, string d)
+        {
+ 
+        }
+    }
+ 
+}&quot;</span>;
+            <b>const string</b> <span id="r8 rd" class="r8 r">newTest</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(NewClassFoo newClassFoo)
+        {
+ 
+        }
+    }
+ 
+    public class NewClassFoo
+    {
+        public string A { get; set; }
+        public string B { get; set; }
+        public int Year { get; set; }
+        public string D { get; set; }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">oldTest</span>, <span class="r8 r">newTest</span>, 0);
+ 
+ 
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="31d62fd5be300331" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenHasNotNameSpaceShouldGenerateClassParameter</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">oldTest</span> = <span class="s">@&quot;
+using System;
+ 
+class TypeName
+{
+    public void Foo(string a, string b, int year, string d)
+    {
+ 
+    }
+}
+&quot;</span>;
+            <b>const string</b> <span id="r10 rd" class="r10 r">newTest</span> = <span class="s">@&quot;
+using System;
+ 
+class TypeName
+{
+    public void Foo(NewClassFoo newClassFoo)
+    {
+ 
+    }
+}
+ 
+public class NewClassFoo
+{
+    public string A { get; set; }
+    public string B { get; set; }
+    public int Year { get; set; }
+    public string D { get; set; }
+}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">oldTest</span>, <span class="r10 r">newTest</span>, 0);
+ 
+ 
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="42e42f16cfad6eaf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ShouldGenerateNewClassFoo2</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">oldTest</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(NewClassFoo newClassFoo)
+        {
+ 
+        }
+ 
+        public void Foo2(string a, string b, int year, string d)
+        {
+ 
+        }
+    }
+ 
+    public class NewClassFoo
+    {
+        public string A { get; set; }
+        public string B { get; set; }
+        public int Year { get; set; }
+        public string D { get; set; }
+    }
+ 
+}&quot;</span>;
+            <b>const string</b> <span id="r12 rd" class="r12 r">newTest</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class TypeName
+    {
+        public void Foo(NewClassFoo newClassFoo)
+        {
+ 
+        }
+ 
+        public void Foo2(NewClassFoo2 newClassFoo2)
+        {
+ 
+        }
+    }
+ 
+    public class NewClassFoo
+    {
+        public string A { get; set; }
+        public string B { get; set; }
+        public int Year { get; set; }
+        public string D { get; set; }
+    }
+ 
+    public class NewClassFoo2
+    {
+        public string A { get; set; }
+        public string B { get; set; }
+        public int Year { get; set; }
+        public string D { get; set; }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">oldTest</span>, <span class="r12 r">newTest</span>, 0);
+ 
+ 
+        }
+ 
+    }
+ 
+}</pre></td></tr></table></div></body></html>

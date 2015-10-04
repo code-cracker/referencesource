@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html><head><title>VirtualMethodOnConstructorAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(54);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/VirtualMethodOnConstructorAnalyzer.cs" target="_top">Usage\VirtualMethodOnConstructorAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="169cd686bd2f8ac9" href="../R/169cd686bd2f8ac9.html" target="n" data-glyph="0,0" class="t"><span id="7f5a78773a958abf">VirtualMethodOnConstructorAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal static readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a575d19f824a005" class="t">LocalizableString</a> <a id="44d4343a3647a824" href="../R/44d4343a3647a824.html" target="n" data-glyph="44,1">Title</a> = <span class="s">&quot;Virtual Method Called On Constructor&quot;</span>;
+        <b>internal const string</b> <a id="3a5fc10866c448b2" href="../R/3a5fc10866c448b2.html" target="n" data-glyph="8,1">Message</a> = <span class="s">&quot;Do not call overridable methods in constructors&quot;</span>;
+        <b>internal const string</b> <a id="3133a35b5be8eb7c" href="../R/3133a35b5be8eb7c.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="d02f1cbcb3a152c9" href="../R/d02f1cbcb3a152c9.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;When a virtual method is called, the actual type that executes the method &quot;</span> +
+                                   <span class="s">&quot;is not selected until run time. When a constructor calls a virtual method, &quot;</span> +
+                                   <span class="s">&quot;it is possible that the constructor for the instance that invokes the method &quot;</span> +
+                                   <span class="s">&quot;has not executed.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="4ab6772e9e6dd869" href="../R/4ab6772e9e6dd869.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#fb352e176a89c98b" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b7a9a1e118c413ee">VirtualMethodOnConstructor</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#44d4343a3647a824">Title</a>,
+            <a href="#3a5fc10866c448b2">Message</a>,
+            <a href="#3133a35b5be8eb7c">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#d02f1cbcb3a152c9">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b7a9a1e118c413ee">VirtualMethodOnConstructor</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="0af9ce7a2c974958" href="../R/0af9ce7a2c974958.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#4ab6772e9e6dd869">Rule</a>);
+ 
+        <b>public override void</b> <a id="e6a220767a938105" href="../R/e6a220767a938105.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#865772c4f64fa94d">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5441df22b7fa0844">ConstructorDeclaration</a>);
+        }
+ 
+        <b>private static void</b> <a id="865772c4f64fa94d" href="../R/865772c4f64fa94d.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="k">var</a> <span id="r5 rd" class="r5 r">ctor</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#51ccd9addfdff816" class="t">ConstructorDeclarationSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <b>if</b> (<span class="r5 r">ctor</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e089891c937c014a">Body</a> == <b>null</b>) <b>return</b>;
+            <b>var</b> <span id="r6 rd" class="r6 r">methodInvocations</span> = <span class="r5 r">ctor</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e089891c937c014a">Body</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>&gt;();
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r7 rd" class="r7 r">method</span> <b>in</b> <span class="r6 r">methodInvocations</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r8 rd" class="r8 r">identifier</span> = <span class="r7 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+                <b>if</b> (<span class="r8 r">identifier</span> == <b>null</b> &amp;&amp; !<span class="r7 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>().StartsWith(<span class="s">&quot;this&quot;</span>)) <b>return</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r9 rd" class="r9 r">methodDeclaration</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r7 r">method</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+                <b>if</b> (<span class="r9 r">methodDeclaration</span> == <b>null</b> || !<span class="r9 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#942fc76ec5d8e27d">IsVirtual</a>) <b>return</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r10 rd" class="r10 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#4ab6772e9e6dd869">Rule</a>, <span class="r7 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>());
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r10 r">diagnostic</span>);
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

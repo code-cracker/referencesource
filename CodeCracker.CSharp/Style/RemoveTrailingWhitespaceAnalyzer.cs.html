@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveTrailingWhitespaceAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(54);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/RemoveTrailingWhitespaceAnalyzer.cs" target="_top">Style\RemoveTrailingWhitespaceAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> Microsoft.CodeAnalysis.Text;
+<b>using</b> System.Text.RegularExpressions;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="a1cd568d1f605fcd" href="../R/a1cd568d1f605fcd.html" target="n" data-glyph="0,0" class="t"><span id="23f0843b268f9d2a">RemoveTrailingWhitespaceAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="bcbc0ce9db70295a" href="../R/bcbc0ce9db70295a.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Remove trailing whitespace&quot;</span>;
+        <b>internal const string</b> <a id="7d065d4207a41306" href="../R/7d065d4207a41306.html" target="n" data-glyph="8,1">MessageFormat</a> = <a href="#bcbc0ce9db70295a">Title</a>;
+        <b>internal const string</b> <a id="7877467671ab6293" href="../R/7877467671ab6293.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+        <b>const string</b> <a id="c6df642f96197b83" href="../R/c6df642f96197b83.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Trailing whitespaces are ugly and show sloppiness. Remove them.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="f79a09e13debfa5c" href="../R/f79a09e13debfa5c.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#5171fb5bf8c79d3f">RemoveTrailingWhitespace</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#bcbc0ce9db70295a">Title</a>,
+            <a href="#7d065d4207a41306">MessageFormat</a>,
+            <a href="#7877467671ab6293">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#c6df642f96197b83">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#5171fb5bf8c79d3f">RemoveTrailingWhitespace</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="f56c07e95013da77" href="../R/f56c07e95013da77.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#f79a09e13debfa5c">Rule</a>);
+ 
+        <b>public override void</b> <a id="0d39d4c44d754996" href="../R/0d39d4c44d754996.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#04c5589f62816c61">RegisterSyntaxTreeAction</a>(<a href="#674b98ec88d50881">AnalyzeTrailingTrivia</a>);
+ 
+        <b>private static void</b> <a id="674b98ec88d50881" href="../R/674b98ec88d50881.html" target="n" data-glyph="76,1">AnalyzeTrailingTrivia</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#90d92645ff9f3d2f" class="t">SyntaxTreeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#248a77262c748d6c">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#095fb020b503d1a4" class="t">SourceText</a> <span id="r5 rd" class="r5 r">text</span>;
+            <b>if</b> (!<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#581761e20d4ad61c">TryGetText</a>(<b>out</b> <span class="r5 r">text</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r6 rd" class="r6 r">root</span>;
+            <b>if</b> (!<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b75c38a801537c2a">TryGetRoot</a>(<b>out</b> <span class="r6 r">root</span>)) <b>return</b>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#4a64353f6539851d" class="k">var</a> <span id="r7 rd" class="r7 r">line</span> <b>in</b> <span class="r5 r">text</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#66bef1dede45eeca">Lines</a>)
+            {
+                <b>if</b> (<span class="r7 r">line</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0a14c408d0e0ab15">End</a> == 0) <b>continue</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="k">var</a> <span id="r8 rd" class="r8 r">endSpan</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="t">TextSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9102ac5baed0c2d7">FromBounds</a>(<span class="r7 r">line</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0a14c408d0e0ab15">End</a> - 1, <span class="r7 r">line</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0a14c408d0e0ab15">End</a>);
+                <b>var</b> <span id="r9 rd" class="r9 r">candidateWhiteSpace</span> = <span class="r7 r">line</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fc0450289f201643">Text</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#afb243b93aed13c1">GetSubText</a>(<span class="r8 r">endSpan</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#5ac3fa68d328a704">ToString</a>();
+                <b>if</b> (<b>string</b>.Compare(<span class="r9 r">candidateWhiteSpace</span>, <span class="s">&quot;\n&quot;</span>, <span class="t">StringComparison</span>.Ordinal) == 0
+                    || !<span class="t">Regex</span>.IsMatch(<span class="r9 r">candidateWhiteSpace</span>, <span class="s">@&quot;\s&quot;</span>)) <b>continue</b>;
+                <b>var</b> <span id="r10 rd" class="r10 r">isLiteral</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r8 r">endSpan</span>) <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+                <b>if</b> (<span class="r10 r">isLiteral</span>) <b>return</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r11 rd" class="r11 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f79a09e13debfa5c">Rule</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#033628ec7bb8f365">Create</a>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>, <span class="r7 r">line</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#3bf2c6ce7c8de6d0">Span</a>));
+                <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#66b0da0ad461de54">ReportDiagnostic</a>(<span class="r11 r">diag</span>);
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

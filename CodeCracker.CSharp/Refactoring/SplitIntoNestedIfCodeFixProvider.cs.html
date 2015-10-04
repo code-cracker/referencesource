@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html><head><title>SplitIntoNestedIfCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(54);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/SplitIntoNestedIfCodeFixProvider.cs" target="_top">Refactoring\SplitIntoNestedIfCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Formatting;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+ 
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#dabf6da2849df496" class="t">SplitIntoNestedIfCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="dabf6da2849df496" href="../R/dabf6da2849df496.html" target="n" data-glyph="0,0" class="t"><span id="f6e9613955decfa1">SplitIntoNestedIfCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>internal const string</b> <a id="bc1b67482d4d7565" href="../R/bc1b67482d4d7565.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Split into nested ifs&quot;</span>;
+ 
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="3f00061cd62e5f2b" href="../R/3f00061cd62e5f2b.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt;
+            <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b0059a3fc078253f">SplitIntoNestedIf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public sealed override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="f0190068cac6b4f5" href="../R/f0190068cac6b4f5.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="SplitIntoNestedIfFixAllProvider.cs.html#ed93f609b83b26f1" class="t">SplitIntoNestedIfFixAllProvider</a>.<a href="SplitIntoNestedIfFixAllProvider.cs.html#03dc4f2413215eb4">Instance</a>;
+ 
+        <b>public sealed override</b> <span class="t">Task</span> <a id="02eb2ec2f4f4ca2b" href="../R/02eb2ec2f4f4ca2b.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<a href="#bc1b67482d4d7565">MessageFormat</a>, <span id="r2 rd" class="r2 r">c</span> =&gt; <a href="#76272ed3bc5937d9">CreateNestedIfAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>, <span class="r2 r">c</span>), <b>nameof</b>(<a href="#dabf6da2849df496" class="t">SplitIntoNestedIfCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="76272ed3bc5937d9" href="../R/76272ed3bc5937d9.html" target="n" data-glyph="76,1">CreateNestedIfAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a> <span id="r4 rd" class="r4 r">diagnosticLocation</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="k">var</a> <span id="r7 rd" class="r7 r">condition</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>)<span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">diagnosticLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r8 rd" class="r8 r">newRoot</span> = <a href="#8aece31f792293dc">CreateNestedIf</a>(<span class="r7 r">condition</span>, <span class="r6 r">root</span>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r9 rd" class="r9 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r8 r">newRoot</span>);
+            <b>return</b> <span class="r9 r">newDocument</span>;
+        }
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="8aece31f792293dc" href="../R/8aece31f792293dc.html" target="n" data-glyph="74,1">CreateNestedIf</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a> <span id="r10 rd" class="r10 r">condition</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r11 rd" class="r11 r">root</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r12 rd" class="r12 r">ifStatement</span> = <span class="r10 r">condition</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="t">IfStatementSyntax</a>&gt;();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r13 rd" class="r13 r">nestedIf</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#59eba276d01e84ae">IfStatement</a>(<span class="r10 r">condition</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7d073ad4f6440af3">Right</a>, <span class="r12 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#337996ab6ff635b7">Statement</a>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#994532e1525a7cd0" class="k">var</a> <span id="r14 rd" class="r14 r">newStatement</span> = <span class="r12 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#337996ab6ff635b7">Statement</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3965eb19de02ab36">Block</a>) ? (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#994532e1525a7cd0" class="t">StatementSyntax</a>)<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ca009226473d4cf3">Block</a>(<span class="r13 r">nestedIf</span>) : <span class="r13 r">nestedIf</span>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#263e17743f3e420b" class="k">var</a> <span id="r15 rd" class="r15 r">newIf</span> = <span class="r12 r">ifStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bc12f2f8b6da85e6">WithCondition</a>(<span class="r10 r">condition</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b59ef6774404c1ce">Left</a>)
+                .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#eb4b35a6b87cc1a4">WithStatement</a>(<span class="r14 r">newStatement</span>)
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r16 rd" class="r16 r">newRoot</span> = <span class="r11 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r12 r">ifStatement</span>, <span class="r15 r">newIf</span>);
+            <b>return</b> <span class="r16 r">newRoot</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html><head><title>InterfaceNameAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(49);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Style/InterfaceNameAnalyzer.vb" target="_top">Style\InterfaceNameAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Style
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="8d6ad52fc629038c" href="../R/8d6ad52fc629038c.html" target="n" data-glyph="0,0" class="t"><span id="b13f987de4f375aa">InterfaceNameAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="652160fe75c5e0a0" href="../R/652160fe75c5e0a0.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;You should add letter &#39;I&#39; before interface name.&quot;</span>
+        <b>Friend Const</b> <a id="9804736ddb4ac220" href="../R/9804736ddb4ac220.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Consider naming interfaces starting with &#39;I&#39;&quot;</span>
+        <b>Friend Const</b> <a id="76f2f7805cf96cfa" href="../R/76f2f7805cf96cfa.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>
+        <b>Private Const</b> <a id="7414431c5a118622" href="../R/7414431c5a118622.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Consider naming interfaces starting with &#39;I&#39;.&quot;</span>
+ 
+        <b>Friend Shared</b> <a id="f7b3e2c22a27f1de" href="../R/f7b3e2c22a27f1de.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#93053666e3bb8ba0">InterfaceName</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#652160fe75c5e0a0">Title</a>,
+            <a href="#9804736ddb4ac220">MessageFormat</a>,
+            <a href="#76f2f7805cf96cfa">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#7414431c5a118622">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#93053666e3bb8ba0">InterfaceName</a>)
+        )
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="ff16696db3c50060" href="../R/ff16696db3c50060.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#f7b3e2c22a27f1de">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="c11b76a4375b4223" href="../R/c11b76a4375b4223.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#f03fe6a53b9a286e">AnalyzeClass</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7f93d5f16bb3b4d2">InterfaceStatement</a>)
+        <b>End Sub
+ 
+        Private Shared Sub</b> <a id="f03fe6a53b9a286e" href="../R/f03fe6a53b9a286e.html" target="n" data-glyph="76,1">AnalyzeClass</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">interfaceDeclaration</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#45a239fafe243daf" class="t">InterfaceStatementSyntax</a>)
+            <b>Dim</b> <span id="r6 rd" class="r6 r">model</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>
+            <b>Dim</b> <span id="r7 rd" class="r7 r">name</span> = <span class="r5 r">interfaceDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8573b19bb683c6c7">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+            <b>If</b> (<span class="r7 r">name</span>.StartsWith(<span class="s">&quot;I&quot;</span>, <span class="t">StringComparison</span>.OrdinalIgnoreCase)) <b>Then Exit Sub
+            Dim</b> <span id="r8 rd" class="r8 r">errorMsg</span> = <b>String</b>.Format(<a href="#9804736ddb4ac220">MessageFormat</a>, <a href="#9804736ddb4ac220">MessageFormat</a>)
+            <b>Dim</b> <span id="r9 rd" class="r9 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f7b3e2c22a27f1de">Rule</a>, <span class="r5 r">interfaceDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="r8 r">errorMsg</span>)
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r9 r">diag</span>)
+        <b>End Sub
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

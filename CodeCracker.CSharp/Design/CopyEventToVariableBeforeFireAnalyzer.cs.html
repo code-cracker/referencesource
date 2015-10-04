@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html><head><title>CopyEventToVariableBeforeFireAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(53);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/CopyEventToVariableBeforeFireAnalyzer.cs" target="_top">Design\CopyEventToVariableBeforeFireAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="48525784bb5520ae" href="../R/48525784bb5520ae.html" target="n" data-glyph="0,0" class="t"><span id="713cc8fca90a474a">CopyEventToVariableBeforeFireAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="eb478e348c6dd0eb" href="../R/eb478e348c6dd0eb.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Copy Event To Variable Before Fire&quot;</span>;
+        <b>internal const string</b> <a id="7a174ad520ee4d4b" href="../R/7a174ad520ee4d4b.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Copy the &#39;{0}&#39; event to a variable before fire it.&quot;</span>;
+        <b>internal const string</b> <a id="556c9378ab60acbf" href="../R/556c9378ab60acbf.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#5fb1495b85695471">Design</a>;
+        <b>const string</b> <a id="1ed87ed7950eedc2" href="../R/1ed87ed7950eedc2.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Events should always be checked for null before being invoked.\r\n&quot;</span>
+            + <span class="s">&quot;As in a multi-threading context it is possible for an event to be unsuscribed between &quot;</span>
+            + <span class="s">&quot;the moment where it is checked to be non-null and the moment it is raised the event must &quot;</span>
+            + <span class="s">&quot;be copied to a temporary variable before the check.&quot;</span>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="3be0292e83e5b889" href="../R/3be0292e83e5b889.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0a55f767e425c802">CopyEventToVariableBeforeFire</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#eb478e348c6dd0eb">Title</a>,
+            <a href="#7a174ad520ee4d4b">MessageFormat</a>,
+            <a href="#556c9378ab60acbf">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <b>true</b>,
+            <span class="r0 r">description</span>: <a href="#1ed87ed7950eedc2">Description</a>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#0a55f767e425c802">CopyEventToVariableBeforeFire</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="6265c71a6f8c1dc7" href="../R/6265c71a6f8c1dc7.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#3be0292e83e5b889">Rule</a>);
+ 
+        <b>public override void</b> <a id="f72e0b831ea792e0" href="../R/f72e0b831ea792e0.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt; <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#ac421322cb66ca9b">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+ 
+        <b>private static void</b> <a id="ac421322cb66ca9b" href="../R/ac421322cb66ca9b.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r4 rd" class="r4 r">invocation</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r5 rd" class="r5 r">identifier</span> = <span class="r4 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+            <b>if</b> (<span class="r5 r">identifier</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.GetType().Name == <b>nameof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72bcbb177b26825d" class="t">ArrowExpressionClauseSyntax</a>)) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#ef7f3cbf4b8f2a0d" class="k">var</a> <span id="r6 rd" class="r6 r">typeInfo</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#937bca6b4366cf65">GetTypeInfo</a>(<span class="r5 r">identifier</span>, <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#87d78e73e6d5a2c9">CancellationToken</a>);
+ 
+            <b>if</b> (<span class="r6 r">typeInfo</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f848b8b3703eab5">ConvertedType</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a> == <b>null</b>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r7 rd" class="r7 r">symbol</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r5 r">identifier</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+ 
+            <b>if</b> (<span class="r6 r">typeInfo</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f848b8b3703eab5">ConvertedType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> != <b>typeof</b>(<span class="t">MulticastDelegate</span>).Name || <span class="r7 r">symbol</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a> || <span class="r7 r">symbol</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#b5352bfcd232fa51" class="t">IParameterSymbol</a>) <b>return</b>;
+ 
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#3be0292e83e5b889">Rule</a>, <span class="r4 r">invocation</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r5 r">identifier</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

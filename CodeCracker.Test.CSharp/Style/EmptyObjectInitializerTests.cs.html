@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyObjectInitializerTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(57);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/EmptyObjectInitializerTests.cs" target="_top">Style\EmptyObjectInitializerTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="becc522d3572e22e" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="38d5b8153f80b917">EmptyObjectInitializerTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#6c1e420f3a9187c8" class="t">EmptyObjectInitializerAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#e868d26305e83515" class="t">EmptyObjectInitializerCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b0a96551384a6c8b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">EmptyObjectInitializerTriggersFix</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">code</span> = <span class="s">@&quot;var a = new A {};&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#df00353d08d4744d">EmptyObjectInitializer</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Remove empty object initializer.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 1, 15) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">code</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ecbd38f1efa38d58" href="../R/../../0000000000.html" target="n" data-glyph="72,1">EmptyObjectInitializerIsRemoved</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">oldCode</span> = <span class="s">@&quot;var a = new A() {};&quot;</span>;
+            <b>const string</b> <span id="r3 rd" class="r3 r">newCode</span> = <span class="s">@&quot;var a = new A();&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r2 r">oldCode</span>, <span class="r3 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0a2c41bdbb8cfa9a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">EmptyObjectInitializerWithNoArgsIsRemovedAndAddsEmptyArgs</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">oldCode</span> = <span class="s">@&quot;var a = new A {};&quot;</span>;
+            <b>const string</b> <span id="r5 rd" class="r5 r">newCode</span> = <span class="s">@&quot;var a = new A();&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">oldCode</span>, <span class="r5 r">newCode</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c31dc306ca54526e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FilledObjectInitializerIsIgnored</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">code</span> = <span class="s">@&quot;var a = new A { X = 1 };&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">code</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7212d6d2e4a887fc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AbsenceOfObjectInitializerIsIgnored</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">code</span> = <span class="s">@&quot;var a = new A();&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">code</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

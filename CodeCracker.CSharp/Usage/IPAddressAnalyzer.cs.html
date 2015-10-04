@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html><head><title>IPAddressAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(56);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/IPAddressAnalyzer.cs" target="_top">Usage\IPAddressAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Reflection;
+<b>using</b> CodeCracker.CSharp.Usage.MethodAnalyzers;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="1d253817271c2cd1" href="../R/1d253817271c2cd1.html" target="n" data-glyph="0,0" class="t"><span id="0868175fa1c401e3">IPAddressAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="9f9d7e5d59a278f2" href="../R/9f9d7e5d59a278f2.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Your IP Address syntax is wrong.&quot;</span>;
+        <b>internal const string</b> <a id="1e03a586d1ef3407" href="../R/1e03a586d1ef3407.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="937163d5da95c60d" href="../R/937163d5da95c60d.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+ 
+        <b>private const string</b> <a id="4bd01fcda780fb87" href="../R/4bd01fcda780fb87.html" target="n" data-glyph="10,1">Description</a> =
+            <span class="s">&quot;This diagnostic checks the IP Address string and triggers if the parsing fail &quot;</span>
+            + <span class="s">&quot;by throwing an exception.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="f29bbdca94d7102f" href="../R/f29bbdca94d7102f.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#9922b37ddbfa7fa6">IPAddress</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#9f9d7e5d59a278f2">Title</a>,
+            <a href="#1e03a586d1ef3407">MessageFormat</a>,
+            <a href="#937163d5da95c60d">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#4bd01fcda780fb87">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#9922b37ddbfa7fa6">IPAddress</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="347f1d53ac49d3a0" href="../R/347f1d53ac49d3a0.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt;<span class="t">ImmutableArray</span>.Create(<a href="#f29bbdca94d7102f">Rule</a>);
+ 
+        <b>public override void</b> <a id="05460ddb30ccbf0f" href="../R/05460ddb30ccbf0f.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#fed7b71e38ea248a">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce8547515e4ea14f">InvocationExpression</a>);
+ 
+        <b>private static void</b> <a id="fed7b71e38ea248a" href="../R/fed7b71e38ea248a.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="MethodAnalyzers/MethodInformation.cs.html#c91c3d4f81a546e3" class="k">var</a> <span id="r5 rd" class="r5 r">method</span> = <b>new</b> <a href="MethodAnalyzers/MethodInformation.cs.html#d2eab224b3737453" class="t">MethodInformation</a>(
+                <span class="s">&quot;Parse&quot;</span>,
+                <span class="s">&quot;System.Net.IPAddress.Parse(string)&quot;</span>,
+                <span id="r6 rd" class="r6 r">args</span> =&gt;
+                {
+                    <a href="#d31bad49616639a3">parseMethodInfo</a>.Value.Invoke(<b>null</b>, <b>new</b>[] { <span class="r6 r">args</span>[0].ToString() });
+                }
+                );
+            <a href="MethodAnalyzers/MethodChecker.cs.html#f04c86011fcfd751" class="k">var</a> <span id="r7 rd" class="r7 r">checker</span> = <b>new</b> <a href="MethodAnalyzers/MethodChecker.cs.html#fbf890c571e9565d" class="t">MethodChecker</a>(<span class="r4 r">context</span>, <a href="#f29bbdca94d7102f">Rule</a>);
+            <span class="r7 r">checker</span>.<a href="MethodAnalyzers/MethodChecker.cs.html#0d33c7261edcb7ef">AnalyzeMethod</a>(<span class="r5 r">method</span>);
+        }
+ 
+        <b>private static readonly</b> <span class="t">Lazy</span>&lt;<span class="t">Type</span>&gt; <a id="3efa9c71a19a31d3" href="../R/3efa9c71a19a31d3.html" target="n" data-glyph="46,1">objectType</a> = <b>new</b> <span class="t">Lazy</span>&lt;<span class="t">Type</span>&gt;(() =&gt; <span class="t">Type</span>.GetType(<span class="s">&quot;System.Net.IPAddress, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;</span>));
+ 
+        <b>private static readonly</b> <span class="t">Lazy</span>&lt;<span class="t">MethodInfo</span>&gt; <a id="d31bad49616639a3" href="../R/d31bad49616639a3.html" target="n" data-glyph="46,1">parseMethodInfo</a> =
+            <b>new</b> <span class="t">Lazy</span>&lt;<span class="t">MethodInfo</span>&gt;(() =&gt; <a href="#3efa9c71a19a31d3">objectType</a>.Value.GetRuntimeMethod(<span class="s">&quot;Parse&quot;</span>, <b>new</b>[] { <b>typeof</b>(<b>string</b>) }));
+    }
+}</pre></td></tr></table></div></body></html>

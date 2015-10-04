@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html><head><title>UriAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(69);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/UriAnalyzer.cs" target="_top">Usage\UriAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage.MethodAnalyzers;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Collections.Immutable;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="7676de3993b7133f" href="../R/7676de3993b7133f.html" target="n" data-glyph="0,0" class="t"><span id="23db9bf75fda6caf">UriAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="f7da34625bf154de" href="../R/f7da34625bf154de.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Your Uri syntax is wrong.&quot;</span>;
+        <b>internal const string</b> <a id="34ec6dc58b943593" href="../R/34ec6dc58b943593.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="fe011f8794d2f405" href="../R/fe011f8794d2f405.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+ 
+        <b>private const string</b> <a id="90cf24f959f2d9e5" href="../R/90cf24f959f2d9e5.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;This diagnostic checks the Uri string and triggers if the parsing fail &quot;</span>
+                                           + <span class="s">&quot;by throwing an exception.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="8487f3bb96fe7b77" href="../R/8487f3bb96fe7b77.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6a23bf04092ee498">Uri</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#f7da34625bf154de">Title</a>,
+            <a href="#34ec6dc58b943593">MessageFormat</a>,
+            <a href="#fe011f8794d2f405">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#90cf24f959f2d9e5">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6a23bf04092ee498">Uri</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="aa41b73d447b043f" href="../R/aa41b73d447b043f.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#8487f3bb96fe7b77">Rule</a>);
+ 
+        <b>public override void</b> <a id="6b746ef85c104796" href="../R/6b746ef85c104796.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt; <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#6d7f41c9a755bfa9">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#37b4e064594ee806">ObjectCreationExpression</a>);
+ 
+        <b>private static void</b> <a id="6d7f41c9a755bfa9" href="../R/6d7f41c9a755bfa9.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="MethodAnalyzers/MethodInformation.cs.html#c91c3d4f81a546e3" class="k">var</a> <span id="r5 rd" class="r5 r">mainConstrutor</span> = <b>new</b> <a href="MethodAnalyzers/MethodInformation.cs.html#d2eab224b3737453" class="t">MethodInformation</a>(
+                <b>nameof</b>(<span class="t">Uri</span>),
+                <span class="s">&quot;System.Uri.Uri(string)&quot;</span>,
+                <span id="r6 rd" class="r6 r">args</span> =&gt;
+                {
+                    {
+                        <b>if</b> (<span class="r6 r">args</span>[0] == <b>null</b>)
+                        {
+                            <b>return</b>;
+                        }
+                        <b>new</b> <span class="t">Uri</span>(<span class="r6 r">args</span>[0].ToString());
+                    }
+                }
+            );
+            <a href="MethodAnalyzers/MethodInformation.cs.html#c91c3d4f81a546e3" class="k">var</a> <span id="r7 rd" class="r7 r">constructorWithUriKind</span> = <b>new</b> <a href="MethodAnalyzers/MethodInformation.cs.html#d2eab224b3737453" class="t">MethodInformation</a>(
+                <b>nameof</b>(<span class="t">Uri</span>),
+                <span class="s">&quot;System.Uri.Uri(string, System.UriKind)&quot;</span>,
+                <span id="r8 rd" class="r8 r">args</span> =&gt;
+                {
+                    <b>if</b> (<span class="r8 r">args</span>[0] == <b>null</b>)
+                    {
+                        <b>return</b>;
+                    }
+                    <b>new</b> <span class="t">Uri</span>(<span class="r8 r">args</span>[0].ToString(), (<span class="t">UriKind</span>)<span class="r8 r">args</span>[1]);
+                }
+            );
+ 
+            <a href="MethodAnalyzers/MethodChecker.cs.html#f04c86011fcfd751" class="k">var</a> <span id="r9 rd" class="r9 r">checker</span> = <b>new</b> <a href="MethodAnalyzers/MethodChecker.cs.html#fbf890c571e9565d" class="t">MethodChecker</a>(<span class="r4 r">context</span>, <a href="#8487f3bb96fe7b77">Rule</a>);
+            <span class="r9 r">checker</span>.<a href="MethodAnalyzers/MethodChecker.cs.html#366e3439cce0a748">AnalyzeConstructor</a>(<span class="r5 r">mainConstrutor</span>);
+            <span class="r9 r">checker</span>.<a href="MethodAnalyzers/MethodChecker.cs.html#366e3439cce0a748">AnalyzeConstructor</a>(<span class="r7 r">constructorWithUriKind</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

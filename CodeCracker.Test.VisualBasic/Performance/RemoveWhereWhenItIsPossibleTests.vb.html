@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveWhereWhenItIsPossibleTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(134);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Performance/RemoveWhereWhenItIsPossibleTests.vb" target="_top">Performance\RemoveWhereWhenItIsPossibleTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Performance
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Performance
+    <b>Public Class</b> <a id="fce9038c4b39d1b1" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="85f5519c418cd956">RemoveWhereWhenItIsPossibleTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#ec8e36205b9849ea" class="t">RemoveWhereWhenItIsPossibleAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#5fd3c0fa0e116a4b" class="t">RemoveWhereWhenItIsPossibleCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;First&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;FirstOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Last&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;LastOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Any&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Single&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SingleOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Count&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="68e85e4f8f18afae" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticWhenUsingWhereWith</a>(<span id="r0 rd" class="r0 r">method</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">&quot;
+Imports System.Linq
+Namespace Sample
+    Public Class Foo
+        Public Async Function DoSomething() As Task
+            Dim a(10) As Integer
+            Dim f = a.Where(Function(item) item &gt; 10).&quot;</span> + <span class="r0 r">method</span> + <span class="s">&quot;()
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r2 rd" class="r2 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b>
+            {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.VisualBasic/A.html#ec8e36205b9849ea" class="t">RemoveWhereWhenItIsPossibleAnalyzer</a>.<a href="/CodeCracker.VisualBasic/A.html#7c0a194c951bb01f">Id</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;You can remove &#39;Where&#39; moving the predicate to &#39;&quot;</span> + <span class="r0 r">method</span> + <span class="s">&quot;&#39;.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 7, 23)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r1 r">test</span>, <span class="r2 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;First&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;FirstOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Last&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;LastOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Any&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Single&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SingleOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Count&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="9fe9861076d40851" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotCreateDiagnosticWheUsingWhereAndAnotherMethodWithPredicates</a>(<span id="r3 rd" class="r3 r">method</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;
+Imports System.Linq
+Namespace Sample
+    Public Class Foo
+        Public Async Function DoSomething() As Task
+            Dim a(10) As Integer
+            Dim f = a.Where(Function(item) item &gt; 10).&quot;</span> + <span class="r3 r">method</span> + <span class="s">&quot;(function(item) item &lt; 50)
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;First&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;FirstOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Last&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;LastOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Any&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Single&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SingleOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Count&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="fba9aff8746ca075" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixRemovesWhereMovingPredicateTo</a>(<span id="r5 rd" class="r5 r">method</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">&quot;
+Imports System.Linq
+Namespace Sample
+    Public Class Foo
+        Public Async Function DoSomething() As Task
+            Dim a(10) As Integer
+            Dim f = a.Where(Function(item) item &gt; 10).&quot;</span> + <span class="r5 r">method</span> + <span class="s">&quot;()
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r7 rd" class="r7 r">expected</span> = <span class="s">&quot;
+Imports System.Linq
+Namespace Sample
+    Public Class Foo
+        Public Async Function DoSomething() As Task
+            Dim a(10) As Integer
+            Dim f = a.&quot;</span> &amp; <span class="r5 r">method</span> &amp; <span class="s">&quot;(Function(item) item &gt; 10)
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r6 r">test</span>, <span class="r7 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;First&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;FirstOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Last&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;LastOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Any&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Single&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;SingleOrDefault&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Count&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="a039c5c0c5cb38f3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixRemovesWherePreservingPreviousExpressionsMovingPredicateTo</a>(<span id="r8 rd" class="r8 r">method</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">&quot;
+Imports System.Linq
+Namespace Sample
+    Public Class Foo
+        Public Async Function DoSomething() As Task
+            Dim a(10) As Integer
+            Dim f = a.OrderBy(Function(item) item).Where(Function(item) item &gt; 10).&quot;</span> + <span class="r8 r">method</span> + <span class="s">&quot;()
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Dim</b> <span id="r10 rd" class="r10 r">expected</span> = <span class="s">&quot;
+Imports System.Linq
+Namespace Sample
+    Public Class Foo
+        Public Async Function DoSomething() As Task
+            Dim a(10) As Integer
+            Dim f = a.OrderBy(Function(item) item).&quot;</span> &amp; <span class="r8 r">method</span> &amp; <span class="s">&quot;(Function(item) item &gt; 10)
+        End Function
+    End Class
+End Namespace&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">expected</span>)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

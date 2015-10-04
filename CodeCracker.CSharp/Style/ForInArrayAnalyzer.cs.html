@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html><head><title>ForInArrayAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(81);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Style/ForInArrayAnalyzer.cs" target="_top">Style\ForInArrayAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Style
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="aed595b1a888c7d3" href="../R/aed595b1a888c7d3.html" target="n" data-glyph="0,0" class="t"><span id="820fd8466e1d8169">ForInArrayAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="be3083f7c069b0c0" href="../R/be3083f7c069b0c0.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Use foreach&quot;</span>;
+        <b>internal const string</b> <a id="963e1d5ed988e903" href="../R/963e1d5ed988e903.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;{0}&quot;</span>;
+        <b>internal const string</b> <a id="73d5f67444df7e2e" href="../R/73d5f67444df7e2e.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#77633741b9b40e3a">Style</a>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="4cbc8bf230f96265" href="../R/4cbc8bf230f96265.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f6230b470f8ac815">ForInArray</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#be3083f7c069b0c0">Title</a>,
+            <a href="#963e1d5ed988e903">MessageFormat</a>,
+            <a href="#73d5f67444df7e2e">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#f6230b470f8ac815">ForInArray</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="898d2ff7dd977198" href="../R/898d2ff7dd977198.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#4cbc8bf230f96265">Rule</a>);
+ 
+        <b>public override void</b> <a id="45957707f727e1f0" href="../R/45957707f727e1f0.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt;
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#9f99ab78a1445183">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d54ea2738d25caee">ForStatement</a>);
+ 
+        <b>private static void</b> <a id="9f99ab78a1445183" href="../R/9f99ab78a1445183.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c215677ee4354d1" class="k">var</a> <span id="r4 rd" class="r4 r">forStatement</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c215677ee4354d1" class="t">ForStatementSyntax</a>;
+            <b>if</b> (<span class="r4 r">forStatement</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9ad6293d9629f711">Declaration</a> == <b>null</b> || <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3656602d55306b0a">Condition</a> == <b>null</b> || !<span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0da0c7f87af641f3">Incrementors</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a>()
+                || <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9ad6293d9629f711">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> != 1 || <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0da0c7f87af641f3">Incrementors</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> != 1) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="k">var</a> <span id="r5 rd" class="r5 r">forBlock</span> = <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2a23858f855e9105">Statement</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="t">BlockSyntax</a>;
+            <b>if</b> (<span class="r5 r">forBlock</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="k">var</a> <span id="r6 rd" class="r6 r">condition</span> = <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3656602d55306b0a">Condition</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>;
+            <b>if</b> (<span class="r6 r">condition</span> == <b>null</b> || !<span class="r6 r">condition</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f22cbf289bb52fe3">LessThanExpression</a>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r7 rd" class="r7 r">arrayAccessor</span> = <span class="r6 r">condition</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7d073ad4f6440af3">Right</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+            <b>if</b> (<span class="r7 r">arrayAccessor</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (!<span class="r7 r">arrayAccessor</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff818812b7a56bce">SimpleMemberAccessExpression</a>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r8 rd" class="r8 r">semanticModel</span> = <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r9 rd" class="r9 r">arrayId</span> = <span class="r8 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r7 r">arrayAccessor</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#89a6a33327342122">Expression</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <b>if</b> (<span class="r9 r">arrayId</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#84da0bead937d033" class="k">var</a> <span id="r10 rd" class="r10 r">forVariable</span> = <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9ad6293d9629f711">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed0e49a5740d359">First</a>();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r11 rd" class="r11 r">literalExpression</span> = <span class="r10 r">forVariable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+            <b>if</b> (<span class="r11 r">literalExpression</span> == <b>null</b> || !<span class="r11 r">literalExpression</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e98627e6c44cd780">NumericLiteralExpression</a>)) <b>return</b>;
+            <b>if</b> (<span class="r11 r">literalExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7f0384acb895cb82">Token</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> != <span class="s">&quot;0&quot;</span>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r12 rd" class="r12 r">controlVarId</span> = <span class="r8 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#01b404a339e77444">GetDeclaredSymbol</a>(<span class="r10 r">forVariable</span>);
+            <b>var</b> <span id="r13 rd" class="r13 r">otherUsesOfIndexToken</span> = <span class="r5 r">forBlock</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#37f36c9babc896b1">DescendantTokens</a>().Count(<span id="r14 rd" class="r14 r">t</span> =&gt;
+                {
+                    <b>if</b> (<span class="r14 r">t</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a> != <span class="r10 r">forVariable</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#08c992cce9b31731">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>) <b>return false</b>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3748954801f741c2" class="k">var</a> <span id="r15 rd" class="r15 r">elementAccess</span> = <span class="r14 r">t</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#665ad13c612b3744">GetAncestor</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3748954801f741c2" class="t">ElementAccessExpressionSyntax</a>&gt;();
+                    <b>if</b> (<span class="r15 r">elementAccess</span> == <b>null</b>) <b>return true</b>;
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r16 rd" class="r16 r">accessIdentifier</span> = <span class="r15 r">elementAccess</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#338bbb7f69f3b9a8">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+                    <b>if</b> (<span class="r16 r">accessIdentifier</span> == <b>null</b>) <b>return true</b>;
+                    <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r17 rd" class="r17 r">identifierSymbol</span> = <span class="r8 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r16 r">accessIdentifier</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+                    <b>if</b> (<span class="r17 r">identifierSymbol</span> == <b>null</b>) <b>return true</b>;
+                    <b>return</b> !<span class="r17 r">identifierSymbol</span>.Equals(<span class="r9 r">arrayId</span>);
+                });
+            <b>if</b> (<span class="r13 r">otherUsesOfIndexToken</span> != 0) <b>return</b>;
+ 
+            <b>var</b> <span id="r18 rd" class="r18 r">arrayAccessorSymbols</span> = (<b>from</b> s <b>in</b> <span class="r5 r">forBlock</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bc3b9b57b05e7d0">Statements</a>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6d3fe3a387240c9e" class="t">LocalDeclarationStatementSyntax</a>&gt;()
+                                        <b>where</b> s.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29fe842192116181">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> == 1
+                                        <b>let</b> declaration = s.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29fe842192116181">Declaration</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e950c49579a85309">Variables</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed0e49a5740d359">First</a>()
+                                        <b>where</b> declaration?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3748954801f741c2" class="t">ElementAccessExpressionSyntax</a>
+                                        <b>let</b> init = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3748954801f741c2" class="t">ElementAccessExpressionSyntax</a>)declaration.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8a5180727ef73069">Initializer</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a75d947dca9b6639">Value</a>
+                                        <b>let</b> initSymbol = <span class="r8 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(init.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3961010186f45708">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#60d3f97d9c8d49ba">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9ed0e49a5740d359">First</a>().<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>
+                                        <b>where</b> <span class="r12 r">controlVarId</span>.Equals(initSymbol)
+                                        <b>let</b> someArrayInit = <span class="r8 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(init.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#338bbb7f69f3b9a8">Expression</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>
+                                        <b>where</b> <span class="r9 r">arrayId</span>.Equals(someArrayInit)
+                                        <b>select</b> <span class="r9 r">arrayId</span>).ToList();
+            <b>if</b> (!<span class="r18 r">arrayAccessorSymbols</span>.Any()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r19 rd" class="r19 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#4cbc8bf230f96265">Rule</a>, <span class="r4 r">forStatement</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d636f9f86e391c0f">ForKeyword</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#20b085a124dddfb0">GetLocation</a>(), <span class="s">&quot;You can use foreach instead of for.&quot;</span>);
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r19 r">diagnostic</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

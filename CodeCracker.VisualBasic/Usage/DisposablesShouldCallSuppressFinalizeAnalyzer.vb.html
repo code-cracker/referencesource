@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposablesShouldCallSuppressFinalizeAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(93);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/DisposablesShouldCallSuppressFinalizeAnalyzer.vb" target="_top">Usage\DisposablesShouldCallSuppressFinalizeAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+ 
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="8226a82bd12f4c0a" href="../R/8226a82bd12f4c0a.html" target="n" data-glyph="0,0" class="t"><span id="575ee0571b372621">DisposablesShouldCallSuppressFinalizeAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="3b59192f34262d21" href="../R/3b59192f34262d21.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Disposables Should Call SuppressFinalize&quot;</span>
+        <b>Friend Const</b> <a id="08f4ec6e668ee32e" href="../R/08f4ec6e668ee32e.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;&#39;{0}&#39; should call GC.SuppressFinalize inside the Dispose method.&quot;</span>
+        <b>Private Const</b> <a id="03afa2056514f829" href="../R/03afa2056514f829.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Classes implementing IDisposable should call the GC.SuppressFinalize method  to avoid any finalizer from being called.
+This rule should be followed even if the class doesn&#39;t have a finalizer in a derived class.&quot;</span>
+ 
+        <b>Friend Shared</b> <a id="f826ecda313e8345" href="../R/f826ecda313e8345.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+        <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+        <a href="#3b59192f34262d21">Title</a>,
+        <a href="#08f4ec6e668ee32e">MessageFormat</a>,
+        <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#2f6994e63821aee7">Naming</a>,
+        <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+        <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+        <span class="r1 r">description</span>:=<a href="#03afa2056514f829">Description</a>,
+        <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="f8cb88ad2eb52d8f" href="../R/f8cb88ad2eb52d8f.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#f826ecda313e8345">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="2bee2ddd4785f2b6" href="../R/2bee2ddd4785f2b6.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#814f11e23a09e6f3">RegisterSymbolAction</a>(<b>AddressOf</b> <a href="#23b71a128a3d6a00">AnalyzeAsync</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#30fd9c0834bef6ff" class="t">SymbolKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#948cc1dd75de6895">NamedType</a>)
+        <b>End Sub
+ 
+        Public Async Sub</b> <a id="23b71a128a3d6a00" href="../R/23b71a128a3d6a00.html" target="n" data-glyph="72,1">AnalyzeAsync</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#24b89e371c62f308">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">symbol</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>)
+            <b>If</b> <span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> &lt;&gt; <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e11035df95f7fe47">Class</a> <b>Then Exit Sub
+            If Not</b> <span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4ab9dbc4496a6195">Interfaces</a>.Any(<b>Function</b>(<span id="r6 rd" class="r6 r">i</span>) <span class="r6 r">i</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e44c02d09717b17d">System_IDisposable</a>) <b>Then Exit Sub
+ 
+            If</b> <span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92631bc5d794919">IsSealed</a> <b>AndAlso Not</b> <a href="#3d0d48d88b650eaf">ContainsUserDefinedFinalizer</a>(<span class="r5 r">symbol</span>) <b>Then Exit Sub
+ 
+            If Not</b> <a href="#5df3646d4af6298f">ContainsNonPrivateConstructors</a>(<span class="r5 r">symbol</span>) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r7 rd" class="r7 r">disposeMethod</span> = <a href="#dee6d2df83d2708a">FindDisposeMethod</a>(<span class="r5 r">symbol</span>)
+            <b>If</b> <span class="r7 r">disposeMethod</span> <b>Is Nothing Then Exit Sub
+ 
+            Dim</b> <span id="r8 rd" class="r8 r">syntaxTree</span> = <b>Await</b> <span class="r7 r">disposeMethod</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>(0)?.<a href="@1@Microsoft.CodeAnalysis/A.html#f6174f3fede998a0">GetSyntaxAsync</a>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#584970a6cc2b9c63">CancellationToken</a>)
+            <b>Dim</b> <span id="r9 rd" class="r9 r">methodBlock</span> = <b>TryCast</b>(<b>TryCast</b>(<span class="r8 r">syntaxTree</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6428171a2349e2b8" class="t">MethodStatementSyntax</a>)?.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>)
+            <b>Dim</b> <span id="r10 rd" class="r10 r">statements</span> = <span class="r9 r">methodBlock</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5ff94a2d363b95a0">Statements</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e5c9d2df19f9ee15" class="t">ExpressionStatementSyntax</a>)
+ 
+            <b>If</b> <span class="r10 r">statements</span> <b>IsNot Nothing Then
+                For Each</b> <span class="r11 r">statement</span> <b>In</b> <span class="r10 r">statements</span>
+                    <b>Dim</b> <span id="r12 rd" class="r12 r">invocation</span> = <b>TryCast</b>(<span class="r11 r">statement</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b8ee5e42fd6ed78d">Expression</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)
+                    <b>Dim</b> <span id="r13 rd" class="r13 r">method</span> = <b>TryCast</b>(<span class="r12 r">invocation</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfdd49868638f90f">Expression</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e39b54af392fd89" class="t">MemberAccessExpressionSyntax</a>)
+                    <b>Dim</b> <span id="r14 rd" class="r14 r">identifier</span> = <b>TryCast</b>(<span class="r13 r">method</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7dc411dd03d3a835">Expression</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a5444c7de676498" class="t">IdentifierNameSyntax</a>)
+                    <b>If</b> <span class="r14 r">identifier</span> <b>IsNot Nothing Then
+                        If NameOf</b>(<span class="t">GC</span>).Equals(<span class="r14 r">identifier</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d6e94d60351f98c8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>, <span class="t">StringComparison</span>.OrdinalIgnoreCase) <b>AndAlso</b> <span class="s">&quot;SuppressFinalize&quot;</span>.Equals(<span class="r13 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19e8a554d3f0fa94">Name</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>(), <span class="t">StringComparison</span>.OrdinalIgnoreCase) <b>Then
+                            Exit Sub
+                        End If
+                    End If
+                Next
+            End If</b>
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b04c1b4614c7fc95">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f826ecda313e8345">Rule</a>, <span class="r7 r">disposeMethod</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6fdf20baf08270e2">Locations</a>(0), <span class="r5 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a>))
+        <b>End Sub
+ 
+        Private Shared Function</b> <a id="dee6d2df83d2708a" href="../R/dee6d2df83d2708a.html" target="n" data-glyph="76,1">FindDisposeMethod</a>(<span id="r15 rd" class="r15 r">symbol</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>) <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="t">ISymbol</a>
+            <b>Return</b> <span class="r15 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>().
+                Where(<b>Function</b>(<span id="r16 rd" class="r16 r">x</span>) <span class="r16 r">x</span>.ToString().IndexOf(<span class="s">&quot;Dispose&quot;</span>, <span class="t">StringComparison</span>.OrdinalIgnoreCase) &gt; 0).OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>).
+                FirstOrDefault(<b>Function</b>(<span id="r17 rd" class="r17 r">m</span>) <span class="r17 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#bc885140ba8cf592">Parameters</a> = <b>Nothing Or</b> <span class="r17 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#bc885140ba8cf592">Parameters</a>.Count = 0)
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="3d0d48d88b650eaf" href="../R/3d0d48d88b650eaf.html" target="n" data-glyph="76,1">ContainsUserDefinedFinalizer</a>(<span id="r18 rd" class="r18 r">symbol</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>) <b>As Boolean
+            Return</b> <span class="r18 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>().Any(<b>Function</b>(<span id="r19 rd" class="r19 r">x</span>) <span class="r19 r">x</span>.ToString().IndexOf(<b>NameOf</b>(Finalize), <span class="t">StringComparison</span>.OrdinalIgnoreCase) &gt; 0)
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="5df3646d4af6298f" href="../R/5df3646d4af6298f.html" target="n" data-glyph="76,1">ContainsNonPrivateConstructors</a>(<span id="r20 rd" class="r20 r">symbol</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>) <b>As Boolean
+            If</b> <a href="#aa277ec97288b1f0">IsNestedPrivateType</a>(<span class="r20 r">symbol</span>) <b>Then Return False
+ 
+            Return</b> <span class="r20 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>().
+                Any(<b>Function</b>(<span id="r21 rd" class="r21 r">m</span>) <span class="r21 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#337168667cb2dd7d">MetadataName</a> = <span class="s">&quot;.ctor&quot;</span> <b>AndAlso</b> <span class="r21 r">m</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0684dd47edcdbeff">DeclaredAccessibility</a> &lt;&gt; <a href="@1@Microsoft.CodeAnalysis/A.html#96ec9a52e8b1305b" class="t">Accessibility</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#42080aaf5bad0b91">Private</a>)
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="aa277ec97288b1f0" href="../R/aa277ec97288b1f0.html" target="n" data-glyph="76,1">IsNestedPrivateType</a>(<span id="r22 rd" class="r22 r">symbol</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>) <b>As Boolean
+            If</b> <span class="r22 r">symbol</span> <b>Is Nothing Then Return False
+            If</b> <span class="r22 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#0684dd47edcdbeff">DeclaredAccessibility</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#96ec9a52e8b1305b" class="t">Accessibility</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#42080aaf5bad0b91">Private</a> <b>AndAlso</b> <span class="r22 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a> <b>IsNot Nothing Then Return True
+            Return</b> <a href="#aa277ec97288b1f0">IsNestedPrivateType</a>(<span class="r22 r">symbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#257e0f4241e53aba">ContainingType</a>)
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

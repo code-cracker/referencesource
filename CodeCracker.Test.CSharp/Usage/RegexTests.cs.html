@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html><head><title>RegexTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(133);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/RegexTests.cs" target="_top">Usage\RegexTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="0f2cb5c755e82239" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="425558f6a082249e">RegexTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bfadf7377f3c03f0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfRegexIdentifierIsNotFoundDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                 Regex.Match(&quot;&quot;&quot;&quot;, &quot;&quot;[&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f73c1c2d964f575e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfRegexIdentifierFoundButRegexTextIsCorrectDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                 Regex.Match(&quot;&quot;&quot;&quot;, &quot;&quot;[]&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bd6a60e056184108" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfRegexIdentifierFoundAndRegexTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                System.Text.RegularExpressions.Regex.Match(&quot;&quot;&quot;&quot;, &quot;&quot;[&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">message</span> = <span class="s">&quot;&quot;</span>;
+            <b>try</b>
+            {
+<b>#</b><b>pragma</b> <b>warning</b> <b>disable</b> CC0010
+                System.Text.RegularExpressions.<a href="@0@System/A.html#bbe3b2eb80ae5526" class="t">Regex</a>.<a href="@0@System/A.html#c5bd3cd0e4ed488f">Match</a>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;[&quot;</span>);
+            }
+            <b>catch</b> (<a href="@0@mscorlib/A.html#109b3ef6299ef9df" class="t">ArgumentException</a> <span id="r4 rd" class="r4 r">e</span>)
+            {
+                <span class="r3 r">message</span> = <span class="r4 r">e</span>.<a href="@0@mscorlib/A.html#71cfcd61786aa2d8">Message</a>;
+            }
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#7d2b20bc384cb1e8">Regex</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="r3 r">message</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 64) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">source</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d4b6da376cf1d55a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfRegexIdentifierFoundAndAbbreviatedAndRegexTextIsIncorrectCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+    using System;
+    using System.Text.RegularExpressions;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                Regex.Match(&quot;&quot;&quot;&quot;, &quot;&quot;[&quot;&quot;);
+            }
+        }
+    }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">message</span> = <span class="s">&quot;&quot;</span>;
+            <b>try</b>
+            {
+                System.Text.RegularExpressions.<a href="@0@System/A.html#bbe3b2eb80ae5526" class="t">Regex</a>.<a href="@0@System/A.html#c5bd3cd0e4ed488f">Match</a>(<span class="s">&quot;&quot;</span>, <span class="s">&quot;[&quot;</span>);
+<b>#</b><b>pragma</b> <b>warning</b> <b>restore</b> CC0010
+            }
+            <b>catch</b> (<a href="@0@mscorlib/A.html#109b3ef6299ef9df" class="t">ArgumentException</a> <span id="r8 rd" class="r8 r">e</span>)
+            {
+                <span class="r7 r">message</span> = <span class="r8 r">e</span>.<a href="@0@mscorlib/A.html#71cfcd61786aa2d8">Message</a>;
+            }
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r9 rd" class="r9 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#7d2b20bc384cb1e8">Regex</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="r7 r">message</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 33) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">source</span>, <span class="r9 r">expected</span>);
+        }
+ 
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a> <a id="93fe8c149440cc72" href="../R/93fe8c149440cc72.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>() =&gt; <b>new</b> <a href="/CodeCracker.CSharp/A.html#d7ab380b44349648" class="t">RegexAnalyzer</a>();
+    }
+}
+</pre></td></tr></table></div></body></html>

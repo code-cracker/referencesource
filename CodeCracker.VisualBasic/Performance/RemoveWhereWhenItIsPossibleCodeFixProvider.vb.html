@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemoveWhereWhenItIsPossibleCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(48);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Performance/RemoveWhereWhenItIsPossibleCodeFixProvider.vb" target="_top">Performance\RemoveWhereWhenItIsPossibleCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+ 
+<b>Namespace</b> Performance
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#5fd3c0fa0e116a4b" class="t">RemoveWhereWhenItIsPossibleCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="5fd3c0fa0e116a4b" href="../R/5fd3c0fa0e116a4b.html" target="n" data-glyph="0,0" class="t"><span id="46011a5242aa492f">RemoveWhereWhenItIsPossibleCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public Overrides NotOverridable ReadOnly Property</b> <a id="0643470c2d13cfb1" href="../R/0643470c2d13cfb1.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="RemoveWhereWhenItIsPossibleAnalyzer.vb.html#ec8e36205b9849ea" class="t">RemoveWhereWhenItIsPossibleAnalyzer</a>.<a href="RemoveWhereWhenItIsPossibleAnalyzer.vb.html#7c0a194c951bb01f">Id</a>)
+ 
+        <b>Public Overrides Function</b> <a id="539268ebd7a035f8" href="../R/539268ebd7a035f8.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public Overrides Async Function</b> <a id="5342d30eb68475b7" href="../R/5342d30eb68475b7.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r2 rd" class="r2 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First
+            <b>Dim</b> <span id="r3 rd" class="r3 r">diagnosticSpan</span> = <span class="r2 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">whereInvoke</span> = <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">diagnosticSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)().First()
+            <b>Dim</b> <span id="r5 rd" class="r5 r">nextMethodInvoke</span> = <span class="r4 r">whereInvoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>)()
+            <b>Dim</b> <span id="r6 rd" class="r6 r">message</span> = <span class="s">&quot;Remove &#39;Where&#39; moving predicate to &#39;&quot;</span> + <a href="RemoveWhereWhenItIsPossibleAnalyzer.vb.html#ec8e36205b9849ea" class="t">RemoveWhereWhenItIsPossibleAnalyzer</a>.<a href="RemoveWhereWhenItIsPossibleAnalyzer.vb.html#51e63bbed0594958">GetNameOfTheInvokeMethod</a>(<span class="r5 r">nextMethodInvoke</span>) + <span class="s">&quot;&#39;&quot;</span>
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="r6 r">message</span>, <b>Function</b>(<span id="r7 rd" class="r7 r">c</span>) <a href="#374fe6f03e2e885f">RemoveWhere</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">whereInvoke</span>, <span class="r5 r">nextMethodInvoke</span>, <span class="r7 r">c</span>), <b>NameOf</b>(<a href="#5fd3c0fa0e116a4b" class="t">RemoveWhereWhenItIsPossibleCodeFixProvider</a>)), <span class="r2 r">diagnostic</span>)
+        <b>End Function
+ 
+        Private Async Function</b> <a id="374fe6f03e2e885f" href="../R/374fe6f03e2e885f.html" target="n" data-glyph="76,1">RemoveWhere</a>(<span id="r8 rd" class="r8 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r9 rd" class="r9 r">whereInvoke</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>, <span id="r10 rd" class="r10 r">nextMethodInvoke</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>, <span id="r11 rd" class="r11 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>)
+            <b>Dim</b> <span id="r12 rd" class="r12 r">root</span> = <b>Await</b> <span class="r8 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r11 r">cancellationToken</span>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r13 rd" class="r13 r">whereMemberAccess</span> = <span class="r9 r">whereInvoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e39b54af392fd89" class="t">MemberAccessExpressionSyntax</a>)().FirstOrDefault()
+            <b>Dim</b> <span id="r14 rd" class="r14 r">nextMethodMemberAccess</span> = <span class="r10 r">nextMethodInvoke</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4e39b54af392fd89" class="t">MemberAccessExpressionSyntax</a>)().FirstOrDefault()
+ 
+            <span class="c">&#39; We need to push the args into the next invoke&#39;s arg list instead of just replacing</span>
+            <span class="c">&#39; where with new method because next method&#39;s arg list&#39;s end paren may have the CRLF which is dropped otherwise.</span>
+            <b>Dim</b> <span id="r15 rd" class="r15 r">whereArgs</span> = <span class="r9 r">whereInvoke</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f21a8b664c3a1477">ArgumentList</a>
+            <b>Dim</b> <span id="r16 rd" class="r16 r">newArguments</span> = <span class="r10 r">nextMethodInvoke</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f21a8b664c3a1477">ArgumentList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#dcb0bf946f09d413">WithArguments</a>(<span class="r15 r">whereArgs</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>)
+ 
+            <b>Dim</b> <span id="r17 rd" class="r17 r">newNextMethodInvoke</span> = <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3e1240e05eaa31c0">InvocationExpression</a>(
+            <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8bedda1f0f918d55">MemberAccessExpression</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9097237816b3f2dc">SimpleMemberAccessExpression</a>, <span class="r13 r">whereMemberAccess</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7dc411dd03d3a835">Expression</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#115c35ee834c241e" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#981434cd44f87f3e">Token</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1b86f922c98167f1">DotToken</a>), <span class="r14 r">nextMethodMemberAccess</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#19e8a554d3f0fa94">Name</a>), <span class="r16 r">newArguments</span>)
+ 
+            <b>Dim</b> <span id="r18 rd" class="r18 r">newRoot</span> = <span class="r12 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r10 r">nextMethodInvoke</span>, <span class="r17 r">newNextMethodInvoke</span>)
+            <b>Dim</b> <span id="r19 rd" class="r19 r">newDocument</span> = <span class="r8 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r18 r">newRoot</span>)
+            <b>Return</b> <span class="r19 r">newDocument</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

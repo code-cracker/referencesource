@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html><head><title>CallExtensionMethodAsExtensionCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(103);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/CallExtensionMethodAsExtensionCodeFixProvider.cs" target="_top">Usage\CallExtensionMethodAsExtensionCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Formatting;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#41056b9de349ade3" class="t">CallExtensionMethodAsExtensionCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public class</b> <a id="41056b9de349ade3" href="../R/41056b9de349ade3.html" target="n" data-glyph="0,0" class="t"><span id="f648ecf3a34b7768">CallExtensionMethodAsExtensionCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="8138c5ae1864e233" href="../R/8138c5ae1864e233.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#417c7d9151b5e945">CallExtensionMethodAsExtension</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="f41a0d9746b06863" href="../R/f41a0d9746b06863.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public override</b> <span class="t">Task</span> <a id="947980894eea4000" href="../R/947980894eea4000.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(
+                <span class="s">&quot;Use extension method as an extension&quot;</span>,
+                <span id="r2 rd" class="r2 r">cancellationToken</span> =&gt; <a href="#d43f00f942c03be0">CallAsExtensionAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r2 r">cancellationToken</span>), <b>nameof</b>(<a href="#41056b9de349ade3" class="t">CallExtensionMethodAsExtensionCodeFixProvider</a>)),
+                <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="d43f00f942c03be0" href="../R/d43f00f942c03be0.html" target="n" data-glyph="76,1">CallAsExtensionAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r4 rd" class="r4 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a>)<b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#375a09d5e3906265" class="k">var</a> <span id="r7 rd" class="r7 r">diagnosticSpan</span> = <span class="r4 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r8 rd" class="r8 r">staticInvocationExpression</span> = <span class="r6 r">root</span>
+                .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#35dd000880886b72">FindToken</a>(<span class="r7 r">diagnosticSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>)
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>()
+                .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>&gt;()
+                .First();
+ 
+            <b>var</b> <span id="r9 rd" class="r9 r">childNodes</span> = <span class="r8 r">staticInvocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e1e8f2625951f9d5">ChildNodes</a>();
+            <b>var</b> <span id="r10 rd" class="r10 r">parameterExpressions</span> = <a href="#18a998f3e1043fae">GetParameterExpressions</a>(<span class="r9 r">childNodes</span>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="k">var</a> <span id="r11 rd" class="r11 r">firstArgument</span> = <span class="r10 r">parameterExpressions</span>.FirstOrDefault();
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r12 rd" class="r12 r">callerMethod</span> = <span class="r9 r">childNodes</span>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>&gt;().FirstOrDefault();
+ 
+            <span class="r6 r">root</span> = <a href="#0883ad54ff3e47a4">ReplaceStaticCallWithExtionMethodCall</a>(
+                        <span class="r6 r">root</span>,
+                        <span class="r8 r">staticInvocationExpression</span>,
+                        <span class="r11 r">firstArgument</span>,
+                        <span class="r12 r">callerMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>,
+                        <a href="#be68f5ada33238a1">CreateArgumentListSyntaxFrom</a>(<span class="r10 r">parameterExpressions</span>.Skip(1))
+                   ).<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r13 rd" class="r13 r">semanticModel</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>();
+            <span class="r6 r">root</span> = <a href="#c459f68a3e330a50">ImportNeededNamespace</a>(<span class="r6 r">root</span>, <span class="r13 r">semanticModel</span>, <span class="r12 r">callerMethod</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r14 rd" class="r14 r">newDocument</span> = <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r6 r">root</span>);
+ 
+            <b>return</b> <span class="r14 r">newDocument</span>;
+        }
+ 
+        <b>public static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a>&gt; <a id="18a998f3e1043fae" href="../R/18a998f3e1043fae.html" target="n" data-glyph="72,1">GetParameterExpressions</a>(<span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>&gt; <span id="r15 rd" class="r15 r">childNodes</span>) =&gt;
+            <span class="r15 r">childNodes</span>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a>&gt;().SelectMany(<span id="r16 rd" class="r16 r">s</span> =&gt; <span class="r16 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>).Select(<span id="r17 rd" class="r17 r">s</span> =&gt; <span class="r17 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>);
+ 
+        <b>public static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a> <a id="be68f5ada33238a1" href="../R/be68f5ada33238a1.html" target="n" data-glyph="72,1">CreateArgumentListSyntaxFrom</a>(<span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a>&gt; <span id="r18 rd" class="r18 r">expressions</span>) =&gt;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e70eaf8fea04f821">ArgumentList</a>().<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#53ce6f529791f85f">AddArguments</a>(<span class="r18 r">expressions</span>.Select(<span id="r19 rd" class="r19 r">s</span> =&gt; <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#deec702bee4ea786">Argument</a>(<span class="r19 r">s</span>)).ToArray());
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a> <a id="0883ad54ff3e47a4" href="../R/0883ad54ff3e47a4.html" target="n" data-glyph="76,1">ReplaceStaticCallWithExtionMethodCall</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a> <span id="r20 rd" class="r20 r">root</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a> <span id="r21 rd" class="r21 r">staticInvocationExpression</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r22 rd" class="r22 r">sourceExpression</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6855c653dc81553a" class="t">SimpleNameSyntax</a> <span id="r23 rd" class="r23 r">methodName</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a> <span id="r24 rd" class="r24 r">argumentList</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r25 rd" class="r25 r">extensionInvocationExpression</span> = <a href="#a85e72b1fa6fc41f">CreateInvocationExpression</a>(<span class="r22 r">sourceExpression</span>, <span class="r23 r">methodName</span>, <span class="r24 r">argumentList</span>)
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r21 r">staticInvocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>());
+            <b>return</b> <span class="r20 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r21 r">staticInvocationExpression</span>, <span class="r25 r">extensionInvocationExpression</span>);
+        }
+ 
+        <b>public static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a> <a id="a85e72b1fa6fc41f" href="../R/a85e72b1fa6fc41f.html" target="n" data-glyph="72,1">CreateInvocationExpression</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r26 rd" class="r26 r">sourceExpression</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6855c653dc81553a" class="t">SimpleNameSyntax</a> <span id="r27 rd" class="r27 r">methodName</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a> <span id="r28 rd" class="r28 r">argumentList</span>) =&gt;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4c39855f81f9e651">InvocationExpression</a>(
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce87a6adad9ffdd6">MemberAccessExpression</a>(
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff818812b7a56bce">SimpleMemberAccessExpression</a>,
+                <span class="r26 r">sourceExpression</span>,
+                <span class="r27 r">methodName</span>),
+                <span class="r28 r">argumentList</span>);
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a> <a id="c459f68a3e330a50" href="../R/c459f68a3e330a50.html" target="n" data-glyph="76,1">ImportNeededNamespace</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a> <span id="r29 rd" class="r29 r">root</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r30 rd" class="r30 r">semanticModel</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a> <span id="r31 rd" class="r31 r">callerMethod</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3d4da02369016847" class="k">var</a> <span id="r32 rd" class="r32 r">symbolInfo</span> = <span class="r30 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r31 r">callerMethod</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="k">var</a> <span id="r33 rd" class="r33 r">methodSymbol</span> = <span class="r32 r">symbolInfo</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>;
+            <b>if</b> (<span class="r33 r">methodSymbol</span> == <b>null</b>) <b>return</b> <span class="r29 r">root</span>;
+            <b>var</b> <span id="r34 rd" class="r34 r">namespaceDisplayString</span> = <span class="r33 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c8ad9ffeacf174ca">ContainingNamespace</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2e1df58bd2fd08c2">ToDisplayString</a>();
+            <b>var</b> <span id="r35 rd" class="r35 r">hasNamespaceImported</span> = <span class="r29 r">root</span>
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#44fe5c9234642a23">DescendantNodes</a>()
+                .OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3a2cea015efa9ed" class="t">UsingDirectiveSyntax</a>&gt;()
+                .Select(<span id="r36 rd" class="r36 r">s</span> =&gt; <span class="r36 r">s</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#425b559b58753c99">Name</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>())
+                .Any(<span id="r37 rd" class="r37 r">n</span> =&gt; <span class="r37 r">n</span> == <span class="r34 r">namespaceDisplayString</span>);
+            <b>if</b> (!<span class="r35 r">hasNamespaceImported</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#811909d67b7e27d4" class="k">var</a> <span id="r38 rd" class="r38 r">namespaceQualifiedName</span> = <span class="r33 r">methodSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c8ad9ffeacf174ca">ContainingNamespace</a>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#e32fdb655438c2ca">ToNameSyntax</a>();
+                <span class="r29 r">root</span> = <span class="r29 r">root</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ec57852018ec2176">AddUsings</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8bb92ec542836f74">UsingDirective</a>(<span class="r38 r">namespaceQualifiedName</span>));
+            }
+            <b>return</b> <span class="r29 r">root</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

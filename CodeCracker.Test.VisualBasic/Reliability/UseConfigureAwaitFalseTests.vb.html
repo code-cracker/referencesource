@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html><head><title>UseConfigureAwaitFalseTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(95);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Reliability/UseConfigureAwaitFalseTests.vb" target="_top">Reliability\UseConfigureAwaitFalseTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Reliability
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Reliability
+    <b>Public Class</b> <a id="3d7eba9e8a6927ff" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="e4014e0976420983">UseConfigureAwaitFalseTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#0f699e8f34d05f6f" class="t">UseConfigureAwaitFalseAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#d2cc861248483d76" class="t">UseConfigureAwaitFalseCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t&quot;</span>, 51)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ContinueWith(Function() 42)&quot;</span>, 51)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.Delay(1000)&quot;</span>, 13)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.FromResult(0)&quot;</span>, 13)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.Run(Sub() )&quot;</span>, 13)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Dim f As Func(Of System.Threading.Tasks.Task) : Await f()&quot;</span>, 61)&gt;
+        <b>Public Async Function</b> <a id="d1c70b4b85a5c71a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAwaitingTaskAnalyzerCreatesDiagnostic</a>(<span id="r0 rd" class="r0 r">sample</span> <b>As String</b>, <span id="r1 rd" class="r1 r">column</span> <b>As Integer</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r2 rd" class="r2 r">test</span> = <span class="r0 r">sample</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>)
+            <b>Dim</b> <span id="r4 rd" class="r4 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#352a24b30260dc0b">UseConfigureAwaitFalse</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Consider using ConfigureAwait(False) on the awaited task.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 6, <span class="r1 r">column</span>)}
+            }
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r4 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ConfigureAwait(false)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await.ContinueWith(Function() 42).ConfigureAwait(false)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.Delay(1000).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.FromResult(0).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.Run(Sub()).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Dim f As Func(Of System.Treading.Tasks.Task) : Await f().ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await System.Threading.Tasks.Task.Yield()&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Await UnknownAsync()&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="d2e2f284436a06e7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenAwaitingANonTaskNoDiagnosticIsCreated</a>(<span id="r5 rd" class="r5 r">sample</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r6 rd" class="r6 r">test</span> = <span class="r5 r">sample</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t&quot;</span>,
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ContinueWith(Function() 42)&quot;</span>,
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ContinueWith(Function() 42).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Delay(1000)&quot;</span>,
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Delay(1000).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Await System.Threading.Tasks.Task.FromResult(0)&quot;</span>,
+            <span class="s">&quot;Await System.Threading.Tasks.Task.FromResult(0).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Run(Sub() )&quot;</span>,
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Run(Sub() ).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Dim f As Func(Of System.Threading.Tasks.Task): Await F()&quot;</span>,
+            <span class="s">&quot;Dim f As Func(Of System.Threading.Tasks.Task): Await F().ConfigureAwait(False)&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="698f5049e799805b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAddsConfigureAwaitFalse</a>(<span id="r7 rd" class="r7 r">original</span> <b>As String</b>, <span id="r8 rd" class="r8 r">result</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r9 rd" class="r9 r">test</span> = <span class="r7 r">original</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>)
+            <b>Dim</b> <span id="r10 rd" class="r10 r">fix</span> = <span class="r8 r">result</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t&quot;</span>,
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ContinueWith(Function() 42)&quot;</span>,
+            <span class="s">&quot;Dim t As System.Threading.Tasks.Task: Await t.ContinueWith(Function() 42).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Delay(1000)&quot;</span>,
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Delay(1000).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Await System.Threading.Tasks.Task.FromResult(0)&quot;</span>,
+            <span class="s">&quot;Await System.Threading.Tasks.Task.FromResult(0).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Run(Sub() )&quot;</span>,
+            <span class="s">&quot;Await System.Threading.Tasks.Task.Run(Sub() ).ConfigureAwait(False)&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(
+            <span class="s">&quot;Dim f As Func(Of System.Threading.Tasks.Task): Await F()&quot;</span>,
+            <span class="s">&quot;Dim f As Func(Of System.Threading.Tasks.Task): Await F().ConfigureAwait(False)&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="9c73bee8bd4aff4f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAllAddsConfigureAwaitFalse</a>(<span id="r11 rd" class="r11 r">original</span> <b>As String</b>, <span id="r12 rd" class="r12 r">result</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r13 rd" class="r13 r">test1</span> = <span class="r11 r">original</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>, <span class="r14 r">typeName</span>:=<span class="s">&quot;MyType1&quot;</span>)
+            <b>Dim</b> <span id="r15 rd" class="r15 r">fix1</span> = <span class="r12 r">result</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>, <span class="r14 r">typeName</span>:=<span class="s">&quot;MyType1&quot;</span>)
+ 
+            <b>Dim</b> <span id="r16 rd" class="r16 r">test2</span> = <span class="r11 r">original</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>, <span class="r14 r">typeName</span>:=<span class="s">&quot;MyType2&quot;</span>)
+            <b>Dim</b> <span id="r17 rd" class="r17 r">fix2</span> = <span class="r12 r">result</span>.<a href="/CodeCracker.Test.Common/A.html#f7b36c8d05dd6bdc">WrapInVBMethod</a>(<span class="r3 r">isAsync</span>:=<b>True</b>, <span class="r14 r">typeName</span>:=<span class="s">&quot;MyType2&quot;</span>)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#0399fad2710dd8f0">VerifyBasicFixAllAsync</a>(<b>New</b> <b>String</b>() {<span class="r13 r">test1</span>, <span class="r16 r">test2</span>}, <b>New</b> <b>String</b>() {<span class="r15 r">fix1</span>, <span class="r17 r">fix2</span>})
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

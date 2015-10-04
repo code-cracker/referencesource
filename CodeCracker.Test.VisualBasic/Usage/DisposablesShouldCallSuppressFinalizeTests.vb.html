@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposablesShouldCallSuppressFinalizeTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(222);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/DisposablesShouldCallSuppressFinalizeTests.vb" target="_top">Usage\DisposablesShouldCallSuppressFinalizeTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Usage
+    <b>Public Class</b> <a id="d72d7ef884f10980" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="e32153c6341dda20">DisposablesShouldCallSuppressFinalizeTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#8226a82bd12f4c0a" class="t">DisposablesShouldCallSuppressFinalizeAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#4bf3fea2e6620056" class="t">DisposablesShouldCallSuppressFinalizeCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="8d3d0a4590d41be4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfClassImplementsIDisposableWithNoSuppressFinalizeCall</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">&quot;
+Public Class MyType
+    Implements System.IDisposable
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+    End Sub
+End Class
+&quot;</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;&#39;MyType&#39; should call GC.SuppressFinalize inside the Dispose method.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 16)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="d5a4d9da4aeba62b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassImplmentsIDisposableButDoesNotContainsAPublicConstructor</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">&quot;
+Public Class MyType
+    Implements System.IDisposable
+ 
+    Private Sub New()
+    End Sub
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+    End Sub
+ 
+    Protected Overrides Sub Finalize()
+            MyBase.Finalize()
+    End Sub
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="9c2d1ab4debacc64" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FunctionNoWarningIfClassIsAPrivateNestedType</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">&quot;
+Public Class MyType
+    Private Class MyNestedType
+        Implements System.IDisposable
+ 
+        Public Sub Dispose() Implements IDisposable.Dispose
+        End Sub
+ 
+        Protected Overrides Sub Finalize()
+                MyBase.Finalize()
+        End Sub
+    End Class
+End Class
+&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+ 
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e697709149afa2a3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotWarnIfStructImplementsIDisposableWithNoSuppressFinalizeCall</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;
+Public Struture MyType
+    Implements System.IDisposable
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+    End Sub
+End Structure
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="99fbe7e8ec57f1f7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotWarnIfSealedClassImplementsIDisposableWithNoSuppressFinalizeCall</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">&quot;
+Public NotInheritable Class MyType
+    Implements System.IDisposable
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+    End Sub
+End Class
+&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>)
+        <b>End Function</b>
+ 
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="b12429b0333716a0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarnIfSealedClassImplementsIDisposableWithNoSuppressFinalizeCallAndContainsUserDefinedFinalizer</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">&quot;
+Public NotInheritable Class MyType
+    Implements System.IDisposable
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+    End Sub
+ 
+    Protected Overrides Sub Finalize()
+            MyBase.Finalize()
+    End Sub
+End Class
+&quot;</span>
+ 
+            <b>Dim</b> <span id="r7 rd" class="r7 r">expected</span> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;&#39;MyType&#39; should call GC.SuppressFinalize inside the Dispose method.&quot;</span>,
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = Microsoft.CodeAnalysis.<a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, 5, 16)}
+            }
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r6 r">test</span>, <span class="r7 r">expected</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="5ff73bf2345f4538" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassImplementsDisposableCallsSuppressFinalizeAndCallsDisposeWithMe</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">&quot;
+Public Class MyType
+    Implements System.IDisposable
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Me.Dispose(True)
+        GC.SuppressFinalize(Me)
+    End Sub
+ 
+    Protected Overridable Sub Dispose(disposing As Boolean)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r8 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a69127e10c8ffaa6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassImplementsDisposableCallsSuppressFinalize</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">&quot;
+Public Class MyType
+    Implements System.IDisposable
+ 
+    Public Sub Dispose() Implements IDisposable.Dispose
+        GC.SuppressFinalize(Me)
+    End Sub
+ 
+    Protected Overridable Sub Dispose(disposing As Boolean)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Structure&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="75033160ee75b12f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfDoesNotImplementIDisposable</a>(<span id="r10 rd" class="r10 r">type</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r11 rd" class="r11 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="s">&quot;
+Public {0} MyType
+End {0}&quot;</span>, <span class="r10 r">type</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r11 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="e644beb2b5218e0c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenImplementsIDisposableCallSuppressFinalize</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">&quot;
+Imports System
+Public Class MyType
+    Implements System.IDisposable
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Dim x = 123
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r13 rd" class="r13 r">fix</span> = <span class="s">&quot;
+Imports System
+Public Class MyType
+    Implements System.IDisposable
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Dim x = 123
+        GC.SuppressFinalize(Me)
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r12 r">source</span>, <span class="r13 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="582b2a1dffe9f559" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenClassHasParameterizedDisposeMethod</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">&quot;
+Imports System
+Public Class MyType
+    Implements System.IDisposable
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Dispose(true)
+    End Sub
+    Protected Overridable Sub Dispose(disposing As Boolean)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r15 rd" class="r15 r">fix</span> = <span class="s">&quot;
+Imports System
+Public Class MyType
+    Implements System.IDisposable
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Dispose(true)
+        GC.SuppressFinalize(Me)
+    End Sub
+ 
+    Protected Overridable Sub Dispose(disposing As Boolean)
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r14 r">source</span>, <span class="r15 r">fix</span>)
+ 
+        <b>End Function
+ 
+    End Class
+ 
+End Namespace</b></pre></td></tr></table></div></body></html>

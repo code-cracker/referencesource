@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html><head><title>IPAddressAnalyzerTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(77);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/IPAddressAnalyzerTests.vb" target="_top">Usage\IPAddressAnalyzerTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Net
+<b>Imports</b> CodeCracker.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Xunit
+ 
+<b>Public Class</b> <a id="6351459fb7a50bfe" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="25e2df83e3559086">IPAddressAnalyzerTests</span></a>
+    <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+ 
+    <b>Private Const</b> <a id="04e1efd0c4e8b41a" href="../R/04e1efd0c4e8b41a.html" target="n" data-glyph="10,1">TestCode</a> = <span class="s">&quot;
+Imports System
+Imports System.Net
+Namespace ConsleApplication1
+    Class Person
+        Public Sub New()
+            {0}
+        End Sub
+    End Class
+End Namespace&quot;</span>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="b4b03509f3ef8d27" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfParseIdentifierFoundAndIpAddressTextIsIncorrectCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r0 rd" class="r0 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#04e1efd0c4e8b41a">TestCode</a>, <span class="s">&quot;System.Net.IPAddress.Parse(&quot;&quot;foo&quot;&quot;)&quot;</span>)
+<b>#</b><b>Disable</b> <b>Warning</b> CC0064
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r0 r">test</span>, <a href="#dfa10f8168a16461">CreateDiagnosticResult</a>(7, 40, <b>Sub</b>() <a href="@0@System/A.html#966bd1c3b2dc55c7" class="t">IPAddress</a>.<a href="@0@System/A.html#b281f2ccedf6c111">Parse</a>(<span class="s">&quot;foo&quot;</span>)))
+<b>#</b><b>Enable</b> <b>Warning</b> CC0064
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="cf2a30be8cbba958" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedParseIdentifierFoundAndIPAddressTextIsIncorrectCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r1 rd" class="r1 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#04e1efd0c4e8b41a">TestCode</a>, <span class="s">&quot;IPAddress.Parse(&quot;&quot;foo&quot;&quot;)&quot;</span>)
+<b>#</b><b>Disable</b> <b>Warning</b> CC0064
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r1 r">test</span>, <a href="#dfa10f8168a16461">CreateDiagnosticResult</a>(7, 29, <b>Sub</b>() <a href="@0@System/A.html#966bd1c3b2dc55c7" class="t">IPAddress</a>.<a href="@0@System/A.html#b281f2ccedf6c111">Parse</a>(<span class="s">&quot;foo&quot;</span>)))
+<b>#</b><b>Enable</b> <b>Warning</b> CC0064
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="4ab27b5cb39102f2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfParseIdentifierFoundAndIPAddressTextIsCorrectDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r2 rd" class="r2 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#04e1efd0c4e8b41a">TestCode</a>, <span class="s">&quot;System.Net.IPAddress.Parse(&quot;&quot;127.0.0.1&quot;&quot;)&quot;</span>)
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="235f97f067ba5906" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedParseIdentifierFoundAndIPAddressTextIsCorrectDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r3 rd" class="r3 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#04e1efd0c4e8b41a">TestCode</a>, <span class="s">&quot;IPAddress.Parse(&quot;&quot;127.0.0.1&quot;&quot;)&quot;</span>)
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+    <b>End Function</b>
+ 
+    &lt;<span class="t">Fact</span>&gt;
+    <b>Public Async Function</b> <a id="27ed639f728ded0e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfIsOtherTypeParseMethodDoesNotCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+        <b>Dim</b> <span id="r4 rd" class="r4 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#04e1efd0c4e8b41a">TestCode</a>, <span class="s">&quot;[Enum].Parse(GetType(String), &quot;&quot;&quot;&quot;)&quot;</span>)
+        <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+    <b>End Function
+ 
+    Private Function</b> <a id="dfa10f8168a16461" href="../R/dfa10f8168a16461.html" target="n" data-glyph="76,1">CreateDiagnosticResult</a>(<span id="r5 rd" class="r5 r">line</span> <b>As Integer</b>, <span id="r6 rd" class="r6 r">column</span> <b>As Integer</b>, <span id="r7 rd" class="r7 r">errorMessageAction</span> <b>As</b> <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t">Action</a>) <b>As</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+        <b>Return</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <b>With</b> {
+            .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#9922b37ddbfa7fa6">IPAddress</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="#18dfffe454263d3e">GetErrorMessage</a>(<span class="r7 r">errorMessageAction</span>),
+            .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+            .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, <span class="r5 r">line</span>, <span class="r6 r">column</span>)}}
+    <b>End Function
+ 
+    Private Shared Function</b> <a id="18dfffe454263d3e" href="../R/18dfffe454263d3e.html" target="n" data-glyph="76,1">GetErrorMessage</a>(<span id="r8 rd" class="r8 r">action</span> <b>As</b> <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t">Action</a>) <b>As String
+        Try</b>
+            <span class="r8 r">action</span>()
+        <b>Catch</b> <span class="r9 r">ex</span> <b>As</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t">Exception</a>
+            <b>Return</b> <span class="r9 r">ex</span>.<a href="@0@mscorlib/A.html#5fba0e16215b42a3">Message</a>
+        <b>End Try
+        Return String</b>.<a href="@0@mscorlib/A.html#c9f70a27facb27cf">Empty</a>
+    <b>End Function
+ 
+    Protected Overrides Function</b> <a id="21ac19dc819daf01" href="../R/21ac19dc819daf01.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+        <b>Return</b> <b>New</b> <a href="/CodeCracker.VisualBasic/A.html#203f73f0f7ff419f" class="t">IPAddressAnalyzer</a>
+    <b>End Function
+End Class</b>
+ 
+</pre></td></tr></table></div></body></html>

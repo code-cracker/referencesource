@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html><head><title>MergeNestedIfTest.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(189);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Refactoring/MergeNestedIfTest.cs" target="_top">Refactoring\MergeNestedIfTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Refactoring;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Refactoring
+{
+    <b>public class</b> <a id="c42484c9d4f7bf3f" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="8321b1b03e551666">MergeNestedIfTest</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#d5270b7d8e03a396" class="t">MergeNestedIfAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#1b329c5c18469e41" class="t">MergeNestedIfCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1e9096a6def8c860" href="../R/../../0000000000.html" target="n" data-glyph="72,1">EmptyIfDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+                if (true)
+                {
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="96646e4ddf16850c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SingleIfDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+                if (true)
+                {
+                    var a = 1;
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9b99b945e7a4793a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NestedIfCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+                if (true)
+                {
+                    if (false)
+                    {
+                        var a = 1;
+                    }
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#15b110fb1bab810b">MergeNestedIf</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="/CodeCracker.CSharp/A.html#d5270b7d8e03a396" class="t">MergeNestedIfAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#f048cfac125420aa">MessageFormat</a>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 17) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="241c5c25d74d30e7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NestedIfWithStatementsOnFirstIfDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+                if (true)
+                {
+                    var a = 1;
+                    if (false)
+                    {
+                        a = 2;
+                    }
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="46eb19b02c3f5270" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfWithElseDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">test</span> = <span class="s">@&quot;
+                if (true)
+                {
+                    if (false)
+                    {
+                        a = 2;
+                    }
+                }
+                else
+                {
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7b3c68c8123ce7a8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfWithNestedElseDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+                if (true)
+                {
+                    if (false)
+                    {
+                        a = 2;
+                    }
+                    else
+                    {
+                    }
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="74aa4f44da50ed13" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NestedIfIsFixed</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;
+                //comment0
+                if (true)//comment1
+                {
+                    //comment3
+                    if (false)
+                    {
+                        var a = 1;//comment2
+                    }
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">fixtest</span> = <span class="s">@&quot;
+                //comment0
+                //comment3
+                if (true &amp;&amp; false)//comment1
+                {
+                    var a = 1;//comment2
+                }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r7 r">test</span>, <span class="r8 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cf42c523586fe7ec" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfWithoutBlockWithNestedIfWithBlockFixed</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">test</span> = <span class="s">@&quot;
+                var cond = System.DateTime.Now.Second &gt; 1;
+                //comment0
+                if (true)//comment1
+                    //comment3
+                    if (cond)
+                    {
+                        var a = 1;//comment2
+                    }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">fixtest</span> = <span class="s">@&quot;
+                var cond = System.DateTime.Now.Second &gt; 1;
+                //comment0
+                //comment3
+                if (true &amp;&amp; cond)//comment1
+                {
+                    var a = 1;//comment2
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r9 r">test</span>, <span class="r10 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b40aa2a9997cb541" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfWithBlockWithNestedIfWithoutBlockFixed</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">test</span> = <span class="s">@&quot;
+                var cond = System.DateTime.Now.Second &gt; 1;
+                //comment0
+                if (true)//comment1
+                {
+                    //comment3
+                    if (cond)
+                        var a = 1;//comment2
+                }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">fixtest</span> = <span class="s">@&quot;
+                var cond = System.DateTime.Now.Second &gt; 1;
+                //comment0
+                //comment3
+                if (true &amp;&amp; cond)//comment1
+                    var a = 1;
+                //comment2&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r11 r">test</span>, <span class="r12 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ca7b71d8d2922e79" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfWithoutBlockWithNestedIfWithoutBlockFixed</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">test</span> = <span class="s">@&quot;
+                var cond = System.DateTime.Now.Second &gt; 1;
+                //comment0
+                if (true)//comment1
+                    //comment3
+                    if (cond)
+                        var a = 1;//comment2&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r14 rd" class="r14 r">fixtest</span> = <span class="s">@&quot;
+                var cond = System.DateTime.Now.Second &gt; 1;
+                //comment0
+                //comment3
+                if (true &amp;&amp; cond)//comment1
+                    var a = 1;//comment2&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r13 r">test</span>, <span class="r14 r">fixtest</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

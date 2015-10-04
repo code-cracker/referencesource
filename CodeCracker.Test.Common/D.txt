@@ -1,0 +1,102 @@
+﻿ApplyFixAsync;43b3be0f6f91e90c;method;CodeCracker.Test.CodeFixVerifier.ApplyFixAsync(Microsoft.CodeAnalysis.Project, Microsoft.CodeAnalysis.CodeActions.CodeAction);76
+ApplyFixAsync;9f56aba5b295d319;method;CodeCracker.Test.CodeFixVerifier.ApplyFixAsync(Microsoft.CodeAnalysis.Document, Microsoft.CodeAnalysis.CodeActions.CodeAction);76
+ChangeCulture;ce78b7892c401f32;class;CodeCracker.Test.ChangeCulture;0
+CheckIfAnalyzerThrew;89f8d4364f595c57;method;CodeCracker.Test.DiagnosticVerifier.CheckIfAnalyzerThrew(System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.Diagnostic>);76
+CodeAnalysisReference;98e3befc32c1ee14;field;CodeCracker.Test.DiagnosticVerifier.CodeAnalysisReference;46
+CodeFixVerifier;ad23ba6f9e894f13;class;CodeCracker.Test.CodeFixVerifier;0
+CodeFixVerifier<T, U>;cb57ec3e3b241743;class;CodeCracker.Test.CodeFixVerifier<T, U>;0
+Column;4531a904db86b157;property;CodeCracker.Test.DiagnosticResultLocation.Column;102
+Column;d47f81299a201a60;property;CodeCracker.Test.DiagnosticResult.Column;102
+CorlibReference;31f8538e0c9c0674;field;CodeCracker.Test.DiagnosticVerifier.CorlibReference;46
+CreateDocument;2d1d89002386d473;method;CodeCracker.Test.DiagnosticVerifier.CreateDocument(System.String, System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);72
+CreateProject;cfde15f7875b8179;method;CodeCracker.Test.DiagnosticVerifier.CreateProject(System.String[], System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);72
+CSharpDefaultFileExt;85c422612e96b534;field;CodeCracker.Test.DiagnosticVerifier.CSharpDefaultFileExt;44
+CSharpDefaultFilePath;120d3b052b01c1ef;field;CodeCracker.Test.DiagnosticVerifier.CSharpDefaultFilePath;44
+CSharpSymbolsReference;2063a2ee22eed449;field;CodeCracker.Test.DiagnosticVerifier.CSharpSymbolsReference;46
+DefaultFilePathPrefix;e4a0f3576ccf3df5;field;CodeCracker.Test.DiagnosticVerifier.DefaultFilePathPrefix;44
+diagnosticIds;69b0e694f7aec9b9;field;CodeCracker.Test.FixAllDiagnosticProvider.diagnosticIds;46
+DiagnosticResult;3363f61080d7fe94;struct;CodeCracker.Test.DiagnosticResult;108
+DiagnosticResultLocation;7367c1957acfda83;struct;CodeCracker.Test.DiagnosticResultLocation;108
+DiagnosticVerifier;edc7bdb3c3230679;class;CodeCracker.Test.DiagnosticVerifier;0
+DiagnosticVerifier<T>;368de6dfc9311559;class;CodeCracker.Test.DiagnosticVerifier<T>;0
+diagOptions;fe830c610c5c92bb;field;CodeCracker.Test.DiagnosticVerifier.diagOptions;46
+Dispose;4efde24a0408e91f;method;CodeCracker.Test.ChangeCulture.Dispose();72
+Extensions;f5f0e280c58c94d7;class;CodeCracker.Test.Extensions;0
+FixAllDiagnosticProvider;1342dd989d129c65;class;CodeCracker.Test.FixAllDiagnosticProvider;0
+FormatDiagnostics;d432caa99429985e;method;CodeCracker.Test.DiagnosticVerifier.FormatDiagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, params Microsoft.CodeAnalysis.Diagnostic[]);76
+FormatSourceAsync;9ab2878f20cbc506;method;CodeCracker.Test.DiagnosticVerifier.FormatSourceAsync(System.String, System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);72
+GetAllDiagnosticsAsync;468ccd169740efea;method;CodeCracker.Test.FixAllDiagnosticProvider.GetAllDiagnosticsAsync(Microsoft.CodeAnalysis.Project, System.Threading.CancellationToken);72
+GetCodeFixProvider;2c8089079f5b7396;method;CodeCracker.Test.CodeFixVerifier<T, U>.GetCodeFixProvider();75
+GetCodeFixProvider;9fd26734cb6ca021;method;CodeCracker.Test.CodeFixVerifier.GetCodeFixProvider();75
+GetCompilerDiagnosticsAsync;d2083890a31c9da3;method;CodeCracker.Test.CodeFixVerifier.GetCompilerDiagnosticsAsync(Microsoft.CodeAnalysis.Document);76
+GetDiagnosticAnalyzer;342cba5641037222;method;CodeCracker.Test.DiagnosticVerifier<T>.GetDiagnosticAnalyzer();75
+GetDiagnosticAnalyzer;ab3f83b554a8f21e;method;CodeCracker.Test.CodeFixVerifier<T, U>.GetDiagnosticAnalyzer();75
+GetDiagnosticAnalyzer;cd501df9a1c444ec;method;CodeCracker.Test.DiagnosticVerifier.GetDiagnosticAnalyzer();75
+getDocumentDiagnosticsAsync;e71353ca42edc712;field;CodeCracker.Test.FixAllDiagnosticProvider.getDocumentDiagnosticsAsync;46
+GetDocumentDiagnosticsAsync;1ba651d493501fd9;method;CodeCracker.Test.FixAllDiagnosticProvider.GetDocumentDiagnosticsAsync(Microsoft.CodeAnalysis.Document, System.Threading.CancellationToken);72
+GetDocuments;0b594b55f049e147;method;CodeCracker.Test.DiagnosticVerifier.GetDocuments(System.String[], System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);72
+GetNewDiagnostics;66ec0d03ce31ff03;method;CodeCracker.Test.CodeFixVerifier.GetNewDiagnostics(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic>, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic>);76
+getProjectDiagnosticsAsync;453a115c85dd9908;field;CodeCracker.Test.FixAllDiagnosticProvider.getProjectDiagnosticsAsync;46
+GetProjectDiagnosticsAsync;292410b359b9a901;method;CodeCracker.Test.FixAllDiagnosticProvider.GetProjectDiagnosticsAsync(Microsoft.CodeAnalysis.Project, System.Threading.CancellationToken);72
+GetSortedDiagnosticsAsync;a7d3638f697d8442;method;CodeCracker.Test.DiagnosticVerifier.GetSortedDiagnosticsAsync(System.String[], System.String, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);76
+GetSortedDiagnosticsFromDocumentsAsync;7fac784bf5b1777d;method;CodeCracker.Test.DiagnosticVerifier.GetSortedDiagnosticsFromDocumentsAsync(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.Document[]);75
+GetStringFromDocumentAsync;92d1a40e885fc4e9;method;CodeCracker.Test.DiagnosticVerifier.GetStringFromDocumentAsync(Microsoft.CodeAnalysis.Document);72
+Id;4042d6f495d6018d;property;CodeCracker.Test.DiagnosticResult.Id;102
+JsonNetReference;3182728e02aa0190;field;CodeCracker.Test.DiagnosticVerifier.JsonNetReference;46
+Line;11b88cf3b49ff54b;property;CodeCracker.Test.DiagnosticResult.Line;102
+Line;b718ead0cf8347b7;property;CodeCracker.Test.DiagnosticResultLocation.Line;102
+locations;94bf5b58ffe8ac85;field;CodeCracker.Test.DiagnosticResult.locations;46
+Locations;684443fd25562855;property;CodeCracker.Test.DiagnosticResult.Locations;102
+Message;3e1e28fae0a40724;property;CodeCracker.Test.DiagnosticResult.Message;102
+Path;799c98f1af5f1d2f;property;CodeCracker.Test.DiagnosticResultLocation.Path;102
+Path;9c1a16d68cab4c8a;property;CodeCracker.Test.DiagnosticResult.Path;102
+RegexReference;d6d5042157391992;field;CodeCracker.Test.DiagnosticVerifier.RegexReference;46
+Severity;7421159e27aa4350;property;CodeCracker.Test.DiagnosticResult.Severity;102
+SortDiagnostics;103eac16e9283766;method;CodeCracker.Test.DiagnosticVerifier.SortDiagnostics(System.Collections.Generic.List<Microsoft.CodeAnalysis.Diagnostic>);76
+SystemCoreReference;960b6a5ea02ba0d7;field;CodeCracker.Test.DiagnosticVerifier.SystemCoreReference;46
+TestProjectName;e1242de2a25e60f2;field;CodeCracker.Test.DiagnosticVerifier.TestProjectName;44
+VerifyBasicDiagnosticAsync;1ad521f1785eee0b;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicDiagnosticAsync(System.String, CodeCracker.Test.DiagnosticResult, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicDiagnosticAsync;303390ca1ef578c1;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicDiagnosticAsync(System.String, CodeCracker.Test.DiagnosticResult[], Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicDiagnosticAsync;b9572ca13ed78a12;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicDiagnosticAsync(System.String[], CodeCracker.Test.DiagnosticResult[], Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicDiagnosticAsync;e69846c21794f630;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicDiagnosticAsync(System.String, CodeCracker.Test.DiagnosticResult, CodeCracker.Test.DiagnosticResult, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicFixAllAsync;0399fad2710dd8f0;method;CodeCracker.Test.CodeFixVerifier.VerifyBasicFixAllAsync(System.String[], System.String[], System.Boolean, System.Boolean, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion, System.String);75
+VerifyBasicFixAllAsync;a9eb17a7699f2c31;method;CodeCracker.Test.CodeFixVerifier.VerifyBasicFixAllAsync(System.String, System.String, System.Boolean, System.Boolean, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion, System.String);75
+VerifyBasicFixAsync;a5a06b48cebf711f;method;CodeCracker.Test.CodeFixVerifier.VerifyBasicFixAsync(System.String, System.String, System.Int32?, System.Boolean, System.Boolean, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicHasNoDiagnosticsAsync;100f841819def5e7;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicHasNoDiagnosticsAsync(System.String[], Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicHasNoDiagnosticsAsync;8ae402837ef13f9a;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicHasNoDiagnosticsAsync(System.String, System.String, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyBasicHasNoDiagnosticsAsync;e5c54a9d0b401d3e;method;CodeCracker.Test.DiagnosticVerifier.VerifyBasicHasNoDiagnosticsAsync(System.String, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);75
+VerifyCSharpDiagnosticAsync;34fef4d5ccbad2c3;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpDiagnosticAsync(System.String[], CodeCracker.Test.DiagnosticResult[], Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpDiagnosticAsync;525ea8bdc7c8943a;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpDiagnosticAsync(System.String, CodeCracker.Test.DiagnosticResult[], Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpDiagnosticAsync;732f339699c891d0;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpDiagnosticAsync(System.String, CodeCracker.Test.DiagnosticResult, Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpDiagnosticAsync;bfb38e984b2a5c7a;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpDiagnosticAsync(System.String, CodeCracker.Test.DiagnosticResult, CodeCracker.Test.DiagnosticResult, Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpFixAllAsync;0f37121e4ac38dc7;method;CodeCracker.Test.CodeFixVerifier.VerifyCSharpFixAllAsync(System.String[], System.String[], System.Boolean, System.Boolean, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.CSharp.LanguageVersion, System.String);75
+VerifyCSharpFixAllAsync;26c6f53dff524c44;method;CodeCracker.Test.CodeFixVerifier.VerifyCSharpFixAllAsync(System.String, System.String, System.Boolean, System.Boolean, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.CSharp.LanguageVersion, System.String);75
+VerifyCSharpFixAsync;eaec7b9ab2094203;method;CodeCracker.Test.CodeFixVerifier.VerifyCSharpFixAsync(System.String, System.String, System.Int32?, System.Boolean, System.Boolean, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpHasNoDiagnosticsAsync;1c84e810dc3d9951;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpHasNoDiagnosticsAsync(System.String, System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpHasNoDiagnosticsAsync;3e4df674331fb37d;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpHasNoDiagnosticsAsync(System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpHasNoDiagnosticsAsync;9a10f8706f7768b8;method;CodeCracker.Test.DiagnosticVerifier.VerifyCSharpHasNoDiagnosticsAsync(System.String[], Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyCSharpHasNoFixAsync;e58c11f9b1222c4b;method;CodeCracker.Test.CodeFixVerifier.VerifyCSharpHasNoFixAsync(System.String, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, Microsoft.CodeAnalysis.CSharp.LanguageVersion);75
+VerifyDiagnosticLocation;a25c767e4ad6ea24;method;CodeCracker.Test.DiagnosticVerifier.VerifyDiagnosticLocation(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.Diagnostic, Microsoft.CodeAnalysis.Location, CodeCracker.Test.DiagnosticResultLocation);76
+VerifyDiagnosticResults;3baa49582e53b981;method;CodeCracker.Test.DiagnosticVerifier.VerifyDiagnosticResults(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic>, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, params CodeCracker.Test.DiagnosticResult[]);76
+VerifyDiagnosticsAsync;97e432dba341acd7;method;CodeCracker.Test.DiagnosticVerifier.VerifyDiagnosticsAsync(System.String[], System.String, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, CodeCracker.Test.DiagnosticResult[], Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);76
+VerifyFixAllAsync;6aa45f9a4acbdbff;method;CodeCracker.Test.CodeFixVerifier.VerifyFixAllAsync(System.String, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, System.String, System.String, System.Boolean, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion, System.String);76
+VerifyFixAllAsync;b689e50ef71e0f5f;method;CodeCracker.Test.CodeFixVerifier.VerifyFixAllAsync(System.String, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, System.String[], System.String[], System.Boolean, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion, System.String);76
+VerifyFixAsync;a0fc4cf98cc36b17;method;CodeCracker.Test.CodeFixVerifier.VerifyFixAsync(System.String, System.Collections.Immutable.ImmutableArray<System.String>, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, System.String, System.String, System.Int32?, System.Boolean, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);76
+VerifyFixAsync;afd27e9f5a63deab;method;CodeCracker.Test.CodeFixVerifier.VerifyFixAsync(System.String, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, System.String, System.String, System.Int32?, System.Boolean, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);76
+VerifyHasNoFixAsync;cba4849e6b900737;method;CodeCracker.Test.CodeFixVerifier.VerifyHasNoFixAsync(System.String, Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider, System.String, Microsoft.CodeAnalysis.CSharp.LanguageVersion, Microsoft.CodeAnalysis.VisualBasic.LanguageVersion);76
+VisualBasicDefaultExt;987862508b81f352;field;CodeCracker.Test.DiagnosticVerifier.VisualBasicDefaultExt;44
+VisualBasicDefaultFilePath;1392203a848d239a;field;CodeCracker.Test.DiagnosticVerifier.VisualBasicDefaultFilePath;44
+WrapInCSharpClass;9c5e5c3f6623cb64;method;CodeCracker.Test.Extensions.WrapInCSharpClass(System.String, System.String);220
+WrapInCSharpMethod;cb53e46d39a2d2c3;method;CodeCracker.Test.Extensions.WrapInCSharpMethod(System.String, System.Boolean, System.String, System.String);220
+WrapInVBMethod;f7b36c8d05dd6bdc;method;CodeCracker.Test.Extensions.WrapInVBMethod(System.String, System.Boolean, System.String, System.String);220
+.NETFramework,Version=v4.5.2.AssemblyAttributes.cs;b7804e044ba53699;file;.NETFramework,Version=v4.5.2.AssemblyAttributes.cs;196
+ChangeCulture.cs;adeaf8ed91e389ba;file;ChangeCulture.cs;196
+CodeCracker.Test.Common.csproj;bd6fd56976dee83e;file;CodeCracker.Test.Common.csproj;227
+FixAllDiagnosticProvider.cs;1bda81c2eed0379c;file;FixAllDiagnosticProvider.cs;196
+CodeFixVerifier.Helper.cs;40585f845808446f;file;Helpers\CodeFixVerifier.Helper.cs;196
+DiagnosticResult.cs;190c0ec7c872829c;file;Helpers\DiagnosticResult.cs;196
+DiagnosticVerifier.Helper.cs;6d4c5c3d41b20ab5;file;Helpers\DiagnosticVerifier.Helper.cs;196
+Extensions.cs;8c395d2349ecb5fc;file;Helpers\Extensions.cs;196
+AssemblyInfo.cs;e01dff73fb647123;file;Properties\AssemblyInfo.cs;196
+CodeFixVerifier.cs;5db0916d1c1948b1;file;Verifiers\CodeFixVerifier.cs;196
+DiagnosticVerifier.cs;a902ddede22ce58f;file;Verifiers\DiagnosticVerifier.cs;196

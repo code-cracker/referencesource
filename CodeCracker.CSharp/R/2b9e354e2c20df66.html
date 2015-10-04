@@ -1,0 +1,13 @@
+﻿<!DOCTYPE html>
+<html><head><title>PropertyPrivateSetCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">4 references to PropertyPrivateSetCodeFixProvider</div><div class="rA">CodeCracker.CSharp (3)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Style\PropertyPrivateSetCodeFixProvider.cs (3)</div>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#15"><b>15</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>PropertyPrivateSetCodeFixProvider</i>)), Shared]</a>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#27"><b>27</b>context.RegisterCodeFix(CodeAction.Create(&quot;Change property to &#39;private set&#39;&quot;, c =&gt; ChangePropertySetAsync(context.Document, diagnostic, c, FixType.PrivateFix), nameof(<i>PropertyPrivateSetCodeFixProvider</i>) + nameof(FixType.PrivateFix)), diagnostic);</a>
+<a href="../Style/PropertyPrivateSetCodeFixProvider.cs.html#28"><b>28</b>context.RegisterCodeFix(CodeAction.Create(&quot;Change property to &#39;protected set&#39;&quot;, c =&gt; ChangePropertySetAsync(context.Document, diagnostic, c, FixType.ProtectedFix), nameof(<i>PropertyPrivateSetCodeFixProvider</i>) + nameof(FixType.ProtectedFix)), diagnostic);</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Style\PropertyPrivateSetTests.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Style/PropertyPrivateSetTests.cs.html#7"><b>7</b>public class PropertyPrivateSetTests : CodeFixVerifier&lt;PropertyPrivateSetAnalyzer, <i>PropertyPrivateSetCodeFixProvider</i>&gt;</a>
+</div>
+</div>
+</body></html>

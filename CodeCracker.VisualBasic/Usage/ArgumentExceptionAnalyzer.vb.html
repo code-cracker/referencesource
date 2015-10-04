@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html><head><title>ArgumentExceptionAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(103);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/ArgumentExceptionAnalyzer.vb" target="_top">Usage\ArgumentExceptionAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="6c329f03d9b7280f" href="../R/6c329f03d9b7280f.html" target="n" data-glyph="0,0" class="t"><span id="e6f5909cec1b5faa">ArgumentExceptionAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Friend Const</b> <a id="eb32b356774b73e2" href="../R/eb32b356774b73e2.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Invalid argument name&quot;</span>
+        <b>Friend Const</b> <a id="8eba7390dfad56a0" href="../R/8eba7390dfad56a0.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Type argument &#39;{0}&#39; is not in the argument list.&quot;</span>
+        <b>Private Const</b> <a id="8c69b06ca540d1ce" href="../R/8c69b06ca540d1ce.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;The string passed as the &#39;paramName&#39; argument of ArgumentException constructor must be the name of one of the method arguments.
+It can be either specified directly or using nameof() (VB 14 and above only).&quot;</span>
+        <b>Friend Shared</b> <a id="f4b8d0a1534ea5ed" href="../R/f4b8d0a1534ea5ed.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+        <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+        <a href="#eb32b356774b73e2">Title</a>,
+        <a href="#8eba7390dfad56a0">MessageFormat</a>,
+        <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#2f6994e63821aee7">Naming</a>,
+        <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+        <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+        <span class="r1 r">description</span>:=<a href="#8c69b06ca540d1ce">Description</a>,
+        <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="bc4a65d373b7e5c8" href="../R/bc4a65d373b7e5c8.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#f4b8d0a1534ea5ed">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="9fd7e5b797ef0bd0" href="../R/9fd7e5b797ef0bd0.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#3eb6cbe5dfa8749c">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e3ce53d1ba44ea20">ObjectCreationExpression</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="3eb6cbe5dfa8749c" href="../R/3eb6cbe5dfa8749c.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">objectCreationExpression</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6e22a2a0b4bad74" class="t">ObjectCreationExpressionSyntax</a>)
+            <b>Dim</b> <span id="r6 rd" class="r6 r">type</span> = <b>TryCast</b>(<span class="r5 r">objectCreationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#62139e2bc5b82c92">Type</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a5444c7de676498" class="t">IdentifierNameSyntax</a>)
+            <b>If</b> <span class="r6 r">type</span> <b>Is Nothing Then Exit Sub
+            If Not</b> <span class="r6 r">type</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d6e94d60351f98c8">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>.EndsWith(<b>NameOf</b>(<span class="t">ArgumentException</span>), <span class="t">StringComparison</span>.OrdinalIgnoreCase) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r7 rd" class="r7 r">argumentList</span> = <span class="r5 r">objectCreationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#32d2c151f4152441">ArgumentList</a>
+            <b>If If</b>(<span class="r7 r">argumentList</span>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a>, 0) &lt; 2 <b>Then Exit Sub
+ 
+            Dim</b> <span id="r8 rd" class="r8 r">paramNameLiteral</span> = <b>TryCast</b>(<span class="r7 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>(1).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c1a390644a6e1686">GetExpression</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da2fa8b8823b23da" class="t">LiteralExpressionSyntax</a>)
+            <b>If</b> <span class="r8 r">paramNameLiteral</span> <b>Is Nothing Then Exit Sub
+ 
+            Dim</b> <span id="r9 rd" class="r9 r">paramNameOpt</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r8 r">paramNameLiteral</span>)
+            <b>If Not</b> <span class="r9 r">paramNameOpt</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1d6e9fac604b3517">HasValue</a> <b>Then Exit Sub
+ 
+            Dim</b> <span id="r10 rd" class="r10 r">paramName</span> = <span class="r9 r">paramNameOpt</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a>.ToString()
+            <b>If</b> <a href="#23713fb87e72c8d1">IsParamNameCompatibleWithCreatingContext</a>(<span class="r5 r">objectCreationExpression</span>, <span class="r10 r">paramName</span>) <b>Then Exit Sub
+ 
+            Dim</b> <span id="r11 rd" class="r11 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#f4b8d0a1534ea5ed">Rule</a>, <span class="r8 r">paramNameLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>, <span class="r10 r">paramName</span>)
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r11 r">diag</span>)
+        <b>End Sub
+ 
+        Private Function</b> <a id="23713fb87e72c8d1" href="../R/23713fb87e72c8d1.html" target="n" data-glyph="76,1">IsParamNameCompatibleWithCreatingContext</a>(<span id="r12 rd" class="r12 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>, <span id="r13 rd" class="r13 r">paramName</span> <b>As String</b>) <b>As Boolean
+            Dim</b> <span id="r14 rd" class="r14 r">parameters</span> = <a href="#b730ec70a8e84860">GetParameterNamesFromCreationContext</a>(<span class="r12 r">node</span>)
+            <b>If</b> <span class="r14 r">parameters</span> <b>Is Nothing Then Return True
+            Return</b> <span class="r14 r">parameters</span>.Contains(<span class="r13 r">paramName</span>)
+        <b>End Function
+ 
+        Friend Shared Function</b> <a id="b730ec70a8e84860" href="../R/b730ec70a8e84860.html" target="n" data-glyph="74,1">GetParameterNamesFromCreationContext</a>(<span id="r15 rd" class="r15 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>) <b>As</b> <span class="t">IEnumerable</span>(<b>Of String</b>)
+            <b>Dim</b> <span id="r16 rd" class="r16 r">creationContext</span> = <span class="r15 r">node</span>.<a href="/CodeCracker.Common/A.html#3a00f9f90b7f23db">FirstAncestorOrSelfOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#1a2acc68fe4d9f42" class="t">MultiLineLambdaExpressionSyntax</a>),
+                                                                 <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5af9b44ccb9a78df" class="t">LambdaExpressionSyntax</a>),
+                                                                 <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>),
+                                                                 <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>),
+                                                                 <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>))
+            <b>Return</b> <a href="#21895d386cceee4d">GetParameterNames</a>(<span class="r16 r">creationContext</span>)
+        <b>End Function
+ 
+        Friend Shared Function</b> <a id="21895d386cceee4d" href="../R/21895d386cceee4d.html" target="n" data-glyph="74,1">GetParameterNames</a>(<span id="r17 rd" class="r17 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>) <b>As</b> <span class="t">IEnumerable</span>(<b>Of String</b>)
+            <b>If</b> <span class="r17 r">node</span> <b>Is Nothing Then Return Nothing
+ 
+            Dim</b> <span id="r18 rd" class="r18 r">method</span> = <b>TryCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>)
+            <b>If</b> <span class="r18 r">method</span> <b>IsNot Nothing Then
+                Return</b> <span class="r18 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#10d160a0781ecce3">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.Select(<b>Function</b>(<span id="r19 rd" class="r19 r">p</span>) <span class="r19 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>())
+            <b>End If
+ 
+            Dim</b> <span id="r20 rd" class="r20 r">simpleLambda</span> = <b>TryCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5af9b44ccb9a78df" class="t">LambdaExpressionSyntax</a>)
+            <b>If</b> <span class="r20 r">simpleLambda</span> <b>IsNot Nothing Then
+                Return</b> <span class="r20 r">simpleLambda</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#53178f4e96edcbe1">SubOrFunctionHeader</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0bad0d90017da80b">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.Select(<b>Function</b>(<span id="r21 rd" class="r21 r">p</span>) <span class="r21 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>())
+            <b>End If
+ 
+            Dim</b> <span id="r22 rd" class="r22 r">accessor</span> = <b>TryCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bd91d28e0b4f5ab3" class="t">AccessorBlockSyntax</a>)
+            <b>If</b> <span class="r22 r">accessor</span> <b>IsNot Nothing Then
+                If</b> <span class="r22 r">accessor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6e7ef3fa9a11e975">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f11ce4841eb7802f">SetAccessorBlock</a>) <b>Then
+                    Return</b> {<span class="s">&quot;value&quot;</span>}
+                <b>End If
+            End If
+ 
+            Dim</b> <span id="r23 rd" class="r23 r">constructor</span> = <b>TryCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>)
+            <b>If</b> <span class="r23 r">constructor</span> <b>IsNot Nothing Then
+                Return</b> <span class="r23 r">constructor</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bf7a2989aeee1e90">SubNewStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b87bc54516eff683">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.Select(<b>Function</b>(<span id="r24 rd" class="r24 r">p</span>) <span class="r24 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>())
+            <b>End If
+ 
+            Return Nothing
+ 
+        End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

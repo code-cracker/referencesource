@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html><head><title>AnalyzerExtensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(115);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Common/Extensions/AnalyzerExtensions.cs" target="_top">Extensions\AnalyzerExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Common" target="_top">src\Common\CodeCracker.Common\CodeCracker.Common.csproj</a> (CodeCracker.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="7dad468f6756e34c" href="../R/7dad468f6756e34c.html" target="n" data-glyph="0,0" class="t">AnalyzerExtensions</a>
+    {
+        <b>public static bool</b> <a id="0b11bc16b3413b91" href="../R/0b11bc16b3413b91.html" target="n" data-glyph="220,1">IsName</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#e62b13fcfb856a0b" class="t">SymbolDisplayPart</a> <span id="r0 rd" class="r0 r">displayPart</span>) =&gt;
+            <span class="r0 r">displayPart</span>.<a href="#79ebb455137c8e6c">IsAnyKind</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#ffbf9e646589e577">ClassName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a212ae8b4fb4ebbd">DelegateName</a>,
+                                  <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#1cbdd64c5beef98f">EnumName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#638a68c9da8a0786">EventName</a>,
+                                  <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b136cfebbcafbb50">FieldName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8d4541904283cf77">InterfaceName</a>,
+                                  <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9290841d9b19e2bb">LocalName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5f0f346289357674">MethodName</a>,
+                                  <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#9dec5d6c724fa53f">NamespaceName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a03e7cb6d23c90eb">ParameterName</a>,
+                                  <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d1a3d1a3b968ee1">PropertyName</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#d328ad2ff1491bf9">StructName</a>);
+ 
+        <b>public static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="8a6360d3de9480c8" href="../R/8a6360d3de9480c8.html" target="n" data-glyph="220,1">WithSameTriviaAs</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r1 rd" class="r1 r">target</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r2 rd" class="r2 r">source</span>)
+        {
+            <b>if</b> (<span class="r1 r">target</span> == <b>null</b>) <b>throw</b> <b>new</b> <span class="t">ArgumentNullException</span>(<b>nameof</b>(<span class="r1 r">target</span>));
+            <b>if</b> (<span class="r2 r">source</span> == <b>null</b>) <b>throw</b> <b>new</b> <span class="t">ArgumentNullException</span>(<b>nameof</b>(<span class="r2 r">source</span>));
+ 
+            <b>return</b> <span class="r1 r">target</span>
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#183cc698a7f51af0">WithLeadingTrivia</a>(<span class="r2 r">source</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d81e1df82fa9772d">GetLeadingTrivia</a>())
+                .<a href="@1@Microsoft.CodeAnalysis/A.html#2a6f33fae5118644">WithTrailingTrivia</a>(<span class="r2 r">source</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2c8b23967d743711">GetTrailingTrivia</a>());
+        }
+ 
+        <b>public static bool</b> <a id="79ebb455137c8e6c" href="../R/79ebb455137c8e6c.html" target="n" data-glyph="220,1">IsAnyKind</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#e62b13fcfb856a0b" class="t">SymbolDisplayPart</a> <span id="r3 rd" class="r3 r">displayPart</span>, <b>params</b> <a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="t">SymbolDisplayPartKind</a>[] <span id="r4 rd" class="r4 r">kinds</span>)
+        {
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#ba05635ee6ca859c" class="k">var</a> <span id="r5 rd" class="r5 r">kind</span> <b>in</b> <span class="r4 r">kinds</span>)
+            {
+                <b>if</b> (<span class="r3 r">displayPart</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#487e90d987b94cc2">Kind</a> == <span class="r5 r">kind</span>) <b>return true</b>;
+            }
+            <b>return false</b>;
+        }
+ 
+        <b>public static</b> <span class="r6 r t">T</span> <a id="00e29052d81e805d" href="../R/00e29052d81e805d.html" target="n" data-glyph="220,1">FirstAncestorOrSelfOfType</a>&lt;<span id="r6 rd t" class="r6 r t">T</span>&gt;(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r7 rd" class="r7 r">node</span>) <b>where</b> <span class="r6 r t">T</span> : <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> =&gt;
+            (<span class="r6 r t">T</span>)<span class="r7 r">node</span>.<a href="#3a00f9f90b7f23db">FirstAncestorOrSelfOfType</a>(<b>typeof</b>(<span class="r6 r t">T</span>));
+ 
+        <b>public static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="3a00f9f90b7f23db" href="../R/3a00f9f90b7f23db.html" target="n" data-glyph="220,1">FirstAncestorOrSelfOfType</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r8 rd" class="r8 r">node</span>, <b>params</b> <span class="t">Type</span>[] <span id="r9 rd" class="r9 r">types</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r10 rd" class="r10 r">currentNode</span> = <span class="r8 r">node</span>;
+            <b>while</b> (<b>true</b>)
+            {
+                <b>if</b> (<span class="r10 r">currentNode</span> == <b>null</b>) <b>break</b>;
+                <b>foreach</b> (<b>var</b> <span id="r11 rd" class="r11 r">type</span> <b>in</b> <span class="r9 r">types</span>)
+                {
+                    <b>if</b> (<span class="r10 r">currentNode</span>.GetType() == <span class="r11 r">type</span>) <b>return</b> <span class="r10 r">currentNode</span>;
+                }
+                <span class="r10 r">currentNode</span> = <span class="r10 r">currentNode</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>;
+            }
+            <b>return null</b>;
+        }
+ 
+        <b>public static</b> <span class="r12 r t">T</span> <a id="cce0f0a86d671732" href="../R/cce0f0a86d671732.html" target="n" data-glyph="220,1">FirstAncestorOfType</a>&lt;<span id="r12 rd t" class="r12 r t">T</span>&gt;(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r13 rd" class="r13 r">node</span>) <b>where</b> <span class="r12 r t">T</span> : <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> =&gt;
+            (<span class="r12 r t">T</span>)<span class="r13 r">node</span>.<a href="#febbf40e5a890c7f">FirstAncestorOfType</a>(<b>typeof</b>(<span class="r12 r t">T</span>));
+ 
+        <b>public static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="febbf40e5a890c7f" href="../R/febbf40e5a890c7f.html" target="n" data-glyph="220,1">FirstAncestorOfType</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r14 rd" class="r14 r">node</span>, <b>params</b> <span class="t">Type</span>[] <span id="r15 rd" class="r15 r">types</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r16 rd" class="r16 r">currentNode</span> = <span class="r14 r">node</span>;
+            <b>while</b> (<b>true</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r17 rd" class="r17 r">parent</span> = <span class="r16 r">currentNode</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>;
+                <b>if</b> (<span class="r17 r">parent</span> == <b>null</b>) <b>break</b>;
+                <b>foreach</b> (<b>var</b> <span id="r18 rd" class="r18 r">type</span> <b>in</b> <span class="r15 r">types</span>)
+                {
+                    <b>if</b> (<span class="r17 r">parent</span>.GetType() == <span class="r18 r">type</span>) <b>return</b> <span class="r17 r">parent</span>;
+                }
+                <span class="r16 r">currentNode</span> = <span class="r17 r">parent</span>;
+            }
+            <b>return null</b>;
+        }
+ 
+        <b>public static</b> <span class="t">IList</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>&gt; <a id="2b7e3414a5e3dc28" href="../R/2b7e3414a5e3dc28.html" target="n" data-glyph="220,1">GetAllMethodsIncludingFromInnerTypes</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r19 rd" class="r19 r">typeSymbol</span>)
+        {
+            <b>var</b> <span id="r20 rd" class="r20 r">methods</span> = <span class="r19 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#4effe2f191a6f60d" class="t">IMethodSymbol</a>&gt;().ToList();
+            <b>var</b> <span id="r21 rd" class="r21 r">innerTypes</span> = <span class="r19 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d11c050127289d0e">GetMembers</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>&gt;();
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r22 rd" class="r22 r">innerType</span> <b>in</b> <span class="r21 r">innerTypes</span>)
+            {
+                <span class="r20 r">methods</span>.AddRange(<span class="r22 r">innerType</span>.<a href="#2b7e3414a5e3dc28">GetAllMethodsIncludingFromInnerTypes</a>());
+            }
+            <b>return</b> <span class="r20 r">methods</span>;
+        }
+ 
+        <b>public static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>&gt; <a id="2715175bc289982f" href="../R/2715175bc289982f.html" target="n" data-glyph="220,1">AllBaseTypesAndSelf</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r23 rd" class="r23 r">typeSymbol</span>)
+        {
+            <b>yield return</b> <span class="r23 r">typeSymbol</span>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="k">var</a> <span id="r24 rd" class="r24 r">b</span> <b>in</b> <a href="#4dfff870c9aff9c7">AllBaseTypes</a>(<span class="r23 r">typeSymbol</span>))
+                <b>yield return</b> <span class="r24 r">b</span>;
+        }
+ 
+        <b>public static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a>&gt; <a id="4dfff870c9aff9c7" href="../R/4dfff870c9aff9c7.html" target="n" data-glyph="220,1">AllBaseTypes</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#706c1c151c462df8" class="t">INamedTypeSymbol</a> <span id="r25 rd" class="r25 r">typeSymbol</span>)
+        {
+            <b>while</b> (<span class="r25 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a> != <b>null</b>)
+            {
+                <b>yield return</b> <span class="r25 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a>;
+                <span class="r25 r">typeSymbol</span> = <span class="r25 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7d2bdbfdbe83771c">BaseType</a>;
+            }
+        }
+ 
+        <b>public static string</b> <a id="dc67cb4896e48643" href="../R/dc67cb4896e48643.html" target="n" data-glyph="220,1">GetLastIdentifierIfQualiedTypeName</a>(<b>this</b> <b>string</b> <span id="r26 rd" class="r26 r">typeName</span>)
+        {
+            <b>var</b> <span id="r27 rd" class="r27 r">result</span> = <span class="r26 r">typeName</span>;
+ 
+            <b>var</b> <span id="r28 rd" class="r28 r">parameterTypeDotIndex</span> = <span class="r26 r">typeName</span>.LastIndexOf(<span class="s">&#39;.&#39;</span>);
+            <b>if</b> (<span class="r28 r">parameterTypeDotIndex</span> &gt; 0)
+            {
+                <span class="r27 r">result</span> = <span class="r26 r">typeName</span>.Substring(<span class="r28 r">parameterTypeDotIndex</span> + 1);
+            }
+ 
+            <b>return</b> <span class="r27 r">result</span>;
+        }
+        <b>public static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a>&gt; <a id="c4b9f68f58f898f1" href="../R/c4b9f68f58f898f1.html" target="n" data-glyph="220,1">EnsureProtectedBeforeInternal</a>(<b>this</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a>&gt; <span id="r29 rd" class="r29 r">modifiers</span>) =&gt; <span class="r29 r">modifiers</span>.OrderByDescending(<span id="r30 rd" class="r30 r">token</span> =&gt; <span class="r30 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#74cb1751daa62fdc">RawKind</a>);
+    }
+}</pre></td></tr></table></div></body></html>

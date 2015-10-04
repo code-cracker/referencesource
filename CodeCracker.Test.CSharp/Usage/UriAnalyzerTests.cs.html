@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html><head><title>UriAnalyzerTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(123);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/UriAnalyzerTests.cs" target="_top">Usage\UriAnalyzerTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="82563a678dd02fb7" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="b14b36ff32091372">UriAnalyzerTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        <b>private const string</b> <a id="ad44715993c567a4" href="../R/ad44715993c567a4.html" target="n" data-glyph="10,1">TestCode</a> = <span class="s">@&quot;
+using System;
+namespace ConsoleApplication1
+{{
+    class Person
+    {{
+        public Person()
+        {{
+            {0}
+        }}
+    }}
+}}&quot;</span>;
+ 
+<b>#</b><b>pragma</b> <b>warning</b> <b>disable</b> CC0063
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9500d267afd9a9c2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedUriConstructorFoundAndUriIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new Uri(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <a href="#9106b235a3b9136c">CreateDiagnosticResult</a>(9, 31, () =&gt; <b>new</b> <a href="@0@System/A.html#9e1bb2fef0d1159b" class="t">Uri</a>(<span class="s">&quot;foo&quot;</span>)));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="fcf433831cb5af66" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorFoundAndUriIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new System.Uri(&quot;&quot;foo&quot;&quot;)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r1 r">test</span>, <a href="#9106b235a3b9136c">CreateDiagnosticResult</a>(9, 38, () =&gt; <b>new</b> <a href="@0@System/A.html#9e1bb2fef0d1159b" class="t">Uri</a>(<span class="s">&quot;foo&quot;</span>)));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c2e9a01926e53e7e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorWithUriKindFoundAndUriIsIncorrectCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new Uri(&quot;&quot;http://wrong&quot;&quot;, UriKind.Relative)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <a href="#9106b235a3b9136c">CreateDiagnosticResult</a>(9, 31, () =&gt; <b>new</b> <a href="@0@System/A.html#d9fc45d783ee73ff" class="t">Uri</a>(<span class="s">&quot;http://wrong&quot;</span>, <a href="@0@System/A.html#ac43655101ad74be" class="t">UriKind</a>.<a href="@0@System/A.html#c6d780fc34e3f702">Relative</a>)));
+        }
+<b>#</b><b>pragma</b> <b>warning</b> <b>restore</b> CC0063
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a5c206b1dd05853e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedUriConstructorWithUriKindFoundAndUriIsCorrectDoNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new Uri(&quot;&quot;foo&quot;&quot;, UriKind.Relative)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0db438cc67dd997b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorWithUriKindFoundAndUriIsCorrectDoNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new System.Uri(&quot;&quot;foo&quot;&quot;, UriKind.Relative)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1f45d02d242bf10c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorUsingNullFoundDoNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new System.Uri(null)&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e3bc4a31d5833c7c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorNotUsingLiteralFoundDoNotCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">test</span> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#ad44715993c567a4">TestCode</a>, <span class="s">@&quot;var uri = new System.Uri(new object().ToString())&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="898da6c66bd8beaa" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedUriConstructorFoundAndUriIsIncorrectAndItsNotSystemUriDoNotCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">code</span> = <span class="s">@&quot;
+namespace ConsoleApplication1
+{
+    class Uri
+    {
+        public Uri(string uri) { }
+ 
+        public void Test() {
+            var uri = new Uri(&quot;&quot;whoCares&quot;&quot;);
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">code</span>);
+        }
+ 
+        <b>private static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="9106b235a3b9136c" href="../R/9106b235a3b9136c.html" target="n" data-glyph="76,1">CreateDiagnosticResult</a>(<b>int</b> <span id="r8 rd" class="r8 r">line</span>, <b>int</b> <span id="r9 rd" class="r9 r">column</span>, <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t">Action</a> <span id="r10 rd" class="r10 r">getErrorMessageAction</span>)
+        {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6a23bf04092ee498">Uri</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="#4b8020122c13b57c">GetErrorMessage</a>(<span class="r10 r">getErrorMessageAction</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">Error</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r8 r">line</span>, <span class="r9 r">column</span>) }
+            };
+        }
+ 
+        <b>private static string</b> <a id="4b8020122c13b57c" href="../R/4b8020122c13b57c.html" target="n" data-glyph="76,1">GetErrorMessage</a>(<a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t">Action</a> <span id="r11 rd" class="r11 r">action</span>)
+        {
+            <b>try</b>
+            {
+                <span class="r11 r">action</span>.<a href="@0@mscorlib/A.html#6fbb51427c383a3a">Invoke</a>();
+            }
+            <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t">Exception</a> <span id="r12 rd" class="r12 r">ex</span>)
+            {
+                <b>return</b> <span class="r12 r">ex</span>.<a href="@0@mscorlib/A.html#5fba0e16215b42a3">Message</a>;
+            }
+            <b>return</b> <span class="s">&quot;&quot;</span>;
+        }
+ 
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a> <a id="de673d5b6f3bd263" href="../R/de673d5b6f3bd263.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>()
+        {
+            <b>return</b> <b>new</b> <a href="/CodeCracker.CSharp/A.html#7676de3993b7133f" class="t">UriAnalyzer</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

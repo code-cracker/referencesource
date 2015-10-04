@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringBuilderInLoopAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(77);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Performance/StringBuilderInLoopAnalyzer.cs" target="_top">Performance\StringBuilderInLoopAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="1563b39124777dfa" href="../R/1563b39124777dfa.html" target="n" data-glyph="0,0" class="t"><span id="57b9e0292dbc68fd">StringBuilderInLoopAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="3fcd9ee067abac16" href="../R/3fcd9ee067abac16.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Don&#39;t concatenate strings in loops&quot;</span>;
+        <b>internal const string</b> <a id="e2b81728a7caf752" href="../R/e2b81728a7caf752.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Don&#39;t concatenate &#39;{0}&#39; in a loop&quot;</span>;
+        <b>internal const string</b> <a id="37e5a7dad8d1180d" href="../R/37e5a7dad8d1180d.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>;
+        <b>const string</b> <a id="748db3e865d0b53e" href="../R/748db3e865d0b53e.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;Do not concatenate a string on a loop. It will alocate a lot of memory.&quot;</span>
+            + <span class="s">&quot;Use a StringBuilder instead. It will will require less allocation, less garbage collector work, less CPU cycles, and less overall time.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="99d5958ee8af2f5d" href="../R/99d5958ee8af2f5d.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#3fcd9ee067abac16">Title</a>,
+            <a href="#e2b81728a7caf752">MessageFormat</a>,
+            <a href="#37e5a7dad8d1180d">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#748db3e865d0b53e">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="4f9e2c463afd6446" href="../R/4f9e2c463afd6446.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#99d5958ee8af2f5d">Rule</a>);
+ 
+        <b>public override void</b> <a id="4fc479cf4137ae30" href="../R/4fc479cf4137ae30.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#c3f010334759d2e9">AnalyzeAssignment</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2b89d7cdf38945fd">AddAssignmentExpression</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bfba69a0d589fc35">SimpleAssignmentExpression</a>);
+ 
+        <b>private static void</b> <a id="c3f010334759d2e9" href="../R/c3f010334759d2e9.html" target="n" data-glyph="76,1">AnalyzeAssignment</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#12e2a42c0608e8a3" class="k">var</a> <span id="r5 rd" class="r5 r">assignmentExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#12e2a42c0608e8a3" class="t">AssignmentExpressionSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">whileStatement</span> = <span class="r5 r">assignmentExpression</span>.<a href="/CodeCracker.Common/A.html#febbf40e5a890c7f">FirstAncestorOfType</a>(<b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6641befaaf470b25" class="t">WhileStatementSyntax</a>),
+                <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c215677ee4354d1" class="t">ForStatementSyntax</a>),
+                <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1088e53381c650a9" class="t">ForEachStatementSyntax</a>),
+                <b>typeof</b>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6d9778f51fdb9856" class="t">DoStatementSyntax</a>));
+            <b>if</b> (<span class="r6 r">whileStatement</span> == <b>null</b>) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r7 rd" class="r7 r">semanticModel</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3748954801f741c2" class="k">var</a> <span id="r8 rd" class="r8 r">arrayAccess</span> = <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1d7f0768983e3662">Left</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3748954801f741c2" class="t">ElementAccessExpressionSyntax</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r9 rd" class="r9 r">symbolForAssignment</span> = <span class="r8 r">arrayAccess</span> != <b>null</b>
+                ? <span class="r7 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r8 r">arrayAccess</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#338bbb7f69f3b9a8">Expression</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>
+                : <span class="r7 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1d7f0768983e3662">Left</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="t">ITypeSymbol</a> <span id="r10 rd" class="r10 r">type</span>;
+            <b>if</b> (<span class="r9 r">symbolForAssignment</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8bbdb65b0c3ead40" class="t">IPropertySymbol</a>) <span class="r10 r">type</span> = ((<a href="@1@Microsoft.CodeAnalysis/A.html#8bbdb65b0c3ead40" class="t">IPropertySymbol</a>)<span class="r9 r">symbolForAssignment</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#16b2f76bec386574">Type</a>;
+            <b>else if</b> (<span class="r9 r">symbolForAssignment</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a>) <span class="r10 r">type</span> = ((<a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a>)<span class="r9 r">symbolForAssignment</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#4272096ccd1dda5a">Type</a>;
+            <b>else if</b> (<span class="r9 r">symbolForAssignment</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>) <span class="r10 r">type</span> = ((<a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>)<span class="r9 r">symbolForAssignment</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#823c491f63842556">Type</a>;
+            <b>else return</b>;
+            <b>if</b> (<span class="r10 r">type</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<span class="r10 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#defa3c38489da969">TypeKind</a> == <a href="@1@Microsoft.CodeAnalysis/A.html#3ca9da1ecf313fe3" class="t">TypeKind</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#93c6a35597c4a10f">Array</a>)
+            {
+                <b>if</b> ((<span class="r10 r">type</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#1b236e714013d091" class="t">IArrayTypeSymbol</a>)?.<a href="@1@Microsoft.CodeAnalysis/A.html#b97887e85cb6f840">ElementType</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> != <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#236fc9e187f143b5">System_String</a>) <b>return</b>;
+            }
+            <b>else if</b> (<span class="r10 r">type</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> != <span class="s">&quot;String&quot;</span>) <b>return</b>;
+            <span class="c">// Do not analyze a string declared within the loop.</span>
+            <b>if</b> (<span class="r9 r">symbolForAssignment</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a> &amp;&amp; <span class="r6 r">whileStatement</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4fda899d98aaf623">DescendantTokens</a>(((<a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a>)<span class="r9 r">symbolForAssignment</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>[0].<a href="@1@Microsoft.CodeAnalysis/A.html#5f209a7983fd1563">Span</a>).Any()) <b>return</b>;
+            <b>if</b> (<span class="r5 r">assignmentExpression</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bfba69a0d589fc35">SimpleAssignmentExpression</a>))
+            {
+                <b>if</b> (!(<span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b04dfd0f5df8792d">Right</a>?.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#590e3553ce7b6674">AddExpression</a>) ?? <b>false</b>)) <b>return</b>;
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r11 rd" class="r11 r">identifierOnConcatExpression</span> = ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>)<span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b04dfd0f5df8792d">Right</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b59ef6774404c1ce">Left</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+                <b>if</b> (<span class="r11 r">identifierOnConcatExpression</span> == <b>null</b>) <b>return</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r12 rd" class="r12 r">symbolOnIdentifierOnConcatExpression</span> = <span class="r7 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r11 r">identifierOnConcatExpression</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+                <b>if</b> (!<span class="r9 r">symbolForAssignment</span>.Equals(<span class="r12 r">symbolOnIdentifierOnConcatExpression</span>)) <b>return</b>;
+            }
+            <b>else if</b> (!<span class="r5 r">assignmentExpression</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2b89d7cdf38945fd">AddAssignmentExpression</a>)) <b>return</b>;
+            <b>var</b> <span id="r13 rd" class="r13 r">assignmentExpressionLeft</span> = <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1d7f0768983e3662">Left</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>();
+            <b>var</b> <span id="r14 rd" class="r14 r">properties</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<b>string</b>, <b>string</b>&gt; { { <b>nameof</b>(<span class="r13 r">assignmentExpressionLeft</span>), <span class="r13 r">assignmentExpressionLeft</span> } }.ToImmutableDictionary();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r15 rd" class="r15 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#99d5958ee8af2f5d">Rule</a>, <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r14 r">properties</span>, <span class="r13 r">assignmentExpressionLeft</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r15 r">diagnostic</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

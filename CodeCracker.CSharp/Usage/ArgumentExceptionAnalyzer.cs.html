@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html><head><title>ArgumentExceptionAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(124);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/ArgumentExceptionAnalyzer.cs" target="_top">Usage\ArgumentExceptionAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="9931b1eaef29ceef" href="../R/9931b1eaef29ceef.html" target="n" data-glyph="0,0" class="t"><span id="5947521c503cdaaf">ArgumentExceptionAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="5f900f21d424f0e2" href="../R/5f900f21d424f0e2.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Invalid argument name&quot;</span>;
+        <b>internal const string</b> <a id="e1df85e87c00bfb6" href="../R/e1df85e87c00bfb6.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Type argument &#39;{0}&#39; is not in the argument list.&quot;</span>;
+        <b>internal const string</b> <a id="162be54945b87d00" href="../R/162be54945b87d00.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#caeeba4fd4be3632">Usage</a>;
+        <b>const string</b> <a id="94cc1f7fc38c9644" href="../R/94cc1f7fc38c9644.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;The string passed as the &#39;paramName&#39; argument of ArgumentException constructor &quot;</span>
+            + <span class="s">&quot;must be the name of one of the method arguments.\r\n&quot;</span>
+            + <span class="s">&quot;It can be either specified directly or using the nameof() operator (C#6 only)&quot;</span>;
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="a68f0f28273aeadf" href="../R/a68f0f28273aeadf.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#5f900f21d424f0e2">Title</a>,
+            <a href="#e1df85e87c00bfb6">MessageFormat</a>,
+            <a href="#162be54945b87d00">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#94cc1f7fc38c9644">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="17c9a4c499ed26bd" href="../R/17c9a4c499ed26bd.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#a68f0f28273aeadf">Rule</a>);
+ 
+        <b>public override void</b> <a id="11bb6f85f142fd83" href="../R/11bb6f85f142fd83.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#d6e77f153c87d34b">AnalyzeNode</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#37b4e064594ee806">ObjectCreationExpression</a>);
+ 
+        <b>private static void</b> <a id="d6e77f153c87d34b" href="../R/d6e77f153c87d34b.html" target="n" data-glyph="76,1">AnalyzeNode</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="k">var</a> <span id="r5 rd" class="r5 r">objectCreationExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>)<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29171ac4ad60a546" class="k">var</a> <span id="r6 rd" class="r6 r">type</span> = <span class="r5 r">objectCreationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1e3fc5081bca0b51">Type</a>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="k">var</a> <span id="r7 rd" class="r7 r">typeSymbol</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r6 r">type</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis/A.html#3dff140bf09f1a2d" class="t">ITypeSymbol</a>;
+            <b>if</b> (!<span class="r7 r">typeSymbol</span>?.ToString().EndsWith(<span class="s">&quot;System.ArgumentException&quot;</span>) ?? <b>true</b>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="k">var</a> <span id="r8 rd" class="r8 r">argumentList</span> = <span class="r5 r">objectCreationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4a2311de9b94b3f">ArgumentList</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a>;
+            <b>if</b> ((<span class="r8 r">argumentList</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#5a1f11ca6bd1d9ff">Count</a> ?? 0) &lt; 2) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="k">var</a> <span id="r9 rd" class="r9 r">paramNameLiteral</span> = <span class="r8 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>[1].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#629c22d781503b11" class="t">LiteralExpressionSyntax</a>;
+            <b>if</b> (<span class="r9 r">paramNameLiteral</span> == <b>null</b>) <b>return</b>;
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#86bbd87a0ffc79bf" class="k">var</a> <span id="r10 rd" class="r10 r">paramNameOpt</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r9 r">paramNameLiteral</span>);
+            <b>if</b> (!<span class="r10 r">paramNameOpt</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1d6e9fac604b3517">HasValue</a>) <b>return</b>;
+ 
+            <b>var</b> <span id="r11 rd" class="r11 r">paramName</span> = <span class="r10 r">paramNameOpt</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a> <b>as string</b>;
+ 
+            <span class="t">IList</span>&lt;<b>string</b>&gt; <span id="r12 rd" class="r12 r">parameters</span>;
+            <b>if</b> (<a href="#af5e6cb4a19c2925">IsParamNameCompatibleWithCreatingContext</a>(<span class="r5 r">objectCreationExpression</span>, <span class="r11 r">paramName</span>, <b>out</b> <span class="r12 r">parameters</span>)) <b>return</b>;
+            <b>var</b> <span id="r13 rd" class="r13 r">props</span> = <span class="r12 r">parameters</span>.ToImmutableDictionary(<span id="r14 rd" class="r14 r">p</span> =&gt; <span class="s">$&quot;</span><span class="s">param</span>{<span class="r14 r">p</span>}<span class="s">&quot;</span>, <span id="r15 rd" class="r15 r">p</span> =&gt; <span class="r15 r">p</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r16 rd" class="r16 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b36bfb59ab5b909b">Create</a>(<a href="#a68f0f28273aeadf">Rule</a>, <span class="r9 r">paramNameLiteral</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r13 r">props</span>.ToImmutableDictionary(), <span class="r11 r">paramName</span>);
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r16 r">diagnostic</span>);
+        }
+ 
+        <b>private static bool</b> <a id="af5e6cb4a19c2925" href="../R/af5e6cb4a19c2925.html" target="n" data-glyph="76,1">IsParamNameCompatibleWithCreatingContext</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r17 rd" class="r17 r">node</span>, <b>string</b> <span id="r18 rd" class="r18 r">paramName</span>, <b>out</b> <span class="t">IList</span>&lt;<b>string</b>&gt; <span id="r19 rd" class="r19 r">parameters</span>)
+        {
+            <span class="r19 r">parameters</span> = <a href="#e9a46c8aea7b2cfb">GetParameterNamesFromCreationContext</a>(<span class="r17 r">node</span>);
+            <b>if</b> (<span class="r19 r">parameters</span> == <b>null</b>) <b>return true</b>;
+            <b>return</b> <span class="r19 r">parameters</span>.Contains(<span class="r18 r">paramName</span>);
+        }
+ 
+        <b>private static</b> <span class="t">IList</span>&lt;<b>string</b>&gt; <a id="e9a46c8aea7b2cfb" href="../R/e9a46c8aea7b2cfb.html" target="n" data-glyph="76,1">GetParameterNamesFromCreationContext</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r20 rd" class="r20 r">node</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r21 rd" class="r21 r">creationContext</span> =
+                <span class="r20 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="t">SimpleLambdaExpressionSyntax</a>&gt;() ??
+                <span class="r20 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f05f866236de7ccc" class="t">ParenthesizedLambdaExpressionSyntax</a>&gt;() ??
+                <span class="r20 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>&gt;() ??
+                (<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>)<span class="r20 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="t">BaseMethodDeclarationSyntax</a>&gt;();
+            <b>return</b> <a href="#76a4d830e7ff3008">GetParameterNames</a>(<span class="r21 r">creationContext</span>);
+        }
+ 
+        <b>internal static</b> <span class="t">IList</span>&lt;<b>string</b>&gt; <a id="76a4d830e7ff3008" href="../R/76a4d830e7ff3008.html" target="n" data-glyph="74,1">GetParameterNames</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r22 rd" class="r22 r">node</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="k">var</a> <span id="r23 rd" class="r23 r">simpleLambda</span> = <span class="r22 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f6de7758e8e866a8" class="t">SimpleLambdaExpressionSyntax</a>;
+            <b>if</b> (<span class="r23 r">simpleLambda</span> != <b>null</b>)
+            {
+                <b>return</b> <b>new</b>[] { <span class="r23 r">simpleLambda</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#48c73cdf61304d80">Parameter</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>() };
+            }
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="k">var</a> <span id="r24 rd" class="r24 r">method</span> = <span class="r22 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#959eaa4f2591a903" class="t">BaseMethodDeclarationSyntax</a>;
+            <b>if</b> (<span class="r24 r">method</span> != <b>null</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b1c0088f7b71bd8" class="k">var</a> <span id="r25 rd" class="r25 r">parameterList</span> = <span class="r24 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#af44c85a856e51b5">ParameterList</a>;
+                <b>return</b> (<span class="r25 r">parameterList</span> == <b>null</b>)
+                    ? <b>new</b> <span class="t">List</span>&lt;<b>string</b>&gt;()
+                    : <span class="r25 r">parameterList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.Select(<span id="r26 rd" class="r26 r">p</span> =&gt; <span class="r26 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>()).ToList();
+            }
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f05f866236de7ccc" class="k">var</a> <span id="r27 rd" class="r27 r">lambda</span> = <span class="r22 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f05f866236de7ccc" class="t">ParenthesizedLambdaExpressionSyntax</a>;
+            <b>if</b> (<span class="r27 r">lambda</span> != <b>null</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b1c0088f7b71bd8" class="k">var</a> <span id="r28 rd" class="r28 r">parameterList</span> = <span class="r27 r">lambda</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b41a0b7ac038d9a6">ParameterList</a>;
+                <b>return</b> (<span class="r28 r">parameterList</span> == <b>null</b>)
+                    ? <b>new</b> <span class="t">List</span>&lt;<b>string</b>&gt;()
+                    : <span class="r28 r">parameterList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>.Select(<span id="r29 rd" class="r29 r">p</span> =&gt; <span class="r29 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>()).ToList();
+            }
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="k">var</a> <span id="r30 rd" class="r30 r">accessor</span> = <span class="r22 r">node</span> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#93f96916e3f702d2" class="t">AccessorDeclarationSyntax</a>;
+            <b>if</b> (<span class="r30 r">accessor</span> != <b>null</b>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="k">var</a> <span id="r31 rd" class="r31 r">indexer</span> = <span class="r22 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f08160d7d650f1b8" class="t">IndexerDeclarationSyntax</a>&gt;();
+                <b>if</b> (<span class="r31 r">indexer</span> != <b>null</b>)
+                {
+                    <b>var</b> <span id="r32 rd" class="r32 r">result</span> = <span class="r31 r">indexer</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#bcc1aa95a20fb37e">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4bb964a3b8ba7cc5">Parameters</a>.Select(<span id="r33 rd" class="r33 r">p</span> =&gt; <span class="r33 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82359c2ce4cf9230">ToString</a>());
+                    <b>if</b> (<span class="r30 r">accessor</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4431df56cc2d289f">SetAccessorDeclaration</a>))
+                    {
+                        <span class="r32 r">result</span> = <span class="r32 r">result</span>.Concat(<b>new</b>[] { <span class="s">&quot;value&quot;</span> });
+                    }
+                    <b>return</b> <span class="r32 r">result</span>.ToList();
+                }
+                <b>if</b> (<span class="r30 r">accessor</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4431df56cc2d289f">SetAccessorDeclaration</a>))
+                {
+                    <b>return</b> <b>new</b> <span class="t">List</span>&lt;<b>string</b>&gt; { <span class="s">&quot;value&quot;</span> };
+                }
+            }
+            <b>return null</b>;
+        }
+ 
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html><head><title>FirstAncestorOfType</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">9 references to FirstAncestorOfType</div><div class="rA">CodeCracker.Common (1)</div><div class="rG" id="CodeCracker.Common"><div class="rF"><div class="rN">Extensions\AnalyzerExtensions.cs (1)</div>
+<a href="../Extensions/AnalyzerExtensions.cs.html#56"><b>56</b>(T)node.<i>FirstAncestorOfType</i>(typeof(T));</a>
+</div>
+</div>
+<div class="rA">CodeCracker.CSharp (4)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\NameOfAnalyzer.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Design/NameOfAnalyzer.cs.html#87"><b>87</b>var ancestorThatMightHaveParameters = stringLiteral.<i>FirstAncestorOfType</i>(typeof(AttributeListSyntax), typeof(MethodDeclarationSyntax), typeof(ConstructorDeclarationSyntax), typeof(IndexerDeclarationSyntax));</a>
+</div>
+<div class="rF"><div class="rN">Design\NameOfCodeFixProvider.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Design/NameOfCodeFixProvider.cs.html#57"><b>57</b>var method = root.FindToken(diagnosticSpanStart).Parent.<i>FirstAncestorOfType</i>(typeof(ConstructorDeclarationSyntax), typeof(MethodDeclarationSyntax)) as BaseMethodDeclarationSyntax;</a>
+</div>
+<div class="rF"><div class="rN">Extensions\CSharpAnalyzerExtensions.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Extensions/CSharpAnalyzerExtensions.cs.html#199"><b>199</b>type = (TypeDeclarationSyntax)type.<i>FirstAncestorOfType</i>(typeof(ClassDeclarationSyntax), typeof(StructDeclarationSyntax));</a>
+</div>
+<div class="rF"><div class="rN">Performance\StringBuilderInLoopAnalyzer.cs (1)</div>
+<a href="../../CodeCracker.CSharp/Performance/StringBuilderInLoopAnalyzer.cs.html#39"><b>39</b>var whileStatement = assignmentExpression.<i>FirstAncestorOfType</i>(typeof(WhileStatementSyntax),</a>
+</div>
+</div>
+<div class="rA">CodeCracker.VisualBasic (4)</div><div class="rG" id="CodeCracker.VisualBasic"><div class="rF"><div class="rN">Design\NameOfAnalyzer.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Design/NameOfAnalyzer.vb.html#68"><b>68</b>Dim ancestorThatMightHaveParameters = stringLiteral.<i>FirstAncestorOfType</i>(GetType(AttributeListSyntax), GetType(MethodBlockSyntax), GetType(SubNewStatementSyntax), GetType(InvocationExpressionSyntax))</a>
+</div>
+<div class="rF"><div class="rN">Extensions\VBAnalyzerExtensions.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Extensions/VBAnalyzerExtensions.vb.html#69"><b>69</b>type = DirectCast(type.<i>FirstAncestorOfType</i>(GetType(ClassBlockSyntax), GetType(StructureBlockSyntax)), TypeBlockSyntax)</a>
+</div>
+<div class="rF"><div class="rN">Performance\StringBuilderInLoopAnalyzer.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Performance/StringBuilderInLoopAnalyzer.vb.html#36"><b>36</b>Dim loopStatment = assignmentExpression.<i>FirstAncestorOfType</i>(</a>
+</div>
+<div class="rF"><div class="rN">Usage\UnusedParametersCodeFixProvider.vb (1)</div>
+<a href="../../CodeCracker.VisualBasic/Usage/UnusedParametersCodeFixProvider.vb.html#36"><b>36</b>Dim method = parameter.<i>FirstAncestorOfType</i>(GetType(SubNewStatementSyntax), GetType(MethodBlockSyntax))</a>
+</div>
+</div>
+</body></html>

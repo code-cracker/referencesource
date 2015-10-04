@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityInfoProvider.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(12);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/InconsistentAccessibility/InconsistentAccessibilityInfoProvider.cs" target="_top">Design\InconsistentAccessibility\InconsistentAccessibilityInfoProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design.InconsistentAccessibility
+{
+    <b>public interface</b> <a id="e4058d9b302c2e34" href="../../R/e4058d9b302c2e34.html" target="n" data-glyph="48,0" class="t">InconsistentAccessibilityInfoProvider</a>
+    {
+        <span class="t">Task</span>&lt;<a href="InconsistentAccessibilityInfo.cs.html#c3a636994e7617fd" class="t">InconsistentAccessibilityInfo</a>&gt; <a id="7814b4bd751b0d4f" href="../../R/7814b4bd751b0d4f.html" target="n" data-glyph="72,1">GetInconsistentAccessibilityInfoAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r0 rd" class="r0 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r1 rd" class="r1 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r2 rd" class="r2 r">cancellationToken</span>);
+    }
+}
+</pre></td></tr></table></div></body></html>

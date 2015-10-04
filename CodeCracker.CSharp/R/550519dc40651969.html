@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html><head><title>IsKind</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">99 references to IsKind</div><div class="rA">CodeCracker.CSharp (99)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\MakeMethodStaticAnalyzer.cs (1)</div>
+<a href="../Design/MakeMethodStaticAnalyzer.cs.html#100"><b>100</b>result = method.Parent.DescendantNodes().Any(descendant =&gt; descendant.<i>IsKind</i>(SyntaxKind.MethodDeclaration) &amp;&amp; ((MethodDeclarationSyntax)descendant).AttributeLists.HasAnyAttribute(NUnitTestMethodAttributes));</a>
+</div>
+<div class="rF"><div class="rN">Design\MakeMethodStaticCodeFixProvider.cs (2)</div>
+<a href="../Design/MakeMethodStaticCodeFixProvider.cs.html#65"><b>65</b>if (token.Parent.<i>IsKind</i>(SyntaxKind.IdentifierName)) continue;</a>
+<a href="../Design/MakeMethodStaticCodeFixProvider.cs.html#67"><b>67</b>if (invocationExpression == null || invocationExpression.<i>IsKind</i>(SyntaxKind.IdentifierName)) continue;</a>
+</div>
+<div class="rF"><div class="rN">Extensions\CSharpAnalyzerExtensions.cs (4)</div>
+<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#82"><b>82</b>.DescendantNodes(n =&gt; !(n.<i>IsKind</i>(</a>
+<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#127"><b>127</b>public static bool IsNotKind(this SyntaxNode node, params SyntaxKind[] kinds) =&gt; !node.<i>IsKind</i>(kinds);</a>
+<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#144"><b>144</b>if (node.<i>IsKind</i>(kind)) return true;</a>
+<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#411"><b>411</b>if (method.Parent.<i>IsKind</i>(SyntaxKind.InterfaceDeclaration))</a>
+</div>
+<div class="rF"><div class="rN">Performance\EmptyFinalizerAnalyzer.cs (1)</div>
+<a href="../Performance/EmptyFinalizerAnalyzer.cs.html#44"><b>44</b>if (body.DescendantNodes().Any(n =&gt; !n.<i>IsKind</i>(SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia))) return;</a>
+</div>
+<div class="rF"><div class="rN">Performance\StringBuilderInLoopAnalyzer.cs (3)</div>
+<a href="../Performance/StringBuilderInLoopAnalyzer.cs.html#62"><b>62</b>if (assignmentExpression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression))</a>
+<a href="../Performance/StringBuilderInLoopAnalyzer.cs.html#64"><b>64</b>if (!(assignmentExpression.Right?.<i>IsKind</i>(SyntaxKind.AddExpression) ?? false)) return;</a>
+<a href="../Performance/StringBuilderInLoopAnalyzer.cs.html#70"><b>70</b>else if (!assignmentExpression.<i>IsKind</i>(SyntaxKind.AddAssignmentExpression)) return;</a>
+</div>
+<div class="rF"><div class="rN">Performance\StringBuilderInLoopCodeFixProvider.cs (1)</div>
+<a href="../Performance/StringBuilderInLoopCodeFixProvider.cs.html#77"><b>77</b>var appendExpressionOnLoop = assignmentExpression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression)</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\ChangeAnyToAllAnalyzer.cs (1)</div>
+<a href="../Refactoring/ChangeAnyToAllAnalyzer.cs.html#46"><b>46</b>if (invocation.Parent.<i>IsKind</i>(SyntaxKind.ExpressionStatement)) return;</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\ChangeAnyToAllCodeFixProvider.cs (19)</div>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#45"><b>45</b>if (invocation.Parent.<i>IsKind</i>(SyntaxKind.LogicalNotExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#66"><b>66</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.ConditionalExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#70"><b>70</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.LogicalNotExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#72"><b>72</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.EqualsExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#75"><b>75</b>if (comparisonBinary.Right.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#77"><b>77</b>if (comparisonBinary.Left.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#79"><b>79</b>if (comparisonBinary.Right.<i>IsKind</i>(SyntaxKind.FalseLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#81"><b>81</b>if (comparisonBinary.Left.<i>IsKind</i>(SyntaxKind.FalseLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#85"><b>85</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.NotEqualsExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#88"><b>88</b>if (comparisonBinary.Right.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#90"><b>90</b>if (comparisonBinary.Left.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#94"><b>94</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.GreaterThanExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#96"><b>96</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.GreaterThanOrEqualExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#98"><b>98</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.LessThanExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#100"><b>100</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.LessThanOrEqualExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#102"><b>102</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#104"><b>104</b>if (comparisonExpression.<i>IsKind</i>(SyntaxKind.FalseLiteralExpression))</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#112"><b>112</b>expression.<i>IsKind</i>(SyntaxKind.ParenthesizedExpression) ? ((ParenthesizedExpressionSyntax)expression).Expression : expression;</a>
+<a href="../Refactoring/ChangeAnyToAllCodeFixProvider.cs.html#119"><b>119</b>left.<i>IsKind</i>(SyntaxKind.ConditionalExpression) ? SyntaxFactory.ParenthesizedExpression(left) : left,</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\ComputeExpressionAnalyzer.cs (1)</div>
+<a href="../Refactoring/ComputeExpressionAnalyzer.cs.html#76"><b>76</b>if (!expression.<i>IsKind</i>(SyntaxKind.NumericLiteralExpression)) return false;</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\IntroduceFieldFromConstructorCodeFixProvider.cs (7)</div>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#77"><b>77</b>if (m.<i>IsKind</i>(SyntaxKind.MethodDeclaration))</a>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#82"><b>82</b>if (m.<i>IsKind</i>(SyntaxKind.EventDeclaration))</a>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#87"><b>87</b>if (m.<i>IsKind</i>(SyntaxKind.EventFieldDeclaration))</a>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#95"><b>95</b>if (m.<i>IsKind</i>(SyntaxKind.FieldDeclaration))</a>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#103"><b>103</b>if (m.<i>IsKind</i>(SyntaxKind.PropertyDeclaration))</a>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#108"><b>108</b>if (m.<i>IsKind</i>(SyntaxKind.DelegateDeclaration))</a>
+<a href="../Refactoring/IntroduceFieldFromConstructorCodeFixProvider.cs.html#113"><b>113</b>if (m.<i>IsKind</i>(SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.EnumDeclaration, SyntaxKind.InterfaceDeclaration))</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\InvertForAnalyzer.cs (3)</div>
+<a href="../Refactoring/InvertForAnalyzer.cs.html#47"><b>47</b>return unary.<i>IsKind</i>(SyntaxKind.PostIncrementExpression);</a>
+<a href="../Refactoring/InvertForAnalyzer.cs.html#55"><b>55</b>return unary.<i>IsKind</i>(SyntaxKind.PostIncrementExpression) || unary.<i>IsKind</i>(SyntaxKind.PostDecrementExpression);</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\NumericLiteralCodeFixProvider.cs (1)</div>
+<a href="../Refactoring/NumericLiteralCodeFixProvider.cs.html#56"><b>56</b>if (literal.Parent != null &amp;&amp; literal.Parent.<i>IsKind</i>(SyntaxKind.UnaryMinusExpression))</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfAnalyzer.cs (1)</div>
+<a href="../Refactoring/SplitIntoNestedIfAnalyzer.cs.html#34"><b>34</b>if (!ifStatement?.Condition.<i>IsKind</i>(SyntaxKind.LogicalAndExpression) ?? true) return;</a>
+</div>
+<div class="rF"><div class="rN">Refactoring\SplitIntoNestedIfCodeFixProvider.cs (1)</div>
+<a href="../Refactoring/SplitIntoNestedIfCodeFixProvider.cs.html#46"><b>46</b>var newStatement = ifStatement.Statement.<i>IsKind</i>(SyntaxKind.Block) ? (StatementSyntax)SyntaxFactory.Block(nestedIf) : nestedIf;</a>
+</div>
+<div class="rF"><div class="rN">Style\ConvertToExpressionBodiedMemberAnalyzer.cs (1)</div>
+<a href="../Style/ConvertToExpressionBodiedMemberAnalyzer.cs.html#57"><b>57</b>if (!accessors[0].<i>IsKind</i>(SyntaxKind.GetAccessorDeclaration)) return;</a>
+</div>
+<div class="rF"><div class="rN">Style\ConvertToSwitchAnalyzer.cs (1)</div>
+<a href="../Style/ConvertToSwitchAnalyzer.cs.html#61"><b>61</b>if (!condition.<i>IsKind</i>(SyntaxKind.EqualsExpression)) return;</a>
+</div>
+<div class="rF"><div class="rN">Style\ExistenceOperatorAnalyzer.cs (9)</div>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#37"><b>37</b>|| !notEqualExpression.<i>IsKind</i>(SyntaxKind.NotEqualsExpression)</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#38"><b>38</b>|| !notEqualExpression.Left.<i>IsKind</i>(SyntaxKind.IdentifierName)</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#39"><b>39</b>|| !notEqualExpression.Right.<i>IsKind</i>(SyntaxKind.NullLiteralExpression))</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#68"><b>68</b>if (!nullLiteral.<i>IsKind</i>(SyntaxKind.NullLiteralExpression)) return null;</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#76"><b>76</b>|| !assignmentExpression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression)</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#77"><b>77</b>|| !assignmentExpression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression))</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#79"><b>79</b>if (!nullLiteralAssignment.Right.<i>IsKind</i>(SyntaxKind.NullLiteralExpression)) return null;</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#80"><b>80</b>if (!nullLiteralAssignment.Left.<i>IsKind</i>(SyntaxKind.IdentifierName)) return null;</a>
+<a href="../Style/ExistenceOperatorAnalyzer.cs.html#81"><b>81</b>if (!assignmentExpression.Left.<i>IsKind</i>(SyntaxKind.IdentifierName)) return null;</a>
+</div>
+<div class="rF"><div class="rN">Style\ForInArrayAnalyzer.cs (3)</div>
+<a href="../Style/ForInArrayAnalyzer.cs.html#41"><b>41</b>if (condition == null || !condition.<i>IsKind</i>(SyntaxKind.LessThanExpression)) return;</a>
+<a href="../Style/ForInArrayAnalyzer.cs.html#44"><b>44</b>if (!arrayAccessor.<i>IsKind</i>(SyntaxKind.SimpleMemberAccessExpression)) return;</a>
+<a href="../Style/ForInArrayAnalyzer.cs.html#50"><b>50</b>if (literalExpression == null || !literalExpression.<i>IsKind</i>(SyntaxKind.NumericLiteralExpression)) return;</a>
+</div>
+<div class="rF"><div class="rN">Style\ObjectInitializerAnalyzer.cs (2)</div>
+<a href="../Style/ObjectInitializerAnalyzer.cs.html#109"><b>109</b>if (assignmentExpression == null || !assignmentExpression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression)) break;</a>
+<a href="../Style/ObjectInitializerAnalyzer.cs.html#111"><b>111</b>if (memberAccess == null || !memberAccess.<i>IsKind</i>(SyntaxKind.SimpleMemberAccessExpression)) break;</a>
+</div>
+<div class="rF"><div class="rN">Style\StringFormatAnalyzer.cs (1)</div>
+<a href="../Style/StringFormatAnalyzer.cs.html#48"><b>48</b>if (!argumentList.Arguments[0]?.Expression?.<i>IsKind</i>(SyntaxKind.StringLiteralExpression) ?? false) return;</a>
+</div>
+<div class="rF"><div class="rN">Style\TernaryOperatorAnalyzer.cs (2)</div>
+<a href="../Style/TernaryOperatorAnalyzer.cs.html#63"><b>63</b>if (expressionInsideIf != null &amp;&amp; expressionInsideIf.Expression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression) &amp;&amp; expressionInsideElse != null &amp;&amp; expressionInsideElse.Expression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression))</a>
+</div>
+<div class="rF"><div class="rN">Usage\ArgumentExceptionAnalyzer.cs (2)</div>
+<a href="../Usage/ArgumentExceptionAnalyzer.cs.html#109"><b>109</b>if (accessor.<i>IsKind</i>(SyntaxKind.SetAccessorDeclaration))</a>
+<a href="../Usage/ArgumentExceptionAnalyzer.cs.html#115"><b>115</b>if (accessor.<i>IsKind</i>(SyntaxKind.SetAccessorDeclaration))</a>
+</div>
+<div class="rF"><div class="rN">Usage\DisposableFieldNotDisposedAnalyzer.cs (1)</div>
+<a href="../Usage/DisposableFieldNotDisposedAnalyzer.cs.html#85"><b>85</b>if (!invocation?.Expression?.<i>IsKind</i>(SyntaxKind.SimpleMemberAccessExpression) ?? true) return false;</a>
+</div>
+<div class="rF"><div class="rN">Usage\DisposableVariableNotDisposedAnalyzer.cs (6)</div>
+<a href="../Usage/DisposableVariableNotDisposedAnalyzer.cs.html#52"><b>52</b>if (objectCreation.Parent.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression))</a>
+<a href="../Usage/DisposableVariableNotDisposedAnalyzer.cs.html#62"><b>62</b>else if (objectCreation.Parent.<i>IsKind</i>(SyntaxKind.EqualsValueClause) &amp;&amp; objectCreation.Parent.Parent.<i>IsKind</i>(SyntaxKind.VariableDeclarator))</a>
+<a href="../Usage/DisposableVariableNotDisposedAnalyzer.cs.html#121"><b>121</b>if (!expressionStatement.Expression.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression)) return false;</a>
+<a href="../Usage/DisposableVariableNotDisposedAnalyzer.cs.html#137"><b>137</b>if (memberAccess.Expression.<i>IsKind</i>(SyntaxKind.IdentifierName))</a>
+<a href="../Usage/DisposableVariableNotDisposedAnalyzer.cs.html#141"><b>141</b>else if (memberAccess.Expression.<i>IsKind</i>(SyntaxKind.ParenthesizedExpression))</a>
+</div>
+<div class="rF"><div class="rN">Usage\DisposableVariableNotDisposedCodeFixProvider.cs (5)</div>
+<a href="../Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#49"><b>49</b>if (objectCreation.Parent.<i>IsKind</i>(SyntaxKind.SimpleAssignmentExpression))</a>
+<a href="../Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#58"><b>58</b>else if (objectCreation.Parent.<i>IsKind</i>(SyntaxKind.EqualsValueClause) &amp;&amp; objectCreation.Parent.Parent.<i>IsKind</i>(SyntaxKind.VariableDeclarator))</a>
+<a href="../Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#65"><b>65</b>else if (objectCreation.Parent.<i>IsKind</i>(SyntaxKind.Argument))</a>
+<a href="../Usage/DisposableVariableNotDisposedCodeFixProvider.cs.html#108"><b>108</b>if (type.<i>IsKind</i>(SyntaxKind.QualifiedName))</a>
+</div>
+<div class="rF"><div class="rN">Usage\IfReturnTrueAnalyzer.cs (4)</div>
+<a href="../Usage/IfReturnTrueAnalyzer.cs.html#45"><b>45</b>if ((returnIf.Expression is LiteralExpressionSyntax &amp;&amp; returnIf.Expression.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression) &amp;&amp;</a>
+<a href="../Usage/IfReturnTrueAnalyzer.cs.html#46"><b>46</b>returnElse.Expression is LiteralExpressionSyntax &amp;&amp; returnElse.Expression.<i>IsKind</i>(SyntaxKind.FalseLiteralExpression)) ||</a>
+<a href="../Usage/IfReturnTrueAnalyzer.cs.html#47"><b>47</b>(returnIf.Expression is LiteralExpressionSyntax &amp;&amp; returnIf.Expression.<i>IsKind</i>(SyntaxKind.FalseLiteralExpression) &amp;&amp;</a>
+<a href="../Usage/IfReturnTrueAnalyzer.cs.html#48"><b>48</b>returnElse.Expression is LiteralExpressionSyntax &amp;&amp; returnElse.Expression.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression)))</a>
+</div>
+<div class="rF"><div class="rN">Usage\IfReturnTrueCodeFixProvider.cs (2)</div>
+<a href="../Usage/IfReturnTrueCodeFixProvider.cs.html#40"><b>40</b>&amp;&amp; returnIf.Expression.<i>IsKind</i>(SyntaxKind.TrueLiteralExpression)</a>
+<a href="../Usage/IfReturnTrueCodeFixProvider.cs.html#42"><b>42</b>&amp;&amp; returnElse.Expression.<i>IsKind</i>(SyntaxKind.FalseLiteralExpression)</a>
+</div>
+<div class="rF"><div class="rN">Usage\ReadonlyFieldAnalyzer.cs (2)</div>
+<a href="../Usage/ReadonlyFieldAnalyzer.cs.html#133"><b>133</b>if (root.<i>IsKind</i>(SyntaxKind.ClassDeclaration) || root.<i>IsKind</i>(SyntaxKind.StructDeclaration))</a>
+</div>
+<div class="rF"><div class="rN">Usage\RedundantFieldAssignmentAnalyzer.cs (2)</div>
+<a href="../Usage/RedundantFieldAssignmentAnalyzer.cs.html#42"><b>42</b>if (initializerValue.<i>IsKind</i>(SyntaxKind.DefaultExpression))</a>
+<a href="../Usage/RedundantFieldAssignmentAnalyzer.cs.html#64"><b>64</b>if (!initializerValue.<i>IsKind</i>(SyntaxKind.NullLiteralExpression)) return false;</a>
+</div>
+<div class="rF"><div class="rN">Usage\RemoveUnreachableCodeCodeFixProvider.cs (5)</div>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#40"><b>40</b>if (node.Parent.<i>IsKind</i>(SyntaxKind.IfStatement, SyntaxKind.WhileStatement))</a>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#42"><b>42</b>if (node.Parent.<i>IsKind</i>(SyntaxKind.ElseClause))</a>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#51"><b>51</b>if (expression.Parent.<i>IsKind</i>(SyntaxKind.ForStatement))</a>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#54"><b>54</b>if (expressionStatement.Parent.<i>IsKind</i>(SyntaxKind.IfStatement, SyntaxKind.WhileStatement))</a>
+<a href="../Usage/RemoveUnreachableCodeCodeFixProvider.cs.html#56"><b>56</b>if (expressionStatement.Parent.<i>IsKind</i>(SyntaxKind.ElseClause))</a>
+</div>
+<div class="rF"><div class="rN">Usage\RemoveUnusedVariablesCodeFixProvider.cs (1)</div>
+<a href="../Usage/RemoveUnusedVariablesCodeFixProvider.cs.html#29"><b>29</b>if (!parent.<i>IsKind</i>(Microsoft.CodeAnalysis.CSharp.SyntaxKind.CatchDeclaration))</a>
+</div>
+<div class="rF"><div class="rN">Usage\SimplifyRedundantBooleanComparisonsCodeFixProvider.cs (2)</div>
+<a href="../Usage/SimplifyRedundantBooleanComparisonsCodeFixProvider.cs.html#52"><b>52</b>if ((!constValue &amp;&amp; comparison.<i>IsKind</i>(SyntaxKind.EqualsExpression)) || (constValue &amp;&amp; comparison.<i>IsKind</i>(SyntaxKind.NotEqualsExpression)))</a>
+</div>
+<div class="rF"><div class="rN">Usage\StringFormatArgsAnalyzer.cs (2)</div>
+<a href="../Usage/StringFormatArgsAnalyzer.cs.html#55"><b>55</b>if (!argumentList.Arguments[0]?.Expression?.<i>IsKind</i>(SyntaxKind.StringLiteralExpression) ?? false) return;</a>
+<a href="../Usage/StringFormatArgsAnalyzer.cs.html#59"><b>59</b>var allInterpolations = analyzingInterpolation.Contents.Where(c =&gt; c.<i>IsKind</i>(SyntaxKind.Interpolation)).Select(c =&gt; (InterpolationSyntax)c);</a>
+</div>
+</div>
+</body></html>

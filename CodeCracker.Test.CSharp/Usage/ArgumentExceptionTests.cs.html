@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<html><head><title>ArgumentExceptionTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(355);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/ArgumentExceptionTests.cs" target="_top">Usage\ArgumentExceptionTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="e7864e4d219744a8" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="c87a5af312faf703">ArgumentExceptionTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#9931b1eaef29ceef" class="t">ArgumentExceptionAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#42248ae5947f3500" class="t">ArgumentExceptionCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="23465aa118204cbc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentAnalyzerCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public async Task Foo(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;);
+            }&quot;</span>);
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;c&#39; is not in the argument list.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 56) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r0 r">test</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8e7c41a6c351eac6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInCtorWithInvalidArgumentAnalyzerCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public TypeName(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;);
+            }&quot;</span>);
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;c&#39; is not in the argument list.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 56) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bf3402e98f558c53" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentAndApplyingFirstFixUsesFirstParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public async Task Foo(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;);
+            }&quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public async Task Foo(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;a&quot;&quot;);
+            }&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r4 r">test</span>, <span class="r5 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1a1f579e71370748" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentAndApplyingSecondFixUsesSecondParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public async Task Foo(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;);
+            }&quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public async Task Foo(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;b&quot;&quot;);
+            }&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r6 r">test</span>, <span class="r7 r">fixtest</span>, 1);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5b6f700281d199b2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInCtorAndApplyingFirstFixUsesFirstParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public TypeName(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;);
+            }&quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public TypeName(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;a&quot;&quot;);
+            }&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r8 r">test</span>, <span class="r9 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e66479c201cce17c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInCtorAndApplyingSecondFixUsesSecondParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public TypeName(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;);
+            }&quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public TypeName(int a, int b)
+            {
+                throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;b&quot;&quot;);
+            }&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r10 r">test</span>, <span class="r11 r">fixtest</span>, 1);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6822dc47aaa6cd9a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresArgumentExceptionObjectsInFields</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            ArgumentException ex = new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;);
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3b025276c5854157" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresArgumentExceptionObjectsInGetAccessors</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string StrangePropertyThatThrowsArgumentExceptionInsideGet
+            { get { throw ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;); } }
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e117ceca43ff7020" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInSetPropertyArgumentNameShouldBeValue</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r14 rd" class="r14 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string RejectsEverythingProperty
+            {
+                get { return null; } 
+                set { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r15 rd" class="r15 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;c&#39; is not in the argument list.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 12, 62) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r14 r">test</span>, <span class="r15 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="954b4fe918430908" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInSetAccessorAndApplyingFixUsesParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r16 rd" class="r16 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string RejectsEverythingProperty
+            {
+                get { return null; } 
+                set { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r17 rd" class="r17 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string RejectsEverythingProperty
+            {
+                get { return null; } 
+                set { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;value&quot;&quot;); } 
+            }
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r16 r">test</span>, <span class="r17 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0276ff62185377bf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInGetPropertyWithIndexersArgumentNameShouldBeInParameterList</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r18 rd" class="r18 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r19 rd" class="r19 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;c&#39; is not in the argument list.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 11, 62) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r18 r">test</span>, <span class="r19 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="75017894b4dfbf91" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInIndexerGetAccessorAndApplyingFirstFixUsesFirstParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r20 rd" class="r20 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r21 rd" class="r21 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;a&quot;&quot;); } 
+            }
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">test</span>, <span class="r21 r">fixtest</span>, 0);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="51648ae940c0457d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionInLambdaArgumentNameShouldBeInParameterList</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r22 rd" class="r22 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            Action&lt;int&gt; action = (p) =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;); };
+            &quot;</span>);
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r23 rd" class="r23 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#983721dbe579df8d">ArgumentException</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Type argument &#39;paramName&#39; is not in the argument list.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 9, 82) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r22 r">test</span>, <span class="r23 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="64376ee6e2089bcb" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInLambdasAndApplyingFixUsesLambdaParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r24 rd" class="r24 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            Action&lt;int&gt; action = (p) =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;); };
+            &quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r25 rd" class="r25 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            Action&lt;int&gt; action = (p) =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;p&quot;&quot;); };
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r24 r">test</span>, <span class="r25 r">fixtest</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f5d984b4d25e05bf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInSimpleLambdasAndApplyingFixUsesLambdaParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r26 rd" class="r26 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            Action&lt;int&gt; action = p =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;); };
+ 
+            void Foo(string a)
+            {
+                Action&lt;int&gt; action = param =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;); };
+            } 
+            &quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r27 rd" class="r27 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            Action&lt;int&gt; action = p =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;p&quot;&quot;); };
+ 
+            void Foo(string a)
+            {
+                Action&lt;int&gt; action = param =&gt; { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;param&quot;&quot;); };
+            } 
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r26 r">test</span>, <span class="r27 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c35a228f32bcede3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInIndexerGetAccessorAndApplyingSecondFixUsesSecondParameter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r28 rd" class="r28 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r29 rd" class="r29 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;b&quot;&quot;); } 
+            }
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r28 r">test</span>, <span class="r29 r">fixtest</span>, 1);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7d36d00afbde7c9d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenThrowingArgumentExceptionWithInvalidArgumentInIndexerSetAccessorAndApplyingThirdFixUsesValue</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r30 rd" class="r30 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { return null; }
+                set { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;c&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r31 rd" class="r31 r">fixtest</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { return null; }
+                set { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;value&quot;&quot;); } 
+            }
+            &quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r30 r">test</span>, <span class="r31 r">fixtest</span>, 2);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ad750566f3e4e2dc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresArgumentExceptionObjectsInSetAccessorsOfIndexersThatUsesValue</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r32 rd" class="r32 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            public string this[int a, int b]
+            {
+                get { return null; }
+                set { throw new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;value&quot;&quot;); } 
+            }
+            &quot;</span>);
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r32 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="649f35ec32d0125e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresArgumentExceptionObjectsInInitializerOfAutoProperties</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r33 rd" class="r33 r">test</span> = <a href="#a6ae1cad7b16cfad">Wrap</a>(<span class="s">@&quot;
+            ArgumentException Exception { get; } = new ArgumentException(&quot;&quot;message&quot;&quot;, &quot;&quot;paramName&quot;&quot;);
+            &quot;</span>);
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r33 r">test</span>);
+        }
+ 
+        <b>static string</b> <a id="a6ae1cad7b16cfad" href="../R/a6ae1cad7b16cfad.html" target="n" data-glyph="76,1">Wrap</a>(<b>string</b> <span id="r34 rd" class="r34 r">code</span>)
+        {
+            <b>return</b> <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            &quot;</span> + <span class="r34 r">code</span> + <span class="s">@&quot;
+        }
+    }&quot;</span>;
+ 
+        }
+    }
+}</pre></td></tr></table></div></body></html>

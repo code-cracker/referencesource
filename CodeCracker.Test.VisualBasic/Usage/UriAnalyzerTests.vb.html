@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html><head><title>UriAnalyzerTests.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(102);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/UriAnalyzerTests.vb" target="_top">Usage\UriAnalyzerTests.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Usage
+    <b>Public Class</b> <a id="92dda902f826e4d9" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="447311177053ba0a">UriAnalyzerTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+        <b>Private Const</b> <a id="4768bdb22efb1d67" href="../R/4768bdb22efb1d67.html" target="n" data-glyph="10,1">TestCode</a> <b>As String</b> = <span class="s">&quot;
+Imports System
+Namespace ConsoleApplication1
+	Class Person
+		Public Sub New()
+            {0}
+		End Sub
+	End Class
+End Namespace
+&quot;</span>
+ 
+<b>#</b><b>Disable</b> <b>Warning</b> CC0063
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="5ea0ea2a4e68d40a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedUriConstructorFoundAndUriIsIncorrectCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r0 rd" class="r0 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New Uri(&quot;&quot;foo&quot;&quot;)&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r0 r">test</span>, <a href="#2a5e8c86ef0a583e">CreateDiagnosticResult</a>(6, 31, <b>Function</b>() <b>New</b> <a href="@0@System/A.html#9e1bb2fef0d1159b" class="t">Uri</a>(<span class="s">&quot;foo&quot;</span>)))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="4aee51446968e71f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorFoundAndUriIsIncorrectCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New System.Uri(&quot;&quot;foo&quot;&quot;)&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r1 r">test</span>, <a href="#2a5e8c86ef0a583e">CreateDiagnosticResult</a>(6, 38, <b>Function</b>() <b>New</b> <a href="@0@System/A.html#9e1bb2fef0d1159b" class="t">Uri</a>(<span class="s">&quot;foo&quot;</span>)))
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="1cba644a032667a5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorWithUriKindFoundAndUriIsIncorrectCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r2 rd" class="r2 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New Uri(&quot;&quot;http://wrong&quot;&quot;, UriKind.Relative)&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#1ad521f1785eee0b">VerifyBasicDiagnosticAsync</a>(<span class="r2 r">test</span>, <a href="#2a5e8c86ef0a583e">CreateDiagnosticResult</a>(6, 31, <b>Function</b>() <b>New</b> <a href="@0@System/A.html#d9fc45d783ee73ff" class="t">Uri</a>(<span class="s">&quot;http://wrong&quot;</span>, <a href="@0@System/A.html#ac43655101ad74be" class="t">UriKind</a>.<a href="@0@System/A.html#c6d780fc34e3f702">Relative</a>)))
+        <b>End Function</b>
+<b>#</b><b>Enable</b> <b>Warning</b> CC0063
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="a9bad51f41e25197" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedUriConstructorWithUriKindFoundAndUriIsCorrectDoNotCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r3 rd" class="r3 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New Uri(&quot;&quot;foo&quot;&quot;, UriKind.Relative)&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="51de966db45c916e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorWithUriKindFoundAndUriIsCorrectDoNotCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New System.Uri(&quot;&quot;foo&quot;&quot;, UriKind.Relative)&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="884c936707879d1f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorUsingNullFoundDoNotCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r5 rd" class="r5 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New System.Uri(null)&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r5 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="405efb281fa741f0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfUriConstructorNotUsingLiteralFoundDoNotCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r6 rd" class="r6 r">test</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="#4768bdb22efb1d67">TestCode</a>, <span class="s">&quot;Dim uri = New System.Uri(new object().ToString())&quot;</span>)
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="113c0064b32b5de9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IfAbbreviatedUriConstructorFoundAndUriIsIncorrectAndItsNotSystemUriDoNotCreatesDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">code</span> <b>As String</b> = <span class="s">&quot;
+Namespace ConsoleApplication1
+	Class Uri
+		Public Sub New(uri__1 As String)
+		End Sub
+ 
+		Public Sub Test()
+			Dim uri = New Uri(&quot;&quot;whoCares&quot;&quot;)
+		End Sub
+	End Class
+End Namespace&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r7 r">code</span>)
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="2a5e8c86ef0a583e" href="../R/2a5e8c86ef0a583e.html" target="n" data-glyph="76,1">CreateDiagnosticResult</a>(<span id="r8 rd" class="r8 r">line</span> <b>As Integer</b>, <span id="r9 rd" class="r9 r">column</span> <b>As Integer</b>, <span id="r10 rd" class="r10 r">getErrorMessageAction</span> <b>As</b> <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t">Action</a>) <b>As</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            <b>Return</b> <b>New</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>() <b>With</b> {
+                .<a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6a23bf04092ee498">Uri</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                .<a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <a href="#7b9d8175937fa2b0">GetErrorMessage</a>(<span class="r10 r">getErrorMessageAction</span>),
+                .<a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f771032fb5a00c1c">[Error]</a>,
+                .<a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>New</b> <a href="/CodeCracker.Test.Common/A.html#7367c1957acfda83" class="t">DiagnosticResultLocation</a>() {<b>New</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.vb&quot;</span>, <span class="r8 r">line</span>, <span class="r9 r">column</span>)}
+            }
+        <b>End Function
+ 
+        Private Shared Function</b> <a id="7b9d8175937fa2b0" href="../R/7b9d8175937fa2b0.html" target="n" data-glyph="76,1">GetErrorMessage</a>(<span id="r11 rd" class="r11 r">action</span> <b>As</b> <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t">Action</a>) <b>As String
+            Try</b>
+                <span class="r11 r">action</span>.<a href="@0@mscorlib/A.html#6fbb51427c383a3a">Invoke</a>()
+            <b>Catch</b> <span class="r12 r">ex</span> <b>As</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t">Exception</a>
+                <b>Return</b> <span class="r12 r">ex</span>.<a href="@0@mscorlib/A.html#5fba0e16215b42a3">Message</a>
+            <b>End Try
+            Return</b> <span class="s">&quot;&quot;</span>
+        <b>End Function
+ 
+        Protected Overrides Function</b> <a id="c6a7801a9e3283a5" href="../R/c6a7801a9e3283a5.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+            <b>Return</b> <b>New</b> <a href="/CodeCracker.VisualBasic/A.html#b28cdfb5a95544c5" class="t">UriAnalyzer</a>()
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

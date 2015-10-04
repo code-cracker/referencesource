@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProvider.StyleCop.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(180);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Refactoring/AllowMembersOrderingCodeFixProvider.StyleCop.vb" target="_top">Refactoring\AllowMembersOrderingCodeFixProvider.StyleCop.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Threading
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Refactoring
+ 
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#abb1d0616f6d8375" class="t">StyleCopAllowMembersOrderingCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="abb1d0616f6d8375" href="../R/abb1d0616f6d8375.html" target="n" data-glyph="0,0" class="t">StyleCopAllowMembersOrderingCodeFixProvider</a>
+        <b>Inherits</b> <a href="AllowMembersOrderingCodeFixProvider.Base.vb.html#effff1a29f2541eb" class="t">BaseAllowMembersOrderingCodeFixProvider</a>
+ 
+        <b>Public Sub</b> <a id="1b661afd932b60d3" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="k">New</a>()
+            <b>MyBase</b>.<a href="AllowMembersOrderingCodeFixProvider.Base.vb.html#146416e28bc74acd" class="k">New</a>(<span class="s">&quot;Order {0}&#39;s members following StyleCop patterns&quot;</span>)
+        <b>End Sub
+ 
+        Protected Overrides Function</b> <a id="2b9e5594d6eaff70" href="../R/2b9e5594d6eaff70.html" target="n" data-glyph="75,1">GetMemberDeclarationComparer</a>(<span id="r0 rd" class="r0 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r1 rd" class="r1 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">IComparer</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)
+            <b>Return</b> <b>New</b> <a href="#58a119cec134ffea" class="t">StyleCopMembersComparer</a>
+        <b>End Function
+ 
+        Public Class</b> <a id="58a119cec134ffea" href="../R/58a119cec134ffea.html" target="n" data-glyph="0,1" class="t"><span id="9e676d90b761b4e2">StyleCopMembersComparer</span></a>
+            <b>Implements</b> <span class="t">IComparer</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)
+ 
+            <b>ReadOnly</b> <a id="caff1e613248b084" href="../R/caff1e613248b084.html" target="n" data-glyph="46,2">typeRank</a> <b>As</b> <b>New</b> <span class="t">Dictionary</span>(<b>Of</b> <span class="t">Type</span>, <b>Integer</b>) <b>From</b>
+                {
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a>), 1},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#69299a12e4aaa816" class="t">ConstructorBlockSyntax</a>), 2},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a>), 4},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ccc91f57a91d3b03" class="t">EventStatementSyntax</a>), 5},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39bd871e87e66650" class="t">EventBlockSyntax</a>), 6},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#774386974bc063e9" class="t">EnumBlockSyntax</a>), 7},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df7d91f3de7b93bf" class="t">InterfaceBlockSyntax</a>), 8},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#add81dfcbd016654" class="t">PropertyBlockSyntax</a>), 9},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a>), 9}, <span class="c">&#39; For VB Auto Properties</span>
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#83291877650dbad6" class="t">OperatorBlockSyntax</a>), 11},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>), 12},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a>), 13},
+                    {<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>), 14}
+                }
+ 
+            <b>ReadOnly</b> <a id="f53dde29d80e0d7b" href="../R/f53dde29d80e0d7b.html" target="n" data-glyph="46,2">specialModifierRank</a> <b>As</b> <b>New</b> <span class="t">Dictionary</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>, <b>Integer</b>) <b>From</b>
+                {
+                    {<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a992c13de18c720">ConstKeyword</a>, 1},
+                    {<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#676068cc4ad0356d">SharedKeyword</a>, 2}
+                }
+ 
+            <b>ReadOnly</b> <a id="dbe8dedffd084e87" href="../R/dbe8dedffd084e87.html" target="n" data-glyph="46,2">accessLevelRank</a> <b>As</b> <b>New</b> <span class="t">Dictionary</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>, <b>Integer</b>) <b>From</b>
+                {
+                    {<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4ba2b22149b0d72b">PublicKeyword</a>, -4},
+                    {<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5e1df68d977a10a5">FriendKeyword</a>, -2},
+                    {<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d5462e5990d8c94b">ProtectedKeyword</a>, 1},
+                    {<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f1354d31b311e16a">PrivateKeyword</a>, 2}
+                }
+ 
+            <b>Public Function</b> Compare(<span id="r2 rd" class="r2 r">x</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>, <span id="r3 rd" class="r3 r">y</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>) <b>As Integer Implements</b> <span class="t">IComparer</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>).Compare
+                <b>If</b> <span class="r2 r">x</span> <b>Is Nothing AndAlso</b> <span class="r3 r">y</span> <b>Is Nothing Then Return</b> 0
+                <b>If</b> <span class="r2 r">x</span> <b>Is Nothing Then Return</b> 1
+                <b>If</b> <span class="r3 r">y</span> <b>Is Nothing Then Return</b> -1
+                <b>If</b> <span class="r2 r">x</span>.Equals(<span class="r3 r">y</span>) <b>Then Return</b> 0
+ 
+                <b>Dim</b> <span id="r4 rd" class="r4 r">comparedPoints</span> = <a href="#ead40c16a870dd01">GetRankPoints</a>(<span class="r2 r">x</span>).CompareTo(<a href="#ead40c16a870dd01">GetRankPoints</a>(<span class="r3 r">y</span>))
+                    <b>If</b> <span class="r4 r">comparedPoints</span> &lt;&gt; 0 <b>Then Return</b> <span class="r4 r">comparedPoints</span>
+ 
+                <b>Dim</b> <span id="r5 rd" class="r5 r">xModifiers</span> = <a href="#5a87b13d1034aa50">GetModifiers</a>(<span class="r2 r">x</span>)
+                <b>Dim</b> <span id="r6 rd" class="r6 r">yModifiers</span> = <a href="#5a87b13d1034aa50">GetModifiers</a>(<span class="r3 r">y</span>)
+                <span class="r4 r">comparedPoints</span> = <a href="#bc150458134a773a">GetAccessLevelPoints</a>(<span class="r5 r">xModifiers</span>).CompareTo(<a href="#bc150458134a773a">GetAccessLevelPoints</a>(<span class="r6 r">yModifiers</span>))
+                <b>If</b> <span class="r4 r">comparedPoints</span> &lt;&gt; 0 <b>Then Return</b> <span class="r4 r">comparedPoints</span>
+ 
+                <span class="r4 r">comparedPoints</span> = <a href="#8edb58a56f6eab58">GetSpecialModifierPoints</a>(<span class="r5 r">xModifiers</span>).CompareTo(<a href="#8edb58a56f6eab58">GetSpecialModifierPoints</a>(<span class="r6 r">yModifiers</span>))
+                <b>If</b> <span class="r4 r">comparedPoints</span> &lt;&gt; 0 <b>Then Return</b> <span class="r4 r">comparedPoints</span>
+ 
+                <b>Return</b> <a href="#67b9f501039b6bbe">GetName</a>(<span class="r2 r">x</span>).CompareTo(<a href="#67b9f501039b6bbe">GetName</a>(<span class="r3 r">y</span>))
+            <b>End Function
+ 
+            Private Function</b> <a id="bc150458134a773a" href="../R/bc150458134a773a.html" target="n" data-glyph="76,2">GetAccessLevelPoints</a>(<span id="r7 rd" class="r7 r">tokens</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a>) <b>As Integer
+                Return</b> <a href="#deaa9e02e532eb51">sumrankPoints</a>(<span class="r7 r">tokens</span>, <a href="#dbe8dedffd084e87">accessLevelRank</a>, <a href="#dbe8dedffd084e87">accessLevelRank</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f1354d31b311e16a">PrivateKeyword</a>))
+            <b>End Function
+ 
+            Private Function</b> <a id="5a87b13d1034aa50" href="../R/5a87b13d1034aa50.html" target="n" data-glyph="76,2">GetModifiers</a>(<span id="r8 rd" class="r8 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>) <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a>
+                <b>If TypeOf</b> <span class="r8 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b675ae543da8cfa8" class="t">MethodBlockBaseSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r8 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b675ae543da8cfa8" class="t">MethodBlockBaseSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7a79812919fe71ec">BlockStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9654ebb871017936">Modifiers</a>
+                <b>End If
+                If TypeOf</b> <span class="r8 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r8 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#45a67503b9cb4463">Modifiers</a>
+                <b>End If
+                If TypeOf</b> <span class="r8 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r8 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7169c77b5c022cc1">Modifiers</a>
+                <b>End If
+                If TypeOf</b> <span class="r8 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r8 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8837a7e0b4c8fa00">Modifiers</a>
+                <b>End If
+                If TypeOf</b> <span class="r8 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#add81dfcbd016654" class="t">PropertyBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r8 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#add81dfcbd016654" class="t">PropertyBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#065a343d449b8d0e">PropertyStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8837a7e0b4c8fa00">Modifiers</a>
+                <b>End If
+                Return</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a>()
+            <b>End Function
+ 
+            Private Function</b> <a id="ead40c16a870dd01" href="../R/ead40c16a870dd01.html" target="n" data-glyph="76,2">GetRankPoints</a>(<span id="r9 rd" class="r9 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>) <b>As Integer
+                Dim</b> <span id="r10 rd" class="r10 r">points</span> = 0
+                <b>If Not</b> <a href="#caff1e613248b084">typeRank</a>.TryGetValue(<span class="r9 r">node</span>.GetType(), <span class="r10 r">points</span>) <b>Then
+                    Return</b> 0
+                <b>End If
+                Return</b> <span class="r10 r">points</span>
+            <b>End Function
+ 
+            Private Function</b> <a id="8edb58a56f6eab58" href="../R/8edb58a56f6eab58.html" target="n" data-glyph="76,2">GetSpecialModifierPoints</a>(<span id="r11 rd" class="r11 r">tokens</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a>) <b>As Integer
+                Return</b> <a href="#deaa9e02e532eb51">SumRankPoints</a>(<span class="r11 r">tokens</span>, <a href="#f53dde29d80e0d7b">specialModifierRank</a>, 100)
+            <b>End Function
+ 
+            Private Function</b> <a id="deaa9e02e532eb51" href="../R/deaa9e02e532eb51.html" target="n" data-glyph="76,2">SumRankPoints</a>(<span id="r12 rd" class="r12 r">tokens</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a>, <span id="r13 rd" class="r13 r">rank</span> <b>As</b> <span class="t">Dictionary</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>, <b>Integer</b>), <span id="r14 rd" class="r14 r">defaultSumValue</span> <b>As Integer</b>) <b>As Integer
+                Dim</b> <span id="r15 rd" class="r15 r">points</span> = <span class="r12 r">tokens</span>.Sum(<b>Function</b>(<span id="r16 rd" class="r16 r">t</span>) <b>If</b>(<span class="r13 r">rank</span>.ContainsKey(<span class="r16 r">t</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b365849ccbe86094">Kind</a>), <span class="r13 r">rank</span>(<span class="r16 r">t</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b365849ccbe86094">Kind</a>), 0))
+ 
+                <b>Return If</b>(<span class="r15 r">points</span> = 0, <span class="r14 r">defaultSumValue</span>, <span class="r15 r">points</span>)
+            <b>End Function
+ 
+            Private Function</b> <a id="67b9f501039b6bbe" href="../R/67b9f501039b6bbe.html" target="n" data-glyph="76,2">GetName</a>(<span id="r17 rd" class="r17 r">node</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>) <b>As String
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a> <b>Then
+                    Return</b> <a href="#270e166fd3774300">GetFieldName</a>(<b>DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3241f6e29a14cfb0" class="t">FieldDeclarationSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7f0ae002e9a7ea2a">Declarators</a>)
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f49fd6666e6eacde" class="t">PropertyStatementSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#608e6caa2afd7ba7">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#add81dfcbd016654" class="t">PropertyBlockSyntax</a> <b>Then
+                    Return</b> <a href="#67b9f501039b6bbe">GetName</a>(<b>DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#add81dfcbd016654" class="t">PropertyBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#065a343d449b8d0e">PropertyStatement</a>)
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#aa5f8d1e5ccd00b4">SubOrFunctionStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#22e1ddd7ffa48688">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a> <b>Then
+                    Return</b> <span class="s">&quot;New&quot;</span>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#774386974bc063e9" class="t">EnumBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#774386974bc063e9" class="t">EnumBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c3e9821912e0d4f7">EnumStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#33e3d42efcd7ff4a">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df7d91f3de7b93bf" class="t">InterfaceBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df7d91f3de7b93bf" class="t">InterfaceBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e4a130213c01c6a0">InterfaceStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8573b19bb683c6c7">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ccc91f57a91d3b03" class="t">EventStatementSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ccc91f57a91d3b03" class="t">EventStatementSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#766c447a072617a5">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39bd871e87e66650" class="t">EventBlockSyntax</a> <b>Then
+                    Return</b> <a href="#67b9f501039b6bbe">GetName</a>(<b>DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39bd871e87e66650" class="t">EventBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#df62a038712b8fbf">EventStatement</a>)
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#83291877650dbad6" class="t">OperatorBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#83291877650dbad6" class="t">OperatorBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#2a3db76cb43cc0cb">OperatorStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e82375716aa734bd">OperatorToken</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#39619489eb6aeca3" class="t">DelegateStatementSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3af8fc44edd60ab4">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cbbbebcffeffb4a6">ClassStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#831332330cf8da44">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                If TypeOf</b> <span class="r17 r">node</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a> <b>Then
+                    Return DirectCast</b>(<span class="r17 r">node</span>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7bb984e0c8dde577">StructureStatement</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#163073d2e4a589ba">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>End If
+                Return</b> <span class="s">&quot;&quot;</span>
+            <b>End Function
+            Custom Event</b> <a id="20793214eeb0ba5f" href="../R/../../0000000000.html" target="n" data-glyph="30,2">foo</a> <b>As</b> <span class="t">Action</span>
+                <b>AddHandler</b>(<span id="r18 rd" class="r18 r">value</span> <b>As</b> <span class="t">Action</span>)
+ 
+                <b>End AddHandler
+                RemoveHandler</b>(<span id="r19 rd" class="r19 r">value</span> <b>As</b> <span class="t">Action</span>)
+ 
+                <b>End RemoveHandler
+                RaiseEvent</b>()
+ 
+                <b>End RaiseEvent
+            End Event
+ 
+ 
+            Private Function</b> <a id="270e166fd3774300" href="../R/270e166fd3774300.html" target="n" data-glyph="76,2">GetFieldName</a>(<span id="r20 rd" class="r20 r">declarations</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="t">SeparatedSyntaxList</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d0b9d38f450a4878" class="t">VariableDeclaratorSyntax</a>)) <b>As String
+                Dim</b> <span id="r21 rd" class="r21 r">names</span> = <b>From</b> declaration <b>In</b> <span class="r20 r">declarations</span>
+                            <b>From</b> name <b>In</b> declaration.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e1bad758d18bf7e0">Names</a>
+                            <b>Select</b> name.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#cc186f48b54c6387">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7bf1ee5d754979b">Text</a>
+                <b>Return String</b>.Join(<span class="s">&quot;&quot;</span>, <span class="r21 r">names</span>)
+            <b>End Function
+        End Class
+    End Class
+End Namespace</b>
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html><head><title>InconsistentAccessibilityCodeFixProvider.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(229);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs" target="_top">Design\InconsistentAccessibility\InconsistentAccessibilityCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Design.InconsistentAccessibility
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="#58836c9c3464b79a" class="t">InconsistentAccessibilityCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>public sealed class</b> <a id="58836c9c3464b79a" href="../../R/58836c9c3464b79a.html" target="n" data-glyph="0,0" class="t"><span id="05e63ee80e182404">InconsistentAccessibilityCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>internal const string</b> <a id="b0b0893623756334" href="../../R/b0b0893623756334.html" target="n" data-glyph="8,1">InconsistentAccessibilityInMethodReturnTypeCompilerErrorNumber</a> = <span class="s">&quot;CS0050&quot;</span>;
+        <b>internal const string</b> <a id="79eb575ba8e6b36a" href="../../R/79eb575ba8e6b36a.html" target="n" data-glyph="8,1">InconsistentAccessibilityInMethodParameterCompilerErrorNumber</a> = <span class="s">&quot;CS0051&quot;</span>;
+        <b>internal const string</b> <a id="da366683aa16a34f" href="../../R/da366683aa16a34f.html" target="n" data-glyph="8,1">InconsistentAccessibilityInFieldTypeCompilerErrorNumber</a> = <span class="s">&quot;CS0052&quot;</span>;
+        <b>internal const string</b> <a id="972406169a8088f8" href="../../R/972406169a8088f8.html" target="n" data-glyph="8,1">InconsistentAccessibilityInPropertyTypeCompilerErrorNumber</a> = <span class="s">&quot;CS0053&quot;</span>;
+        <b>internal const string</b> <a id="667c42cc5580c20b" href="../../R/667c42cc5580c20b.html" target="n" data-glyph="8,1">InconsistentAccessibilityInIndexerReturnTypeCompilerErrorNumber</a> = <span class="s">&quot;CS0054&quot;</span>;
+        <b>internal const string</b> <a id="a534ccb47ab8427b" href="../../R/a534ccb47ab8427b.html" target="n" data-glyph="8,1">InconsistentAccessibilityInIndexerParameterCompilerErrorNumber</a> = <span class="s">&quot;CS0055&quot;</span>;
+ 
+        <b>public override</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a> <a id="c64add3658d1f05d" href="../../R/c64add3658d1f05d.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() =&gt; <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>;
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="216b88cbf63d53ab" href="../../R/216b88cbf63d53ab.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#b0b0893623756334">InconsistentAccessibilityInMethodReturnTypeCompilerErrorNumber</a>, <a href="#79eb575ba8e6b36a">InconsistentAccessibilityInMethodParameterCompilerErrorNumber</a>, <a href="#da366683aa16a34f">InconsistentAccessibilityInFieldTypeCompilerErrorNumber</a>, <a href="#972406169a8088f8">InconsistentAccessibilityInPropertyTypeCompilerErrorNumber</a>, <a href="#667c42cc5580c20b">InconsistentAccessibilityInIndexerReturnTypeCompilerErrorNumber</a>, <a href="#a534ccb47ab8427b">InconsistentAccessibilityInIndexerParameterCompilerErrorNumber</a>);
+ 
+        <b>public override async</b> <span class="t">Task</span> <a id="71f471e8f639e240" href="../../R/71f471e8f639e240.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> <b>in</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>)
+            {
+                <a href="InconsistentAccessibilityInfo.cs.html#c3a636994e7617fd" class="k">var</a> <span id="r2 rd" class="r2 r">inconsistentAccessibilityInfo</span> = <b>await</b> <a href="#e7f45ae2c2085b1f">GetInconsistentAccessibilityInfoAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+ 
+                <b>if</b> (<span class="r2 r">inconsistentAccessibilityInfo</span>.<a href="InconsistentAccessibilityInfo.cs.html#4c813f0d35eb047c">TypeToChangeFound</a>())
+                {
+                    <b>var</b> <span id="r3 rd" class="r3 r">typeLocations</span> = <b>await</b> <a href="#472586a39b865643">FindTypeLocationsInSourceCodeAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r2 r">inconsistentAccessibilityInfo</span>.<a href="InconsistentAccessibilityInfo.cs.html#f4b95516972fae93">TypeToChangeAccessibility</a>, <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>false</b>);
+ 
+                    <b>if</b> (<span class="r3 r">typeLocations</span>.Length == 1)
+                    {
+                        <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<span class="r2 r">inconsistentAccessibilityInfo</span>.<a href="InconsistentAccessibilityInfo.cs.html#11c7b496002fdf66">CodeActionMessage</a>, <span id="r4 rd" class="r4 r">c</span> =&gt; <a href="#9beb7934d38e93cb">ChangeTypeAccessibilityInDocumentAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#16fb85241ac740ed">Project</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4c4d2a069da85c41">Solution</a>, <span class="r2 r">inconsistentAccessibilityInfo</span>.<a href="InconsistentAccessibilityInfo.cs.html#ff2a5ab993a79b76">NewAccessibilityModifiers</a>, <span class="r3 r">typeLocations</span>[0], <span class="r4 r">c</span>), <b>nameof</b>(<a href="#58836c9c3464b79a" class="t">InconsistentAccessibilityCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+                    }
+                    <b>else if</b> (<span class="r3 r">typeLocations</span>.Length &gt; 1)
+                    {
+                        <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<span class="r2 r">inconsistentAccessibilityInfo</span>.<a href="InconsistentAccessibilityInfo.cs.html#11c7b496002fdf66">CodeActionMessage</a>, <span id="r5 rd" class="r5 r">c</span> =&gt; <a href="#ccc3e622a0b7d086">ChangeTypeAccessibilityInSolutionAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#16fb85241ac740ed">Project</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4c4d2a069da85c41">Solution</a>, <span class="r2 r">inconsistentAccessibilityInfo</span>.<a href="InconsistentAccessibilityInfo.cs.html#ff2a5ab993a79b76">NewAccessibilityModifiers</a>, <span class="r3 r">typeLocations</span>, <span class="r5 r">c</span>), <b>nameof</b>(<a href="#58836c9c3464b79a" class="t">InconsistentAccessibilityCodeFixProvider</a>)), <span class="r1 r">diagnostic</span>);
+                    }
+                }
+            }
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="InconsistentAccessibilityInfo.cs.html#c3a636994e7617fd" class="t">InconsistentAccessibilityInfo</a>&gt; <a id="e7f45ae2c2085b1f" href="../../R/e7f45ae2c2085b1f.html" target="n" data-glyph="76,1">GetInconsistentAccessibilityInfoAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r6 rd" class="r6 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r7 rd" class="r7 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r8 rd" class="r8 r">cancellationToken</span>)
+        {
+            <a href="InconsistentAccessibilityInfoProvider.cs.html#e4058d9b302c2e34" class="t">InconsistentAccessibilityInfoProvider</a> <span id="r9 rd" class="r9 r">inconsistentAccessibilityProvider</span> = <b>null</b>;
+ 
+            <b>switch</b> (<span class="r7 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a>)
+            {
+                <b>case</b> <a href="#b0b0893623756334">InconsistentAccessibilityInMethodReturnTypeCompilerErrorNumber</a>:
+                    <span class="r9 r">inconsistentAccessibilityProvider</span> = <b>new</b> <a href="InconsistentAccessibilityInMethodReturnType.cs.html#9706be551b046b40" class="t">InconsistentAccessibilityInMethodReturnType</a>();
+                    <b>break</b>;
+                <b>case</b> <a href="#79eb575ba8e6b36a">InconsistentAccessibilityInMethodParameterCompilerErrorNumber</a>:
+                    <span class="r9 r">inconsistentAccessibilityProvider</span> = <b>new</b> <a href="InconsistentAccessibilityInMethodParameter.cs.html#54ee86732e581b93" class="t">InconsistentAccessibilityInMethodParameter</a>();
+                    <b>break</b>;
+                <b>case</b> <a href="#da366683aa16a34f">InconsistentAccessibilityInFieldTypeCompilerErrorNumber</a>:
+                    <span class="r9 r">inconsistentAccessibilityProvider</span> = <b>new</b> <a href="InconsistentAccessibilityInFieldType.cs.html#8b42a9f31679ad3f" class="t">InconsistentAccessibilityInFieldType</a>();
+                    <b>break</b>;
+                <b>case</b> <a href="#972406169a8088f8">InconsistentAccessibilityInPropertyTypeCompilerErrorNumber</a>:
+                    <span class="r9 r">inconsistentAccessibilityProvider</span> = <b>new</b> <a href="InconsistentAccessibilityInPropertyType.cs.html#4a3f9a1d02c1149b" class="t">InconsistentAccessibilityInPropertyType</a>();
+                    <b>break</b>;
+                <b>case</b> <a href="#667c42cc5580c20b">InconsistentAccessibilityInIndexerReturnTypeCompilerErrorNumber</a>:
+                    <span class="r9 r">inconsistentAccessibilityProvider</span> = <b>new</b> <a href="InconsistentAccessibilityInIndexerReturnType.cs.html#bceb2c65378e20c1" class="t">InconsistentAccessibilityInIndexerReturnType</a>();
+                    <b>break</b>;
+                <b>case</b> <a href="#a534ccb47ab8427b">InconsistentAccessibilityInIndexerParameterCompilerErrorNumber</a>:
+                    <span class="r9 r">inconsistentAccessibilityProvider</span> = <b>new</b> <a href="InconsistentAccessibilityInIndexerParameter.cs.html#e2c5b4a389eb822d" class="t">InconsistentAccessibilityInIndexerParameter</a>();
+                    <b>break</b>;
+            }
+ 
+            <b>return await</b> <span class="r9 r">inconsistentAccessibilityProvider</span>.<a href="InconsistentAccessibilityInfoProvider.cs.html#7814b4bd751b0d4f">GetInconsistentAccessibilityInfoAsync</a>(<span class="r6 r">document</span>, <span class="r7 r">diagnostic</span>, <span class="r8 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>[]&gt; <a id="472586a39b865643" href="../../R/472586a39b865643.html" target="n" data-glyph="76,1">FindTypeLocationsInSourceCodeAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r10 rd" class="r10 r">document</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#29171ac4ad60a546" class="t">TypeSyntax</a> <span id="r11 rd" class="r11 r">type</span>, <span class="t">CancellationToken</span> <span id="r12 rd" class="r12 r">cancellationToken</span>)
+        {
+            <b>var</b> <span id="r13 rd" class="r13 r">result</span> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>[] { };
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="k">var</a> <span id="r14 rd" class="r14 r">semanticModel</span> = <b>await</b> <span class="r10 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>(<span class="r12 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r15 rd" class="r15 r">typeSymbol</span> = <span class="r14 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#80493af4e0bb9fa4">GetSymbolInfo</a>(<span class="r11 r">type</span>, <span class="r12 r">cancellationToken</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+ 
+            <b>if</b>(<span class="r15 r">typeSymbol</span> != <b>null</b>)
+            {
+                <span class="r13 r">result</span> = <span class="r15 r">typeSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6fdf20baf08270e2">Locations</a>.Where(<span id="r16 rd" class="r16 r">location</span> =&gt; <span class="r16 r">location</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#74184eabffb07170">IsInSource</a>).ToArray();
+            }
+ 
+            <b>return</b> <span class="r13 r">result</span>;
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="9beb7934d38e93cb" href="../../R/9beb7934d38e93cb.html" target="n" data-glyph="76,1">ChangeTypeAccessibilityInDocumentAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a> <span id="r17 rd" class="r17 r">solution</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r18 rd" class="r18 r">newAccessibilityModifiers</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a> <span id="r19 rd" class="r19 r">typeLocation</span>, <span class="t">CancellationToken</span> <span id="r20 rd" class="r20 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r21 rd" class="r21 r">document</span> = <span class="r17 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a33a6e4693bb7d1e">GetDocument</a>(<span class="r19 r">typeLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#87ab18124629fa25">SourceTree</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r22 rd" class="r22 r">syntaxRoot</span> = <b>await</b> <span class="r21 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r20 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r23 rd" class="r23 r">newRoot</span> = <a href="#1fd8635db8a58338">ChangeTypeAccessibilityInSyntaxRoot</a>(<span class="r22 r">syntaxRoot</span>, <span class="r18 r">newAccessibilityModifiers</span>, <span class="r19 r">typeLocation</span>);
+ 
+            <b>return</b> <span class="r21 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r23 r">newRoot</span>);
+        }
+ 
+        <b>private static async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>&gt; <a id="ccc3e622a0b7d086" href="../../R/ccc3e622a0b7d086.html" target="n" data-glyph="76,1">ChangeTypeAccessibilityInSolutionAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a> <span id="r24 rd" class="r24 r">solution</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r25 rd" class="r25 r">newAccessibilityModifiers</span>, <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>&gt; <span id="r26 rd" class="r26 r">typeLocations</span>, <span class="t">CancellationToken</span> <span id="r27 rd" class="r27 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="k">var</a> <span id="r28 rd" class="r28 r">updatedSolution</span> = <span class="r24 r">solution</span>;
+            <b>var</b> <span id="r29 rd" class="r29 r">typeLocationsGroupedByDocument</span> = <span class="r26 r">typeLocations</span>.GroupBy(<span id="r30 rd" class="r30 r">location</span> =&gt; <span class="r24 r">solution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a33a6e4693bb7d1e">GetDocument</a>(<span class="r30 r">location</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#87ab18124629fa25">SourceTree</a>));
+ 
+            <b>foreach</b>(<b>var</b> <span id="r31 rd" class="r31 r">typeLocationsWithinDocument</span> <b>in</b> <span class="r29 r">typeLocationsGroupedByDocument</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r32 rd" class="r32 r">document</span> = <span class="r31 r">typeLocationsWithinDocument</span>.Key;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r33 rd" class="r33 r">syntaxRoot</span> = <b>await</b> <span class="r32 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r27 r">cancellationToken</span>).ConfigureAwait(<b>false</b>);
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r34 rd" class="r34 r">newRoot</span> = <a href="#ff60d6b8acdf5678">ChangeTypesAccessibilityInSyntaxRoot</a>(<span class="r33 r">syntaxRoot</span>, <span class="r25 r">newAccessibilityModifiers</span>, <span class="r31 r">typeLocationsWithinDocument</span>);
+                <span class="r28 r">updatedSolution</span> = <span class="r28 r">updatedSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d63e3a736f35fb26">WithDocumentSyntaxRoot</a>(<span class="r32 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>, <span class="r34 r">newRoot</span>);
+            }
+ 
+            <b>return</b> <span class="r28 r">updatedSolution</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="1fd8635db8a58338" href="../../R/1fd8635db8a58338.html" target="n" data-glyph="76,1">ChangeTypeAccessibilityInSyntaxRoot</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r35 rd" class="r35 r">syntaxRoot</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r36 rd" class="r36 r">newAccessibilityModifiers</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a> <span id="r37 rd" class="r37 r">typeLocation</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="k">var</a> <span id="r38 rd" class="r38 r">declaration</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>)<span class="r35 r">syntaxRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r37 r">typeLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+ 
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="k">var</a> <span id="r39 rd" class="r39 r">newDeclaration</span> = <a href="#46acc33234092729">ChangeAccessibilityModifiersInDeclaration</a>(<span class="r38 r">declaration</span>, <span class="r36 r">newAccessibilityModifiers</span>);
+ 
+            <b>return</b> <span class="r35 r">syntaxRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r38 r">declaration</span>, <span class="r39 r">newDeclaration</span>);
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="ff60d6b8acdf5678" href="../../R/ff60d6b8acdf5678.html" target="n" data-glyph="76,1">ChangeTypesAccessibilityInSyntaxRoot</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r40 rd" class="r40 r">syntaxRoot</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r41 rd" class="r41 r">newAccessibilityModifiers</span>, <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#ad289cd0d5b2b950" class="t">Location</a>&gt; <span id="r42 rd" class="r42 r">typeLocations</span>)
+        {
+            <b>var</b> <span id="r43 rd" class="r43 r">declarations</span> =  <span class="r42 r">typeLocations</span>.Select(<span id="r44 rd" class="r44 r">typeLocation</span> =&gt; (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>)<span class="r40 r">syntaxRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r44 r">typeLocation</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>)).ToList();
+            <b>var</b> <span id="r45 rd" class="r45 r">newDeclarations</span> = <b>new</b> <span class="t">Dictionary</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a>&gt;();
+ 
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="k">var</a> <span id="r46 rd" class="r46 r">declaration</span> <b>in</b> <span class="r43 r">declarations</span>)
+            {
+                <span class="r45 r">newDeclarations</span>.Add(<span class="r46 r">declaration</span>, <a href="#46acc33234092729">ChangeAccessibilityModifiersInDeclaration</a>(<span class="r46 r">declaration</span>, <span class="r41 r">newAccessibilityModifiers</span>));
+            }
+ 
+            <b>return</b> <span class="r40 r">syntaxRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(<span class="r43 r">declarations</span>, (<span id="r47 rd" class="r47 r">original</span>, <span id="r48 rd" class="r48 r">rewritten</span>) =&gt; <span class="r45 r">newDeclarations</span>[<span class="r47 r">original</span>]);
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <a id="46acc33234092729" href="../../R/46acc33234092729.html" target="n" data-glyph="76,1">ChangeAccessibilityModifiersInDeclaration</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r49 rd" class="r49 r">declaration</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r50 rd" class="r50 r">newAccessibilityModifiers</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="k">var</a> <span id="r51 rd" class="r51 r">newDeclaration</span> = <span class="r49 r">declaration</span>;
+ 
+            <b>var</b> <span id="r52 rd" class="r52 r">actualTypeAccessibilityModifiers</span> = <a href="#273bc43b7a02bf57">GetAccessibilityModifiersFromMember</a>(<span class="r49 r">declaration</span>);
+            <b>var</b> <span id="r53 rd" class="r53 r">hasAccessibilityModifiers</span> = <span class="r52 r">actualTypeAccessibilityModifiers</span>.Any();
+ 
+            <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="k">var</a> <span id="r54 rd" class="r54 r">leadingTrivias</span> = <b>default</b>(<a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="k">var</a> <span id="r55 rd" class="r55 r">trailingTrivias</span> = <b>default</b>(<a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a>);
+            <b>if</b> (!<span class="r53 r">hasAccessibilityModifiers</span>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="k">var</a> <span id="r56 rd" class="r56 r">modifiers</span> = <span class="r49 r">declaration</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#e29aa2aa423489a4">GetModifiers</a>();
+                <b>if</b> (<span class="r56 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#513bb67b570f6d7b">Any</a>())
+                {
+                    <a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="k">var</a> <span id="r57 rd" class="r57 r">firstModifier</span> = <span class="r56 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d7d1623535a9f9af">First</a>();
+                    <span class="r54 r">leadingTrivias</span> = <span class="r57 r">firstModifier</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>;
+                    <span class="r51 r">newDeclaration</span> = <a href="#500869d26e2e68d8">RemoveLeadingTriviasFromFirstDeclarationModifier</a>(<span class="r49 r">declaration</span>, <span class="r56 r">modifiers</span>, <span class="r57 r">firstModifier</span>);
+                }
+                <b>else</b>
+                {
+                    <span class="r54 r">leadingTrivias</span> = <span class="r49 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#50d9c7aa8355746a">GetLeadingTrivia</a>();
+                    <span class="r51 r">newDeclaration</span> = <a href="#f8e0a7eb5c4c5019">RemoveLeadingTriviasFromDeclaration</a>(<span class="r49 r">declaration</span>);
+                }
+                <span class="r55 r">trailingTrivias</span> = <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5ff4f804c43c23bd">TriviaList</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#be62a5f285c5a69a">Space</a>);
+            }
+            <b>else</b>
+            {
+                <span class="r54 r">leadingTrivias</span> = <span class="r52 r">actualTypeAccessibilityModifiers</span>.First().<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>;
+                <span class="r55 r">trailingTrivias</span> = <a href="#ff5f108ed44dbe7b">GetAllTriviasAfterFirstModifier</a>(<span class="r52 r">actualTypeAccessibilityModifiers</span>);
+            }
+ 
+            <span class="r50 r">newAccessibilityModifiers</span> = <a href="#b37c8b8f19a539bd">MergeActualTriviasIntoNewAccessibilityModifiers</a>(<span class="r50 r">newAccessibilityModifiers</span>, <span class="r54 r">leadingTrivias</span>, <span class="r55 r">trailingTrivias</span>);
+ 
+            <span class="r51 r">newDeclaration</span> = <a href="#e345adeeacb89c52">ReplaceDeclarationModifiers</a>(<span class="r51 r">newDeclaration</span>, <span class="r52 r">actualTypeAccessibilityModifiers</span>.ToList(), <span class="r50 r">newAccessibilityModifiers</span>);
+ 
+            <b>return</b> <span class="r51 r">newDeclaration</span>;
+        }
+ 
+        <b>private static</b> <span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a>&gt; <a id="273bc43b7a02bf57" href="../../R/273bc43b7a02bf57.html" target="n" data-glyph="76,1">GetAccessibilityModifiersFromMember</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r58 rd" class="r58 r">member</span>) =&gt; <span class="r58 r">member</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#e29aa2aa423489a4">GetModifiers</a>().Where(<span id="r59 rd" class="r59 r">token</span> =&gt; <span class="r59 r">token</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b4701da0ca687ba5">PublicKeyword</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c00358d30ac54cb3">ProtectedKeyword</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df597579a4251569">InternalKeyword</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f5360853bd205f17">PrivateKeyword</a>));
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <a id="500869d26e2e68d8" href="../../R/500869d26e2e68d8.html" target="n" data-glyph="76,1">RemoveLeadingTriviasFromFirstDeclarationModifier</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r60 rd" class="r60 r">declaration</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r61 rd" class="r61 r">modifiers</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a> <span id="r62 rd" class="r62 r">modifier</span>) =&gt; <span class="r60 r">declaration</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#45d2cae86139e10d">WithModifiers</a>(<span class="r61 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#69729bb8d8d55028">Replace</a>(<span class="r62 r">modifier</span>, <span class="r62 r">modifier</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#9bc906586ce5e234">WithLeadingTrivia</a>(<b>default</b>(<a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a>))));
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <a id="f8e0a7eb5c4c5019" href="../../R/f8e0a7eb5c4c5019.html" target="n" data-glyph="76,1">RemoveLeadingTriviasFromDeclaration</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r63 rd" class="r63 r">declaration</span>) =&gt; <span class="r63 r">declaration</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#3a85ff69eb8e796d">WithoutLeadingTrivia</a>();
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a> <a id="ff5f108ed44dbe7b" href="../../R/ff5f108ed44dbe7b.html" target="n" data-glyph="76,1">GetAllTriviasAfterFirstModifier</a>(<span class="t">IEnumerable</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a>&gt; <span id="r64 rd" class="r64 r">modifiers</span>) =&gt; <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#003ccfd786d81246">TriviaList</a>(<span class="r64 r">modifiers</span>.Skip(1).SelectMany(<span id="r65 rd" class="r65 r">token</span> =&gt; <span class="r65 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>).Union(<span class="r64 r">modifiers</span>.SelectMany(<span id="r66 rd" class="r66 r">token</span> =&gt; <span class="r66 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#54ca4a6e9f8e1738">TrailingTrivia</a>)));
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <a id="e345adeeacb89c52" href="../../R/e345adeeacb89c52.html" target="n" data-glyph="76,1">ReplaceDeclarationModifiers</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="t">MemberDeclarationSyntax</a> <span id="r67 rd" class="r67 r">declaration</span>, <span class="t">List</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a>&gt; <span id="r68 rd" class="r68 r">oldAccessibilityModifiers</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r69 rd" class="r69 r">newAccessibilityModifiers</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#df33ad6325693a18" class="k">var</a> <span id="r70 rd" class="r70 r">result</span> = <span class="r67 r">declaration</span>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="k">var</a> <span id="r71 rd" class="r71 r">replacedModifiers</span> = <span class="r67 r">declaration</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#e29aa2aa423489a4">GetModifiers</a>();
+ 
+            <b>if</b> (<span class="r68 r">oldAccessibilityModifiers</span>.Count == 0)
+            {
+                <span class="r71 r">replacedModifiers</span> = <span class="r71 r">replacedModifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#788318cb81366ae4">InsertRange</a>(0,<span class="r69 r">newAccessibilityModifiers</span>);
+            }
+            <b>else if</b>(<span class="r68 r">oldAccessibilityModifiers</span>.Count == 1)
+            {
+                <span class="r71 r">replacedModifiers</span> = <span class="r71 r">replacedModifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#26a3ec3fccc984f2">ReplaceRange</a>(<span class="r68 r">oldAccessibilityModifiers</span>[0], <span class="r69 r">newAccessibilityModifiers</span>);
+            }
+            <b>else if</b>(<span class="r68 r">oldAccessibilityModifiers</span>.Count == 2)
+            {
+                <span class="r71 r">replacedModifiers</span> = <span class="r71 r">replacedModifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#26a3ec3fccc984f2">ReplaceRange</a>(<span class="r68 r">oldAccessibilityModifiers</span>[0], <span class="r69 r">newAccessibilityModifiers</span>);
+                <span class="r71 r">replacedModifiers</span> = <span class="r71 r">replacedModifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#37578a772c5f28bf">Remove</a>(<span class="r71 r">replacedModifiers</span>.SingleOrDefault(<span id="r72 rd" class="r72 r">token</span> =&gt; <span class="r72 r">token</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#2d3e3b89c4a8f72c">IsKind</a>(<span class="r68 r">oldAccessibilityModifiers</span>[1].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f99f46fc603f74ac">Kind</a>())));
+            }
+ 
+            <span class="r70 r">result</span> = <span class="r67 r">declaration</span>.<a href="../../Extensions/CSharpAnalyzerExtensions.cs.html#45d2cae86139e10d">WithModifiers</a>(<span class="r71 r">replacedModifiers</span>);
+ 
+            <b>return</b> <span class="r70 r">result</span>;
+        }
+ 
+        <b>private static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <a id="b37c8b8f19a539bd" href="../../R/b37c8b8f19a539bd.html" target="n" data-glyph="76,1">MergeActualTriviasIntoNewAccessibilityModifiers</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#cfcef3d9d174b392" class="t">SyntaxTokenList</a> <span id="r73 rd" class="r73 r">modifiers</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a> <span id="r74 rd" class="r74 r">leadingTrivias</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a> <span id="r75 rd" class="r75 r">trailingTrivias</span>)
+        {
+            <b>if</b> (<span class="r73 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#8cafab21216f2e91">Count</a> == 1)
+            {
+                <span class="r73 r">modifiers</span> = <span class="r73 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#69729bb8d8d55028">Replace</a>(<span class="r73 r">modifiers</span>[0], <span class="r73 r">modifiers</span>[0].<a href="@1@Microsoft.CodeAnalysis/A.html#9bc906586ce5e234">WithLeadingTrivia</a>(<span class="r74 r">leadingTrivias</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#c2df56331cfaa87c">WithTrailingTrivia</a>(<span class="r75 r">trailingTrivias</span>));
+            }
+            <b>else if</b> (<span class="r73 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#8cafab21216f2e91">Count</a> == 2)
+            {
+                <span class="r73 r">modifiers</span> = <span class="r73 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#69729bb8d8d55028">Replace</a>(<span class="r73 r">modifiers</span>[0], <span class="r73 r">modifiers</span>[0].<a href="@1@Microsoft.CodeAnalysis/A.html#9bc906586ce5e234">WithLeadingTrivia</a>(<span class="r74 r">leadingTrivias</span>));
+                <span class="r73 r">modifiers</span> = <span class="r73 r">modifiers</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#69729bb8d8d55028">Replace</a>(<span class="r73 r">modifiers</span>[1], <span class="r73 r">modifiers</span>[1].<a href="@1@Microsoft.CodeAnalysis/A.html#c2df56331cfaa87c">WithTrailingTrivia</a>(<span class="r75 r">trailingTrivias</span>));
+            }
+ 
+            <b>return</b> <span class="r73 r">modifiers</span>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

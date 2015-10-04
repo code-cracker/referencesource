@@ -1,0 +1,13 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyCatchBlockCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">4 references to EmptyCatchBlockCodeFixProvider</div><div class="rA">CodeCracker.Test.VisualBasic (1)</div><div class="rG" id="CodeCracker.Test.VisualBasic"><div class="rF"><div class="rN">Design\EmptyCatchBlockTests.vb (1)</div>
+<a href="../../CodeCracker.Test.VisualBasic/Design/EmptyCatchBlockTests.vb.html#6"><b>6</b>Inherits CodeFixVerifier(Of EmptyCatchBlockAnalyzer, <i>EmptyCatchBlockCodeFixProvider</i>)</a>
+</div>
+</div>
+<div class="rA">CodeCracker.VisualBasic (3)</div><div class="rG" id="CodeCracker.VisualBasic"><div class="rF"><div class="rN">Design\EmptyCatchBlockCodeFixProvider.vb (3)</div>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.vb.html#11"><b>11</b>&lt;ExportCodeFixProvider(LanguageNames.VisualBasic, Name:=NameOf(<i>EmptyCatchBlockCodeFixProvider</i>)), Composition.Shared&gt;</a>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.vb.html#26"><b>26</b>context.RegisterCodeFix(CodeAction.Create(&quot;Remove Empty Catch Block&quot;, Function(c) RemoveTry(context.Document, declaration, c), NameOf(<i>EmptyCatchBlockCodeFixProvider</i>) &amp; NameOf(RemoveTry)), diag)</a>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.vb.html#27"><b>27</b>context.RegisterCodeFix(CodeAction.Create(&quot;Insert Exception class to Catch&quot;, Function(c) InsertExceptionClassCommentAsync(context.Document, declaration, c), NameOf(<i>EmptyCatchBlockCodeFixProvider</i>) &amp; NameOf(InsertExceptionClassCommentAsync)), diag)</a>
+</div>
+</div>
+</body></html>

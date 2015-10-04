@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html><head><title>AlwaysUseVarTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(219);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/AlwaysUseVarTests.cs" target="_top">Style\AlwaysUseVarTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="441193c05aa098a4" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="5afb329e5cb05894">AlwaysUseVarTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#a073d86dee85d0c0" class="t">AlwaysUseVarAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#5a34da0f8de96343" class="t">AlwaysUseVarCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7c73b959b5636b91" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresConstantDeclarations</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                const int a = 10;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ec4a4d5514380c74" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresVarDeclarations</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                var a = 10;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="07d0bfba7d344fab" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDeclarationsWithNoInitializers</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                int a = 10, b;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">test</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c0cd57cdc574962f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDeclarationsWithNoIdentityConversions</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                IFee fee = new Fee();
+            }
+        }
+        interface IFee{}
+        class Fee: IFee {}
+    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">test</span>);
+ 
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="140d8d2ab5d8b8a6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">CreateDiagnosticsWhenAssigningValueWithSameDeclaringType</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                int a = 10;
+            }
+        }
+    }&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r5 rd" class="r5 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#26d2bfefbec35140">AlwaysUseVar</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;Use &#39;var&#39; instead of specifying the type name.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 17) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r4 r">test</span>, <span class="r5 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c671d1a5868cb96d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixReplacesDeclaringTypeWithVarIdentifier</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                int a = 10;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r7 rd" class="r7 r">expected</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Foo()
+            {
+                var a = 10;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r6 r">test</span>, <span class="r7 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="dd313d40a142b3f9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixReplacesDeclaringTypeWithVarIdentifierFixAll</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source1</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                int a = 10;
+                int b = 10;
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r9 rd" class="r9 r">source2</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                string a = &quot;&quot;10&quot;&quot;;
+                string b = &quot;&quot;10&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r10 rd" class="r10 r">fixtest1</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                var a = 10;
+                var b = 10;
+            }
+        }
+    }&quot;</span>;
+            <b>const string</b> <span id="r11 rd" class="r11 r">fixtest2</span> = <span class="s">@&quot;
+    using System;
+ 
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public void Foo()
+            {
+                var a = &quot;&quot;10&quot;&quot;;
+                var b = &quot;&quot;10&quot;&quot;;
+            }
+        }
+    }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b>[] { <span class="r8 r">source1</span>, <span class="r9 r">source2</span> }, <b>new</b>[] { <span class="r10 r">fixtest1</span>, <span class="r11 r">fixtest2</span> });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

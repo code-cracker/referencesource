@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html><head><title>XmlDocumentationCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(47);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Maintainability/XmlDocumentationCodeFixProvider.cs" target="_top">Maintainability\XmlDocumentationCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+ 
+<b>namespace</b> CodeCracker.CSharp.Maintainability
+{
+    <b>public abstract class</b> <a id="6b4e5f9c75eb1f26" href="../R/6b4e5f9c75eb1f26.html" target="n" data-glyph="0,0" class="t"><span id="92a2635b2c6cd076">XmlDocumentationCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>public sealed override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="662f71d102ed0a8b" href="../R/662f71d102ed0a8b.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#affeb52510950583">XmlDocumentation</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>());
+ 
+        <b>public abstract</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="a5d6c09f2244ab9f" href="../R/a5d6c09f2244ab9f.html" target="n" data-glyph="72,1">FixParameters</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r0 rd" class="r0 r">method</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r1 rd" class="r1 r">root</span>);
+ 
+        <b>protected async</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="757f9f90b11c0ac8" href="../R/757f9f90b11c0ac8.html" target="n" data-glyph="75,1">FixParametersAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r2 rd" class="r2 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r3 rd" class="r3 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r4 rd" class="r4 r">c</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r5 rd" class="r5 r">root</span> = <b>await</b> <span class="r2 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r4 r">c</span>).ConfigureAwait(<b>false</b>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r6 rd" class="r6 r">documentationNode</span> = <span class="r5 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#bec99789f8b3d64d">AncestorsAndSelf</a>().OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>&gt;().First();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r7 rd" class="r7 r">newRoot</span> = <a href="#a5d6c09f2244ab9f">FixParameters</a>(<span class="r6 r">documentationNode</span>, <span class="r5 r">root</span>);
+            <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="k">var</a> <span id="r8 rd" class="r8 r">newDocument</span> = <span class="r2 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r7 r">newRoot</span>);
+            <b>return</b> <span class="r8 r">newDocument</span>;
+        }
+ 
+        <b>protected static</b> <span class="t">IEnumerable</span>&lt;<span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>, <span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27a7afadf701abe4" class="t">XmlElementSyntax</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e4d120a3c07c8abf" class="t">XmlNameAttributeSyntax</a>&gt;&gt;&gt; <a id="7b7f2a7744e77206" href="../R/7b7f2a7744e77206.html" target="n" data-glyph="75,1">GetMethodParametersWithDocParameters</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a> <span id="r9 rd" class="r9 r">method</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3a36c23c9de118dc" class="t">DocumentationCommentTriviaSyntax</a> <span id="r10 rd" class="r10 r">documentationNode</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#5a3fae0b5246ec39" class="k">var</a> <span id="r11 rd" class="r11 r">methodParameters</span> = <span class="r9 r">method</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#885475f5cb2513b6">ParameterList</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e5efd9494cf8dbed">Parameters</a>;
+ 
+            <b>var</b> <span id="r12 rd" class="r12 r">xElementsWitAttrs</span> = <span class="r10 r">documentationNode</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff45c2309de3f286">Content</a>.OfType&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27a7afadf701abe4" class="t">XmlElementSyntax</a>&gt;()
+                                    .Where(<span id="r13 rd" class="r13 r">xEle</span> =&gt; <span class="r13 r">xEle</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d5e819c597692231">StartTag</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9260aa33954ccca5">Name</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3d8be07feff44923">LocalName</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> == <span class="s">&quot;param&quot;</span>)
+                                    .SelectMany(<span id="r14 rd" class="r14 r">xEle</span> =&gt; <span class="r14 r">xEle</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#d5e819c597692231">StartTag</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#9fbd18bf92f1142a">Attributes</a>, (<span id="r15 rd" class="r15 r">xEle</span>, <span id="r16 rd" class="r16 r">attr</span>) =&gt; <b>new</b> <span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27a7afadf701abe4" class="t">XmlElementSyntax</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e4d120a3c07c8abf" class="t">XmlNameAttributeSyntax</a>&gt;(<span class="r15 r">xEle</span>, (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e4d120a3c07c8abf" class="t">XmlNameAttributeSyntax</a>)<span class="r16 r">attr</span>));
+ 
+            <b>var</b> <span id="r17 rd" class="r17 r">keys</span> = <span class="r11 r">methodParameters</span>.Select(<span id="r18 rd" class="r18 r">parameter</span> =&gt; <span class="r18 r">parameter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>)
+                .Union(<span class="r12 r">xElementsWitAttrs</span>.Select(<span id="r19 rd" class="r19 r">x</span> =&gt; <span class="r19 r">x</span>.Item2.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#166f65937f09ea6a">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a>))
+                .ToImmutableList();
+ 
+            <b>return</b> (<b>from</b> key <b>in</b> <span class="r17 r">keys</span>
+                    <b>let</b> Parameter = <span class="r11 r">methodParameters</span>.FirstOrDefault(<span id="r20 rd" class="r20 r">p</span> =&gt; <span class="r20 r">p</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fbdd570c810a0ad9">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> == key)
+                    <b>let</b> DocParameter = <span class="r12 r">xElementsWitAttrs</span>.FirstOrDefault(<span id="r21 rd" class="r21 r">p</span> =&gt; <span class="r21 r">p</span>.Item2.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#166f65937f09ea6a">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> == key)
+                    <b>select</b> <b>new</b> <span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4236bde1ed6a0bc3" class="t">ParameterSyntax</a>, <span class="t">Tuple</span>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27a7afadf701abe4" class="t">XmlElementSyntax</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e4d120a3c07c8abf" class="t">XmlNameAttributeSyntax</a>&gt;&gt;(Parameter, DocParameter));
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

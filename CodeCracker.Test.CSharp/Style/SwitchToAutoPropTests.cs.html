@@ -1,0 +1,460 @@
+﻿<!DOCTYPE html>
+<html><head><title>SwitchToAutoPropTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(451);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Style/SwitchToAutoPropTests.cs" target="_top">Style\SwitchToAutoPropTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Style;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Style
+{
+    <b>public class</b> <a id="48385134155fb94b" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="76f28758f27a95ef">SwitchToAutoPropTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#2ace097f9c5710c4" class="t">SwitchToAutoPropAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#272bdad4eaeaa4e2" class="t">SwitchToAutoPropCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="96326fc064cede30" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresExistingAutoProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;public int Id { get; set; }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6da20c1448d5fe6f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresPropertyThatDoesMoreInTheGetter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get
+            {
+                Console.WriteLine(1);
+                return id;
+            }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="93506bebf24dc26b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresPropertyThatDoesMoreInTheSetter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set
+            {
+                Console.WriteLine(1);
+                id = value;
+            }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e8614c7f6ced6f4c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresEmptyBodyInTheGetter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get {  }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f7a79a5708e25a91" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresEmptyBodyInTheSetter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set { }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7ea512c6ef832718" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresReadonlyProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e0202d16e3cd48f3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresWriteonlyProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="42dbb6c81c2f7ffa" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresSetterThatDoesNotSet</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set { Console.WriteLine(1); }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d7bbccdb3246dfca" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresGetterThatDoesNotGet</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { throw new Exception(); }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9b2685f65503522f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoubleGetterDoesNotThrow</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { throw new Exception(); }
+            get { throw new Exception(); }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f706f03a1c1d17bc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresGetterThatDoesNotReturnTheSameFieldThatSetterSets</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+        private int id;
+        private int otherId;
+        public int Id
+        {
+            get { return otherId; }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r10 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4cdf3d663ce5454f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresSetterThatAssignsAnotherIdentifier</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+        private int id;
+        private int otherId;
+        public int Id
+        {
+            get { return id; }
+            set { id = otherId; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="4ca9502eaa3ceada" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresSetterThatAssignsSomethingThatIsNotAnIdentifier</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set { id = 1; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="575b6bb2acaf2eab" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresWhenAssigningToSomethingThatIsNotAField</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+        public int OtherId { get; set; }
+        public int Id
+        {
+            get { return OtherId; }
+            set { OtherId = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bc40c990778ea8c3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresWhenAssigningToAFieldFromAnotherClass</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+using System;
+ 
+namespace ConsoleApplication1
+{
+    class AnotherType
+    {
+        public static int otherId = 1;
+    }
+    class TypeName
+    {
+        public int Id
+        {
+            get { return AnotherType.otherId; }
+            set { AnotherType.otherId = value; }
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r14 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3deea79cf1983ac8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresWhenAssigningToAFieldFromAnotherClassWithUsingStatic</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+namespace ConsoleApplication1
+{
+    using static AnotherType;
+    class AnotherType
+    {
+        public static int otherId = 1;
+    }
+    class TypeName
+    {
+        public int Id
+        {
+            get { return otherId; }
+            set { otherId = value; }
+        }
+    }
+}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7e27fa258727127f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresWhenNotCSharp6OrGreaterAndFieldHasAssignment</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+        private int id = 1;
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r16 r">source</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#41ddf4073ec089aa" class="t">LanguageVersion</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c0e4ce9db6cb2e0">CSharp5</a>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="bfb5a10aa469f543" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SimplePropertyCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r17 rd" class="r17 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r18 rd" class="r18 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#6c81564f859d457a">SwitchToAutoProp</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#2ace097f9c5710c4" class="t">SwitchToAutoPropAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#580942a5f21fb8e4">MessageFormat</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#aee4b463ed562218">ToString</a>(), <span class="s">&quot;Id&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 9) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r17 r">source</span>, <span class="r18 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="80a67a71064319e9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixSimplePropIntoAutoProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r19 rd" class="r19 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }//comment 1
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r20 rd" class="r20 r">expected</span> = <span class="s">@&quot;public int Id { get; set; }//comment 1
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r19 r">source</span>, <span class="r20 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5536b654c1b73496" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixSimplePropWithFieldAssigmentIntoAutoProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r21 rd" class="r21 r">source</span> = <span class="s">@&quot;
+        private int id = 42;
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }//comment 1
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r22 rd" class="r22 r">expected</span> = <span class="s">@&quot;public int Id { get; set; } = 42;//comment 1
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r21 r">source</span>, <span class="r22 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9963071c75debafc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixSimplePropWithMultipleFieldsIntoAutoProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r23 rd" class="r23 r">source</span> = <span class="s">@&quot;
+                private int x = 42, y; //comment 1
+                public int X
+                {
+                    get { return x; }
+                    set { x = value; }
+                }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r24 rd" class="r24 r">expected</span> = <span class="s">@&quot;
+                private int y; //comment 1
+                public int X { get; set; } = 42;&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r23 r">source</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(), <span class="r24 r">expected</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>());
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c0e44f0143be73af" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixSimplePropWithVaribleDeclarationNotFirstIntoAutoProp</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r25 rd" class="r25 r">source</span> = <span class="s">@&quot;
+                private int x, y = 42; //comment 1
+                public int Y
+                {
+                    get { return y; }
+                    set { y = value; }
+                }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r26 rd" class="r26 r">expected</span> = <span class="s">@&quot;
+                private int x; //comment 1
+                public int Y { get; set; } = 42;&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r25 r">source</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(), <span class="r26 r">expected</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>());
+        }
+ 
+ 
+        [<span class="t">Fact</span>(Skip = <span class="s">&quot;Skip until the FixAll has been fixed.&quot;</span>)]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="85511bc646ce34e6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixSimplePropWithMultipleFieldsIntoAutoPropAll</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r27 rd" class="r27 r">source</span> = <span class="s">@&quot;
+                private int x = 42, y;
+                private int z = int.MaxValue;
+ 
+                public int X
+                {
+                    get { return x; }
+                    set { x = value; }
+                }
+ 
+                public int Y
+                {
+                    get { return y; }
+                    set { y = value; }
+                }
+ 
+                public int Z
+                {
+                    get { return z; }
+                    set { z = value; }
+                }&quot;</span>;
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r28 rd" class="r28 r">expected</span> = <span class="s">@&quot;
+                public int X { get; set; } = 42;
+                public int Y { get; set; }
+                public int Z { get; set; } = int.MaxValue;&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#26c6f53dff524c44">VerifyCSharpFixAllAsync</a>(<span class="r27 r">source</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(), <span class="r28 r">expected</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>());
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e5b0693e4a52923e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixPropIntoAutoPropAndFixFieldReferencesInSameClass</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r29 rd" class="r29 r">source</span> = <span class="s">@&quot;
+        private int id;
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }//comment 1
+        public void Foo()
+        {
+            var someId = id;
+            id = someId + 1;
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r30 rd" class="r30 r">expected</span> = <span class="s">@&quot;public int Id { get; set; }//comment 1
+        public void Foo()
+        {
+            var someId = Id;
+            Id = someId + 1;
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r29 r">source</span>, <span class="r30 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="379fa2f934911a3d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixPropIntoAutoPropAndFixFieldReferencesInDifferentDocs</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r31 rd" class="r31 r">source1</span> = <span class="s">@&quot;
+        public int id;
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r32 rd" class="r32 r">source2</span> = <span class="s">@&quot;
+        public void Foo()
+        {
+            var c = new TypeName();
+            var someId = c.id;
+            c.id = someId + 1;
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;OtherType&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r33 rd" class="r33 r">expected1</span> = <span class="s">@&quot;public int Id { get; set; }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r34 rd" class="r34 r">expected2</span> = <span class="s">@&quot;
+        public void Foo()
+        {
+            var c = new TypeName();
+            var someId = c.Id;
+            c.Id = someId + 1;
+        }
+&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#9c5e5c3f6623cb64">WrapInCSharpClass</a>(<span class="s">&quot;OtherType&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b>[] { <span class="r31 r">source1</span>, <span class="r32 r">source2</span> }, <b>new</b>[] { <span class="r33 r">expected1</span>, <span class="r34 r">expected2</span> });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html><head><title>MSBuildToolsPath</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">24 usages of MSBuild property MSBuildToolsPath</div><div class="rA">CodeCracker.Test.Common (1)</div><div class="rG" id="CodeCracker.Test.Common"><div class="rF"><div class="rN">CodeCracker.Test.Common.csproj (1)</div>
+<a href="../../CodeCracker.Test.Common/CodeCracker.Test.Common.csproj.html#149"><b>149</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.CSharp.targets&quot; /&gt;</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">CodeCracker.Test.csproj (1)</div>
+<a href="../../CodeCracker.Test.CSharp/CodeCracker.Test.csproj.html#241"><b>241</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.CSharp.targets&quot; /&gt;</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.VisualBasic (1)</div><div class="rG" id="CodeCracker.Test.VisualBasic"><div class="rF"><div class="rN">CodeCracker.Test.vbproj (1)</div>
+<a href="../../CodeCracker.Test.VisualBasic/CodeCracker.Test.vbproj.html#234"><b>234</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.VisualBasic.targets&quot; /&gt;</a>
+</div>
+</div>
+<div class="rA">MSBuildFiles (21)</div><div class="rG" id="MSBuildFiles"><div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Common.CurrentVersion.targets (10)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#2986"><b>2986</b>Inputs=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.Common.targets&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5464"><b>5464</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.NETFramework.targets&quot; Condition=&quot;(&#39;$(TargetFrameworkIdentifier)&#39; == &#39;&#39;  or &#39;$(TargetFrameworkIdentifier)&#39; == &#39;.NETFramework&#39;) and (&#39;$(TargetRuntime)&#39; == &#39;Managed&#39;)&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5467"><b>5467</b>&lt;ImportXamlTargets Condition=&quot;&#39;$(ImportXamlTargets)&#39;==&#39;&#39; and (&#39;$(TargetFrameworkVersion)&#39; != &#39;v2.0&#39; and &#39;$(TargetFrameworkVersion)&#39; != &#39;v3.5&#39;) and Exists(&#39;$(<i>MSBuildToolsPath</i>)\Microsoft.Xaml.targets&#39;)&quot;&gt;true&lt;/ImportXamlTargets&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5470"><b>5470</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.Xaml.targets&quot; Condition=&quot;(&#39;$(ImportXamlTargets)&#39; == &#39;true&#39;)&quot; /&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5474"><b>5474</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.WorkflowBuildExtensions.targets&quot;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5475"><b>5475</b>Condition=&quot;(&#39;$(TargetFrameworkVersion)&#39; != &#39;v2.0&#39; and &#39;$(TargetFrameworkVersion)&#39; != &#39;v3.5&#39; and (!$([System.String]::IsNullOrEmpty(&#39;$(TargetFrameworkVersion)&#39;)) and !$(TargetFrameworkVersion.StartsWith(&#39;v4.0&#39;)))) and Exists(&#39;$(<i>MSBuildToolsPath</i>)\Microsoft.WorkflowBuildExtensions.targets&#39;)&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5478"><b>5478</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.WinFX.targets&quot; Condition=&quot;&#39;$(TargetFrameworkIdentifier)&#39; == &#39;Silverlight&#39; and Exists(&#39;$(<i>MSBuildToolsPath</i>)\Microsoft.WinFX.targets&#39;)&quot;/&gt;</a>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.CurrentVersion.targets.html#5503"><b>5503</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.Data.Entity.targets&quot; Condition=&quot;&#39;$(TargetFrameworkIdentifier)&#39; == &#39;Silverlight&#39; and Exists(&#39;$(<i>MSBuildToolsPath</i>)\Microsoft.Data.Entity.targets&#39;)&quot;/&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Common.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.targets.html#40"><b>40</b>&lt;CommonTargetsPath&gt;$(<i>MSBuildToolsPath</i>)\Microsoft.Common.CurrentVersion.targets&lt;/CommonTargetsPath&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.CurrentVersion.targets (2)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.CurrentVersion.targets.html#324"><b>324</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.ServiceModel.targets&quot; Condition=&quot;(&#39;$(TargetFrameworkVersion)&#39; != &#39;v2.0&#39; and &#39;$(TargetFrameworkVersion)&#39; != &#39;v3.0&#39; and &#39;$(TargetFrameworkVersion)&#39; != &#39;v3.5&#39;) and Exists(&#39;$(<i>MSBuildToolsPath</i>)\Microsoft.ServiceModel.targets&#39;)&quot;/&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.Targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.Targets.html#45"><b>45</b>&lt;CSharpTargetsPath&gt;$(<i>MSBuildToolsPath</i>)\Microsoft.CSharp.CurrentVersion.targets&lt;/CSharpTargetsPath&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.VisualBasic.CurrentVersion.targets (2)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.CurrentVersion.targets.html#324"><b>324</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.ServiceModel.targets&quot; Condition=&quot;(&#39;$(TargetFrameworkVersion)&#39; != &#39;v2.0&#39; and &#39;$(TargetFrameworkVersion)&#39; != &#39;v3.0&#39; and &#39;$(TargetFrameworkVersion)&#39; != &#39;v3.5&#39;) and Exists(&#39;$(<i>MSBuildToolsPath</i>)\Microsoft.ServiceModel.targets&#39;)&quot;/&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.VisualBasic.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.targets.html#46"><b>46</b>&lt;VisualBasicTargetsPath&gt;$(<i>MSBuildToolsPath</i>)\Microsoft.VisualBasic.CurrentVersion.targets&lt;/VisualBasicTargetsPath&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\v4.5\Microsoft.Portable.CSharp.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/v4.5/Microsoft.Portable.CSharp.targets.html#18"><b>18</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.CSharp.Targets&quot; /&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\v4.5\Microsoft.Portable.VisualBasic.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/v4.5/Microsoft.Portable.VisualBasic.targets.html#43"><b>43</b>&lt;Import Project=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.VisualBasic.targets&quot; /&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\CodeAnalysis\Microsoft.CodeAnalysis.targets (1)</div>
+<a href="../../MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/CodeAnalysis/Microsoft.CodeAnalysis.targets.html#3"><b>3</b>&lt;UsingTask TaskName=&quot;SetEnvironmentVariable&quot; TaskFactory=&quot;CodeTaskFactory&quot; AssemblyFile=&quot;$(<i>MSBuildToolsPath</i>)\Microsoft.Build.Tasks.v12.0.dll&quot;&gt;</a>
+</div>
+<div class="rF"><div class="rN">C\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Microsoft.Xaml.targets (1)</div>
+<a href="../../MSBuildFiles/C/WINDOWS/Microsoft.NET/Framework64/v4.0.30319/Microsoft.Xaml.targets.html#48"><b>48</b>&lt;MSBuildAllProjects&gt;$(MSBuildAllProjects);$(<i>MSBuildToolsPath</i>)\Microsoft.Xaml.targets&lt;/MSBuildAllProjects&gt;</a>
+</div>
+</div>
+</body></html>

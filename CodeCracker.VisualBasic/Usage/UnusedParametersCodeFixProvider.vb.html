@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnusedParametersCodeFixProvider.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(74);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Usage/UnusedParametersCodeFixProvider.vb" target="_top">Usage\UnusedParametersCodeFixProvider.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.FindSymbols
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Usage
+    &lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a>:=<b>NameOf</b>(<a href="#0dfde03360186c91" class="t">UnusedParametersCodeFixProvider</a>)), Composition.<span class="t">Shared</span>&gt;
+    <b>Public Class</b> <a id="0dfde03360186c91" href="../R/0dfde03360186c91.html" target="n" data-glyph="0,0" class="t"><span id="684fb531ef2b6112">UnusedParametersCodeFixProvider</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Public Overrides Async Function</b> <a id="e7ac003aa5b12d44" href="../R/e7ac003aa5b12d44.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r0 rd" class="r0 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r1 rd" class="r1 r">root</span> = <b>Await</b> <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r2 rd" class="r2 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First
+            <b>Dim</b> <span id="r3 rd" class="r3 r">span</span> = <span class="r2 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+            <b>Dim</b> <span id="r4 rd" class="r4 r">parameter</span> = <span class="r1 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r3 r">span</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a6d7eee4bdd4d185">FirstAncestorOrSelf</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>)
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6792f886662d4bae">Create</a>(<b>String</b>.Format(<span class="s">&quot;Remove unused parameter: &#39;{0}&#39;&quot;</span>, <span class="r4 r">parameter</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#279bbb45df5026dc">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f87c302a4d24a15b">GetText</a>()), <b>Function</b>(<span id="r5 rd" class="r5 r">c</span>) <a href="#108ef02528cfd859">RemovePArameterAsync</a>(<span class="r1 r">root</span>, <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r4 r">parameter</span>, <span class="r5 r">c</span>), <b>NameOf</b>(<a href="#0dfde03360186c91" class="t">UnusedParametersCodeFixProvider</a>)), <span class="r2 r">diagnostic</span>)
+        <b>End Function
+ 
+        Public Overrides NotOverridable ReadOnly Property</b> <a id="dc739e8660db3091" href="../R/dc739e8660db3091.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#3c47a0e6723314bc">UnusedParameters</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>())
+ 
+        <b>Public Overrides Function</b> <a id="85ea76786fa826b9" href="../R/85ea76786fa826b9.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Private Shared Async Function</b> <a id="108ef02528cfd859" href="../R/108ef02528cfd859.html" target="n" data-glyph="76,1">RemovePArameterAsync</a>(<span id="r6 rd" class="r6 r">root</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>, <span id="r7 rd" class="r7 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r8 rd" class="r8 r">parameter</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#fe8a17be54633f4a" class="t">ParameterSyntax</a>, <span id="r9 rd" class="r9 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d8d55a05a5d42f0" class="t">Solution</a>)
+            <b>Dim</b> <span id="r10 rd" class="r10 r">solution</span> = <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#16fb85241ac740ed">Project</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4c4d2a069da85c41">Solution</a>
+            <b>Dim</b> <span id="r11 rd" class="r11 r">parameterList</span> = <b>DirectCast</b>(<span class="r8 r">parameter</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#505f643dfdbfcc06" class="t">ParameterListSyntax</a>)
+            <b>Dim</b> <span id="r12 rd" class="r12 r">parameterPosition</span> = <span class="r11 r">parameterList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#82f5b8da27d2c453">IndexOf</a>(<span class="r8 r">parameter</span>)
+            <b>Dim</b> <span id="r13 rd" class="r13 r">newParameterList</span> = <span class="r11 r">parameterList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#c7b7cce83a8c28d1">WithParameters</a>(<span class="r11 r">parameterList</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d89841a1bebecbed">Parameters</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#c0a3d78995005fe0">Remove</a>(<span class="r8 r">parameter</span>))
+            <b>Dim</b> <span id="r14 rd" class="r14 r">newSolution</span> = <span class="r10 r">solution</span>
+            <b>Dim</b> <span id="r15 rd" class="r15 r">foundDocument</span> = <b>False
+            Dim</b> <span id="r16 rd" class="r16 r">semanticModel</span> = <b>Await</b> <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>(<span class="r9 r">cancellationToken</span>)
+            <b>Dim</b> <span id="r17 rd" class="r17 r">method</span> = <span class="r8 r">parameter</span>.<a href="/CodeCracker.Common/A.html#febbf40e5a890c7f">FirstAncestorOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#343eb5ffc1e732b4" class="t">SubNewStatementSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#888b57245ad58de4" class="t">MethodBlockSyntax</a>))
+            <b>Dim</b> <span id="r18 rd" class="r18 r">methodSymbol</span> = <span class="r16 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8ee3f65d466216e">GetDeclaredSymbol</a>(<span class="r17 r">method</span>)
+            <b>Dim</b> <span id="r19 rd" class="r19 r">references</span> = <b>Await</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#fd299f73032d2f26" class="t">SymbolFinder</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#56626d323065e104">FindReferencesAsync</a>(<span class="r18 r">methodSymbol</span>, <span class="r10 r">solution</span>, <span class="r9 r">cancellationToken</span>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r20 rd" class="r20 r">documentGroups</span> = <span class="r19 r">references</span>.SelectMany(<b>Function</b>(<span id="r21 rd" class="r21 r">r</span>) <span class="r21 r">r</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#74d672ed43fc6596">Locations</a>).GroupBy(<b>Function</b>(<span id="r22 rd" class="r22 r">loc</span>) <span class="r22 r">loc</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d0745a5e2983aa57">Document</a>)
+            <b>For Each</b> <span class="r23 r">documentGroup</span> <b>In</b> <span class="r20 r">documentGroups</span>
+                <b>Dim</b> <span id="r24 rd" class="r24 r">referencingDocument</span> = <span class="r23 r">documentGroup</span>.Key
+                <b>Dim</b> <span id="r25 rd" class="r25 r">locRoot</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>
+                <b>Dim</b> <span id="r26 rd" class="r26 r">locSemanticModel</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a>
+                <b>Dim</b> <span id="r27 rd" class="r27 r">replacingArgs</span> = <b>New</b> <span class="t">Dictionary</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a>)
+                <b>If</b> <span class="r24 r">referencingDocument</span>.Equals(<span class="r7 r">document</span>) <b>Then</b>
+                    <span class="r26 r">locSemanticModel</span> = <span class="r16 r">semanticModel</span>
+                    <span class="r25 r">locRoot</span> = <span class="r6 r">root</span>
+                    <span class="r27 r">replacingArgs</span>.Add(<span class="r11 r">parameterList</span>, <span class="r13 r">newParameterList</span>)
+                    <span class="r15 r">foundDocument</span> = <b>True
+                Else</b>
+                    <span class="r26 r">locSemanticModel</span> = <b>Await</b> <span class="r24 r">referencingDocument</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b08b348524cb1d0f">GetSemanticModelAsync</a>(<span class="r9 r">cancellationToken</span>)
+                    <span class="r25 r">locRoot</span> = <b>Await</b> <span class="r26 r">locSemanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#196efcb3181a4a4e">SyntaxTree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e5029b50040d4ef4">GetRootAsync</a>(<span class="r9 r">cancellationToken</span>)
+                <b>End If
+                For Each</b> <span class="r28 r">loc</span> <b>In</b> <span class="r23 r">documentGroup</span>
+                    <b>Dim</b> <span id="r29 rd" class="r29 r">methodIdentifier</span> = <span class="r25 r">locRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r28 r">loc</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#e3014382acaf96c2">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>)
+                    <b>Dim</b> <span id="r30 rd" class="r30 r">objectCreation</span> = <b>TryCast</b>(<span class="r29 r">methodIdentifier</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e6e22a2a0b4bad74" class="t">ObjectCreationExpressionSyntax</a>)
+                    <b>Dim</b> <span id="r31 rd" class="r31 r">arguments</span> = <b>If</b>(<span class="r30 r">objectCreation</span> <b>IsNot Nothing</b>,
+                        <span class="r30 r">objectCreation</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#32d2c151f4152441">ArgumentList</a>,
+                        <span class="r29 r">methodIdentifier</span>.<a href="/CodeCracker.Common/A.html#cce0f0a86d671732">FirstAncestorOfType</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#05acf9b8c2e5c1b4" class="t">InvocationExpressionSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f21a8b664c3a1477">ArgumentList</a>)
+                    <b>Dim</b> <span id="r32 rd" class="r32 r">newArguments</span> = <span class="r31 r">arguments</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#dcb0bf946f09d413">WithArguments</a>(<span class="r31 r">arguments</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#3aa1f5f044e3d761">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f504ba82dca44b96">RemoveAt</a>(<span class="r12 r">parameterPosition</span>))
+                    <span class="r27 r">replacingArgs</span>.Add(<span class="r31 r">arguments</span>, <span class="r32 r">newArguments</span>)
+                <b>Next
+                Dim</b> <span id="r33 rd" class="r33 r">newLocRoot</span> = <span class="r25 r">locRoot</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(<span class="r27 r">replacingArgs</span>.Keys, <b>Function</b>(<span id="r34 rd" class="r34 r">original</span>, <span id="r35 rd" class="r35 r">rewritten</span>) <span class="r27 r">replacingArgs</span>(<span class="r34 r">original</span>))
+                <span class="r14 r">newSolution</span> = <span class="r14 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d63e3a736f35fb26">WithDocumentSyntaxRoot</a>(<span class="r24 r">referencingDocument</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>, <span class="r33 r">newLocRoot</span>)
+            <b>Next
+            If Not</b> <span class="r15 r">foundDocument</span> <b>Then
+                Dim</b> <span id="r36 rd" class="r36 r">newRoot</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r11 r">parameterList</span>, <span class="r13 r">newParameterList</span>)
+                <b>Dim</b> <span id="r37 rd" class="r37 r">newDocument</span> = <span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r36 r">newRoot</span>)
+                <span class="r14 r">newSolution</span> = <span class="r14 r">newSolution</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d63e3a736f35fb26">WithDocumentSyntaxRoot</a>(<span class="r7 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d2eedd4052d10496">Id</a>, <span class="r36 r">newRoot</span>)
+            <b>End If
+            Return</b> <span class="r14 r">newSolution</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

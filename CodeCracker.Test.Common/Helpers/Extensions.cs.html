@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html><head><title>Extensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(54);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.Common/Helpers/Extensions.cs" target="_top">Helpers\Extensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.Common" target="_top">test\Common\CodeCracker.Test.Common\CodeCracker.Test.Common.csproj</a> (CodeCracker.Test.Common)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>namespace</b> CodeCracker.Test
+{
+    <b>public static class</b> <a id="f5f0e280c58c94d7" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t">Extensions</a>
+    {
+        <b>public static string</b> <a id="9c5e5c3f6623cb64" href="../R/9c5e5c3f6623cb64.html" target="n" data-glyph="220,1">WrapInCSharpClass</a>(<b>this</b> <b>string</b> <span id="r0 rd" class="r0 r">code</span>, <b>string</b> <span id="r1 rd" class="r1 r">typeName</span> = <span class="s">&quot;TypeName&quot;</span>)
+        {
+            <b>return</b> <span class="s">$@&quot;</span><span class="s">
+    using System;
+ 
+    namespace ConsoleApplication1
+    {{
+        class </span>{<span class="r1 r">typeName</span>}<span class="s">
+        {{
+            </span>{<span class="r0 r">code</span>}<span class="s">
+        }}
+    }}</span><span class="s">&quot;</span>;
+        }
+ 
+        <b>public static string</b> <a id="cb53e46d39a2d2c3" href="../R/cb53e46d39a2d2c3.html" target="n" data-glyph="220,1">WrapInCSharpMethod</a>(<b>this</b> <b>string</b> <span id="r2 rd" class="r2 r">code</span>, <b>bool</b> <span id="r3 rd" class="r3 r">isAsync</span> = <b>false</b>, <b>string</b> <span id="r4 rd" class="r4 r">typeName</span> = <span class="s">&quot;TypeName&quot;</span>, <b>string</b> <span id="r5 rd" class="r5 r">usings</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <b>return</b> <span class="s">$@&quot;</span><span class="s">
+    using System;</span>{<span class="r5 r">usings</span>}<span class="s">
+ 
+    namespace ConsoleApplication1
+    {{
+        class </span>{<span class="r4 r">typeName</span>}<span class="s">
+        {{
+            public </span>{(<span class="r3 r">isAsync</span> ? <span class="s">&quot;async &quot;</span> : <span class="s">&quot;&quot;</span>)}<span class="s">void Foo()
+            {{
+                </span>{<span class="r2 r">code</span>}<span class="s">
+            }}
+        }}
+    }}</span><span class="s">&quot;</span>;
+        }
+        <b>public static string</b> <a id="f7b36c8d05dd6bdc" href="../R/f7b36c8d05dd6bdc.html" target="n" data-glyph="220,1">WrapInVBMethod</a>(<b>this</b> <b>string</b> <span id="r6 rd" class="r6 r">code</span>,
+            <b>bool</b> <span id="r7 rd" class="r7 r">isAsync</span> = <b>false</b>,
+            <b>string</b> <span id="r8 rd" class="r8 r">typeName</span> = <span class="s">&quot;TypeName&quot;</span>,
+            <b>string</b> <span id="r9 rd" class="r9 r">imports</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <b>return</b> <span class="s">$@&quot;</span><span class="s">
+Imports System</span>{<span class="r9 r">imports</span>}<span class="s">
+Namespace ConsoleApplication1
+    Class </span>{<span class="r8 r">typeName</span>}<span class="s">
+        Public </span>{(<span class="r7 r">isAsync</span> ? <span class="s">&quot;Async &quot;</span> : <span class="s">&quot;&quot;</span>)}{(<span class="r7 r">isAsync</span> ? <span class="s">&quot;Function&quot;</span> : <span class="s">&quot;Sub&quot;</span>)}<span class="s"> Foo()</span>{(<span class="r7 r">isAsync</span> ? <span class="s">&quot; As Task&quot;</span> : <span class="s">&quot;&quot;</span>)}<span class="s">
+            </span>{<span class="r6 r">code</span>}<span class="s">
+            &#39; VB Requires value to be used or another analyzer is added which breaks the tests
+            Console.WriteLine(a)
+        End </span>{(<span class="r7 r">isAsync</span> ? <span class="s">&quot;Function&quot;</span> : <span class="s">&quot;Sub&quot;</span>)}<span class="s">
+    End Class
+End Namespace</span><span class="s">&quot;</span>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

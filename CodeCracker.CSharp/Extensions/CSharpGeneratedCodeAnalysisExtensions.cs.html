@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html><head><title>CSharpGeneratedCodeAnalysisExtensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(56);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Extensions/CSharpGeneratedCodeAnalysisExtensions.cs" target="_top">Extensions\CSharpGeneratedCodeAnalysisExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Linq;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+ 
+<b>namespace</b> CodeCracker
+{
+    <b>public static class</b> <a id="60ee42896d44df1a" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t">CSharpGeneratedCodeAnalysisExtensions</a>
+    {
+        <b>public static bool</b> <a id="009121599af66016" href="../R/009121599af66016.html" target="n" data-glyph="220,1">IsGenerated</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r0 rd" class="r0 r">context</span>) =&gt; (<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>?.<a href="@1@Microsoft.CodeAnalysis/A.html#196efcb3181a4a4e">SyntaxTree</a>?.<a href="#ffd8f310ea97cacf">IsGenerated</a>() ?? <b>false</b>) || (<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>?.<a href="#7f2d273b26bad763">IsGenerated</a>() ?? <b>false</b>);
+ 
+        <b>private static readonly string</b>[] <a id="f2296674bcfbe8f1" href="../R/f2296674bcfbe8f1.html" target="n" data-glyph="46,1">generatedCodeAttributes</a> = <b>new</b> <b>string</b>[] { <span class="s">&quot;DebuggerNonUserCode&quot;</span>, <span class="s">&quot;GeneratedCode&quot;</span>, <span class="s">&quot;DebuggerNonUserCodeAttribute&quot;</span>, <span class="s">&quot;GeneratedCodeAttribute&quot;</span> };
+ 
+        <b>public static bool</b> <a id="7f2d273b26bad763" href="../R/7f2d273b26bad763.html" target="n" data-glyph="220,1">IsGenerated</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r1 rd" class="r1 r">node</span>) =&gt; <span class="r1 r">node</span>.<a href="CSharpAnalyzerExtensions.cs.html#6581dfc88330bc13">HasAttributeOnAncestorOrSelf</a>(<a href="#f2296674bcfbe8f1">generatedCodeAttributes</a>);
+ 
+        <b>public static bool</b> <a id="248a77262c748d6c" href="../R/248a77262c748d6c.html" target="n" data-glyph="220,1">IsGenerated</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#90d92645ff9f3d2f" class="t">SyntaxTreeAnalysisContext</a> <span id="r2 rd" class="r2 r">context</span>) =&gt; <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#03c48359441f34b7">Tree</a>?.<a href="#ffd8f310ea97cacf">IsGenerated</a>() ?? <b>false</b>;
+ 
+        <b>public static bool</b> <a id="2fdf5467e5e35082" href="../R/2fdf5467e5e35082.html" target="n" data-glyph="220,1">IsGenerated</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#aaf83894264bf5cd" class="t">SymbolAnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>)
+        {
+            <b>if</b> (<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a> == <b>null</b>) <b>return false</b>;
+            <b>foreach</b> (<a href="@1@Microsoft.CodeAnalysis/A.html#582def1fcb55b1ba" class="k">var</a> <span id="r4 rd" class="r4 r">syntaxReference</span> <b>in</b> <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d8b9efd9a2854104">Symbol</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>)
+            {
+                <b>if</b> (<span class="r4 r">syntaxReference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d7a9281f07d40af6">SyntaxTree</a>.<a href="#ffd8f310ea97cacf">IsGenerated</a>()) <b>return true</b>;
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r5 rd" class="r5 r">root</span> = <span class="r4 r">syntaxReference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d7a9281f07d40af6">SyntaxTree</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>();
+                <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">node</span> = <span class="r5 r">root</span>?.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">syntaxReference</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5f209a7983fd1563">Span</a>);
+                <b>if</b> (<span class="r6 r">node</span>.<a href="#7f2d273b26bad763">IsGenerated</a>()) <b>return true</b>;
+            }
+            <b>return false</b>;
+        }
+ 
+        <b>public static bool</b> <a id="ffd8f310ea97cacf" href="../R/ffd8f310ea97cacf.html" target="n" data-glyph="220,1">IsGenerated</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="t">SyntaxTree</a> <span id="r7 rd" class="r7 r">tree</span>) =&gt; (<span class="r7 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#e12956b59d7683ea">FilePath</a>?.<a href="/CodeCracker.Common/A.html#d2c79ffe8bcf600f">IsOnGeneratedFile</a>() ?? <b>false</b>) || <span class="r7 r">tree</span>.<a href="#15ca5bc94ee06386">HasAutoGeneratedComment</a>();
+ 
+        <b>public static bool</b> <a id="15ca5bc94ee06386" href="../R/15ca5bc94ee06386.html" target="n" data-glyph="220,1">HasAutoGeneratedComment</a>(<b>this</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8649488200d5b57a" class="t">SyntaxTree</a> <span id="r8 rd" class="r8 r">tree</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r9 rd" class="r9 r">root</span> = <span class="r8 r">tree</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#fa53eac1e5f1db85">GetRoot</a>();
+            <b>if</b> (<span class="r9 r">root</span> == <b>null</b>) <b>return false</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="k">var</a> <span id="r10 rd" class="r10 r">firstToken</span> = <span class="r9 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b583ecde97c0fa5c">GetFirstToken</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#02308f9b3fe9d49e" class="t">SyntaxTriviaList</a> <span id="r11 rd" class="r11 r">trivia</span>;
+            <b>if</b> (<span class="r10 r">firstToken</span> == <b>default</b>(<a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="t">SyntaxToken</a>))
+            {
+                <a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="k">var</a> <span id="r12 rd" class="r12 r">token</span> = ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b0d8be0586bb102" class="t">CompilationUnitSyntax</a>)<span class="r9 r">root</span>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2a7dcdf56c722304">EndOfFileToken</a>;
+                <b>if</b> (!<span class="r12 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92f67dcd545e072">HasLeadingTrivia</a>) <b>return false</b>;
+                <span class="r11 r">trivia</span> = <span class="r12 r">token</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>;
+            }
+            <b>else</b>
+            {
+                <b>if</b> (!<span class="r10 r">firstToken</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b92f67dcd545e072">HasLeadingTrivia</a>) <b>return false</b>;
+                <span class="r11 r">trivia</span> = <span class="r10 r">firstToken</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f0dc80731e1b9aec">LeadingTrivia</a>;
+            }
+            <b>var</b> <span id="r13 rd" class="r13 r">commentLines</span> = <span class="r11 r">trivia</span>.Where(<span id="r14 rd" class="r14 r">t</span> =&gt; <span class="r14 r">t</span>.<a href="CSharpAnalyzerExtensions.cs.html#380d33c095dd8a8f">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#504210015fef4fba">SingleLineCommentTrivia</a>)).Take(2).ToList();
+            <b>if</b> (<span class="r13 r">commentLines</span>.Count != 2) <b>return false</b>;
+            <b>return</b> <span class="r13 r">commentLines</span>[1].<a href="@1@Microsoft.CodeAnalysis/A.html#b9a2cb8779d1aa3f">ToString</a>() == <span class="s">&quot;// &lt;auto-generated&gt;&quot;</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

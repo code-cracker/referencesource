@@ -1,0 +1,346 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposablesShouldCallSuppressFinalizeTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(337);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/DisposablesShouldCallSuppressFinalizeTests.cs" target="_top">Usage\DisposablesShouldCallSuppressFinalizeTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="c6391be070960553" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="c23a778dc37b806e">DisposablesShouldCallSuppressFinalizeTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#f3ded5ab73dfeecb" class="t">DisposablesShouldCallSuppressFinalizeAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#252d76e51b0940c9" class="t">DisposablesShouldCallSuppressFinalizeCodeFixProvider</a>&gt;
+    {
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="3fc75b1c8f523eee" href="../R/../../0000000000.html" target="n" data-glyph="72,1">AlreadyCallsSuppressFinalize</a>()
+        {
+            <b>const string</b> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+                public class MyType : System.IDisposable
+                {
+                    public void Dispose()
+                    {
+                        GC.SuppressFinalize(this);
+                    }
+                }&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="c11448a323dc45d0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoNotWarnIfStructImplmentsIDisposableWithNoSuppressFinalizeCall</a>()
+        {
+            <b>const string</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">@&quot;
+                public struct MyType : System.IDisposable
+                { 
+                    public void Dispose() 
+                    { 
+                    } 
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="dc0182bc59bf1a75" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfClassImplmentsIDisposableWithNoSuppressFinalizeCall</a>()
+        {
+            <b>const string</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">@&quot;
+                public class MyType : System.IDisposable
+                { 
+                    public void Dispose() 
+                    { 
+                    } 
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;&#39;MyType&#39; should call GC.SuppressFinalize inside the Dispose method.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 4, 33) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8e99d06380c850ec" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassImplementsDisposableCallsSuppressFinalizeAndCallsDisposeWithThis</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+            public class MyType : System.IDisposable
+            {
+                public void Dispose()
+                {
+                    this.Dispose(true);
+                    GC.SuppressFinalize(this);
+                }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f2108795df66012a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassImplementsDisposableCallsSuppressFinalize</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+            public class MyType : System.IDisposable
+            {
+                public void Dispose()
+                {
+                    GC.SuppressFinalize(this);
+                }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">source</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="757467e334340e7c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassImplmentsIDisposableButDoesNotContainsAPublicConstructor</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">test</span> = <span class="s">@&quot;
+                public class MyType : System.IDisposable
+                { 
+                    private MyType() 
+                    {
+                    }
+ 
+                    public void Dispose() 
+                    { 
+                    }
+ 
+                    ~MyType() {}
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r6 r">test</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="eb7384061dfa0b35" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassIsAPrivateNestedType</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">@&quot;
+                public class MyType
+                {
+                    private class MyNestedType : System.IDisposable
+                    { 
+                        public void Dispose() 
+                        { 
+                        }
+ 
+                        ~MyType() {}
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="03feb5e4eb967f47" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassIsNestedOfAPrivateNestedType</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">@&quot;
+                public class MyType
+                {
+                    private class MyType
+                    {
+                        public class MyNestedType : System.IDisposable
+                        { 
+                            public void Dispose() 
+                            { 
+                            }
+ 
+                            ~MyType() {}
+                        }
+                    }
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="a6c63b1a69293a55" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfStructDoesNotImplementsIDisposable</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">test</span> = <span class="s">@&quot;
+                public struct MyType
+                { 
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="a6aa279b8799f320" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassIsSealedWithNoUserDefinedFinalizer</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">test</span> = <span class="s">@&quot;
+                public sealed class MyType : System.IDisposable
+                { 
+                    public void Dispose() 
+                    { 
+                    } 
+                }&quot;</span>
+                ;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r10 r">test</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="e1b38dfb05251578" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WarningIfSealedClassHaveUserDefinedFinalizerImplmentsIDisposableWithNoSuppressFinalizeCall</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">test</span> = <span class="s">@&quot;
+                public sealed class MyType : System.IDisposable
+                { 
+                    public void Dispose() 
+                    { 
+                    }
+ 
+                    ~MyType() {} 
+                }&quot;</span>;
+ 
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r12 rd" class="r12 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#d482295f5ead3cac">DisposablesShouldCallSuppressFinalize</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <span class="s">&quot;&#39;MyType&#39; should call GC.SuppressFinalize inside the Dispose method.&quot;</span>,
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 4, 33) }
+            };
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r11 r">test</span>, <span class="r12 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="82c22c3117a2bed6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoWarningIfClassDoesNotImplementsIDisposable</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">test</span> = <span class="s">@&quot;
+                public class MyType 
+                { 
+                }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r13 r">test</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="063c959b4187835e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenClassImplementsIDisposableCallSuppressFinalize</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void Dispose() 
+                        { 
+                            var x = 123;
+                        } 
+                    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r15 rd" class="r15 r">fixtest</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void Dispose() 
+                        { 
+                            var x = 123;
+                            GC.SuppressFinalize(this);
+                        } 
+                    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r14 r">source</span>, <span class="r15 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="f6fe2a5d29c8f2ff" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenClassHasParametrizedDisposeMethod</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void Dispose() 
+                        { 
+                            Dispose(true);
+                        } 
+ 
+                        protected virtual void Dispose(bool disposing)
+                        {
+                            
+                        }
+                    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r17 rd" class="r17 r">fixtest</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void Dispose() 
+                        { 
+                            Dispose(true);
+                            GC.SuppressFinalize(this);
+                        } 
+ 
+                        protected virtual void Dispose(bool disposing)
+                        {
+                            
+                        }
+                    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r16 r">source</span>, <span class="r17 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="c5e789d58b7a4357" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenClassExplicitImplementsOfIDisposableCallSuppressFinalize</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void IDisposable.Dispose() 
+                        { 
+                            var x = 123;
+                        } 
+                    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r19 rd" class="r19 r">fixtest</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void IDisposable.Dispose() 
+                        { 
+                            var x = 123;
+                            GC.SuppressFinalize(this);
+                        } 
+                    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r18 r">source</span>, <span class="r19 r">fixtest</span>, 0);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async void</b> <a id="8682ce20b7af052f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenClassHasParametrizedDisposeMethodAndExplicitlyImplementsIDisposable</a>()
+        {
+            <b>const string</b> <span id="r20 rd" class="r20 r">source</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void IDisposable.Dispose() 
+                        { 
+                            Dispose(true);
+                        } 
+ 
+                        protected virtual void Dispose(bool disposing)
+                        {
+                            
+                        }
+                    }&quot;</span>;
+ 
+            <b>const string</b> <span id="r21 rd" class="r21 r">fixtest</span> = <span class="s">@&quot;
+                    public class MyType : System.IDisposable
+                    { 
+                        public void IDisposable.Dispose() 
+                        { 
+                            Dispose(true);
+                            GC.SuppressFinalize(this);
+                        } 
+ 
+                        protected virtual void Dispose(bool disposing)
+                        {
+                            
+                        }
+                    }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r20 r">source</span>, <span class="r21 r">fixtest</span>, 0);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

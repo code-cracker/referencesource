@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProvider.Base.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(69);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Refactoring/AllowMembersOrderingCodeFixProvider.Base.vb" target="_top">Refactoring\AllowMembersOrderingCodeFixProvider.Base.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> System.Threading
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.CodeActions
+<b>Imports</b> Microsoft.CodeAnalysis.CodeFixes
+<b>Imports</b> Microsoft.CodeAnalysis.Formatting
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Refactoring
+    <b>Public MustInherit Class</b> <a id="effff1a29f2541eb" href="../R/effff1a29f2541eb.html" target="n" data-glyph="0,0" class="t">BaseAllowMembersOrderingCodeFixProvider</a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+ 
+        <b>Protected ReadOnly Property</b> <a id="cbcfba84fe7eea98" href="../R/cbcfba84fe7eea98.html" target="n" data-glyph="105,1">CodeActionDescription</a> <b>As String
+ 
+        Protected Sub</b> <a id="146416e28bc74acd" href="../R/146416e28bc74acd.html" target="n" data-glyph="75,1" class="k">New</a>(<span id="r0 rd" class="r0 r">codeActionDescription</span> <b>As String</b>)
+            <b>Me</b>.<a href="#cbcfba84fe7eea98">CodeActionDescription</a> = <span class="r0 r">codeActionDescription</span>
+        <b>End Sub
+ 
+        Public Overrides NotOverridable ReadOnly Property</b> <a id="4d7e56a613c844c6" href="../R/4d7e56a613c844c6.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of String</b>) = <span class="t">ImmutableArray</span>.Create(<a href="AllowMembersOrderingAnalyzer.vb.html#e6609d34b1d160ba" class="t">AllowMembersOrderingAnalyzer</a>.<a href="AllowMembersOrderingAnalyzer.vb.html#397e1a167298ad40">Id</a>)
+ 
+        <b>Public Overrides Function</b> <a id="37115a1b9cfa8e39" href="../R/37115a1b9cfa8e39.html" target="n" data-glyph="72,1">GetFixAllProvider</a>() <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#b3382e99d2806cc6" class="t">FixAllProvider</a>
+            <b>Return</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#08eb45b0f142f888" class="t">WellKnownFixAllProviders</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f42c8a42757f6a56">BatchFixer</a>
+        <b>End Function
+ 
+        Public Overrides Async Function</b> <a id="864ed692d6dd97cd" href="../R/864ed692d6dd97cd.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<span id="r1 rd" class="r1 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a>) <b>As</b> <span class="t">Task</span>
+            <b>Dim</b> <span id="r2 rd" class="r2 r">root</span> = <b>Await</b> <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>).ConfigureAwait(<b>False</b>)
+            <b>Dim</b> <span id="r3 rd" class="r3 r">diagnostic</span> = <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First()
+            <b>Dim</b> <span id="r4 rd" class="r4 r">diagnosticSpan</span> = <span class="r3 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>
+ 
+            <b>Dim</b> <span id="r5 rd" class="r5 r">typeBlock</span> = <b>DirectCast</b>(<span class="r2 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d01482975ad9b7b">FindToken</a>(<span class="r4 r">diagnosticSpan</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#b8dca547922982b0">Start</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#98bd8326ede523af">Parent</a>.<a href="/CodeCracker.Common/A.html#3a00f9f90b7f23db">FirstAncestorOrSelfOfType</a>(<b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#ecddca21802fdee4" class="t">ClassBlockSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a74088475ed7f8f" class="t">StructureBlockSyntax</a>), <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#b29cc29f13816bd0" class="t">ModuleBlockSyntax</a>)), <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>)
+            <b>Dim</b> <span id="r6 rd" class="r6 r">newDocument</span> = <b>Await</b> <a href="#08c6d32b22258f5e">AllowMembersOrderingAsync</a>(<span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r5 r">typeBlock</span>, <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c57f5d43f0e76de4">CancellationToken</a>)
+            <b>If</b> <span class="r6 r">newDocument</span> <b>IsNot Nothing Then</b>
+                <span class="r1 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(<b>String</b>.Format(<a href="#cbcfba84fe7eea98">CodeActionDescription</a>, <span class="r5 r">typeBlock</span>), <b>Function</b>(<span id="r7 rd" class="r7 r">ct</span>)
+                                                                                                               <b>Return</b> <span class="t">Task</span>.FromResult(<span class="r6 r">newDocument</span>)
+                                                                                                           <b>End Function</b>), <span class="r3 r">diagnostic</span>)
+            <b>End If
+        End Function
+ 
+        Private Async Function</b> <a id="08c6d32b22258f5e" href="../R/08c6d32b22258f5e.html" target="n" data-glyph="76,1">AllowMembersOrderingAsync</a>(<span id="r8 rd" class="r8 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r9 rd" class="r9 r">typeBlock</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>, <span id="r10 rd" class="r10 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">Task</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>)
+            <b>Dim</b> <span id="r11 rd" class="r11 r">membersDeclaration</span> = <span class="r9 r">typeBlock</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#db7553ec707f0bcd">Members</a>.OfType(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)
+            <b>Dim</b> <span id="r12 rd" class="r12 r">root</span> = <b>DirectCast</b>(<b>Await</b> <span class="r8 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r10 r">cancellationToken</span>), <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d79aac101c1808e2" class="t">CompilationUnitSyntax</a>)
+ 
+            <b>Dim</b> <span id="r13 rd" class="r13 r">newTypeBlock</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a> = <b>Nothing
+            Dim</b> <span id="r14 rd" class="r14 r">orderChanged</span> = <a href="#80d0a5e563835017">TryReplaceTypeMembers</a>(<span class="r9 r">typeBlock</span>, <span class="r11 r">membersDeclaration</span>, <span class="r11 r">membersDeclaration</span>.OrderBy(<b>Function</b>(<span id="r15 rd" class="r15 r">member</span>) <span class="r15 r">member</span>, <a href="#39cf043fe13fca24">GetMemberDeclarationComparer</a>(<span class="r8 r">document</span>, <span class="r10 r">cancellationToken</span>)), <span class="r13 r">newTypeBlock</span>)
+            <b>If Not</b> <span class="r14 r">orderChanged</span> <b>Then Return Nothing
+ 
+            Dim</b> <span id="r16 rd" class="r16 r">newDocument</span> = <span class="r8 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r12 r">root</span>.
+                                                      <a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r9 r">typeBlock</span>, <span class="r13 r">newTypeBlock</span>).
+                                                      <a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#f445ffe3c814c002" class="t">Formatter</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#9b2fbeca7ce83cd6">Annotation</a>))
+            <b>Return</b> <span class="r16 r">newDocument</span>
+        <b>End Function
+ 
+        Protected MustOverride Function</b> <a id="39cf043fe13fca24" href="../R/39cf043fe13fca24.html" target="n" data-glyph="75,1">GetMemberDeclarationComparer</a>(<span id="r17 rd" class="r17 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r18 rd" class="r18 r">cancellationToken</span> <b>As</b> <span class="t">CancellationToken</span>) <b>As</b> <span class="t">IComparer</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)
+ 
+        <b>Private Function</b> <a id="80d0a5e563835017" href="../R/80d0a5e563835017.html" target="n" data-glyph="76,1">TryReplaceTypeMembers</a>(<span id="r19 rd" class="r19 r">typeBlock</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>, <span id="r20 rd" class="r20 r">membersDeclaration</span> <b>As</b> <span class="t">IEnumerable</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>), <span id="r21 rd" class="r21 r">sortedMembers</span> <b>As</b> <span class="t">IEnumerable</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>), <b>ByRef</b> <span id="r22 rd" class="r22 r">orderedType</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>) <b>As Boolean
+            Dim</b> <span id="r23 rd" class="r23 r">sortedMembersQueue</span> = <b>New</b> <span class="t">Queue</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)(<span class="r21 r">sortedMembers</span>)
+            <b>Dim</b> <span id="r24 rd" class="r24 r">orderChanged</span> = <b>False</b>
+            <span class="r22 r">orderedType</span> = <span class="r19 r">typeBlock</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bf535c74c453cab">ReplaceNodes</a>(<span class="r20 r">membersDeclaration</span>,
+                                                 <b>Function</b>(<span id="r25 rd" class="r25 r">original</span>, <span id="r26 rd" class="r26 r">rewritten</span>)
+                                                     <b>Dim</b> <span id="r27 rd" class="r27 r">newMember</span> = <span class="r23 r">sortedMembersQueue</span>.Dequeue()
+                                                     <b>If Not</b> <span class="r24 r">orderChanged</span> <b>And Not</b> <span class="r25 r">original</span>.Equals(<span class="r27 r">newMember</span>) <b>Then</b>
+                                                         <span class="r24 r">orderChanged</span> = <b>True
+                                                     End If
+                                                     Return</b> <span class="r27 r">newMember</span>
+                                                 <b>End Function</b>)
+            <b>Return</b> <span class="r24 r">orderChanged</span>
+        <b>End Function
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

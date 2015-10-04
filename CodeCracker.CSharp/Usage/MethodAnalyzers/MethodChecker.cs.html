@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html><head><title>MethodChecker.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(104);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Usage/MethodAnalyzers/MethodChecker.cs" target="_top">Usage\MethodAnalyzers\MethodChecker.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System;
+<b>using</b> System.Collections.Generic;
+<b>using</b> System.Linq;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.CSharp.Usage.MethodAnalyzers
+{
+    <b>public class</b> <a id="f04c86011fcfd751" href="../../R/f04c86011fcfd751.html" target="n" data-glyph="0,0" class="t">MethodChecker</a>
+    {
+        <b>private readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <a id="6c5b3fb992d1bde3" href="../../R/6c5b3fb992d1bde3.html" target="n" data-glyph="46,1">context</a>;
+        <b>private readonly</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="c510dfd54746db63" href="../../R/c510dfd54746db63.html" target="n" data-glyph="46,1">diagnosticDescriptor</a>;
+ 
+        <b>public</b> <a id="fbf890c571e9565d" href="../../R/fbf890c571e9565d.html" target="n" data-glyph="72,1">MethodChecker</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r0 rd" class="r0 r">context</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <span id="r1 rd" class="r1 r">diagnosticDescriptor</span>)
+        {
+            <a href="#f04c86011fcfd751" class="k">this</a>.<a href="#6c5b3fb992d1bde3">context</a> = <span class="r0 r">context</span>;
+            <a href="#f04c86011fcfd751" class="k">this</a>.<a href="#c510dfd54746db63">diagnosticDescriptor</a> = <span class="r1 r">diagnosticDescriptor</span>;
+        }
+ 
+        <b>public void</b> <a id="366e3439cce0a748" href="../../R/366e3439cce0a748.html" target="n" data-glyph="72,1">AnalyzeConstructor</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r2 rd" class="r2 r">methodInformation</span>)
+        {
+            <b>if</b> (<a href="#d002f5fc841795f5">ConstructorNameNotFound</a>(<span class="r2 r">methodInformation</span>) || <a href="#ee300f0758b4558b">MethodFullNameNotFound</a>(<span class="r2 r">methodInformation</span>.<a href="MethodInformation.cs.html#2dfb39d41c221e09">MethodFullDefinition</a>))
+                <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="k">var</a> <span id="r3 rd" class="r3 r">argumentList</span> = ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>)<a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4a2311de9b94b3f">ArgumentList</a>;
+            <b>var</b> <span id="r4 rd" class="r4 r">arguments</span> = <a href="#f041635d0f873724">GetArguments</a>(<span class="r3 r">argumentList</span>);
+            <a href="#efd04d0684472784">Execute</a>(<span class="r2 r">methodInformation</span>, <span class="r4 r">arguments</span>, <span class="r3 r">argumentList</span>);
+        }
+ 
+        <b>private bool</b> <a id="d002f5fc841795f5" href="../../R/d002f5fc841795f5.html" target="n" data-glyph="76,1">ConstructorNameNotFound</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r5 rd" class="r5 r">methodInformation</span>)
+        {
+            <b>return</b> <a href="#bce5ee2aceed7aff">AbreviatedConstructorNameNotFound</a>(<span class="r5 r">methodInformation</span>) &amp;&amp; <a href="#d60d13f6de2550bd">QualifiedConstructorNameNotFound</a>(<span class="r5 r">methodInformation</span>);
+        }
+ 
+        <b>private bool</b> <a id="bce5ee2aceed7aff" href="../../R/bce5ee2aceed7aff.html" target="n" data-glyph="76,1">AbreviatedConstructorNameNotFound</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r6 rd" class="r6 r">methodInformation</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="k">var</a> <span id="r7 rd" class="r7 r">objectCreationExpressionSyntax</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>) <a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="k">var</a> <span id="r8 rd" class="r8 r">identifier</span> = <span class="r7 r">objectCreationExpressionSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1e3fc5081bca0b51">Type</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f3330d1d7adc90a8" class="t">IdentifierNameSyntax</a>;
+            <b>return</b> <span class="r8 r">identifier</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#6b6e307a4999a4f3">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> != <span class="r6 r">methodInformation</span>.<a href="MethodInformation.cs.html#193d8bdde3b215a3">MethodName</a>;
+        }
+ 
+        <b>private bool</b> <a id="d60d13f6de2550bd" href="../../R/d60d13f6de2550bd.html" target="n" data-glyph="76,1">QualifiedConstructorNameNotFound</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r9 rd" class="r9 r">methodInformation</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="k">var</a> <span id="r10 rd" class="r10 r">objectCreationExpressionSyntax</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7384196622194db8" class="t">ObjectCreationExpressionSyntax</a>)<a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a81349bd5115c017" class="k">var</a> <span id="r11 rd" class="r11 r">identifier</span> = <span class="r10 r">objectCreationExpressionSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#1e3fc5081bca0b51">Type</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a81349bd5115c017" class="t">QualifiedNameSyntax</a>;
+            <b>return</b> <span class="r11 r">identifier</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#329f138110d262d7">Right</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#88ca427df4b5fee7">ToString</a>() != <span class="r9 r">methodInformation</span>.<a href="MethodInformation.cs.html#193d8bdde3b215a3">MethodName</a>;
+        }
+ 
+        <b>public void</b> <a id="0d33c7261edcb7ef" href="../../R/0d33c7261edcb7ef.html" target="n" data-glyph="72,1">AnalyzeMethod</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r12 rd" class="r12 r">methodInformation</span>)
+        {
+            <b>if</b> (<a href="#be14d19a9c7d50b5">MethodNameNotFound</a>(<span class="r12 r">methodInformation</span>) ||
+                <a href="#ee300f0758b4558b">MethodFullNameNotFound</a>(<span class="r12 r">methodInformation</span>.<a href="MethodInformation.cs.html#2dfb39d41c221e09">MethodFullDefinition</a>))
+            {
+                <b>return</b>;
+            }
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="k">var</a> <span id="r13 rd" class="r13 r">argumentList</span> = ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#0ba788612f9446cb">ArgumentList</a>;
+            <b>var</b> <span id="r14 rd" class="r14 r">arguments</span> = <a href="#f041635d0f873724">GetArguments</a>(<span class="r13 r">argumentList</span>);
+ 
+            <a href="#efd04d0684472784">Execute</a>(<span class="r12 r">methodInformation</span>, <span class="r14 r">arguments</span>, <span class="r13 r">argumentList</span>);
+        }
+ 
+        <b>private bool</b> <a id="be14d19a9c7d50b5" href="../../R/be14d19a9c7d50b5.html" target="n" data-glyph="76,1">MethodNameNotFound</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r15 rd" class="r15 r">methodInformation</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="k">var</a> <span id="r16 rd" class="r16 r">invocationExpression</span> = (<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c8227e666d14a278" class="t">InvocationExpressionSyntax</a>)<a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="k">var</a> <span id="r17 rd" class="r17 r">memberExpression</span> = <span class="r16 r">invocationExpression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72937404d1b9662c">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#acb41cf4d8bd7504" class="t">MemberAccessExpressionSyntax</a>;
+            <b>return</b> <span class="r17 r">memberExpression</span>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#a4d964258ed93924">Name</a>?.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8dd001af6537653d">Identifier</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8e2ea3db84939bf">ValueText</a> != <span class="r15 r">methodInformation</span>.<a href="MethodInformation.cs.html#193d8bdde3b215a3">MethodName</a>;
+        }
+ 
+        <b>private bool</b> <a id="ee300f0758b4558b" href="../../R/ee300f0758b4558b.html" target="n" data-glyph="76,1">MethodFullNameNotFound</a>(<b>string</b> <span id="r18 rd" class="r18 r">methodDefinition</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#c480aa68531d9f32" class="k">var</a> <span id="r19 rd" class="r19 r">memberSymbol</span> = <a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#6d0ce5ad095fe519">GetSymbolInfo</a>(<a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>;
+            <b>return</b> <span class="r19 r">memberSymbol</span>?.ToString() != <span class="r18 r">methodDefinition</span>;
+        }
+ 
+        <b>private void</b> <a id="efd04d0684472784" href="../../R/efd04d0684472784.html" target="n" data-glyph="76,1">Execute</a>(<a href="MethodInformation.cs.html#c91c3d4f81a546e3" class="t">MethodInformation</a> <span id="r20 rd" class="r20 r">methodInformation</span>, <span class="t">List</span>&lt;<b>object</b>&gt; <span id="r21 rd" class="r21 r">arguments</span>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a> <span id="r22 rd" class="r22 r">argumentList</span>)
+        {
+            <b>if</b> (!<span class="r22 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e9b41a6f4ad1ff39">Any</a>())
+            {
+                <b>return</b>;
+            }
+            <b>try</b>
+            {
+                <span class="r20 r">methodInformation</span>.<a href="MethodInformation.cs.html#814f6b0919b1367e">MethodAction</a>.Invoke(<span class="r21 r">arguments</span>);
+            }
+            <b>catch</b> (<span class="t">Exception</span> <span id="r23 rd" class="r23 r">ex</span>)
+            {
+                <b>while</b> (<span class="r23 r">ex</span>.InnerException != <b>null</b>)
+                {
+                    <span class="r23 r">ex</span> = <span class="r23 r">ex</span>.InnerException;
+                }
+                <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r24 rd" class="r24 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#c510dfd54746db63">diagnosticDescriptor</a>, <span class="r22 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a><a href="@1@Microsoft.CodeAnalysis/A.html#cf51f027f7c70407">[</a><span class="r20 r">methodInformation</span>.<a href="MethodInformation.cs.html#45ef93d057d240ca">ArgumentIndex</a>].<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#688aabba81a44c86">GetLocation</a>(), <span class="r23 r">ex</span>.Message);
+                <a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r24 r">diag</span>);
+            }
+        }
+ 
+        <b>private</b> <span class="t">List</span>&lt;<b>object</b>&gt; <a id="f041635d0f873724" href="../../R/f041635d0f873724.html" target="n" data-glyph="76,1">GetArguments</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#efabd1fd197c8154" class="t">ArgumentListSyntax</a> <span id="r25 rd" class="r25 r">argumentList</span>)
+        {
+            <b>return</b> <span class="r25 r">argumentList</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#21917b67c2df0f09">Arguments</a>
+                .Select(<span id="r26 rd" class="r26 r">a</span> =&gt; <span class="r26 r">a</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e27dc3b014256408">Expression</a>)
+                .Select(<span id="r27 rd" class="r27 r">l</span> =&gt; <span class="r27 r">l</span> == <b>null</b> ? <b>null</b> : <a href="#6c5b3fb992d1bde3">context</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#12115c594fc62f89">GetConstantValue</a>(<span class="r27 r">l</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#c365410e787a28a4">Value</a>)
+                .ToList();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

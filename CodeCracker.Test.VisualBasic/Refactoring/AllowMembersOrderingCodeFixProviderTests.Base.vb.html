@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingCodeFixProviderTests.Base.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(159);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Refactoring/AllowMembersOrderingCodeFixProviderTests.Base.vb" target="_top">Refactoring\AllowMembersOrderingCodeFixProviderTests.Base.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Threading
+<b>Imports</b> CodeCracker.VisualBasic.Refactoring
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Refactoring
+    <b>Public Class</b> <a id="8f060d6b23a0050e" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="271470f632bf666f">BaseAllowMembersOrderingCodeFixProviderTests</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#e6609d34b1d160ba" class="t">AllowMembersOrderingAnalyzer</a>, <a href="#e092b7df74076112" class="t">MockCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>, <span class="s">&quot;Property B As String&quot;</span>, <span class="s">&quot;Property A As String&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="1681124ab628d1a3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">BaseAllowMembersOrderingShouldCallIComparerToOrder</a>(<span id="r0 rd" class="r0 r">typeDeclaration</span> <b>As String</b>, <span id="r1 rd" class="r1 r">memberA</span> <b>As String</b>, <span id="r2 rd" class="r2 r">memberB</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+ 
+            <b>Dim</b> <span id="r3 rd" class="r3 r">codeFixProvider</span> = <b>DirectCast</b>(<b>MyBase</b>.<a href="/CodeCracker.Test.Common/A.html#2c8089079f5b7396">GetCodeFixProvider</a>, <a href="#e092b7df74076112" class="t">MockCodeFixProvider</a>)
+ 
+ 
+            <b>Dim</b> <span id="r4 rd" class="r4 r">source</span> = <b>String</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e">Format</a>(<span class="s">&quot;
+Public {0} Foo
+    {1}
+    {2}
+End {0}&quot;</span>, <span class="r0 r">typeDeclaration</span>, <span class="r1 r">memberA</span>, <span class="r2 r">memberB</span>)
+ 
+            <b>Dim</b> <span id="r5 rd" class="r5 r">expected</span> = <b>String</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e">Format</a>(<span class="s">&quot;
+Public {0} Foo
+    {2}
+    {1}
+End {0}&quot;</span>, <span class="r0 r">typeDeclaration</span>, <span class="r1 r">memberA</span>, <span class="r2 r">memberB</span>)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r4 r">source</span>, <span class="r5 r">expected</span>, <span class="r6 r">codeFixProvider</span>:=<span class="r3 r">codeFixProvider</span>)
+            <span class="t">Assert</span>.True(<span class="r3 r">codeFixProvider</span>.<a href="#3adb38a5ae006e58">HasIComparerBeenCalled</a>, <span class="s">&quot;The IComparer must be used to sort the members of that type&quot;</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Theory</span>&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Class&quot;</span>)&gt;
+        &lt;<span class="t">InlineData</span>(<span class="s">&quot;Structure&quot;</span>)&gt;
+        <b>Public Async Function</b> <a id="70527154968947b5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">BaseAllowMembersOrderingShouldSupportWriteMembers</a>(<span id="r7 rd" class="r7 r">typeDeclaration</span> <b>As String</b>) <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Dim</b> <span id="r8 rd" class="r8 r">source</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="s">&quot;
+Imports System
+ 
+Namespace ConsoleApplication1
+    {0} Foo
+        Public Class Foo2
+        End Class
+        Public Structure Struct
+ 
+        End Structure
+        Public Shared Operator +(f1 As Foo, f2 As Foo) As Foo
+            Return New Foo()
+        End Operator
+        Sub Method(a As String)
+ 
+        End Sub
+        Public Property Prop As String
+        Private Interface IInterface
+ 
+        End Interface
+        Public Enum Eenum
+            Enum1
+            Enum2 = 1
+        End Enum
+        Public Custom Event CustomEvent As EventHandler
+            AddHandler(value As EventHandler)
+ 
+            End AddHandler
+            RemoveHandler(value As EventHandler)
+ 
+            End RemoveHandler
+            RaiseEvent(sender As Object, e As EventArgs)
+ 
+            End RaiseEvent
+        End Event
+        Public Delegate Function doubleDelegate(num As Double) As Double
+        Public Sub New()
+            Prop = &quot;&quot;&quot;&quot;
+            Field = &quot;&quot;&quot;&quot;
+        End Sub
+        Public Event EventField1 As Action
+        Public field As String
+    End {0}
+End Namespace
+&quot;</span>, <span class="r7 r">typeDeclaration</span>)
+ 
+            <b>Dim</b> <span id="r9 rd" class="r9 r">expected</span> = <b>String</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<span class="s">&quot;
+Imports System
+ 
+Namespace ConsoleApplication1
+    {0} Foo
+        Private Interface IInterface
+ 
+        End Interface
+        Public Class Foo2
+        End Class
+        Public Custom Event CustomEvent As EventHandler
+            AddHandler(value As EventHandler)
+ 
+            End AddHandler
+            RemoveHandler(value As EventHandler)
+ 
+            End RemoveHandler
+            RaiseEvent(sender As Object, e As EventArgs)
+ 
+            End RaiseEvent
+        End Event
+        Public Delegate Function doubleDelegate(num As Double) As Double
+        Public Enum Eenum
+            Enum1
+            Enum2 = 1
+        End Enum
+        Public Event EventField1 As Action
+        Public field As String
+        Public Property Prop As String
+        Public Shared Operator +(f1 As Foo, f2 As Foo) As Foo
+            Return New Foo()
+        End Operator
+        Public Structure Struct
+ 
+        End Structure
+        Public Sub New()
+            Prop = &quot;&quot;&quot;&quot;
+            Field = &quot;&quot;&quot;&quot;
+        End Sub
+        Sub Method(a As String)
+ 
+        End Sub
+    End {0}
+End Namespace
+&quot;</span>, <span class="r7 r">typeDeclaration</span>)
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r8 r">source</span>, <span class="r9 r">expected</span>)
+        <b>End Function
+        Public Class</b> <a id="e092b7df74076112" href="../R/e092b7df74076112.html" target="n" data-glyph="0,1" class="t">MockCodeFixProvider</a>
+            <b>Inherits</b> <a href="/CodeCracker.VisualBasic/A.html#effff1a29f2541eb" class="t">BaseAllowMembersOrderingCodeFixProvider</a>
+            <b>Public Sub</b> <a id="03807d5b4f4169d4" href="../R/../../0000000000.html" target="n" data-glyph="72,2" class="k">New</a>()
+                <b>MyBase</b>.<a href="/CodeCracker.VisualBasic/A.html#146416e28bc74acd" class="k">New</a>(<span class="s">&quot;Fake codefix&quot;</span>)
+            <b>End Sub
+ 
+            Public Property</b> <a id="3adb38a5ae006e58" href="../R/3adb38a5ae006e58.html" target="n" data-glyph="102,2">HasIComparerBeenCalled</a> <b>As Boolean
+ 
+            Protected Overrides Function</b> <a id="32abce324481444a" href="../R/32abce324481444a.html" target="n" data-glyph="75,2">GetMemberDeclarationComparer</a>(<span id="r10 rd" class="r10 r">document</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>, <span id="r11 rd" class="r11 r">cancellationToken</span> <b>As</b> <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t">CancellationToken</a>) <b>As</b> <a href="@0@mscorlib/A.html#6bf8828f51320498" class="t">IComparer</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)
+                <b>Return</b> <b>New</b> <a href="#3b4cfdb487f7eb78" class="t">AlphabeticalMemberOrderingComparer</a>(<b>Me</b>)
+            <b>End Function
+            Friend Class</b> <a id="ecd0d37e0c467447" href="../R/ecd0d37e0c467447.html" target="n" data-glyph="2,2" class="t">AlphabeticalMemberOrderingComparer</a>
+                <b>Implements</b> <a href="@0@mscorlib/A.html#6bf8828f51320498" class="t">IComparer</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>)
+ 
+                <b>ReadOnly</b> <a id="b34e50ecbb65ecb5" href="../R/b34e50ecbb65ecb5.html" target="n" data-glyph="46,3">parent</a> <b>As</b> <a href="#e092b7df74076112" class="t">MockCodeFixProvider</a>
+ 
+                <b>Public Sub</b> <a id="3b4cfdb487f7eb78" href="../R/3b4cfdb487f7eb78.html" target="n" data-glyph="72,3" class="k">New</a>(<span id="r12 rd" class="r12 r">parent</span> <b>As</b> <a href="#e092b7df74076112" class="t">MockCodeFixProvider</a>)
+                    <b>Me</b>.<a href="#b34e50ecbb65ecb5">parent</a> = <span class="r12 r">parent</span>
+                <b>End Sub
+ 
+                Public Function</b> <a href="@0@mscorlib/A.html#c25c7bd1e274c8e3">Compare</a>(<span id="r13 rd" class="r13 r">x</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>, <span id="r14 rd" class="r14 r">y</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>) <b>As Integer Implements</b> <a href="@0@mscorlib/A.html#6bf8828f51320498" class="t">IComparer</a>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#827e22d59d063707" class="t">DeclarationStatementSyntax</a>).<a href="@0@mscorlib/A.html#c25c7bd1e274c8e3">Compare</a>
+                    <a href="#b34e50ecbb65ecb5">parent</a>.<a href="#3adb38a5ae006e58">HasIComparerBeenCalled</a> = <b>True
+                    Return String</b>.<a href="@0@mscorlib/A.html#0be9474bc8e160b6">Compare</a>(<span class="r13 r">x</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7b7213a73624f84d">ToFullString</a>, <span class="r14 r">y</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7b7213a73624f84d">ToFullString</a>, <a href="@0@mscorlib/A.html#702797def97ecb7c" class="t">StringComparison</a>.<a href="@0@mscorlib/A.html#eb6ce9ac0dbf4269">InvariantCulture</a>)
+                <b>End Function
+            End Class
+        End Class
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

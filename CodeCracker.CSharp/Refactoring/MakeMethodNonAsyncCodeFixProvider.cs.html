@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html><head><title>MakeMethodNonAsyncCodeFixProvider.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(68);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/MakeMethodNonAsyncCodeFixProvider.cs" target="_top">Refactoring\MakeMethodNonAsyncCodeFixProvider.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Composition;
+<b>using</b> System.Linq;
+<b>using</b> System.Threading;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> CodeCracker.CSharp.Design.InconsistentAccessibility;
+<b>using</b> CodeCracker.Properties;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CodeActions;
+<b>using</b> Microsoft.CodeAnalysis.CodeFixes;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Simplification;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#585016b9048100ce" class="t">ExportCodeFixProvider</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>, <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fdb399777da525d">Name</a> = <b>nameof</b>(<a href="../Design/InconsistentAccessibility/InconsistentAccessibilityCodeFixProvider.cs.html#58836c9c3464b79a" class="t">InconsistentAccessibilityCodeFixProvider</a>)), <span class="t">Shared</span>]
+    <b>class</b> <a id="d204358abd142d9d" href="../R/d204358abd142d9d.html" target="n" data-glyph="2,0" class="t"><span id="06c8dc7d9acb6acd">MakeMethodNonAsyncCodeFixProvider</span></a> : <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#0ea452288308834d" class="t">CodeFixProvider</a>
+    {
+        <b>internal const string</b> <a id="0d1742832a584715" href="../R/0d1742832a584715.html" target="n" data-glyph="8,1">AsyncMethodLacksAwaitCompilerWarningNumber</a> = <span class="s">&quot;CS1998&quot;</span>;
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<b>string</b>&gt; <a id="f0476cd5e432ea07" href="../R/f0476cd5e432ea07.html" target="n" data-glyph="102,1">FixableDiagnosticIds</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#0d1742832a584715">AsyncMethodLacksAwaitCompilerWarningNumber</a>);
+ 
+        <b>public override</b> <span class="t">Task</span> <a id="564a0d3733922a02" href="../R/564a0d3733922a02.html" target="n" data-glyph="72,1">RegisterCodeFixesAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#c2382943b9b56c59" class="t">CodeFixContext</a> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r1 rd" class="r1 r">diagnostic</span> = <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#4fce289e7fe277f1">Diagnostics</a>.First();
+            <span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#837213192cd171e0">RegisterCodeFix</a>(
+                <a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#a0ff3abf0aa54079" class="t">CodeAction</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6c4624acca2d3d92">Create</a>(
+                    <a href="/CodeCracker.Common/A.html#1afda3e31be9b42d" class="t">Resources</a>.<a href="/CodeCracker.Common/A.html#4a64d044a02f8b48">MakeMethodNonAsyncCodeFixProvider_Title</a>,
+                    <span id="r2 rd" class="r2 r">ct</span> =&gt; <a href="#a7271c7d9332c73f">MakeMethodNonAsyncAsync</a>(<span class="r0 r">context</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#ce162f05388a2e67">Document</a>, <span class="r1 r">diagnostic</span>, <span class="r2 r">ct</span>)),
+                <span class="r1 r">diagnostic</span>);
+            <b>return</b> <span class="t">Task</span>.FromResult(0);
+        }
+ 
+        <b>private async static</b> <span class="t">Task</span>&lt;<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a>&gt; <a id="a7271c7d9332c73f" href="../R/a7271c7d9332c73f.html" target="n" data-glyph="76,1">MakeMethodNonAsyncAsync</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#d329a1db49ea3429" class="t">Document</a> <span id="r3 rd" class="r3 r">document</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a> <span id="r4 rd" class="r4 r">diagnostic</span>, <span class="t">CancellationToken</span> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">root</span> = <b>await</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#67ed794985130034">GetSyntaxRootAsync</a>(<span class="r5 r">cancellationToken</span>);
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r7 rd" class="r7 r">node</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#1973a2affa06beb8">FindNode</a>(<span class="r4 r">diagnostic</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#d005f0142ed4b084">Location</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#2bfeefd0e9b57370">SourceSpan</a>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r8 rd" class="r8 r">methodDeclaration</span> = <span class="r7 r">node</span>.<a href="/CodeCracker.Common/A.html#00e29052d81e805d">FirstAncestorOrSelfOfType</a>&lt;<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="t">MethodDeclarationSyntax</a>&gt;();
+            <a href="#87d73f0ad4854776" class="k">var</a> <span id="r9 rd" class="r9 r">rewriter</span> = <b>new</b> <a href="#87d73f0ad4854776" class="t">ReturnTaskFromResultRewriter</a>();
+            <a href="@1@Microsoft.CodeAnalysis/A.html#9155479a447d6efa" class="k">var</a> <span id="r10 rd" class="r10 r">asyncKeyword</span> = <span class="r8 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.First(<span id="r11 rd" class="r11 r">t</span> =&gt; <span class="r11 r">t</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#f99f46fc603f74ac">Kind</a>() == <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#fe144043efedba0a">AsyncKeyword</a>);
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#2ed95cfdec599ee4" class="k">var</a> <span id="r12 rd" class="r12 r">newMethodDeclaration</span> =
+                <span class="r8 r">methodDeclaration</span>
+                    .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7d0190bddb7a603c">WithModifiers</a>(<span class="r8 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5369a360c03ad7ac">Modifiers</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#37578a772c5f28bf">Remove</a>(<span class="r10 r">asyncKeyword</span>))
+                    .<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#5ff86d0418262efa">WithBody</a>((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#73a9f2b8733eeaea" class="t">BlockSyntax</a>) <span class="r9 r">rewriter</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c0c43741bb9fe453">VisitBlock</a>(<span class="r8 r">methodDeclaration</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#8c51e0298dba03b0">Body</a>));
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r13 rd" class="r13 r">newRoot</span> = <span class="r6 r">root</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#38c6f0bbbbf1ba5c">ReplaceNode</a>(<span class="r8 r">methodDeclaration</span>, <span class="r12 r">newMethodDeclaration</span>);
+            <b>return</b> <span class="r3 r">document</span>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#6f5c972effc26722">WithSyntaxRoot</a>(<span class="r13 r">newRoot</span>);
+        }
+ 
+        <b>private class</b> <a id="87d73f0ad4854776" href="../R/87d73f0ad4854776.html" target="n" data-glyph="4,1" class="t"><span id="c994f3172eb8408b">ReturnTaskFromResultRewriter</span></a> : <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72741c962906b744" class="t">CSharpSyntaxRewriter</a>
+        {
+            <b>public override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <a id="f034a5bccd981052" href="../R/f034a5bccd981052.html" target="n" data-glyph="72,2">VisitReturnStatement</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7b882edb31b3369a" class="t">ReturnStatementSyntax</a> <span id="r14 rd" class="r14 r">node</span>)
+            {
+ 
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7b882edb31b3369a" class="k">var</a> <span id="r15 rd" class="r15 r">newNode</span> = <span class="r14 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#034f269e3da6d8eb">WithExpression</a>(
+                    <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4c39855f81f9e651">InvocationExpression</a>(
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ce87a6adad9ffdd6">MemberAccessExpression</a>(
+                            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ff818812b7a56bce">SimpleMemberAccessExpression</a>,
+                            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#30857c901e1b349e">ParseName</a>(<span class="s">&quot;System.Threading.Tasks.Task&quot;</span>)
+                                .<a href="@1@Microsoft.CodeAnalysis/A.html#2d2d0e89a4ff625e">WithAdditionalAnnotations</a>(<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#1d256ae3815b1cac" class="t">Simplifier</a>.<a href="@1@Microsoft.CodeAnalysis.Workspaces/A.html#bc64208ff333a839">Annotation</a>),
+                            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#27378cefb5a2fa01">IdentifierName</a>(<span class="s">&quot;FromResult&quot;</span>)),
+                        <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e70eaf8fea04f821">ArgumentList</a>().<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#53ce6f529791f85f">AddArguments</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#4fb8e71831d97959" class="t">SyntaxFactory</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#deec702bee4ea786">Argument</a>(<span class="r14 r">node</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#ea9c4588e2f98bb9">Expression</a>))));
+                <b>return</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#72741c962906b744" class="k">base</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3f1cede2d65ff9e7">VisitReturnStatement</a>(<span class="r15 r">newNode</span>);
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Portable.VisualBasic.targets</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(46);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/v4.5/Microsoft.Portable.VisualBasic.targets" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\v4.5\Microsoft.Portable.VisualBasic.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.Portable.VisualBasic.targets
+ 
+Contains common properties and targets that are shared by all v4.5 Portable Library VB projects.
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+ 
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/NoConfig.html" target="n" class="msbuildlink">NoConfig</a></span><span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">NoConfig</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/MyType.html" target="n" class="msbuildlink">MyType</a></span><span class="xd">&gt;</span>Empty<span class="xd">&lt;/</span><span class="xn">MyType</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Turns on VB runtime embedding if not already set and Microsoft.VisualBasic.dll does not exist in the target framework </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Target</span><span class="xan">
+        Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GetVBRuntime.html" target="n" class="msbuildlink">GetVBRuntime</a></span>&quot;<span class="xan">
+        BeforeTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/CoreCompile.html" target="n" class="msbuildlink">CoreCompile</a></span>&quot;<span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/VBRuntime.html" target="n" class="msbuildlink">VBRuntime</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;!--</span><span class="c"> Turn TargetFrameworkDirectory (which is a property with one or more directories) into an item </span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/_VBRuntimeSearchDirectories.html" target="n" class="msbuildlink">_VBRuntimeSearchDirectories</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetFrameworkDirectory.html" target="n" class="msbuildlink">TargetFrameworkDirectory</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/_VBRuntimeFound.html" target="n" class="msbuildlink">_VBRuntimeFound</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">Exists(&#39;%(_VBRuntimeSearchDirectories.Identity)Microsoft.VisualBasic.dll&#39;)</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">_VBRuntimeFound</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/_VBRuntimeFound.html" target="n" class="msbuildlink">_VBRuntimeFound</a>) != &#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/VBRuntime.html" target="n" class="msbuildlink">VBRuntime</a></span><span class="xd">&gt;</span>Embed<span class="xd">&lt;/</span><span class="xn">VBRuntime</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/v4.5/Microsoft.Portable.Common.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">Microsoft.Portable.Common.targets</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.VisualBasic.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildToolsPath.html" target="n" class="msbuildlink">MSBuildToolsPath</a>)\Microsoft.VisualBasic.targets</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/Microsoft.Portable.Core.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">..\Microsoft.Portable.Core.targets</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

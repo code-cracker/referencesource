@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html><head><title>RemovePrivateMethodNeverUsedAnalyzerTest.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(120);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.VisualBasic/Usage/RemovePrivateMethodNeverUsedAnalyzerTest.vb" target="_top">Usage\RemovePrivateMethodNeverUsedAnalyzerTest.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.VisualBasic" target="_top">test\VisualBasic\CodeCracker.Test\CodeCracker.Test.vbproj</a> (CodeCracker.Test.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> CodeCracker.VisualBasic.Usage
+<b>Imports</b> Xunit
+ 
+<b>Namespace</b> Usage
+    <b>Public Class</b> <a id="408c0d4f8a98d4a2" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="141be75bfe422fc7">RemovePrivateMethodNeverUsedAnalyzerTest</span></a>
+        <b>Inherits</b> <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>(<b>Of</b> <a href="/CodeCracker.VisualBasic/A.html#62f0818c68fefdd6" class="t">RemovePrivateMethodNeverUsedAnalyzer</a>, <a href="/CodeCracker.VisualBasic/A.html#e49530c7f530923e" class="t">RemovePrivateMethodNeverUsedCodeFixProvider</a>)
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="7748ea5afe95e9b4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DoesNotGenerateDiagnostics</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r0 rd" class="r0 r">test</span> = <span class="s">&quot;
+Public Class Foo
+    Public Sub PublicFoo
+        PrivateFoo()
+    End Sub
+    Private Sub PrivateFoo
+        PrivateFoo2
+    End Sub
+    Private Sub PrivateFoo2
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r0 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="844c2425facd5d93" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodUsedInPartialClassesDoesNotGenerateDiagnostics</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r1 rd" class="r1 r">test</span> = <span class="s">&quot;
+Public Partial Class Foo
+    Public Sub PublicFoo
+        PrivateFoo()
+    End Sub
+End Class
+ 
+Public Partial Class Foo
+    Private Sub PrivateFoo
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r1 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="ec57fa16733c5660" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodIsNotUsedInPartialClassesItShouldBeRemoved</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r2 rd" class="r2 r">test</span> = <span class="s">&quot;
+Public Partial Class Foo
+    Public Sub PublicFoo
+    End Sub
+End Class
+ 
+Public Partial Class Foo
+    Private Sub PrivateFoo
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r3 rd" class="r3 r">fix</span> = <span class="s">&quot;
+Public Partial Class Foo
+    Public Sub PublicFoo
+    End Sub
+End Class
+ 
+Public Partial Class Foo
+End Class&quot;</span>
+ 
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r2 r">test</span>, <span class="r3 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="f93948e4f2b2a074" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodUsedDoesNotGenerateDiagnostics</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r4 rd" class="r4 r">test</span> = <span class="s">&quot;
+Public Class Foo
+    Public Sub PublicFoo
+        PrivateFoo()
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r4 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="47080e8c64d26b49" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodIsNotUsedShouldCreateDiagnostic</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r5 rd" class="r5 r">test</span> = <span class="s">&quot;
+Class Foo
+    Private Sub PrivateFoo()
+    End Sub
+End Class&quot;</span>
+ 
+            <b>Const</b> <span id="r6 rd" class="r6 r">fix</span> = <span class="s">&quot;
+Class Foo
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#a5a06b48cebf711f">VerifyBasicFixAsync</a>(<span class="r5 r">test</span>, <span class="r6 r">fix</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="b5007cb2fc4ccee4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodUsedInAttributionDoesNotGenerateDiagnostics</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r7 rd" class="r7 r">test</span> = <span class="s">&quot;
+Imports System
+Class Foo
+    Public Sub PublicFoo()
+        Dim method As Action = AddressOf PrivateFoo
+    End Sub
+    Private Sub PrivateFoo()
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r7 r">test</span>)
+        <b>End Function</b>
+ 
+        &lt;<span class="t">Fact</span>&gt;
+        <b>Public Async Function</b> <a id="4ffe6a2b5c70d8e2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenPrivateMethodHandlesEventExplicitlyDoesNotGenerateDiagnostics</a>() <b>As</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a>
+            <b>Const</b> <span id="r8 rd" class="r8 r">test</span> = <span class="s">&quot;
+Imports System
+Class Foo
+    Private Event Load(ByVal sender As Object, ByVal e As EventArgs)
+ 
+    Private Sub Form_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
+    End Sub
+End Class&quot;</span>
+            <b>Await</b> <a href="/CodeCracker.Test.Common/A.html#e5c54a9d0b401d3e">VerifyBasicHasNoDiagnosticsAsync</a>(<span class="r8 r">test</span>)
+        <b>End Function
+    End Class
+ 
+End Namespace</b></pre></td></tr></table></div></body></html>

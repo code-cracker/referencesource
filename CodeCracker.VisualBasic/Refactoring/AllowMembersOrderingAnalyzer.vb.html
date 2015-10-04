@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html><head><title>AllowMembersOrderingAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(47);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Refactoring/AllowMembersOrderingAnalyzer.vb" target="_top">Refactoring\AllowMembersOrderingAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> System.Collections.Immutable
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+ 
+<b>Namespace</b> Refactoring
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="e6609d34b1d160ba" href="../R/e6609d34b1d160ba.html" target="n" data-glyph="0,0" class="t"><span id="91b08e1e9f07331b">AllowMembersOrderingAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="397e1a167298ad40" href="../R/397e1a167298ad40.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b4e1a1d2add10d97">AllowMembersOrdering</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+ 
+        <b>Friend Const</b> <a id="dce12f8251659be1" href="../R/dce12f8251659be1.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Ordering member inside this type.&quot;</span>
+        <b>Friend Const</b> <a id="ee1937eb46935fe6" href="../R/ee1937eb46935fe6.html" target="n" data-glyph="8,1">MessageFormat</a> = <span class="s">&quot;Ordering member inside this type.&quot;</span>
+        <b>Friend Const</b> <a id="583956e9cb70601b" href="../R/583956e9cb70601b.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>
+        <b>Friend Shared</b> <a id="c538df82c91541a4" href="../R/c538df82c91541a4.html" target="n" data-glyph="44,1">Rule</a> <b>As</b> <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#397e1a167298ad40">Id</a>,
+            <a href="#dce12f8251659be1">Title</a>,
+            <a href="#ee1937eb46935fe6">MessageFormat</a>,
+            <a href="#583956e9cb70601b">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#b4e1a1d2add10d97">AllowMembersOrdering</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="108ae5cb11f4a3ae" href="../R/108ae5cb11f4a3ae.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>)
+            <b>Get
+                Return</b> <span class="t">ImmutableArray</span>.Create(<a href="#c538df82c91541a4">Rule</a>)
+            <b>End Get
+        End Property
+ 
+        Public Overrides Sub</b> <a id="aba6f5409c690358" href="../R/aba6f5409c690358.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r2 rd" class="r2 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r2 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#b3818ec279b52e73">Analyze</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#713d0f80872ce33e">ClassBlock</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#9f15bcb4b70c578c">StructureBlock</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#5b3b4b3b885386e2">ModuleBlock</a>)
+        <b>End Sub
+ 
+        Public Sub</b> <a id="b3818ec279b52e73" href="../R/b3818ec279b52e73.html" target="n" data-glyph="72,1">Analyze</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r3 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r4 rd" class="r4 r">typeSyntax</span> = <b>TryCast</b>(<span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#560801b2c13f828f" class="t">TypeBlockSyntax</a>)
+            <b>If</b> <span class="r4 r">typeSyntax</span> <b>Is Nothing Then Exit Sub
+ 
+            Dim</b> <span id="r5 rd" class="r5 r">currentChildNodesOrder</span> = <span class="r4 r">typeSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#db7553ec707f0bcd">Members</a>()
+            <b>If</b> <span class="r5 r">currentChildNodesOrder</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#83189d65513d4ea2">Count</a> &gt; 1 <b>Then</b> <span class="c">&#39; If there is only member, we don&#39;t need to worry about the order</span>
+                <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#c538df82c91541a4">Rule</a>, <span class="r4 r">typeSyntax</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>()))
+            <b>End If
+        End Sub
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html><head><title>StringBuilderInLoopAnalyzer.vb</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(72);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.VisualBasic/Performance/StringBuilderInLoopAnalyzer.vb" target="_top">Performance\StringBuilderInLoopAnalyzer.vb</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.VisualBasic" target="_top">src\VisualBasic\CodeCracker\CodeCracker.vbproj</a> (CodeCracker.VisualBasic)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>Imports</b> Microsoft.CodeAnalysis
+<b>Imports</b> Microsoft.CodeAnalysis.Diagnostics
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic
+<b>Imports</b> Microsoft.CodeAnalysis.VisualBasic.Syntax
+<b>Imports</b> System.Collections.Immutable
+ 
+<b>Namespace</b> Performance
+    &lt;<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#e8b3edd090bfbe79">VisualBasic</a>)&gt;
+    <b>Public Class</b> <a id="59081c9411df33d4" href="../R/59081c9411df33d4.html" target="n" data-glyph="0,0" class="t"><span id="d0c305cecc1b6385">StringBuilderInLoopAnalyzer</span></a>
+        <b>Inherits</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+ 
+        <b>Public Shared ReadOnly</b> <a id="434e3a2438ab50eb" href="../R/434e3a2438ab50eb.html" target="n" data-glyph="42,1">Id</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>()
+        <b>Public Const</b> <a id="f94dc9b4876d17e9" href="../R/f94dc9b4876d17e9.html" target="n" data-glyph="6,1">Title</a> <b>As String</b> = <span class="s">&quot;Don&#39;t concatenate strings in loops&quot;</span>
+        <b>Public Const</b> <a id="333307172494d32b" href="../R/333307172494d32b.html" target="n" data-glyph="6,1">MessageFormat</a> <b>As String</b> = <span class="s">&quot;Don&#39;t concatenate &#39;{0}&#39; in a loop.&quot;</span>
+        <b>Public Const</b> <a id="e77ae341e970bc48" href="../R/e77ae341e970bc48.html" target="n" data-glyph="6,1">Category</a> <b>As String</b> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#00f959a014ffd899">Performance</a>
+        <b>Public Const</b> <a id="93a58b172722cedc" href="../R/93a58b172722cedc.html" target="n" data-glyph="6,1">Description</a> <b>As String</b> = <span class="s">&quot;Do not concatenate a string in a loop. It will allocate a lot of memory. Use a StringBuilder instead. It will require less allocation, less garbage collection work, less CPU cycles, and less overall time.&quot;</span>
+        <b>Protected Shared</b> <a id="d5c5191876131010" href="../R/d5c5191876131010.html" target="n" data-glyph="45,1">Rule</a> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> = <b>New</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="#434e3a2438ab50eb">Id</a>,
+            <a href="#f94dc9b4876d17e9">Title</a>,
+            <a href="#333307172494d32b">MessageFormat</a>,
+            <a href="#e77ae341e970bc48">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+            <span class="r0 r">isEnabledByDefault</span>:=<b>True</b>,
+            <span class="r1 r">description</span>:=<a href="#93a58b172722cedc">Description</a>,
+            <span class="r2 r">helpLinkUri</span>:=<a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#86c6ef6503d79aa4">StringBuilderInLoop</a>))
+ 
+        <b>Public Overrides ReadOnly Property</b> <a id="7eb77ec460c80d68" href="../R/7eb77ec460c80d68.html" target="n" data-glyph="102,1">SupportedDiagnostics</a>() <b>As</b> <span class="t">ImmutableArray</span>(<b>Of</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>) = <span class="t">ImmutableArray</span>.Create(<a href="#d5c5191876131010">Rule</a>)
+ 
+        <b>Public Overrides Sub</b> <a id="108dad85620ed6cf" href="../R/108dad85620ed6cf.html" target="n" data-glyph="72,1">Initialize</a>(<span id="r3 rd" class="r3 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a>)
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<b>AddressOf</b> <a href="#0cdccfc4980bd8d3">Analyze</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0ef8f2712e7cb3dc">AddAssignmentStatement</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6d38d5b13c8e8123">ConcatenateAssignmentStatement</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e4202cba1790d2e3">SimpleAssignmentStatement</a>)
+        <b>End Sub
+ 
+        Private Sub</b> <a id="0cdccfc4980bd8d3" href="../R/0cdccfc4980bd8d3.html" target="n" data-glyph="76,1">Analyze</a>(<span id="r4 rd" class="r4 r">context</span> <b>As</b> <a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a>)
+            <b>If</b> (<span class="r4 r">context</span>.<a href="../Extensions/VBGeneratedCodeAnalysisExtensions.vb.html#5761500a6910397e">IsGenerated</a>()) <b>Then Return
+            Dim</b> <span id="r5 rd" class="r5 r">assignmentExpression</span> = <b>DirectCast</b>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#da26dfb1f2292a74" class="t">AssignmentStatementSyntax</a>)
+            <b>Dim</b> <span id="r6 rd" class="r6 r">loopStatment</span> = <span class="r5 r">assignmentExpression</span>.<a href="/CodeCracker.Common/A.html#febbf40e5a890c7f">FirstAncestorOfType</a>(
+            <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e400a0b771576a18" class="t">WhileBlockSyntax</a>),
+            <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#f8a7aaa1bdb91e96" class="t">ForBlockSyntax</a>),
+            <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#861307a1f71de29f" class="t">ForEachBlockSyntax</a>),
+            <b>GetType</b>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#391e6887e88b4b28" class="t">DoLoopBlockSyntax</a>))
+ 
+            <b>If</b> <span class="r6 r">loopStatment</span> <b>Is Nothing Then Exit Sub
+            Dim</b> <span id="r7 rd" class="r7 r">semanticModel</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>
+            <b>Dim</b> <span id="r8 rd" class="r8 r">symbolForAssignment</span> = <span class="r7 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bbe6e672459c9c43">GetSymbolInfo</a>(<span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4d1bd19513601b86">Left</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>
+            <b>If</b> <span class="r8 r">symbolForAssignment</span> <b>Is Nothing Then Exit Sub
+            If TypeOf</b> <span class="r8 r">symbolForAssignment</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#8bbdb65b0c3ead40" class="t">IPropertySymbol</a> <b>AndAlso DirectCast</b>(<span class="r8 r">symbolForAssignment</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#8bbdb65b0c3ead40" class="t">IPropertySymbol</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#16b2f76bec386574">Type</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> &lt;&gt; <span class="s">&quot;String&quot;</span> <b>Then Exit Sub
+            If TypeOf</b> <span class="r8 r">symbolForAssignment</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a> <b>AndAlso DirectCast</b>(<span class="r8 r">symbolForAssignment</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#7201fe5debf7ef5d" class="t">IFieldSymbol</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#823c491f63842556">Type</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> &lt;&gt; <span class="s">&quot;String&quot;</span> <b>Then Exit Sub
+            If TypeOf</b> <span class="r8 r">symbolForAssignment</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#b5352bfcd232fa51" class="t">IParameterSymbol</a> <b>AndAlso DirectCast</b>(<span class="r8 r">symbolForAssignment</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#b5352bfcd232fa51" class="t">IParameterSymbol</a>).<a href="@1@Microsoft.CodeAnalysis/A.html#89ec5b09b94414f6">Type</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#419b1f2b26aee404">Name</a> &lt;&gt; <span class="s">&quot;String&quot;</span> <b>Then Exit Sub
+            If TypeOf</b> <span class="r8 r">symbolForAssignment</span> <b>Is</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a> <b>Then
+                Dim</b> <span id="r9 rd" class="r9 r">localSymbol</span> = <b>DirectCast</b>(<span class="r8 r">symbolForAssignment</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#2daef585b2ba821e" class="t">ILocalSymbol</a>)
+                <b>If</b> <span class="r9 r">localSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4272096ccd1dda5a">Type</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#06399dc3a39671b5">SpecialType</a> &lt;&gt; <a href="@1@Microsoft.CodeAnalysis/A.html#5b11a29d644330dc" class="t">SpecialType</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#236fc9e187f143b5">System_String</a> <b>Then Exit Sub</b>
+                <span class="c">&#39; Don&#39;t analyze string declared within the loop.</span>
+                <b>If</b> <span class="r6 r">loopStatment</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#4fda899d98aaf623">DescendantTokens</a>(<span class="r9 r">localSymbol</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#7f9fc305c0940c9b">DeclaringSyntaxReferences</a>(0).<a href="@1@Microsoft.CodeAnalysis/A.html#5f209a7983fd1563">Span</a>).Any() <b>Then Exit Sub
+            End If
+ 
+            If</b> <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6e7ef3fa9a11e975">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e4202cba1790d2e3">SimpleAssignmentStatement</a>) <b>Then
+                If</b> (<b>Not If</b>(<span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d827a7144fcfbaed">Right</a>?.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6e7ef3fa9a11e975">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#8f843d8deaf35488">AddExpression</a>), <b>False</b>)) <b>Then Exit Sub
+                Dim</b> <span id="r10 rd" class="r10 r">identifierOnConcatExpression</span> = <b>TryCast</b>(<b>DirectCast</b>(<span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#d827a7144fcfbaed">Right</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#60f76ccf690c6360" class="t">BinaryExpressionSyntax</a>).<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#7720fcba0f2de9ce">Left</a>, <a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4a5444c7de676498" class="t">IdentifierNameSyntax</a>)
+                <b>If</b> <span class="r10 r">identifierOnConcatExpression</span> <b>Is Nothing Then Exit Sub
+                Dim</b> <span id="r11 rd" class="r11 r">symbolOnIdentifierOnConcatExpression</span> = <span class="r7 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bbe6e672459c9c43">GetSymbolInfo</a>(<span class="r10 r">identifierOnConcatExpression</span>).<a href="@1@Microsoft.CodeAnalysis/A.html#b20ec4711d9cd320">Symbol</a>
+                <b>If Not</b> <span class="r8 r">symbolForAssignment</span>.Equals(<span class="r11 r">symbolOnIdentifierOnConcatExpression</span>) <b>Then Exit Sub
+ 
+            ElseIf Not</b> <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6e7ef3fa9a11e975">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#0ef8f2712e7cb3dc">AddAssignmentStatement</a>) <b>AndAlso
+                Not</b> <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6e7ef3fa9a11e975">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#57bf9d4408f16f49" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#6d38d5b13c8e8123">ConcatenateAssignmentStatement</a>) <b>Then
+                Exit Sub
+            End If
+ 
+            Dim</b> <span id="r12 rd" class="r12 r">diag</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#d5c5191876131010">Rule</a>, <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#e36c53151d23992b">GetLocation</a>(), <span class="r5 r">assignmentExpression</span>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#4d1bd19513601b86">Left</a>.<a href="@1@Microsoft.CodeAnalysis.VisualBasic/A.html#bfd2e9c3685d3047">ToString</a>())
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r12 r">diag</span>)
+        <b>End Sub
+    End Class
+End Namespace</b></pre></td></tr></table></div></body></html>

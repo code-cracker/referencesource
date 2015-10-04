@@ -1,0 +1,452 @@
+﻿<!DOCTYPE html>
+<html><head><title>NoPrivateReadonlyFieldTest.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(443);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/NoPrivateReadonlyFieldTest.cs" target="_top">Usage\NoPrivateReadonlyFieldTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="158577150b5a9424" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="3512822657b72ff9">NoPrivateReadonlyFieldTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#ad23ba6f9e894f13" class="t">CodeFixVerifier</a>
+    {
+        <b>protected override</b> <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a> <a id="b981171ca9136c49" href="../R/b981171ca9136c49.html" target="n" data-glyph="75,1">GetDiagnosticAnalyzer</a>() =&gt; <b>new</b> <a href="/CodeCracker.CSharp/A.html#c9e65446c7a84063" class="t">NoPrivateReadonlyFieldAnalyzer</a>();
+ 
+        <b>static</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a> <a id="4eac9259a9e1e078" href="../R/4eac9259a9e1e078.html" target="n" data-glyph="76,1">CreateExpectedDiagnosticResult</a>(<b>int</b> <span id="r0 rd" class="r0 r">line</span>, <b>int</b> <span id="r1 rd" class="r1 r">column</span>, <b>string</b> <span id="r2 rd" class="r2 r">fieldName</span> = <span class="s">&quot;i&quot;</span>) =&gt;
+            <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#74ea83b0cf8eb548">NoPrivateReadonlyField</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#c9e65446c7a84063" class="t">NoPrivateReadonlyFieldAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#1e53042e96dd7c3d">Message</a>, <span class="r2 r">fieldName</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#807009a8fa15cf53">Info</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, <span class="r0 r">line</span>, <span class="r1 r">column</span>) }
+            };
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="9c43e5dc59237396" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PrivateFieldWithAssignmentOnDeclarationCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				private int i = 1;
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5a5b893edf8bdc38" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ReadonlyFieldCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				internal readonly int i = 1;
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="111d9342477593bc" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ConstFieldCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected const int i = 1;
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r5 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="1287e482e9d87abb" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoPrivateFieldWithAssignmentOnDeclarationCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected int i = 1;
+			}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r6 r">source</span>, <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 19));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="21fa7fb3a2a24358" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithoutAcessModifierCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				int i = 1;
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a1143dfa07c5ba7b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">NoPrivateFieldsInAStructCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+			public struct TypeName
+			{
+				public int i = 1;
+				internal int j = 1;
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(
+                <span class="r8 r">source</span>,
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 16),
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 5, <span class="r1 r">column</span>: 18, <span class="r2 r">fieldName</span>: <span class="s">&quot;j&quot;</span>));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="62b631da42d2a4c7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StaticFieldCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected static int i = 1;
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r9 r">source</span>, <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 26));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f1c223fb6e5d6a09" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StaticFieldAssignmentOnStaticConstructorCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected static int i;
+				static TypeName()
+				{
+					i = 0;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r10 r">source</span>, <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 26));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8771936369eaac65" href="../R/../../0000000000.html" target="n" data-glyph="72,1">StaticFieldAssignmentOnAInstanceConstructorCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected static int i;
+				private TypeName()
+				{
+					i = 0;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="884e147e2f1afb40" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithAssignmentCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				public int i;
+				public void Foo()
+				{
+					i = 0;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r12 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="96ffd90b4dca1669" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithAssignmentOnConstructorCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+			namespace ConsoleApplication1
+			{
+				public class TypeName
+				{
+					protected int i;
+					public TypeName()
+					{
+						i = 0;
+					}
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r13 r">source</span>, <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 6, <span class="r1 r">column</span>: 20));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="22c2e26803eb3774" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithPostfixUnaryAssignmentOnMethodCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected int i = 0;
+				public void Foo()
+				{
+					i++;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r14 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b5b8071581d382ee" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithPrefixUnaryAssignmentOnMethodCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r15 rd" class="r15 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected int i = 0;
+				public void Foo()
+				{
+					--i;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r15 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="47673bd11e5cbd4c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithPostfixUnaryAssignmentOnConstructorCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected int i = 0;
+				public TypeName()
+				{
+					i++;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r16 r">source</span>, <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 19));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="31da03bf86ac7cc2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithPrefixUnaryAssignmentOnConstructorCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r17 rd" class="r17 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				protected int i = 0;
+				public TypeName()
+				{
+					--i;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r17 r">source</span>, <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 19));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="190a55ff414f91f6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">TwoClassesWithNoPrivateFieldsCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+			namespace ConsoleApplication1
+			{
+				public class TypeName1
+				{
+					public int i = 1;
+					public int j = 1;
+				}
+				internal class TypeName2
+				{
+					internal int k = 1;
+					internal int l = 1;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#525ea8bdc7c8943a">VerifyCSharpDiagnosticAsync</a>(<span class="r18 r">source</span>, <b>new</b>[] {
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 6, <span class="r1 r">column</span>: 17, <span class="r2 r">fieldName</span>: <span class="s">&quot;i&quot;</span>),
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 7, <span class="r1 r">column</span>: 17, <span class="r2 r">fieldName</span>: <span class="s">&quot;j&quot;</span>),
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 11, <span class="r1 r">column</span>: 19, <span class="r2 r">fieldName</span>: <span class="s">&quot;k&quot;</span>),
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 12, <span class="r1 r">column</span>: 19, <span class="r2 r">fieldName</span>: <span class="s">&quot;l&quot;</span>)
+            });
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5ef72096353b84e9" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ReadFieldFieldFromOtherTypeCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r19 rd" class="r19 r">source1</span> = <span class="s">@&quot;
+			namespace ConsoleApplication1
+			{
+				public class TypeName1
+				{
+					public int i = 1;
+				}
+			}&quot;</span>;
+ 
+            <b>const string</b> <span id="r20 rd" class="r20 r">source2</span> = <span class="s">@&quot;
+			namespace ConsoleApplication1
+			{
+				public class TypeName2
+				{
+					TypeName2()
+					{
+						var x = new TypeName1().i;
+					}
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#34fef4d5ccbad2c3">VerifyCSharpDiagnosticAsync</a>(<b>new</b>[] { <span class="r19 r">source1</span>, <span class="r20 r">source2</span> }, <b>new</b>[] { <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 6, <span class="r1 r">column</span>: 17) });
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0e4d00ee8b83bda4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SetFieldFieldFromOtherTypeCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">source1</span> = <span class="s">@&quot;
+			namespace ConsoleApplication1
+			{
+				public class TypeName1
+				{
+					public int i = 1;
+				}
+			}&quot;</span>;
+ 
+            <b>const string</b> <span id="r22 rd" class="r22 r">source2</span> = <span class="s">@&quot;
+			namespace ConsoleApplication1
+			{
+				public class TypeName2
+				{
+					TypeName2()
+					{
+						new TypeName1() { i = 10 };
+					}
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#1c84e810dc3d9951">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r21 r">source1</span>, <span class="r22 r">source2</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="f28af5a15080f2d5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ReadFieldFieldFromNestedTypeCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r23 rd" class="r23 r">source</span> = <span class="s">@&quot;
+			public class TypeName1
+			{
+				protected int j = 0;
+				TypeName1()
+				{
+					new TypeName2(0).i.ToString();
+				}
+ 
+				struct TypeName2
+				{
+					internal int i;
+					internal TypeName2(int i)
+					{
+						this.i = i;
+						new TypeName1().j.ToString();
+					}
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r23 r">source</span>,
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 04, <span class="r1 r">column</span>: 19, <span class="r2 r">fieldName</span>: <span class="s">&quot;j&quot;</span>),
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 12, <span class="r1 r">column</span>: 19, <span class="r2 r">fieldName</span>: <span class="s">&quot;i&quot;</span>));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="083328d175d32a23" href="../R/../../0000000000.html" target="n" data-glyph="72,1">SetFieldFieldFromNestedTypeCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;
+			public class TypeName1
+			{
+				TypeName1()
+				{
+					new TypeName2() { i = 1 };
+				}
+ 
+				struct TypeName2
+				{
+					internal int i;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r24 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="06c5f773fb79cc5d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithAssignmentOnMethodByRefOrOutParameterCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r25 rd" class="r25 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				public int i;
+				public int k;
+				void Foo()
+				{
+					Foo1(ref i);
+					Foo2(out k);
+				}
+				void Foo1(ref int j)
+				{
+				}
+				void Foo2(out int m)
+				{
+					m = 0;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r25 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="7b7cde8e2869f9b0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldWithAssignmentOnConstructorByRefOrOutParameterCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r26 rd" class="r26 r">source</span> = <span class="s">@&quot;
+			public class TypeName
+			{
+				public int i;
+				public int k;
+				TypeName()
+				{
+					Foo1(ref i);
+					Foo2(out k);
+				}
+				void Foo1(ref int j)
+				{
+				}
+				void Foo2(out int m)
+				{
+					m = 0;
+				}
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#bfb38e984b2a5c7a">VerifyCSharpDiagnosticAsync</a>(<span class="r26 r">source</span>,
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 16, <span class="r2 r">fieldName</span>: <span class="s">&quot;i&quot;</span>),
+                <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 5, <span class="r1 r">column</span>: 16, <span class="r2 r">fieldName</span>: <span class="s">&quot;k&quot;</span>));
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5c2af5ae07c8fefd" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldInPartialClassWithAssignmentOnConstructorInOtherTreeCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r27 rd" class="r27 r">source1</span> = <span class="s">@&quot;
+			public partial class TypeName
+			{
+				public int i;
+			}&quot;</span>;
+ 
+            <b>const string</b> <span id="r28 rd" class="r28 r">source2</span> = <span class="s">@&quot;
+			public partial class TypeName
+			{
+				TypeName()
+				{
+					i = 0;
+				};
+			}&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#34fef4d5ccbad2c3">VerifyCSharpDiagnosticAsync</a>(
+                <span class="r29 r">sources</span>: <b>new</b>[] { <span class="r27 r">source1</span>, <span class="r28 r">source2</span> },
+                <span class="r30 r">expected</span>: <b>new</b>[] { <a href="#4eac9259a9e1e078">CreateExpectedDiagnosticResult</a>(<span class="r0 r">line</span>: 4, <span class="r1 r">column</span>: 16) });
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e49109e95de2855e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FieldInPartialClassWithAssignmentOnMethodInOtherTreeCreatesNoDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r31 rd" class="r31 r">source1</span> = <span class="s">@&quot;
+			public partial class TypeName
+			{
+				public int i;
+			}&quot;</span>;
+ 
+            <b>const string</b> <span id="r32 rd" class="r32 r">source2</span> = <span class="s">@&quot;
+			public partial class TypeName
+			{
+				void Foo()
+				{
+					i = 0;
+				};
+			}&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#1c84e810dc3d9951">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r31 r">source1</span>, <span class="r32 r">source2</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

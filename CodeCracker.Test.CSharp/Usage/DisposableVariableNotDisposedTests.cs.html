@@ -1,0 +1,1135 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposableVariableNotDisposedTests.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(1126);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.Test.CSharp/Usage/DisposableVariableNotDisposedTests.cs" target="_top">Usage\DisposableVariableNotDisposedTests.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.Test.CSharp" target="_top">test\CSharp\CodeCracker.Test\CodeCracker.Test.csproj</a> (CodeCracker.Test.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> CodeCracker.CSharp.Usage;
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> System.Threading.Tasks;
+<b>using</b> Xunit;
+ 
+<b>namespace</b> CodeCracker.Test.CSharp.Usage
+{
+    <b>public class</b> <a id="c8d9516a6afc1cee" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t"><span id="36b6b743b54a7aa9">DisposableVariableNotDisposedTests</span></a> : <a href="/CodeCracker.Test.Common/A.html#cb57ec3e3b241743" class="t">CodeFixVerifier</a>&lt;<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>, <a href="/CodeCracker.CSharp/A.html#b3ddd0a55e8bf94b" class="t">DisposableVariableNotDisposedCodeFixProvider</a>&gt;
+    {
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="805f50a1ce2abd5d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VariableNotCreatedDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">source</span> = <span class="s">&quot;int i;&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r0 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c269bfad18fe9fc7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">VariableNotDisposableDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r1 rd" class="r1 r">source</span> = <span class="s">&quot;new object();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r1 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ec481d5979308fe2" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">source</span> = <span class="s">&quot;new System.IO.MemoryStream();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r3 rd" class="r3 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#862ffbf2dd3cafaf">DisposableVariableNotDisposed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#c6ae5178d1101d69">MessageFormat</a>, <span class="s">&quot;MemoryStream&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 17) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r2 r">source</span>, <span class="r3 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="724d34e5cce17e9d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDisposableObjectsCreatedWithUsingStatement</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">source</span> = <span class="s">&quot;using (new System.IO.MemoryStream()) { }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ca7543a03c9828bf" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableDeclaredWithAnotherVariableCreatesOnlyOneDiagnostic</a>()
+        {
+ 
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">source</span> = <span class="s">&quot;System.IO.MemoryStream a, b = new System.IO.MemoryStream();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r6 rd" class="r6 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#862ffbf2dd3cafaf">DisposableVariableNotDisposed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#c6ae5178d1101d69">MessageFormat</a>, <span class="s">&quot;MemoryStream&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 47) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r5 r">source</span>, <span class="r6 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b35e18da84ac10c4" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableWhenDisposedDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+m = new System.IO.MemoryStream();
+m.Dispose();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0b14864ce4d35b61" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableWithDeclarationWhenDisposedDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;var m = new System.IO.MemoryStream();
+m.Dispose();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r8 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c0378ab3514bc784" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PassedIntoThisDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r9 rd" class="r9 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    public A(Disposable foo)
+                    { }
+ 
+                    A() : this(new Disposable())
+                    { }
+                }
+ 
+                class Disposable : System.IDisposable
+                {
+                    void System.IDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r9 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="21493663708a875a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PassedIntoBaseDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    public A(Disposable foo)
+                    { }
+                }
+                class B : A
+                {
+                    B() : base(new Disposable())
+                    { }
+                }
+                class Disposable : System.IDisposable
+                {
+                    void System.IDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r10 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="df8ff1dece9dc566" href="../R/../../0000000000.html" target="n" data-glyph="72,1">PassedToConstructorDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    public A(Disposable foo)
+                    { }
+ 
+                    void Foo()
+                    {
+                        var a = new A(new Disposable());
+                    }
+                }
+ 
+                class Disposable : System.IDisposable
+                {
+                    void System.IDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r11 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="dfef44b8815e9b7f" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariablePassedAsParamCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">source</span> = <span class="s">&quot;string.Format(\&quot;\&quot;, new System.IO.MemoryStream());&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r13 rd" class="r13 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#862ffbf2dd3cafaf">DisposableVariableNotDisposed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#c6ae5178d1101d69">MessageFormat</a>, <span class="s">&quot;MemoryStream&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 35) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r12 r">source</span>, <span class="r13 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3643a02e27e41b5a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableCallsIncorrectDisposeCreatesDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r14 rd" class="r14 r">source</span> = <span class="s">@&quot;var m = new System.IO.MemoryStream();
+m.Dispose(true);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r15 rd" class="r15 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#862ffbf2dd3cafaf">DisposableVariableNotDisposed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#c6ae5178d1101d69">MessageFormat</a>, <span class="s">&quot;MemoryStream&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 25) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r14 r">source</span>, <span class="r15 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="600db5c20347665a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableCallsIncorrectDisposeSymbolCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r16 rd" class="r16 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        var d = new Disposable();
+                        d.Dispose();
+                    }
+                }
+                class Disposable : System.IDisposable
+                {
+                    void System.IDisposable.Dispose() { }
+                    public void Dispose() { }
+                }
+&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r17 rd" class="r17 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#862ffbf2dd3cafaf">DisposableVariableNotDisposed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#c6ae5178d1101d69">MessageFormat</a>, <span class="s">&quot;Disposable&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 33) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r16 r">source</span>, <span class="r17 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="555a783c246116b8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableCallsIDisposableDisposeDirectlyDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r18 rd" class="r18 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        var d = new Disposable();
+                        ((System.IDisposable)d).Dispose();
+                    }
+                }
+                class Disposable : System.IDisposable
+                {
+                    void System.IDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r18 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="20fb270062deb140" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableVariableCallsOtherDisposableDisposeDirectlyCreatesDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r19 rd" class="r19 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        var d = new Disposable();
+                        ((System.IOtherDisposable)d).Dispose();
+                    }
+                }
+                interface IOtherDiposable
+                {
+                    void Dispose();
+                }
+                class Disposable : System.IDisposable, IOtherDiposable
+                {
+                    void System.IDisposable.Dispose() { }
+                    void IOtherDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="k">var</a> <span id="r20 rd" class="r20 r">expected</span> = <b>new</b> <a href="/CodeCracker.Test.Common/A.html#3363f61080d7fe94" class="t">DiagnosticResult</a>
+            {
+                <a href="/CodeCracker.Test.Common/A.html#4042d6f495d6018d">Id</a> = <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#862ffbf2dd3cafaf">DisposableVariableNotDisposed</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+                <a href="/CodeCracker.Test.Common/A.html#3e1e28fae0a40724">Message</a> = <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f">Format</a>(<a href="/CodeCracker.CSharp/A.html#9529317f868a4a33" class="t">DisposableVariableNotDisposedAnalyzer</a>.<a href="/CodeCracker.CSharp/A.html#c6ae5178d1101d69">MessageFormat</a>, <span class="s">&quot;Disposable&quot;</span>),
+                <a href="/CodeCracker.Test.Common/A.html#7421159e27aa4350">Severity</a> = <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#b7d8e92d90e33f13">Warning</a>,
+                <a href="/CodeCracker.Test.Common/A.html#684443fd25562855">Locations</a> = <b>new</b>[] { <b>new</b> <a href="/CodeCracker.Test.Common/A.html#4a56895e0452f88d" class="t">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 6, 33) }
+            };
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#732f339699c891d0">VerifyCSharpDiagnosticAsync</a>(<span class="r19 r">source</span>, <span class="r20 r">expected</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d1638a927b2ddb53" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableAssignedToFieldDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r21 rd" class="r21 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    System.IO.MemoryStream field;
+                    void Foo()
+                    {
+                        var m = new System.IO.MemoryStream();
+                        field = m;
+                    }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r21 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3eb06c41034e2173" href="../R/../../0000000000.html" target="n" data-glyph="72,1">DisposableDeclaredOnFieldDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r22 rd" class="r22 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    System.IO.MemoryStream field;
+                    void Foo()
+                    {
+                        field = new System.IO.MemoryStream();
+                    }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r22 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="6e4bae5fd07aa8b7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WithUsingDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r23 rd" class="r23 r">source</span> = <span class="s">@&quot;using (var m = new System.IO.MemoryStream()) { }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r23 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="65677454d76db186" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WithUsingAndAssignmentDoesNotCreateDiagnostic</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r24 rd" class="r24 r">source</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+using (m = new System.IO.MemoryStream()) { }&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r24 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="cfb03fb6ea71241d" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixADisposableDeclarationWithoutDispose</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r25 rd" class="r25 r">source</span> = <span class="s">@&quot;var m = new System.IO.MemoryStream();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r26 rd" class="r26 r">fixtest</span> = <span class="s">@&quot;using (var m = new System.IO.MemoryStream())
+{
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r25 r">source</span>, <span class="r26 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="358dfb8e8941ea55" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixADisposableDeclarationWithoutDisposeWithStatementsAfter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r27 rd" class="r27 r">source</span> = <span class="s">@&quot;var m = new System.IO.MemoryStream();
+Console.WriteLine(m);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r28 rd" class="r28 r">fixtest</span> = <span class="s">@&quot;using (var m = new System.IO.MemoryStream())
+{
+    Console.WriteLine(m);
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r27 r">source</span>, <span class="r28 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="3b06f6c7a86b35e8" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixADisposableDeclarationWithoutDisposeInsideBlock</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r29 rd" class="r29 r">source</span> = <span class="s">@&quot;if (DateTime.Now.Second % 2 == 0)
+{
+    var m = new System.IO.MemoryStream();
+    Console.WriteLine(m);
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r30 rd" class="r30 r">fixtest</span> = <span class="s">@&quot;if (DateTime.Now.Second % 2 == 0)
+{
+    using (var m = new System.IO.MemoryStream())
+    {
+        Console.WriteLine(m);
+    }
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r29 r">source</span>, <span class="r30 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="c7ac8ec6837fccab" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAnObjectCreationWithoutDispose</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r31 rd" class="r31 r">source</span> = <span class="s">@&quot;new System.IO.MemoryStream();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r32 rd" class="r32 r">fixtest</span> = <span class="s">@&quot;using (new System.IO.MemoryStream())
+{
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r31 r">source</span>, <span class="r32 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e5e319e651773a38" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixObjectCreationWithoutDisposeWithStatementsAfter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r33 rd" class="r33 r">source</span> = <span class="s">@&quot;new System.IO.MemoryStream();
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r34 rd" class="r34 r">fixtest</span> = <span class="s">@&quot;using (new System.IO.MemoryStream())
+{
+    Console.WriteLine(1);
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r33 r">source</span>, <span class="r34 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="eeca9cd5928b16d7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixObjectCreationWithoutDisposeInsideBlock</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r35 rd" class="r35 r">source</span> = <span class="s">@&quot;if (DateTime.Now.Second % 2 == 0)
+{
+    new System.IO.MemoryStream();
+    Console.WriteLine(2);
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r36 rd" class="r36 r">fixtest</span> = <span class="s">@&quot;if (DateTime.Now.Second % 2 == 0)
+{
+    using (new System.IO.MemoryStream())
+    {
+        Console.WriteLine(2);
+    }
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r35 r">source</span>, <span class="r36 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="d63159cb6bcafa96" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentWithoutDispose</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r37 rd" class="r37 r">source</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+m = new System.IO.MemoryStream();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r38 rd" class="r38 r">fixtest</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+using (m = new System.IO.MemoryStream())
+{
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r37 r">source</span>, <span class="r38 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ae2396c7a46871b1" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentWithStatementsAfter</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r39 rd" class="r39 r">source</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+m = new System.IO.MemoryStream();
+Console.WriteLine(m);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r40 rd" class="r40 r">fixtest</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+using (m = new System.IO.MemoryStream())
+{
+    Console.WriteLine(m);
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r39 r">source</span>, <span class="r40 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b9c1e4d60fcb6f2e" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideArgument</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r41 rd" class="r41 r">source</span> = <span class="s">@&quot;
+{
+    string.Format(string.Empty,new System.IO.MemoryStream());
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r42 rd" class="r42 r">fixtest</span> = <span class="s">@&quot;
+{
+    using (var memoryStream = new System.IO.MemoryStream())
+    {
+        string.Format(string.Empty, memoryStream);
+    }
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r41 r">source</span>, <span class="r42 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="60d7411e395f64c5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideArgumentWithSimpleName</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r43 rd" class="r43 r">source</span> = <span class="s">@&quot;
+{
+    string.Format(string.Empty,new MemoryStream());
+    var s = string.empty;
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r44 r">usings</span>: <span class="s">&quot;using System.IO;&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r45 rd" class="r45 r">fixtest</span> = <span class="s">@&quot;
+{
+    using (var memoryStream = new MemoryStream())
+    {
+        string.Format(string.Empty, memoryStream);
+    }
+    var s = string.empty;
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r44 r">usings</span>: <span class="s">&quot;using System.IO;&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r43 r">source</span>, <span class="r45 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="028696d459e0c7e5" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideArgumentWithAssgienmt</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r46 rd" class="r46 r">source</span> = <span class="s">@&quot;
+{
+    var s = string.Format(string.Empty,new MemoryStream());
+    s.Trim();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r44 r">usings</span>: <span class="s">&quot;using System.IO;&quot;</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r47 rd" class="r47 r">fixtest</span> = <span class="s">@&quot;
+{
+    using (var memoryStream = new MemoryStream())
+    {
+        var s = string.Format(string.Empty, memoryStream);
+        s.Trim();
+    }
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>(<span class="r44 r">usings</span>: <span class="s">&quot;using System.IO;&quot;</span>);
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r46 r">source</span>, <span class="r47 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="0a0024fc04aee8e0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideArgumentWithVariables</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r48 rd" class="r48 r">source</span> = <span class="s">@&quot;
+{
+    var s = string.Empty;
+    string.Format(s,new System.IO.MemoryStream());
+    s.Trim();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r49 rd" class="r49 r">fixtest</span> = <span class="s">@&quot;
+{
+    var s = string.Empty;
+    using (var memoryStream = new System.IO.MemoryStream())
+    {
+        string.Format(s, memoryStream);
+    }
+    s.Trim();
+}&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r48 r">source</span>, <span class="r49 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="53c0584c4106f0c0" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideArgumentWithGenericName</a>()
+        {
+            <b>const string</b> <span id="r50 rd" class="r50 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        string.Format(string.Empty,new Disposable&lt;int&gt;());
+                    }
+                }
+                class Disposable&lt;T&gt; : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r51 rd" class="r51 r">fixtest</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        using (var disposable = new Disposable&lt;int&gt;())
+                        {
+                            string.Format(string.Empty, disposable);
+                        }
+                    }
+                }
+                class Disposable&lt;T&gt; : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r50 r">source</span>, <span class="r51 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="df63b6d1db37ca26" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideArgumentWithGenericName2</a>()
+        {
+            <b>const string</b> <span id="r52 rd" class="r52 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        string.Format(string.Empty,new Disposable());
+                    }
+                }
+                class Disposable : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r53 rd" class="r53 r">fixtest</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        using (var disposable = new Disposable())
+                        {
+                            string.Format(string.Empty, disposable);
+                        }
+                    }
+                }
+                class Disposable : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r52 r">source</span>, <span class="r53 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ad4c159c1ab21ce7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentWithConflictingsLocalName</a>()
+        {
+            <b>const string</b> <span id="r54 rd" class="r54 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        var str = &quot;&quot;;
+                        string.Format(str, new Str());
+                    }
+                }
+                class Str : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r55 rd" class="r55 r">fixtest</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        var str = &quot;&quot;;
+                        using (var str1 = new Str())
+                        {
+                            string.Format(str, str1);
+                        }
+                    }
+                }
+                class Str : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r54 r">source</span>, <span class="r55 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="5eea861284e96dd6" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentWithManyConflictingsName</a>()
+        {
+            <b>const string</b> <span id="r56 rd" class="r56 r">source</span> = <span class="s">@&quot;
+                class A
+                {
+                    class str { }
+                    string str1 { get; set; }
+                    string str2;
+                    void Foo()
+                    {
+                        var str3 = &quot;&quot;;
+                        string.Format(str3, new Str());
+                    }
+                }
+                class Str : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r57 rd" class="r57 r">fixtest</span> = <span class="s">@&quot;
+                class A
+                {
+                    class str { }
+                    string str1 { get; set; }
+                    string str2;
+                    void Foo()
+                    {
+                        var str3 = &quot;&quot;;
+                        using (var str4 = new Str())
+                        {
+                            string.Format(str3, str4);
+                        }
+                    }
+                }
+                class Str : System.IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r56 r">source</span>, <span class="r57 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2b56339059b5bd3c" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideBlock</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r58 rd" class="r58 r">source</span> = <span class="s">@&quot;if (DateTime.Now.Second % 2 == 0)
+{
+    System.IO.MemoryStream m;
+    m = new System.IO.MemoryStream();
+    Console.WriteLine(m);
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r59 rd" class="r59 r">fixtest</span> = <span class="s">@&quot;if (DateTime.Now.Second % 2 == 0)
+{
+    System.IO.MemoryStream m;
+    using (m = new System.IO.MemoryStream())
+    {
+        Console.WriteLine(m);
+    }
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r58 r">source</span>, <span class="r59 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="27ee3d2bac17b46a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideBlockWithDifferentScopeInDeclarationAndAssignment</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r60 rd" class="r60 r">source</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+if (DateTime.Now.Second % 2 == 0)
+{
+    m = new System.IO.MemoryStream();
+    Console.WriteLine(m);
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r61 rd" class="r61 r">fixtest</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+if (DateTime.Now.Second % 2 == 0)
+{
+    using (m = new System.IO.MemoryStream())
+    {
+        Console.WriteLine(m);
+    }
+}
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r60 r">source</span>, <span class="r61 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="47a2e04e2c2f62f3" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideBlockWithDifferentScopeInDeclarationAndAssignmentAndUseOnOutsideScope</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r62 rd" class="r62 r">source</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+if (DateTime.Now.Second % 2 == 0)
+{
+    m = new System.IO.MemoryStream();
+    Console.WriteLine(m);
+}
+m.Flush();
+Console.WriteLine(1);&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r63 rd" class="r63 r">fixtest</span> = <span class="s">@&quot;System.IO.MemoryStream m;
+if (DateTime.Now.Second % 2 == 0)
+{
+    m = new System.IO.MemoryStream();
+    Console.WriteLine(m);
+}
+m.Flush();
+Console.WriteLine(1);
+m.Dispose();&quot;</span>.<a href="/CodeCracker.Test.Common/A.html#cb53e46d39a2d2c3">WrapInCSharpMethod</a>();
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r62 r">source</span>, <span class="r63 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="ea741382e2138145" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideBlockWithDifferentScopeInDeclarationAndAssignmentAndUseOnOutsideScopeAndWithImplicitDispose</a>()
+        {
+            <b>const string</b> <span id="r64 rd" class="r64 r">source</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            m = new Disposable();
+                            Console.WriteLine(m);
+                        }
+                        m.Flush();
+                        Console.WriteLine(1);
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r65 rd" class="r65 r">fixtest</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            m = new Disposable();
+                            Console.WriteLine(m);
+                        }
+                        m.Flush();
+                        Console.WriteLine(1);
+                        ((IDisposable)m).Dispose();
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r64 r">source</span>, <span class="r65 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="872ba910bdc6f11a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideBlockWithDifferentScopeInDeclarationWithImplicitDisposeAndNoExtraStatements</a>()
+        {
+            <b>const string</b> <span id="r66 rd" class="r66 r">source</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            m = new Disposable();
+                        }
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r67 rd" class="r67 r">fixtest</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            using (m = new Disposable())
+                            {
+                            }
+                        }
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r66 r">source</span>, <span class="r67 r">fixtest</span>);
+        }
+ 
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b11867e8e621ad75" href="../R/../../0000000000.html" target="n" data-glyph="72,1">ExplicitlyDisposedObjectDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r68 rd" class="r68 r">source</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            m = new Disposable();
+                        }
+                        m.Flush();
+                        ((IDisposable)m).Dispose();
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r68 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="419623a78407335a" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAssignmentInsideBlockWithDifferentScopeInDeclarationAndAssignmentAndUseOnOutsideScopeAndWithImplicitDisposeAndDisjointFirstAndLastStatements</a>()
+        {
+            <b>const string</b> <span id="r69 rd" class="r69 r">source</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m = null;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            m = new Disposable();
+                            Console.WriteLine(m);
+                        }
+                        m.Flush();
+                        if (DateTime.Now.Second % 3 == 0)
+                        {
+                            Console.WriteLine(1);
+                        }
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r70 rd" class="r70 r">fixtest</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m = null;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            m = new Disposable();
+                            Console.WriteLine(m);
+                        }
+                        m.Flush();
+                        if (DateTime.Now.Second % 3 == 0)
+                        {
+                            Console.WriteLine(1);
+                        } ((IDisposable)m).Dispose();
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r69 r">source</span>, <span class="r70 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="e3909645457b4a03" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixConflictingScopesDescendingInTree</a>()
+        {
+            <b>const string</b> <span id="r71 rd" class="r71 r">source</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m = null;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            if (DateTime.Now.Second % 4 == 0)
+                            {
+                                m = new Disposable();
+                                Console.WriteLine(m);
+                            }
+                            m.Flush();
+                        }
+                        if (DateTime.Now.Second % 3 == 0)
+                        {
+                            Console.WriteLine(1);
+                        }
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r72 rd" class="r72 r">fixtest</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        Disposable m = null;
+                        if (DateTime.Now.Second % 2 == 0)
+                        {
+                            if (DateTime.Now.Second % 4 == 0)
+                            {
+                                m = new Disposable();
+                                Console.WriteLine(m);
+                            }
+                            m.Flush();
+                        }
+                        if (DateTime.Now.Second % 3 == 0)
+                        {
+                            Console.WriteLine(1);
+                        } ((IDisposable)m).Dispose();
+                    }
+                }
+                class Disposable : IDisposable
+                {
+                    void IDisposable.Dispose() { }
+                    public void Flush() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#eaec7b9ab2094203">VerifyCSharpFixAsync</a>(<span class="r71 r">source</span>, <span class="r72 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="8d9e6f365ef7830b" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsReturnedDoesNotCreateDiagnostic</a>()
+        {
+            <b>const string</b> <span id="r73 rd" class="r73 r">source</span> = <span class="s">@&quot;
+                using System.IO;
+                class A
+                {
+                    MemoryStream Foo()
+                    {
+                        var m = new MemoryStream();
+                        return m;
+                    }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r73 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="2d63795b16efa6d7" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAll</a>()
+        {
+            <b>const string</b> <span id="r74 rd" class="r74 r">source</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        var d1 = new Disposable1();
+                        var d2 = new Disposable2();
+                    }
+                }
+                class Disposable1 : IDisposable
+                {
+                    public void Dispose() { }
+                }
+                class Disposable2 : IDisposable
+                {
+                    public void Dispose() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r75 rd" class="r75 r">fixtest</span> = <span class="s">@&quot;
+                using System;
+                class A
+                {
+                    void Foo()
+                    {
+                        using (var d1 = new Disposable1())
+                        {
+                            using (var d2 = new Disposable2())
+                            {
+                            }
+                        }
+                    }
+                }
+                class Disposable1 : IDisposable
+                {
+                    public void Dispose() { }
+                }
+                class Disposable2 : IDisposable
+                {
+                    public void Dispose() { }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#26c6f53dff524c44">VerifyCSharpFixAllAsync</a>(<span class="r74 r">source</span>, <span class="r75 r">fixtest</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="a9a3167d40f67707" href="../R/../../0000000000.html" target="n" data-glyph="72,1">FixAllInProject</a>()
+        {
+            <b>const string</b> <span id="r76 rd" class="r76 r">source1</span> = <span class="s">@&quot;
+                using System;
+                class Disposable1 : IDisposable
+                {
+                    public void Dispose() { }
+                }
+                class Disposable2 : IDisposable
+                {
+                    public void Dispose() { }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r77 rd" class="r77 r">source2</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        var d1 = new Disposable1();
+                        var d2 = new Disposable2();
+                    }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r78 rd" class="r78 r">source3</span> = <span class="s">@&quot;
+                class B
+                {
+                    void Foo()
+                    {
+                        var e1 = new Disposable1();
+                        var e2 = new Disposable2();
+                    }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r79 rd" class="r79 r">fixtest1</span> = <span class="r76 r">source1</span>;
+            <b>const string</b> <span id="r80 rd" class="r80 r">fixtest2</span> = <span class="s">@&quot;
+                class A
+                {
+                    void Foo()
+                    {
+                        using (var d1 = new Disposable1())
+                        {
+                            using (var d2 = new Disposable2())
+                            {
+                            }
+                        }
+                    }
+                }
+&quot;</span>;
+            <b>const string</b> <span id="r81 rd" class="r81 r">fixtest3</span> = <span class="s">@&quot;
+                class B
+                {
+                    void Foo()
+                    {
+                        using (var e1 = new Disposable1())
+                        {
+                            using (var e2 = new Disposable2())
+                            {
+                            }
+                        }
+                    }
+                }
+&quot;</span>;
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#0f37121e4ac38dc7">VerifyCSharpFixAllAsync</a>(<b>new</b>[] { <span class="r76 r">source1</span>, <span class="r77 r">source2</span>, <span class="r78 r">source3</span> }, <b>new</b>[] { <span class="r79 r">fixtest1</span>, <span class="r80 r">fixtest2</span>, <span class="r81 r">fixtest3</span> });
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="667451d883acdf11" href="../R/../../0000000000.html" target="n" data-glyph="72,1">IgnoresDisposableObjectsBeingCreatedOnReturnStatement</a>()
+        {
+            <b>const string</b> <span id="r82 rd" class="r82 r">source</span> =
+             <span class="s">@&quot;namespace MyNamespace
+                  {
+                        public class DisposableClass : System.IDisposable  { }
+ 
+                        public class ActualClass
+                        {
+                            public DisposableClass Method()
+                            {
+                                return new DisposableClass();
+                            }
+                        }
+                  }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r82 r">source</span>);
+        }
+ 
+        [<span class="t">Fact</span>]
+        <b>public async</b> <a href="@0@mscorlib/A.html#045a746eb48cbaa9" class="t">Task</a> <a id="b2c17f44b7bf53ea" href="../R/../../0000000000.html" target="n" data-glyph="72,1">WhenVariableIsReturnedAsAnImplementedInterface</a>()
+        {
+            <b>const string</b> <span id="r83 rd" class="r83 r">source</span> =
+            <span class="s">@&quot;namespace MyNamespace
+            {
+                public class DisposableClass : System.IDisposable { }
+ 
+                public class ActualClass
+                {
+                    public System.IDisposable Method()
+                    {
+                        var disposable = new DisposableClass();
+                        return disposable;
+                    }
+                }
+            }&quot;</span>;
+ 
+            <b>await</b> <a href="/CodeCracker.Test.Common/A.html#3e4df674331fb37d">VerifyCSharpHasNoDiagnosticsAsync</a>(<span class="r83 r">source</span>);
+        }
+    }
+}
+ 
+</pre></td></tr></table></div></body></html>

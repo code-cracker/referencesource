@@ -1,0 +1,14 @@
+﻿<!DOCTYPE html>
+<html><head><title>EmptyCatchBlockCodeFixProvider</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">5 references to EmptyCatchBlockCodeFixProvider</div><div class="rA">CodeCracker.CSharp (4)</div><div class="rG" id="CodeCracker.CSharp"><div class="rF"><div class="rN">Design\EmptyCatchBlockCodeFixProvider.cs (4)</div>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.cs.html#15"><b>15</b>[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(<i>EmptyCatchBlockCodeFixProvider</i>)), Shared]</a>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.cs.html#26"><b>26</b>context.RegisterCodeFix(CodeAction.Create(&quot;Remove Empty Catch Block&quot;, c =&gt; RemoveEmptyCatchBlockAsync(context.Document, diagnostic, c), nameof(<i>EmptyCatchBlockCodeFixProvider</i>) + nameof(RemoveEmptyCatchBlockAsync)), diagnostic);</a>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.cs.html#27"><b>27</b>context.RegisterCodeFix(CodeAction.Create(&quot;Remove Empty Catch Block and Put a Documentation Link about Try...Catch use&quot;, c =&gt; RemoveEmptyCatchBlockPutCommentAsync(context.Document, diagnostic, c), nameof(<i>EmptyCatchBlockCodeFixProvider</i> ) + nameof(RemoveEmptyCatchBlockPutCommentAsync)), diagnostic);</a>
+<a href="../Design/EmptyCatchBlockCodeFixProvider.cs.html#28"><b>28</b>context.RegisterCodeFix(CodeAction.Create(&quot;Insert Exception class to Catch&quot;, c =&gt; InsertExceptionClassCommentAsync(context.Document, diagnostic, c), nameof(<i>EmptyCatchBlockCodeFixProvider</i>) + nameof(InsertExceptionClassCommentAsync)), diagnostic);</a>
+</div>
+</div>
+<div class="rA">CodeCracker.Test.CSharp (1)</div><div class="rG" id="CodeCracker.Test.CSharp"><div class="rF"><div class="rN">Design\EmptyCatchBlockTests.cs (1)</div>
+<a href="../../CodeCracker.Test.CSharp/Design/EmptyCatchBlockTests.cs.html#7"><b>7</b>public class EmptyCatchBlockTests : CodeFixVerifier&lt;EmptyCatchBlockAnalyzer, <i>EmptyCatchBlockCodeFixProvider</i>&gt;</a>
+</div>
+</div>
+</body></html>

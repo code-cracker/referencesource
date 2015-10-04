@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html><head><title>ComputeExpressionAnalyzer.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(81);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#CodeCracker.CSharp/Refactoring/ComputeExpressionAnalyzer.cs" target="_top">Refactoring\ComputeExpressionAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#CodeCracker.CSharp" target="_top">src\CSharp\CodeCracker\CodeCracker.csproj</a> (CodeCracker.CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> Microsoft.CodeAnalysis;
+<b>using</b> Microsoft.CodeAnalysis.CSharp;
+<b>using</b> Microsoft.CodeAnalysis.CSharp.Syntax;
+<b>using</b> Microsoft.CodeAnalysis.Diagnostics;
+<b>using</b> System.Collections.Immutable;
+<b>using</b> System.Linq;
+ 
+<b>namespace</b> CodeCracker.CSharp.Refactoring
+{
+    [<a href="@1@Microsoft.CodeAnalysis/A.html#8857adce10abb22f" class="t">DiagnosticAnalyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#0e5396a976ac70ba" class="t">LanguageNames</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#a127f83900f6cc72">CSharp</a>)]
+    <b>public class</b> <a id="da52e87a8e855bfc" href="../R/da52e87a8e855bfc.html" target="n" data-glyph="0,0" class="t"><span id="445b2ab8074e85af">ComputeExpressionAnalyzer</span></a> : <a href="@1@Microsoft.CodeAnalysis/A.html#02c0887aafaae6b6" class="t">DiagnosticAnalyzer</a>
+    {
+        <b>internal const string</b> <a id="dfbcf2f986e6ee83" href="../R/dfbcf2f986e6ee83.html" target="n" data-glyph="8,1">Title</a> = <span class="s">&quot;Change for expression value&quot;</span>;
+        <b>internal const string</b> <a id="3fd46ae5ecf30969" href="../R/3fd46ae5ecf30969.html" target="n" data-glyph="8,1">Message</a> = <span class="s">&quot;Change &#39;{0}&#39; for expression value&quot;</span>;
+        <b>internal const string</b> <a id="6a3394f920cd2d17" href="../R/6a3394f920cd2d17.html" target="n" data-glyph="8,1">Category</a> = <a href="/CodeCracker.Common/A.html#1ac38a1af5daebd1" class="t">SupportedCategories</a>.<a href="/CodeCracker.Common/A.html#9c4473146bae1391">Refactoring</a>;
+        <b>const string</b> <a id="6f079c38f84da2f4" href="../R/6f079c38f84da2f4.html" target="n" data-glyph="10,1">Description</a> = <span class="s">&quot;You may change an expression for its value if the expression is made of literal values.&quot;</span>;
+ 
+        <b>internal static</b> <a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a> <a id="ed9868d6c3615779" href="../R/ed9868d6c3615779.html" target="n" data-glyph="44,1">Rule</a> = <b>new</b> <a href="@1@Microsoft.CodeAnalysis/A.html#bfc0d7e7267f8606" class="t">DiagnosticDescriptor</a>(
+            <a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#db5b8233ee892fad">ComputeExpression</a>.<a href="/CodeCracker.Common/A.html#3101118681cb0e9b">ToDiagnosticId</a>(),
+            <a href="#dfbcf2f986e6ee83">Title</a>,
+            <a href="#3fd46ae5ecf30969">Message</a>,
+            <a href="#6a3394f920cd2d17">Category</a>,
+            <a href="@1@Microsoft.CodeAnalysis/A.html#e70281df673d47f6" class="t">DiagnosticSeverity</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#f6ba4649b58eea12">Hidden</a>,
+            <span class="r0 r">isEnabledByDefault</span>: <b>true</b>,
+            <span class="r1 r">description</span>: <a href="#6f079c38f84da2f4">Description</a>,
+            <span class="r2 r">helpLinkUri</span>: <a href="/CodeCracker.Common/A.html#5e96b057e4cf35cc" class="t">HelpLink</a>.<a href="/CodeCracker.Common/A.html#ab842563f9ea773d">ForDiagnostic</a>(<a href="/CodeCracker.Common/A.html#285b925c1a09c261" class="t">DiagnosticId</a>.<a href="/CodeCracker.Common/A.html#db5b8233ee892fad">ComputeExpression</a>));
+ 
+        <b>public override</b> <span class="t">ImmutableArray</span>&lt;<a href="@1@Microsoft.CodeAnalysis/A.html#2af1d2a48008a64c" class="t">DiagnosticDescriptor</a>&gt; <a id="f41789ea62ca8d0d" href="../R/f41789ea62ca8d0d.html" target="n" data-glyph="102,1">SupportedDiagnostics</a> =&gt; <span class="t">ImmutableArray</span>.Create(<a href="#ed9868d6c3615779">Rule</a>);
+ 
+        <b>public override void</b> <a id="4b90cf48c25d23f8" href="../R/4b90cf48c25d23f8.html" target="n" data-glyph="72,1">Initialize</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#35971aa0805077f7" class="t">AnalysisContext</a> <span id="r3 rd" class="r3 r">context</span>) =&gt;
+            <span class="r3 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#919688708f2fddc2">RegisterSyntaxNodeAction</a>(<a href="#1b87f9efcbe4b72e">Analyzer</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#590e3553ce7b6674">AddExpression</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#262f72aa664c79c0">SubtractExpression</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#01752bf331262e9f">MultiplyExpression</a>, <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#3171516adfcede9a">DivideExpression</a>);
+ 
+        <b>private void</b> <a id="1b87f9efcbe4b72e" href="../R/1b87f9efcbe4b72e.html" target="n" data-glyph="76,1">Analyzer</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#42631a741aee62e2" class="t">SyntaxNodeAnalysisContext</a> <span id="r4 rd" class="r4 r">context</span>)
+        {
+            <b>if</b> (<span class="r4 r">context</span>.<a href="../Extensions/CSharpGeneratedCodeAnalysisExtensions.cs.html#009121599af66016">IsGenerated</a>()) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="k">var</a> <span id="r5 rd" class="r5 r">expression</span> = <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#f8851057e67a0fcb">Node</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>;
+            <b>if</b> (<span class="r5 r">expression</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<a href="#a8ea138339b82399">HasErrors</a>(<span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#89e2daf52678da77">SemanticModel</a>, <span class="r5 r">expression</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="k">var</a> <span id="r6 rd" class="r6 r">nodeToReportDiagnosticOn</span> = <span class="r5 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52142b9b7c72c9ba" class="t">ParenthesizedExpressionSyntax</a> ? <span class="r5 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a> : <span class="r5 r">expression</span>;
+            <b>if</b> (<a href="#ed8bd7d77dddd4ef">IsPartOfALargerBinaryExpression</a>(<span class="r6 r">nodeToReportDiagnosticOn</span>)) <b>return</b>;
+            <b>if</b> (!<a href="#06d9be82431998b8">AreLeftAndRightLiterals</a>(<span class="r5 r">expression</span>)) <b>return</b>;
+            <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="k">var</a> <span id="r7 rd" class="r7 r">diagnostic</span> = <a href="@1@Microsoft.CodeAnalysis/A.html#1351732df68d91bc" class="t">Diagnostic</a>.<a href="@1@Microsoft.CodeAnalysis/A.html#8a6faf8a20fbdf67">Create</a>(<a href="#ed9868d6c3615779">Rule</a>, <span class="r6 r">nodeToReportDiagnosticOn</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#111ac3d15ffccc76">GetLocation</a>(), <span class="r6 r">nodeToReportDiagnosticOn</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5f8dcf264c758c12">ToString</a>());
+            <span class="r4 r">context</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#c5b2dbd0a70df331">ReportDiagnostic</a>(<span class="r7 r">diagnostic</span>);
+        }
+ 
+        <b>private static bool</b> <a id="a8ea138339b82399" href="../R/a8ea138339b82399.html" target="n" data-glyph="76,1">HasErrors</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#f8e51661446fa281" class="t">SemanticModel</a> <span id="r8 rd" class="r8 r">semanticModel</span>, <a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r9 rd" class="r9 r">node</span>)
+        {
+            <b>var</b> <span id="r10 rd" class="r10 r">diags</span> = <span class="r8 r">semanticModel</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#44ba6f49eb9b989a">GetDiagnostics</a>(<span class="r9 r">node</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#5b32036d766a0ea2">Span</a>);
+            <b>if</b> (<span class="r10 r">diags</span>.Any(<span id="r11 rd" class="r11 r">d</span> =&gt; <span class="r11 r">d</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#258716063ffadf49">Id</a>.StartsWith(<span class="s">&quot;CS&quot;</span>))) <b>return true</b>;
+            <b>return false</b>;
+        }
+ 
+        <b>private static bool</b> <a id="ed8bd7d77dddd4ef" href="../R/ed8bd7d77dddd4ef.html" target="n" data-glyph="76,1">IsPartOfALargerBinaryExpression</a>(<a href="@1@Microsoft.CodeAnalysis/A.html#849dc6029695ef7b" class="t">SyntaxNode</a> <span id="r12 rd" class="r12 r">nodeToReportDiagnosticOn</span>) =&gt;
+            <span class="r12 r">nodeToReportDiagnosticOn</span>.<a href="@1@Microsoft.CodeAnalysis/A.html#efecb528c7d2c282">Parent</a> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>;
+ 
+        <b>private bool</b> <a id="06d9be82431998b8" href="../R/06d9be82431998b8.html" target="n" data-glyph="76,1">AreLeftAndRightLiterals</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a> <span id="r13 rd" class="r13 r">expression</span>)
+        {
+            <b>if</b> (!<a href="#f98ee17634ca2da0">IsLiteralOrMadeOfBinaryOperations</a>(<span class="r13 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b59ef6774404c1ce">Left</a>) ||
+                !<a href="#f98ee17634ca2da0">IsLiteralOrMadeOfBinaryOperations</a>(<span class="r13 r">expression</span>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7d073ad4f6440af3">Right</a>)) <b>return false</b>;
+            <b>return true</b>;
+        }
+ 
+        <b>private bool</b> <a id="f98ee17634ca2da0" href="../R/f98ee17634ca2da0.html" target="n" data-glyph="76,1">IsLiteralOrMadeOfBinaryOperations</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#b2f4fe7bd1901de5" class="t">ExpressionSyntax</a> <span id="r14 rd" class="r14 r">expression</span>)
+        {
+            <b>if</b> (<span class="r14 r">expression</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>)
+            {
+                <b>if</b> (!<a href="#06d9be82431998b8">AreLeftAndRightLiterals</a>((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>)<span class="r14 r">expression</span>)) <b>return false</b>;
+            }
+            <b>else if</b> (<span class="r14 r">expression</span> <b>is</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52142b9b7c72c9ba" class="t">ParenthesizedExpressionSyntax</a>)
+            {
+                <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="k">var</a> <span id="r15 rd" class="r15 r">binary</span> = ((<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#52142b9b7c72c9ba" class="t">ParenthesizedExpressionSyntax</a>)<span class="r14 r">expression</span>).<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#c6e255562b53b18a">Expression</a> <b>as</b> <a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#424c57178fbd64d7" class="t">BinaryExpressionSyntax</a>;
+                <b>if</b> (<span class="r15 r">binary</span> == <b>null</b> || !<a href="#06d9be82431998b8">AreLeftAndRightLiterals</a>(<span class="r15 r">binary</span>)) <b>return false</b>;
+            }
+            <b>else</b>
+            {
+                <b>if</b> (!<span class="r14 r">expression</span>.<a href="../Extensions/CSharpAnalyzerExtensions.cs.html#550519dc40651969">IsKind</a>(<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#7c4040782a1b2ce0" class="t">SyntaxKind</a>.<a href="@1@Microsoft.CodeAnalysis.CSharp/A.html#e98627e6c44cd780">NumericLiteralExpression</a>)) <b>return false</b>;
+            }
+            <b>return true</b>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>
